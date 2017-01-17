@@ -1,0 +1,387 @@
+/*=======================================>>>> ESTILO CUERPO <<<<<<=================================*/
+body {
+    font-size: 13px;
+    font-family: Segoe UI Web Semibold, Segoe UI Web Regular, Segoe UI, Segoe UI Symbol,Helvetica Neue, Open Sans, Arial;
+    color: gray;
+    bottom: 50px;
+}
+
+/*=======================================>>>> ESTILO CABECERA <<<<<<=================================*/
+
+.barraEncabezado {
+    background:#0072C6 repeat-x;
+    /*position: fixed;*/
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 500;
+}
+/* ===================================>>>> ESTILO DEL FORMULARIO <<====================================================*/
+
+/* Estilo de las lineas de los titulos */
+.hr4 {
+    background-color: #538DD5;
+    border-top-style: solid;
+    height: 1px;
+    margin-top: 0px;
+}
+#lineaHorizontal{
+    float: right;
+    height: 440px;
+    width: 10px;
+    margin-right: 50px;
+    margin-top: 70px;
+}
+
+/* Estilo Formulario */
+.encabezado{
+    position: relative;
+    height: 50px;
+    background: #9BBB59;
+    margin: 40px -15px 0;
+}
+
+.encabezado>p{
+    margin: 0;
+    font-size: 20px;
+    line-height: 50px;
+    color: #fff;
+    text-align: center;
+}
+
+.encabezado>img{
+    position: absolute;
+}
+
+.encabezado>.hojaP{
+    width: 40px;
+    transform: translateY(-35%);
+    top: 50%;
+    left: 30px;
+}
+
+.encabezado>.hojaG{
+    width: 65px;
+    top: -40px;
+    right: -25px;
+}
+
+div.alert.alert-danger {
+    margin-top: 10px;
+}
+
+.panel-body em{
+    color: #244062;
+    font-weight: bold;
+}
+
+
+/* Estilo de los CAmpos */
+#divCampos{
+    width: 550px;
+    height: 70px;
+}
+
+/* Estilos de subtitulos del formularios */
+#tituloInfo{
+    position: relative;
+    top: -35px;
+    left: 30px;
+    background: #B8CCE4;
+    height: 30px;
+    width: 310px;
+    color: #366092;
+}
+
+/* Estilo de la linea del subtitulo */
+#hr3 {
+    background-color: #4F6228;
+    border-top-style: dashed;
+    margin-top: 50px;
+}
+
+/* Estilo de lo puntos del documento */
+#estadoDisponible{
+    border-bottom-style: solid;
+    width: 120px;
+    border-color: #C4D79B;
+    width: 390px;
+    font-style: italic
+}
+
+/* Estilo de la letra dentro del DIV */
+#estadoDisponible > b{
+    margin-left: 6px;
+    color: #4F6228;
+}
+
+
+#divContenido {
+    border-top: 1px;
+    border-right: 1px;
+    border-top-style: dashed;
+    border-right-style: dashed;
+    border-color: #76933C;
+}
+
+/* Estilo del multiselect del AJAX */
+#styleMultiselect > button{
+    margin-top: 10px;
+    height:35px;
+    font-size:13px;
+    width: 100%;
+}
+.fancybox-skin{
+    padding: 0px;
+}
+
+.subtitulo{
+    border-color: #95B3D7;
+    width: 70%;
+    border-left-style: solid;
+    border-left-width: 10px;
+    border-bottom-style: solid;
+    font-style: italic;
+    margin-top: 10px;
+}
+/* Estilo de la linea del subtitulo */
+#hr5 {
+    background-color: #95B3D7;
+    margin-top: 50px;
+    width: 530px;
+    height: 3px;
+    margin-left: 30px;
+    margin-top: -2px;
+}
+
+#imgLogo2{
+    width: 80px;
+    position: absolute;
+    right: 20px;
+    top: 40px;
+}
+
+#imgLogo{
+    width: 80px;
+    margin-right: -40px;
+    margin-top: -60px;
+    float: right;
+}
+/* ============================================== Estilo para mostrara el desarrollo de las actividades ======================================================*/
+.notice {
+    padding: 15px;
+    background-color: #fafafa;
+    border-left: 6px solid #7f7f84;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+    box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+}
+.notice-sm {
+    padding: 10px;
+    font-size: 80%;
+}
+.notice-lg {
+    padding: 35px;
+    font-size: large;
+}
+.notice-success {
+    border-color: #228B22;
+}
+.notice-success>strong {
+    color: #80D651;
+}
+.notice-info {
+    border-color: #45ABCD;
+}
+.notice-info>strong {
+    color: #45ABCD;
+}
+.notice-warning {
+    border-color: #FEAF20;
+}
+.notice-warning>strong {
+    color: #FEAF20;
+}
+.notice-danger {
+    border-color: #d73814;
+}
+.notice-danger>strong {
+    color: #d73814;
+}
+/* ********************************** Estilo de la cabecera de informacion mostrar ***************************** */
+#cabecera #hr1 {
+    margin-top: 30px;
+    background-color: white;
+    height: 2px;
+}
+#cabecera p{
+    float: left;
+    margin-top: 20px;
+    margin-left: 15px;
+    font-size: 17.5pt;
+    font-weight: 500;
+    color: #4F6228;
+}
+#cabecera img{
+    position: absolute;
+    right: 50px;
+    top: 30px;
+    width: 80px;
+    height: 80px;
+}
+#cabecera span{
+    float: left;
+    margin-top: 27px;
+    margin-left: 15px;
+}
+
+/*=======================================>>>> ESTILO CARGANDO <<<<<<=================================*/
+#loadingImgBar{
+    background:#000000;
+    width: 100%;
+    height: 100%;
+    filter:alpha(opacity=50);
+    opacity:0.5;
+    margin: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    z-index:1000;
+    margin: 0px;
+    padding: 0px;
+}
+
+#MensajePilo{
+    background:#000000;
+    width: 100%;
+    height: 100%;
+    filter:alpha(opacity=50);
+    opacity:0.5;
+    margin: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    z-index:1000;
+    margin: 0px;
+    padding: 0px;
+}
+
+.contenedorLoading{
+    width: auto;
+    position: relative;
+    margin: 15% 50%;
+    padding: 1px;
+}
+
+div.card {
+    width: 250px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(10, 0, 0, 0.19);
+    margin-top: 30px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-left: 20px;
+}
+
+#btnCorrelacionSelect{
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #985f0d;
+}
+#btnOpcionCorrelacion {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #1b6d85;
+    width: 800px;
+}
+
+.lobibox-notify-wrapper{
+    margin-right: 50px;
+    margin-top: 90px;
+    z-index: 1555;
+}
+
+#reloj{
+    padding: 18px;
+    position: fixed;
+    z-index: 555;
+    right: 10px;
+    top: 43%;
+    width: 120px;
+    height: 60px;
+    font-size: 20px;
+}
+
+/* ======================================>>>>>> Estilo Animacion de PILO <<<<<<=============================================*/
+#mensaje:hover
+{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
+#mensajeAlerta:hover
+{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
+.popover-title{
+    color:white;
+    font-style:italic;
+    font-family:"Bookman Old Style", serif;
+    text-align: center;
+    background:#366092;
+    font-size: 15px;
+}
+.popover-content{
+    color:#16365C;
+    font-style:italic;
+    font-family:"Bookman Old Style", serif;
+    background:#EEF3F8;
+    font-size: 15px;
+}
+
+.move-down {
+    transform: translate(0,170%);
+    -webkit-transform: translate(0,170%);
+    -o-transform: translate(0,170%);
+    -moz-transform: translate(0,170%);
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+}
+.move-up {
+    transform: translate(0,-6%);
+    -webkit-transform: translate(0,-6%);
+    -o-transform: translate(0,-6%);
+    -moz-transform: translate(0,-6%);
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+}
+/*=========================================>>>>> Estilo de la DATATABLE <<<<==========================================*/
+.dataTables_length, #tableSesiones_info{
+    margin-left: 18px;
+}
+#tableSesiones_filter{
+    margin-right: 15px;
+}
+.sorting{
+    width: 300px;
+}
+
+div.card {
+    width: 250px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+}
+/* Estilo del Titulo del Formulario */
+#tituloForm{
+    font-size: 20px;
+    color: white;
+    float: left;
+    margin-top: 30px;
+    margin-left: 20px;
+}

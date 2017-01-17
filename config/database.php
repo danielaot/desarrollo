@@ -46,9 +46,55 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+        'aplicativos' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_A_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'genericas' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_G_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'generarventaempleado' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_GVE_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_spanish_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'besa' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_HOST', 'localhost'),
+            'database' => env('DB_SQL_DATABASE', 'forge'),
+            'username' => env('DB_SQL_USERNAME', 'forge'),
+            'password' => env('DB_SQL_PASSWORD', ''),
+            'charset' => 'utf8',
             'prefix' => '',
         ],
 
@@ -66,17 +112,14 @@ return [
             'engine' => null,
         ],
 
-        'pgsql' => [
-            'driver' => 'pgsql',
+        'sqlsrv' => [
+            'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
         ],
 
     ],

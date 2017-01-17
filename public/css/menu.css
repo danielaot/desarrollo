@@ -1,0 +1,105 @@
+ul.menu, ul.menu ul {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  list-style-type:none;
+}
+
+ul.menu a {
+  display: block;
+  text-decoration: none;
+  text-align: left;
+}
+
+ul.menu li {
+  margin-top: 1px;
+}
+
+ul.menu li ul li {
+    border: 1px solid #969696;
+    margin-top: 2px;
+}
+
+ul.menu li a {
+  background: #084B8A;
+  color: #fff;
+  padding: 0.5em;
+}
+
+ul.menu li a:hover {
+  background: #000;
+}
+
+ul.menu li a.active {
+    text-decoration: underline;
+    background: #000;
+}
+
+ul.menu li ul li a {
+  background: #ccc;
+  color: #000;
+  padding-left: 15px;
+}
+
+ul.menu li ul li a:hover {
+  background: #aaa;
+  border-left: 5px #000 solid;
+  padding-left: 10px;
+}
+
+ul.menu li ul li a.active {
+    text-decoration: underline;
+    background: #aaa;
+    border-left: 5px #000 solid;
+    padding-left: 10px;
+    color: #000;
+}
+
+ul.menu li ul li ul li {
+    border-top: 1px dotted #969696;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    margin: 0px;
+}
+
+ul.menu li ul li ul li a {
+  background: #F2F2F2;
+  color: #000;
+  padding-left: 30px;
+}
+
+ul.menu li ul li ul li a:hover {
+  background: #aaa;
+  border-left: 5px #000 solid;
+  padding-left: 25px;
+}
+
+ul.menu li ul li ul li a.active {
+    text-decoration: underline;
+    border-left: 5px #000 solid;
+    padding-left: 25px;
+    background: #aaa;
+    color: #000;
+}
+
+ul.menu li ul li ul li ul li a {
+  background: #F2F2F2;
+  color: #000;
+  padding-left: 45px;
+}
+
+ul.menu li ul li ul li ul li a:hover {
+  background: #aaa;
+  border-left: 5px #000 solid;
+  padding-left: 40px;
+}
+
+ul.menu li ul li ul li ul li a.active {
+    text-decoration: underline;
+    border-left: 5px #000 solid;
+    padding-left: 40px;
+    background: #aaa;
+    color: #000;
+}
