@@ -1,0 +1,46 @@
+.container.login{
+  width: 70%;
+  margin: 0px auto;
+  font-family: Arial;
+}
+
+.panel-body {
+    padding: 10px 15px 15px;
+}
+
+.login .panel-primary{
+    margin-bottom: 10px;
+    border-radius: 0px;
+    border: 0;
+    box-shadow: 0px 2px 1px rgba(53, 53, 53, 0.5);
+    -webkit-box-shadow: 0px 2px 1px rgba(53, 53, 53, 0.5);
+}
+
+.login .panel-heading{
+    height: 40px;
+    border-radius: 0;
+}
+
+.login .panel-primary h2{
+    margin: 5px 0;
+    font-size: 20px;
+    color: #000;
+}
+
+.login .panel-primary p, .login .panel-primary label{
+    font-size: 12px;
+    color: #000;
+}
+
+.login .form_description {
+    margin: 0 0 1em;
+    padding: 5px;
+    border-bottom: 1px dotted #ccc;
+}
+
+.login .options a{
+    font-size: 11px;
+    color: #585858;
+    text-decoration: none;
+    border-bottom: 1px dotted #999999;
+}

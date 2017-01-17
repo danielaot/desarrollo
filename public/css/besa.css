@@ -1,49 +1,20 @@
-.wrap{
-  width: 90%;
-  margin: 10px auto 0;
-  font-family: Arial;
-}
-
-.tituloModulo{
-    background: url(start/images/ui-bg_gloss-wave_50_6eac2c_500x100.png) 50% 50% repeat-x;
-    width: 50%;
-    padding: 5px 0;
-    text-transform: uppercase;
+.txt-center {
     text-align: center;
-    margin: 30px auto;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 13px;
-    line-height: 20px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #9bbb59;
-    border-radius: 5px;
-    box-shadow: 7px -5px 5px #888888;
 }
 
-footer{
-    position: relative;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+header, footer {
+    width: 100%;
 }
 
-.subtexto {
+footer {
     font-size: 12px;
     font-family: Arial;
-    color: #000000;
+    color: #000;
 }
 
-.panel-primary>.panel-heading{
-    position: relative;
-}
-
-.panel-heading>.btn.btn-warning.label{
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 100%;
+.navbar {
+    margin: 10px 0px;
+    border-radius: 0px;
 }
 
 .navbar-dark .navbar-nav>li>a{
@@ -54,6 +25,120 @@ footer{
     background-color: transparent;
     color: #EEE;
 }
+
+.wrap {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+a.shortcut-button:hover {
+    text-decoration: none;
+}
+
+a.shortcut-button .badge {
+    background-color: transparent;
+}
+
+a.shortcut-button .title {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+}
+
+a.shortcut-button img {
+    width: 50%;
+    height: auto;
+}
+
+
+a.shortcut-button {
+    width: 176px;
+    height: 128px;
+}
+
+span.title {
+    font-size: 13px;
+    line-height: 20px;
+}
+
+a.shortcut-button.btn1 {
+    background-color: #60a917;
+}
+
+a.shortcut-button.btn2 {
+    background-color: #da5a53;
+}
+
+a.shortcut-button.btn3 {
+    background-color: #1ba1e2;
+}
+
+a.shortcut-button.btn4 {
+    background-color: #00aba9;
+}
+
+a.shortcut-button.btn5 {
+    background-color: #fa6800;
+}
+
+a.shortcut-button.btn6 {
+    background-color: #1b6eae;
+}
+
+a.shortcut-button.btn7 {
+    background-color: #6a00ff;
+}
+
+a.shortcut-button.btn8 {
+    background-color: #825a2c;
+}
+
+a.shortcut-button.btn9 {
+    background-color: #a20025;
+}
+
+a.shortcut-button.btn10 {
+    background-color: #76608a;
+}
+
+a.shortcut-button.btn11 {
+    background-color: #008a00;
+}
+
+a.shortcut-button.btn12 {
+    background-color: #647687;
+}
+
+a.shortcut-button.btn13 {
+    background-color: #ce352c;
+}
+
+a.shortcut-button.btn14 {
+    background-color: #6d8764;
+}
+
+a.shortcut-button.btn15 {
+    background-color: #bf5a15;
+}
+
+a.shortcut-button.btn16 {
+    background-color: #9a165a;
+}
+
+a.shortcut-button.btn17 {
+    background-color: #0050ef;
+}
+
+a.shortcut-button.btn18 {
+    background-color: #87794e;
+}
+
+
 
 .breadcrumb.bg-primary{
     background-color: #337ab7;
@@ -66,32 +151,4 @@ footer{
 .breadcrumb.bg-primary>li>a:focus, .breadcrumb.bg-primary>li>a:hover, .breadcrumb.bg-primary>li.active{
     color: #EEE;
     text-decoration: none;
-}
-
-.login .panel-primary{
-    border-radius: 0px;
-    /*box-shadow: 7px -5px 5px #888888;*/
-    border: 0;
-}
-
-.login .panel-heading{
-    height: 40px;
-    border-radius: 0;
-}
-
-.login .panel-primary h2{
-    margin: 5px 0;
-    font-size: 20px;
-    color: #000;
-}
-
-.login .panel-primary p, .login .panel-primary label{
-    font-size: 12px;
-    color: #000;
-}
-
-.login .form_description {
-    margin: 0 0 1em;
-    padding: 5px;
-    border-bottom: 1px dotted #ccc;
 }

@@ -181,11 +181,10 @@ return [
         /*
          * PLugins Extra Service Providers
          */
-         Collective\Html\HtmlServiceProvider::class,
-         Barryvdh\DomPDF\ServiceProvider::class,
-         Barryvdh\Cors\ServiceProvider::class,
-         Laravel\Passport\PassportServiceProvider::class,
-
+        Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Proengsoft\JsValidation\JsValidationServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
     ],
 
     /*
@@ -236,6 +235,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
     ],
 
 ];

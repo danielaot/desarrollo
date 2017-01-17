@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
-use App\Models\User;
-use App\Models\GDirNacional;
-use App\Models\GVendedor;
+use App\Models\Aplicativos\User;
+use App\Models\Aplicativos\LogUsuario;
+use App\Models\Genericas\TDirNacional;
+use App\Models\Genericas\TVendedor;
 
 use Auth;
 
@@ -34,7 +35,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/reimprimirfactura';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -66,32 +67,60 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        $user = User::where(['login' => $request->login, 'password' => md5($request->password), 'numactivo' => '1'])
+        $user = User::where([['login', 'LIKE BINARY', $request->login], 'password' => md5($request->password), 'numactivo' => '1'])
                     ->first();
 
-        $dirnacional = GDirNacional::where('dir_txt_cedula', $user->idTerceroUsuario)
-                                   ->first();
-
         if(count($user) > 0){
-          Auth::loginUsingId($request->login);
+          $dirnacional = TDirNacional::where('dir_txt_cedula', $user->idTerceroUsuario)
+                                     ->first();
 
-          $fechaIngreso = time();
-          Auth::user()->update(['fechaIngreso' => $fechaIngreso]);
+          Auth::loginUsingId($request->login,false);
 
-          $vendedor = GVendedor::find($user->idTerceroUsuario);
+          $time = time();
+          Auth::user()->update(['fechaIngreso' => $time]);
 
+          $vendedor = TVendedor::where('ven_id', $user->idTerceroUsuario)
+                               ->first();
+
+          $_SESSION['url'] = env('APPV1_URL');
           $_SESSION['app'] = 'aplicativos';
           $_SESSION['idUsuario'] = $user->login;
           $_SESSION['idTercero'] = $user->idTerceroUsuario;
-          $_SESSION['ultimoIngreso'] = $fechaIngreso;
+          $_SESSION['ultimoIngreso'] = $time;
           $_SESSION['cedula'] = $user->idTerceroUsuario;
           $_SESSION['nombreCompleto'] = $user->nombre.' '.$user->apellido;
           $_SESSION['correoElectronico'] = $dirnacional ? $dirnacional->dir_txt_email : '';
           $_SESSION['ven_id'] = $vendedor ?  $vendedor->ven_id : '';
 
-          return redirect(env('APPV1_URL'));
+          $log = new LogUsuario;
+          $log->usu_id = $user->login;
+          $log->log_num_creacion = $time;
+          $log->log_txt_ip = $_SERVER['REMOTE_ADDR'];
+          $log->log_txt_url = $_SERVER['REQUEST_URI'];
+          $log->log_num_tipo = 1;
+
+          $log->save();
+
+          return view('session')->with(['inputs' => $_SESSION]);
         }
 
-        return response()->json(false);
+        $errors = ['login' => 'Usuario o Contrase&ntilde;a son incorrectos, vuelva a intentarlo'];
+
+        return redirect()->back()
+                         ->withErrors($errors);
+    }
+
+    /**
+     * Override Log the user out of the application.
+     *
+     * @return void
+     */
+    public function logout(Request $request)
+    {
+        session_destroy();
+
+        Auth::logout();
+
+        return redirect()->route('login');
     }
 }
