@@ -117,8 +117,6 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        session_destroy();
-
         Auth::logout();
 
         return redirect()->route('login');
