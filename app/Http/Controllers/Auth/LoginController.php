@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-session_start();
-
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -82,15 +80,17 @@ class LoginController extends Controller
           $vendedor = TVendedor::where('ven_id', $user->idTerceroUsuario)
                                ->first();
 
-          $_SESSION['url'] = env('APPV1_URL');
-          $_SESSION['app'] = 'aplicativos';
-          $_SESSION['idUsuario'] = $user->login;
-          $_SESSION['idTercero'] = $user->idTerceroUsuario;
-          $_SESSION['ultimoIngreso'] = $time;
-          $_SESSION['cedula'] = $user->idTerceroUsuario;
-          $_SESSION['nombreCompleto'] = $user->nombre.' '.$user->apellido;
-          $_SESSION['correoElectronico'] = $dirnacional ? $dirnacional->dir_txt_email : '';
-          $_SESSION['ven_id'] = $vendedor ?  $vendedor->ven_id : '';
+          $info = [
+                    'url' => env('APPV1_URL'),
+                    'app' => 'aplicativos',
+                    'idUsuario' => $user->login,
+                    'idTercero' => $user->idTerceroUsuario,
+                    'ultimoIngreso' => $time,
+                    'cedula' => $user->idTerceroUsuario,
+                    'nombreCompleto' => $user->nombre.' '.$user->apellido,
+                    'correoElectronico' => $dirnacional ? $dirnacional->dir_txt_email : '',
+                    'ven_id' => $vendedor ?  $vendedor->ven_id : ''
+                  ];
 
           $log = new LogUsuario;
           $log->usu_id = $user->login;
@@ -101,7 +101,7 @@ class LoginController extends Controller
 
           $log->save();
 
-          return view('session')->with(['inputs' => $_SESSION]);
+          return view('session')->with(['inputs' => $info]);
         }
 
         $errors = ['login' => 'Usuario o Contrase&ntilde;a son incorrectos, vuelva a intentarlo'];
