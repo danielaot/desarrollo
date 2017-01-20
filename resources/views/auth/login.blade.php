@@ -55,7 +55,7 @@
                     </div>
                   </div>
                   <div class="col-sm-6">
-                    <img src="{{url('/img/login.jpg')}}"/>
+                    <img src="{{url('/images/login.jpg')}}"/>
                   </div>
                 </div>
               {!! Form::close() !!}
