@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
     return redirect('login');
   });
 
-  Route::get('/home', function () {
+  Route::get('home', function () {
     return redirect(env('APPV1_URL'));
   });
 });

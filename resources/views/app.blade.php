@@ -11,6 +11,8 @@
     <!-- Styles -->
     <!--******************** CSS BOOTSTRAP *********************-->
     <link href="{{url('/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet" />
+    <!--******************** CSS DataTables **************************-->
+    <link href="{{url('/css/jquery.dataTables.min.css')}}" type="text/css" rel="stylesheet"/>
     <!--******************** CSS BESA **************************-->
     <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
 
@@ -18,8 +20,19 @@
     <script src="{{url('/js/jquery.min.js')}}" type="text/javascript" language="javascript"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="{{url('/js/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
+    <!-- DataTables -->
+    <script src="{{url('/js/jquery.dataTables.min.js')}}" type="text/javascript" language="javascript"></script>
+
+    <script type="text/javascript">
+      $.extend( true, $.fn.dataTable.defaults, {
+        "language": {
+          "url": "{{ asset('vendor/datatables/es_ES.json')}}"
+        }
+      } );
+    </script>
     <!-- Laravel Javascript Validation -->
     <script src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}" type="text/javascript" language="javascript"></script>
+    @stack('script_data_table')
   </head>
   <body>
     @include('includes.header')
