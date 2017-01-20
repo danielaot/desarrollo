@@ -23,7 +23,6 @@
   </head>
   <body>
     @include('includes.header')
-    @include('includes.menu')
 
     <div class="wrap">
       @yield('content')

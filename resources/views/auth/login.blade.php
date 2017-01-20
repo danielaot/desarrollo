@@ -62,9 +62,9 @@
               <div class="options txt-center">
                 <span>
                   |&nbsp;
-                  <a href="#">Crear Cuenta</a>
+                  <a href="{{env('APPV1_INGRESO')}}/index.php?op=REG">Crear Cuenta</a>
                   &nbsp;|&nbsp;
-                  <a href="#">Recuperar Contraseña</a>
+                  <a href="{{env('APPV1_INGRESO')}}/index.php?op=REC">Recuperar Contraseña</a>
                   &nbsp;|
                 </span>
               </div>
