@@ -32,7 +32,7 @@ return [
     | Here is the the database connection for the auditing log.
     |
     */
-    'connection' => 'aplicativos',
+    'connection' => null,
 
     /*
     |--------------------------------------------------------------------------

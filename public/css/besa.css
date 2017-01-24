@@ -32,6 +32,8 @@ footer {
     padding: 20px 0;
 }
 
+/* Estilos de la cuadricula del menu de inicio */
+
 a.shortcut-button:hover {
     text-decoration: none;
 }
@@ -138,8 +140,13 @@ a.shortcut-button.btn18 {
     background-color: #87794e;
 }
 
+/* Estilo Header de }l DataTable */
+table.dataTable thead{
+    background-color: #366092;
+    color: #fff;
+}
 
-
+/* Estilo breadcumbs */
 .breadcrumb.bg-primary{
     background-color: #337ab7;
 }
