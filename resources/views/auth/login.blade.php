@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link type="image/x-icon" href="favicon.png" rel="icon"/>
+    <link type="image/x-icon" href="favicon.ico" rel="icon"/>
 
     <title>Aplicativos Belleza Express S.A.</title>
 
@@ -55,16 +55,16 @@
                     </div>
                   </div>
                   <div class="col-sm-6">
-                    <img src="{{url('/img/login.jpg')}}"/>
+                    <img src="{{url('/images/login.jpg')}}"/>
                   </div>
                 </div>
               {!! Form::close() !!}
               <div class="options txt-center">
                 <span>
                   |&nbsp;
-                  <a href="#">Crear Cuenta</a>
+                  <a href="{{env('APPV1_INGRESO')}}/index.php?op=REG">Crear Cuenta</a>
                   &nbsp;|&nbsp;
-                  <a href="#">Recuperar Contraseña</a>
+                  <a href="{{env('APPV1_INGRESO')}}/index.php?op=REC">Recuperar Contraseña</a>
                   &nbsp;|
                 </span>
               </div>

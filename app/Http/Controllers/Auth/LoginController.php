@@ -67,7 +67,6 @@ class LoginController extends Controller
 
         $user = User::where([['login', 'LIKE BINARY', $request->login], 'password' => md5($request->password), 'numactivo' => '1'])
                     ->first();
-
         if(count($user) > 0){
           $dirnacional = TDirNacional::where('dir_txt_cedula', $user->idTerceroUsuario)
                                      ->first();
@@ -117,8 +116,6 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        session_destroy();
-
         Auth::logout();
 
         return redirect()->route('login');
