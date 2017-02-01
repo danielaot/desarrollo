@@ -9,7 +9,7 @@
     <title>Aplicativos Belleza Express S.A.</title>
 
     <!-- Styles -->
-    <!--******************** CSS BOOTSTRAP *********************-->
+    <!--******************** CSS BOOTSTRAP 3.3.7 *********************-->
     <link href="{{url('/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet" />
     <!--******************** CSS BESA **************************-->
     <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
