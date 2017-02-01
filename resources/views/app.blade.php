@@ -9,9 +9,9 @@
     <title>Aplicativos Belleza Express S.A.</title>
 
     <!-- Styles -->
-    <!--******************** CSS BOOTSTRAP *********************-->
+    <!--******************** CSS BOOTSTRAP 3.3.7 *********************-->
     <link href="{{url('/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet" />
-    <!--******************** CSS DataTables **************************-->
+    <!--******************** CSS DataTables 1.10.13 **************************-->
     <link href="{{url('/css/jquery.dataTables.min.css')}}" type="text/css" rel="stylesheet"/>
     <!--******************** CSS BESA **************************-->
     <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
@@ -20,7 +20,7 @@
     <script src="{{url('/js/jquery.min.js')}}" type="text/javascript" language="javascript"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="{{url('/js/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
-    <!-- DataTables -->
+    <!-- DataTables 1.10.13 -->
     <script src="{{url('/js/jquery.dataTables.min.js')}}" type="text/javascript" language="javascript"></script>
 
     <script type="text/javascript">
