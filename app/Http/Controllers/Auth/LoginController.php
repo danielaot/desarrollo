@@ -80,7 +80,7 @@ class LoginController extends Controller
                                ->first();
 
           $info = [
-                    'url' => env('APPV1_URL'),
+                    'url' => env('APPV1_SESSION'),
                     'app' => 'aplicativos',
                     'idUsuario' => $user->login,
                     'idTercero' => $user->idTerceroUsuario,
