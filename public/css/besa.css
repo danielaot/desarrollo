@@ -1,5 +1,5 @@
-.txt-center {
-    text-align: center;
+html {
+    background-color: #fff;
 }
 
 header, footer {
@@ -12,150 +12,131 @@ footer {
     color: #000;
 }
 
-.navbar {
-    margin: 10px 0px;
-    border-radius: 0px;
-}
-
-.navbar-dark .navbar-nav>li>a{
-    color: #FFF;
-}
-
-.navbar-dark .nav>li>a:focus, .navbar-dark .nav>li>a:hover{
-    background-color: transparent;
-    color: #EEE;
-}
-
 .wrap {
-    width: 80%;
+    width: 92%;
     margin: 0 auto;
     padding: 20px 0;
 }
 
-/* Estilos de la cuadricula del menu de inicio */
-
-a.shortcut-button:hover {
-    text-decoration: none;
+.txt-center {
+  text-align: center;
 }
 
-a.shortcut-button .badge {
-    background-color: transparent;
+.required {
+  font-size: 16px;
+  color: rgba(221, 44, 40, 1);
 }
 
-a.shortcut-button .title {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    height: 40px;
-    background-color: rgba(255, 255, 255, 0.4);
-    font-weight: 600;
+/* Estilo barra de ruta de navegacion */
+.breadcumbs{
+  padding: 6px;
+  margin: 0 0 20px;
+  min-height: 28px;
+  border-radius: 5px;
+  background-color: #337ab7;
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: bold;
+  color: #fff;
 }
 
-a.shortcut-button img {
-    width: 50%;
-    height: auto;
+/* Estilos titulo modulo */
+.titulo{
+  width: 50%;
+  border-radius: 5px;
+  padding: 3px 0;
+  margin: 0 25% 20px;
+  background-color: #8fbf5c;
+  box-shadow: 2px -2px 2px #888888;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
 }
 
-
-a.shortcut-button {
-    width: 176px;
-    height: 128px;
-}
-
-span.title {
-    font-size: 13px;
-    line-height: 20px;
-}
-
-a.shortcut-button.btn1 {
-    background-color: #60a917;
-}
-
-a.shortcut-button.btn2 {
-    background-color: #da5a53;
-}
-
-a.shortcut-button.btn3 {
-    background-color: #1ba1e2;
-}
-
-a.shortcut-button.btn4 {
-    background-color: #00aba9;
-}
-
-a.shortcut-button.btn5 {
-    background-color: #fa6800;
-}
-
-a.shortcut-button.btn6 {
-    background-color: #1b6eae;
-}
-
-a.shortcut-button.btn7 {
-    background-color: #6a00ff;
-}
-
-a.shortcut-button.btn8 {
-    background-color: #825a2c;
-}
-
-a.shortcut-button.btn9 {
-    background-color: #a20025;
-}
-
-a.shortcut-button.btn10 {
-    background-color: #76608a;
-}
-
-a.shortcut-button.btn11 {
-    background-color: #008a00;
-}
-
-a.shortcut-button.btn12 {
-    background-color: #647687;
-}
-
-a.shortcut-button.btn13 {
-    background-color: #ce352c;
-}
-
-a.shortcut-button.btn14 {
-    background-color: #6d8764;
-}
-
-a.shortcut-button.btn15 {
-    background-color: #bf5a15;
-}
-
-a.shortcut-button.btn16 {
-    background-color: #9a165a;
-}
-
-a.shortcut-button.btn17 {
-    background-color: #0050ef;
-}
-
-a.shortcut-button.btn18 {
-    background-color: #87794e;
-}
-
-/* Estilo Header de }l DataTable */
+/* Estilo Header del DataTable */
 table.dataTable thead{
-    background-color: #366092;
-    color: #fff;
+  background-color: #366092;
+  color: #fff;
 }
 
-/* Estilo breadcumbs */
-.breadcrumb.bg-primary{
-    background-color: #337ab7;
+/* Estilos del autocompletar */
+.md-autocomplete-suggestions-container, ul.ui-autocomplete{
+    z-index: 9999 !important;
 }
 
-.breadcrumb.bg-primary>li>a{
-    color: #FFF;
+md-autocomplete-wrap{
+  display: block;
+  height: 34px !important;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
-.breadcrumb.bg-primary>li>a:focus, .breadcrumb.bg-primary>li>a:hover, .breadcrumb.bg-primary>li.active{
-    color: #EEE;
-    text-decoration: none;
+md-autocomplete[disabled]:not([md-floating-label]) md-autocomplete-wrap{
+  background-color: rgb(245,245,245);
+}
+
+md-autocomplete[disabled]:not([md-floating-label]){
+  background: #fff;
+}
+
+md-chips md-autocomplete-wrap{
+  border: 0px;
+}
+
+md-chips md-autocomplete{
+  min-width: 300px;
+}
+
+md-autocomplete-wrap.md-whiteframe-z1{
+  box-shadow: 0 0 0;
+}
+
+md-autocomplete input:not(.md-input){
+  height: 34px !important;
+}
+
+.panel-default>.panel-heading {
+  background-color: #dedede;
+}
+
+/* Estilos listado de Procesos */
+a.pro-name{
+    line-height: 30px;
+}
+
+.form-horizontal .control-label{
+  text-align: left;
+}
+
+.form-horizontal .form-group{
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.input-group-btn>.btn {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.ng-submitted .form-control.ng-invalid, .form-control.ng-dirty.ng-invalid, .form-control.has-error {
+  border-color: #c13131;
+}
+
+.help-block.error-help-block{
+  color: #c13131;
+}
+
+.interno .row .row>div[class^="col-sm"] {
+    padding-left: 0;
+    /*padding-right: 0;*/
 }

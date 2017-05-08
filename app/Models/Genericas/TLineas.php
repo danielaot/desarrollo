@@ -19,4 +19,14 @@ class TLineas extends Model
         'lin_txt_descrip',
         'lin_txt_estado'
     ];
+
+    public function criterioslinea()
+  	{
+  		  return $this->hasMany('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'lin_id');
+  	}
+
+    public function categorias()
+  	{
+  		  return $this->hasOne('App\Models\Genericas\TCategoria', 'cat_id', 'cat_id');
+  	}
 }
