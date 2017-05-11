@@ -79,11 +79,31 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'besa' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_HOST', 'localhost'),
+            'database' => env('DB_SQL_DATABASE', 'BESA'),
+            'username' => env('DB_SQL_USERNAME', 'forge'),
+            'password' => env('DB_SQL_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+        'unoeereal' => [
+          'driver' => 'sqlsrv',
+          'host' => env('DB_SQL_HOST', 'localhost'),
+          'database' => env('DB_SQL_DATABASE_UNOEEREAL', 'unoeereal'),
+          'username' => env('DB_SQL_USERNAME', 'forge'),
+          'password' => env('DB_SQL_PASSWORD', ''),
+          'charset' => 'utf8',
+          'prefix' => '',
+        ],
+
         'aplicativos' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_A_DATABASE', 'forge'),
+            'database' => env('DB_A_DATABASE', 'bd_aplicativos'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
@@ -97,7 +117,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_G_DATABASE', 'forge'),
+            'database' => env('DB_G_DATABASE', 'bd_genericas'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
@@ -106,17 +126,6 @@ return [
             'strict' => true,
             'engine' => null,
         ],
-
-        'besa' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_SQL_HOST', 'localhost'),
-            'database' => env('DB_SQL_DATABASE', 'forge'),
-            'username' => env('DB_SQL_USERNAME', 'forge'),
-            'password' => env('DB_SQL_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-        ],
-
     ],
 
     /*
