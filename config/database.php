@@ -79,6 +79,26 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'besa' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_HOST', 'localhost'),
+            'database' => env('DB_SQL_DATABASE', 'BESA'),
+            'username' => env('DB_SQL_USERNAME', 'forge'),
+            'password' => env('DB_SQL_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+        'unoeereal' => [
+          'driver' => 'sqlsrv',
+          'host' => env('DB_SQL_HOST', 'localhost'),
+          'database' => env('DB_SQL_DATABASE_UNOEEREAL', 'unoeereal'),
+          'username' => env('DB_SQL_USERNAME', 'forge'),
+          'password' => env('DB_SQL_PASSWORD', ''),
+          'charset' => 'utf8',
+          'prefix' => '',
+        ],
+
         'aplicativos' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
