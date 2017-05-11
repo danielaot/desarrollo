@@ -3,7 +3,7 @@
 @section('content')
   @include('includes.titulo')
   <div ng-controller="paso1Ctrl" ng-cloak>
-    <form name="paso1Form" ng-submit="paso1Form.$valid" class="form-horizontal">
+    <form name="paso1Form" ng-submit="paso1Form.$valid && saveProducto()" class="form-horizontal" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Descripción Interna Logyca</div>
         <div class="panel-body">
@@ -21,7 +21,7 @@
                 <label class="col-sm-6 control-label">Tipo de Producto:</label>
                 <div class="col-sm-5">
                   <select class="form-control" ng-model="producto.tipo" ng-change="validateTipo()">
-                    <option value="">Regular</option>
+                    <option value="Regular">Regular</option>
                     <option value="Etch.">Estuche</option>
                     <option value="Oft.">Oferta</option>
                   </select>
@@ -105,10 +105,10 @@
               <div class="row">
                 <label class="col-sm-12 control-label">Contenido<span class="required">*</span> :</label>
                 <div class="col-sm-4">
-                  <input type="number" class="form-control" ng-model="producto.contenido" ng-change="createDescripciones()"/>
+                  <input type="number" class="form-control" ng-model="producto.contenido" ng-change="createDescripciones()" required/>
                 </div>
                 <div class="col-sm-3">
-                  <select class="form-control" ng-model="producto.contum" ng-change="createDescripciones()">
+                  <select class="form-control" ng-model="producto.contum" ng-change="createDescripciones()" required>
                     <option value="art">art</option>
                     <option value="gr">gr</option>
                     <option value="ml">ml</option>
@@ -165,7 +165,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Cantidad Embalaje<span class="required">*</span> :</label>
                 <div class="col-sm-5 input-group">
-                  <input type="number" class="form-control" ng-model="producto.embalaje" maxlength="3"/>
+                  <input type="number" class="form-control" ng-model="producto.embalaje" maxlength="3" required/>
                   <div class="input-group-addon">unidades</div>
                 </div>
               </div>
@@ -176,7 +176,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Nombre del Fabricante<span class="required">*</span> :</label>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" ng-model="producto.fabricante"/>
+                  <input type="text" class="form-control" ng-model="producto.fabricante" required/>
                 </div>
               </div>
             </div>
@@ -191,7 +191,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Origen<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.origen" ng-options="opt.descripcionItemCriterioMayor for opt in origen track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.origen" ng-options="opt.descripcionItemCriterioMayor for opt in origen track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -199,31 +199,31 @@
               <div class="row">
                 <label class="col-sm-8 control-label">Tipo Marca<span class="required">*</span>:</label>
                 <div class="col-sm-4">
-                  <select class="form-control" ng-model="producto.tipomarca" ng-options="opt.descripcionItemCriterioMayor for opt in tipomarca track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.tipomarca" ng-options="opt.descripcionItemCriterioMayor for opt in tipomarca track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
-            <div class="col-sm-4 form-group" ng-if="producto.tipo != ''">
+            <div class="col-sm-4 form-group" ng-if="producto.tipo != 'Regular'">
               <div class="row">
                 <label class="col-sm-5 control-label">Tipo Oferta<span class="required">*</span> :</label>
                 <div class="col-sm-7">
-                  <select class="form-control" ng-model="producto.tipooferta" ng-options="opt.descripcionItemCriterioMayor for opt in tipooferta track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.tipooferta" ng-options="opt.descripcionItemCriterioMayor for opt in tipooferta track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
-            <div class="col-sm-3 form-group" ng-if="producto.tipo != ''">
+            <div class="col-sm-3 form-group" ng-if="producto.tipo != 'Regular'">
               <div class="row">
                 <label class="col-sm-9 control-label">Menu de Promociones<span class="required">*</span> :</label>
                 <div class="col-sm-3">
-                  <select class="form-control" ng-model="producto.menupromo" ng-options="opt.descripcionItemCriterioMayor for opt in menupromociones track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.menupromo" ng-options="opt.descripcionItemCriterioMayor for opt in menupromociones track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
-            <div class="col-sm-3 form-group" ng-if="producto.tipo != ''">
+            <div class="col-sm-3 form-group" ng-if="producto.tipo != 'Regular'">
               <div class="row">
                 <label class="col-sm-7 control-label">Tipo Promoción<span class="required">*</span>:</label>
                 <div class="col-sm-5">
-                  <select class="form-control" ng-model="producto.tipopromo" ng-options="opt.descripcionItemCriterioMayor for opt in tipopromocion track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.tipopromo" ng-options="opt.descripcionItemCriterioMayor for opt in tipopromocion track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@
               <div class="row">
                 <label class="col-sm-4 control-label">Presentación<span class="required">*</span> :</label>
                 <div class="col-sm-8">
-                  <select class="form-control" ng-model="producto.presentacion" ng-options="opt.descripcionItemCriterioMayor for opt in presentacion track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.presentacion" ng-options="opt.descripcionItemCriterioMayor for opt in presentacion track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -239,7 +239,7 @@
               <div class="row">
                 <label class="col-sm-4 control-label">Variedad<span class="required">*</span> :</label>
                 <div class="col-sm-8">
-                  <select class="form-control" ng-model="producto.variedadbesa" ng-options="opt.descripcionItemCriterioMayor for opt in variedad track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.variedadbesa" ng-options="opt.descripcionItemCriterioMayor for opt in variedad track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -253,7 +253,7 @@
               <div class="row">
                 <label class="col-sm-3 control-label">Linea<span class="required">*</span> :</label>
                 <div class="col-sm-9">
-                  <select class="form-control" ng-model="producto.linea" ng-options="opt.lineas[0].descripcionItemCriterioMayor for opt in (linea | filter : {mar_nombre : producto.marca.mar_nombre}) track by opt.lineas[0].idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.linea" ng-options="opt.lineas[0].descripcionItemCriterioMayor for opt in (linea | filter : {mar_nombre : producto.marca.mar_nombre}) track by opt.lineas[0].idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -261,7 +261,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Sublinea<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.sublinea" ng-options="opt.descripcionItemCriterioMayor for opt in sublinea track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.sublinea" ng-options="opt.descripcionItemCriterioMayor for opt in sublinea track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -269,7 +269,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Sublinea Mercadeo:</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.sublinmercadeo" ng-options="opt.descripcionItemCriterioMayor for opt in sublinmercadeo track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.sublinmercadeo" ng-options="opt.descripcionItemCriterioMayor for opt in sublinmercadeo track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Sublinea Mercadeo 2:</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.sublinmercadeo2" ng-options="opt.descripcionItemCriterioMayor for opt in sublinmercadeo2 track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.sublinmercadeo2" ng-options="opt.descripcionItemCriterioMayor for opt in sublinmercadeo2 track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -285,7 +285,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Submarca<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.submarca" ng-options="opt.descripcionItemCriterioMayor for opt in submarca track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.submarca" ng-options="opt.descripcionItemCriterioMayor for opt in submarca track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -301,7 +301,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Segmento<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.segmento" ng-options="opt.descripcionItemCriterioMayor for opt in segmento track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.segmento" ng-options="opt.descripcionItemCriterioMayor for opt in segmento track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -309,7 +309,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Clasificación<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.clasificacion" ng-options="opt.descripcionItemCriterioMayor for opt in clasificacion track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.clasificacion" ng-options="opt.descripcionItemCriterioMayor for opt in clasificacion track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>
@@ -317,7 +317,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Acondicionamiento<span class="required">*</span> :</label>
                 <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.acondicionamiento" ng-options="opt.descripcionItemCriterioMayor for opt in acondicionamiento track by opt.idItemCriterioMayor"></select>
+                  <select class="form-control" ng-model="producto.acondicionamiento" ng-options="opt.descripcionItemCriterioMayor for opt in acondicionamiento track by opt.idItemCriterioMayor" required></select>
                 </div>
               </div>
             </div>

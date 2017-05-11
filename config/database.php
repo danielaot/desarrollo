@@ -145,16 +145,6 @@ return [
             'engine' => 'InnoDB',
         ],
 
-         'unoeereal' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_SQL_HOST', 'localhost'),
-            'database' => env('DB_SQL_DATABASE_UNOEEREAL', 'forge'),
-            'username' => env('DB_SQL_USERNAME', 'forge'),
-            'password' => env('DB_SQL_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-        ],
-
     ],
 
     /*

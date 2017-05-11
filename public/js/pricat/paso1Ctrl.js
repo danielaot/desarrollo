@@ -31,7 +31,7 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
   $scope.producto = {
                       'categoria' : '',
                       'variedad' : [],
-                      'tipo' : '',
+                      'tipo' : 'Regular',
                       'fabricante' : 'Belleza Express SA'
                     };
 
@@ -79,7 +79,7 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
     $scope.producto.desbesa = '';
     $scope.producto.descorta = '';
     //console.log('tipo', $scope.producto.tipo);
-    if($scope.producto.tipo != '' && $scope.producto.tipo != 'Etch.'){
+    if($scope.producto.tipo != 'Regular' && $scope.producto.tipo != 'Etch.'){
       $scope.producto.deslogyca += $scope.producto.tipo;
       $scope.producto.desbesa += $scope.producto.tipo;
       $scope.producto.descorta += $scope.producto.tipo;
@@ -124,5 +124,14 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
       $scope.producto.desbesa += $scope.producto.contum;
       $scope.producto.descorta += $scope.producto.contum;
     }
+  }
+
+  $scope.saveProducto = function(){
+    console.log($scope.producto);
+    /*$http.post($scope.url, $scope.proceso).then(function(response){
+      $scope.getInfo();
+      $scope.proceso = {};
+      $scope.procesoForm.$setPristine();
+    }, function(){});*/
   }
 }]);
