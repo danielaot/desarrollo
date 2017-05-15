@@ -13,6 +13,9 @@
 <!-- CSS DataTables 1.10.13 -->
 <link href="{{url('/css/jquery.dataTables.min.css')}}" type="text/css" rel="stylesheet"/>
 
+<!-- CSS Dropzone -->
+<link href="{{url('/css/dropzone.css')}}" type="text/css" rel="stylesheet"/>
+
 <!-- CSS BESA -->
 <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
 

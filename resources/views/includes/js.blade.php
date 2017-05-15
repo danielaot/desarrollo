@@ -33,7 +33,11 @@
 <!-- Laravel Javascript Validation -->
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}" type="text/javascript" language="javascript"></script>
 
+<!-- Dropzone -->
+<script src="{{url('/js/dropzone.js')}}" type="text/javascript" language="javascript"></script>
+
 <script src="{{url('/js/genericas.js')}}" type="text/javascript" language="javascript"></script>
 
 @stack('script_data_table')
 @stack('script_angularjs')
+@stack('script_custom')
