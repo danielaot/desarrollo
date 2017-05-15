@@ -3,207 +3,290 @@
 @section('content')
   @include('includes.titulo')
   <div ng-controller="paso7Ctrl" ng-cloak>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <form name="paso4Form" ng-submit="paso4Form.$valid" class="form-horizontal">
-          {!! Form::token() !!}
+    <form name="paso7Form" ng-submit="paso4Form.$valid" class="form-horizontal">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Información del Producto</div>
+        <div class="panel-body">
           <div class="row">
-            <div class="col-sm-5 form-group">
-              <label class="col-sm-6 control-label">Tipo de Empaque:</label>
-              <div class="col-sm-6">
-                <md-autocomplete md-search-text="searchText" md-selected-item-change="selectedItemChange(item)"
-                                 md-items="item in querySearch(searchText)" md-item-text="item.tvoc_palabra" md-min-length="1">
-                  <md-item-template>
-                    <span md-highlight-text="searchText" md-highlight-flags="^i">@{{item.tvoc_palabra}}</span>
-                  </md-item-template>
-                  <md-not-found>
-                    No se encontraron resultados para "@{{searchText}}".
-                  </md-not-found>
-                </md-autocomplete>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h4>AAA000 - Shampoo BIOHERBAL Manzanilla X 350ml</h4>
+                </div>
               </div>
             </div>
-            <div class="col-sm-7 form-group">
-              <label class="col-sm-6 control-label">Cantidad de Embalaje:</label>
-              <div class="col-sm-5">
-                <div class="input-group">
-                  <input type="text" class="form-control" ng-model="producto.cantemb" maxlength="3"/>
-                  <div class="input-group-addon">unidades</div>
-                </div>
-              </div>
-              <div class="col-sm-1">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" value="1"/>
-                  </label>
-                </div>
-              </div>
+            <div class="col-sm-3">
+              <h4>Cod Producto: 7702277144540</h4>
+            </div>
+            <div class="col-sm-3">
+              <h4>Cod Corrugado: 17702277144547</h4>
             </div>
           </div>
+          <br>
           <div class="row">
             <div class="col-sm-4 form-group">
-              <label class="col-sm-6 control-label">Tipo de Embalaje:</label>
-              <div class="col-sm-6">
-                <select class="form-control" ng-model="producto.tembalaje" ng-options="option.temb_nombre for option in tembalaje track by option.id"></select>
-              </div>
-            </div>
-            <div class="col-sm-4 form-group">
-              <label class="col-sm-6 control-label">Número de tendidos:</label>
-              <div class="col-sm-6">
-                <div class="input-group">
-                  <input type="text" class="form-control" ng-model="producto.numtendidos" maxlength="3"/>
-                  <div class="input-group-addon">unidades</div>
+              <div class="row">
+                <label class="col-sm-6 control-label">Tipo de Empaque:</label>
+                <div class="col-sm-5">
+                  <select class="form-control" ng-model="producto.tempaque" ng-options="opt.temp_nombre for opt in tempaque track by opt.temp_calificador" required></select>
                 </div>
               </div>
             </div>
             <div class="col-sm-4 form-group">
-              <label class="col-sm-6 control-label">Numero de unidades apilables de embalaje:</label>
-              <div class="col-sm-6">
-                <div class="input-group">
-                  <input type="text" class="form-control" ng-model="producto.numuniapi" maxlength="3"/>
-                  <div class="input-group-addon">unidades</div>
+              <div class="row">
+                <label class="col-sm-6 control-label">Tipo de Embalaje:</label>
+                <div class="col-sm-5">
+                  <select class="form-control" ng-model="producto.tembalaje" ng-options="opt.temb_nombre for opt in tembalaje track by opt.temb_calificador" required></select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4 form-group">
+              <div class="row">
+                <label class="col-sm-7 control-label">Condiciones de Manipulacion:</label>
+                <div class="col-sm-5">
+                  <select class="form-control" ng-model="producto.manipulacion" ng-options="opt.tcman_nombre for opt in cmanipulacion track by opt.tcman_calificador" required></select>
                 </div>
               </div>
             </div>
           </div>
           Descripcion Embalaje Larga <br>
           Descripcion Embalaje Corta <br>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Medidas del Producto</div>
+        <div class="panel-body">
           <div class="row">
-            <div class="col-sm-6 form-group">
-              <label class="col-sm-4 control-label">¿Tiene SubEmpaque?</label>
-              <div class="col-sm-4">
-                <select class="form-control" ng-model="producto.hasSubEmp">
-                  <option value="true">Si</option>
-                  <option value="">No</option>
-                </select>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Alto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.alto"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Ancho:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.ancho"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Profundo:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.profundo"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Volumen:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.volumen" ng-value="producto.alto*producto.ancho*producto.profundo" disabled/>
+                  <div class="input-group-addon">mm<sup>3</sup></div>
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-12 form-group">
-              <label class="control-label">Medidas del Producto</label>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Peso Neto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.pesoneto"/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Peso Bruto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.pesobruto"/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Tara:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="producto.tara" ng-value="producto.pesoneto-producto.pesobruto" disabled/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Medidas del Empaque</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Alto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.alto"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Ancho:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.ancho"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Profundo:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.profundo"/>
+                  <div class="input-group-addon">mm</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Volumen:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.volumen" ng-value="empaque.alto*empaque.ancho*empaque.profundo" disabled/>
+                  <div class="input-group-addon">mm<sup>3</sup></div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Alto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.alto"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Peso Neto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.pesoneto"/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Ancho:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.ancho"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Peso Bruto:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.pesobruto"/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Profundo:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.profundo"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-5 control-label">Tara:</label>
+                <div class="col-sm-6 input-group">
+                  <input type="number" class="form-control" ng-model="empaque.tara" ng-value="empaque.pesoneto-empaque.pesobruto" disabled/>
+                  <div class="input-group-addon">Kg</div>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Volumen:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.volumen" ng-value="producto.alto*producto.ancho*producto.profundo" disabled/>
-                <div class="input-group-addon">mm<sup>3</sup></div>
-              </div>
-            </div>
-          </div><br>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Patrón de Arrume</div>
+        <div class="panel-body">
           <div class="row">
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Peso Bruto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.pesobruto"/>
-                <div class="input-group-addon">Kg</div>
+            <div class="col-sm-4 form-group">
+              <div class="row">
+                <label class="col-sm-6 control-label">Unidad de Empaque:</label>
+                <div class="col-sm-4">
+                  <div class="input-group">
+                    <input type="text" class="form-control" ng-model="producto.cantemb" maxlength="3"/>
+                    <div class="input-group-addon">unds</div>
+                  </div>
+                </div>
+                <div class="col-sm-1">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="1"/>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Peso Neto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.pesoneto"/>
-                <div class="input-group-addon">Kg</div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-7 control-label">Tendidos x Caja:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.numtendidos" maxlength="3"/>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Tara:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="producto.tara" ng-value="producto.pesoneto-producto.pesobruto" disabled/>
-                <div class="input-group-addon">Kg</div>
+            <div class="col-sm-3 form-group">
+              <div class="row">
+                <label class="col-sm-10 control-label">Unds apilables de embalaje:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.numuniapi"/>
+                </div>
               </div>
-            </div>
-          </div><br>
-          <div class="row">
-            <div class="col-sm-12 form-group">
-              <label class="control-label">Medidas del Empaque</label>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Alto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.alto"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-2 form-group">
+              <div class="row">
+                <label class="col-sm-9 control-label">Cajas x Tendido:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.cajten"/>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Ancho:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.ancho"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-2 form-group">
+              <div class="row">
+                <label class="col-sm-10 control-label">Tendidos x Estiba:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0; margin-left: -15px;">
+                  <input type="number" class="form-control" ng-model="patron.tenest"/>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Profundo:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.profundo"/>
-                <div class="input-group-addon">mm</div>
+            <div class="col-sm-2 form-group">
+              <div class="row">
+                <label class="col-sm-9 control-label">Unds x Tendido:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.undten" ng-value="producto.cantemb*patron.cajten" disabled/>
+                </div>
               </div>
             </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Volumen:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.volumen" ng-value="empaque.alto*empaque.ancho*empaque.profundo" disabled/>
-                <div class="input-group-addon">mm<sup>3</sup></div>
+            <div class="col-sm-2 form-group">
+              <div class="row">
+                <label class="col-sm-8 control-label">Unds x Estiba:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.undest" ng-value="patron.undten*patron.tenest" disabled/>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 form-group">
+              <div class="row">
+                <label class="col-sm-8 control-label">Cajas x Estiba:</label>
+                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                  <input type="number" class="form-control" ng-model="patron.caest" ng-value="patron.cajten*patron.tenest" disabled/>
+                </div>
               </div>
             </div>
           </div>
           <br>
           <div class="row">
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Peso Bruto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.pesobruto"/>
-                <div class="input-group-addon">Kg</div>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Peso Neto:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.pesoneto"/>
-                <div class="input-group-addon">Kg</div>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <label class="col-sm-5 control-label">Tara:</label>
-              <div class="input-group">
-                <input type="number" class="col-sm-6 form-control" ng-model="empaque.tara" ng-value="empaque.pesoneto-empaque.pesobruto" disabled/>
-                <div class="input-group-addon">Kg</div>
-              </div>
-            </div>
-          </div>
-          Condiciones de Manipulacion <br>
-          <div class="row">
-            <div class="text-center form-group">
+            <div class="text-center">
               <button class="btn btn-primary" type="submit">Guardar</button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 @endsection
 

@@ -112,7 +112,6 @@
                     <option value="art">art</option>
                     <option value="gr">gr</option>
                     <option value="ml">ml</option>
-                    <option value="und">und</option>
                   </select>
                 </div>
               </div>
@@ -166,7 +165,7 @@
                 <label class="col-sm-6 control-label">Cantidad Embalaje<span class="required">*</span> :</label>
                 <div class="col-sm-5 input-group">
                   <input type="number" class="form-control" ng-model="producto.embalaje" maxlength="3" required/>
-                  <div class="input-group-addon">unidades</div>
+                  <div class="input-group-addon">unds</div>
                 </div>
               </div>
             </div>

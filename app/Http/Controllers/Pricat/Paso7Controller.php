@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 
-use App\Models\Pricat\TVocabas as Vocabas;
-use App\Models\Pricat\TCategoriasLogyca as CatLogyca;
+use App\Models\Pricat\TCondManipulacion as CManipulacion;
+use App\Models\Pricat\TTipoEmpaque as TEmpaque;
 use App\Models\Pricat\TTipoEmbalaje as TEmbalaje;
 
 class Paso7Controller extends Controller
@@ -32,10 +32,11 @@ class Paso7Controller extends Controller
      */
     public function getInfo()
     {
-        $vocabas = Vocabas::all();
+        $cmanipulacion = CManipulacion::all();
+        $tempaque = TEmpaque::all();
         $tembalaje = TEmbalaje::all();
 
-        $response = compact('vocabas', 'tembalaje');
+        $response = compact('cmanipulacion', 'tempaque', 'tembalaje');
 
         return response()->json($response);
     }

@@ -4,15 +4,15 @@ namespace App\Models\Pricat;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TTipoEmpEmb extends Model
+class TCondManipulacion extends Model
 {
     protected $connection = 'pricat';
 
-    protected $table = 't_tipo_emp_emb';
+    protected $table = 't_cond_manipulacion';
 
     protected $fillable = [
-        'tem_calificador',
-        'tem_nombre'
+        'tcman_calificador',
+        'tcman_nombre'
     ];
 
 }

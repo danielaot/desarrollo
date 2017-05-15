@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTTipoEmpEmb extends Migration
+class CreateTTipoEmpaques extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTTipoEmpEmb extends Migration
      */
     public function up()
     {
-        Schema::connection('pricat')->create('t_tipo_emp_emb', function (Blueprint $table) {
+        Schema::connection('pricat')->create('t_tipo_empaques', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('tem_calificador');
-            $table->string('tem_nombre');
+            $table->string('temp_calificador');
+            $table->string('temp_nombre');
             $table->timestamps();
         });
     }
