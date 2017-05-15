@@ -40,3 +40,4 @@
 
 @stack('script_data_table')
 @stack('script_angularjs')
+@stack('script_custom')
