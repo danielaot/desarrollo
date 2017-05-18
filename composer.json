@@ -14,7 +14,8 @@
         "nesbot/carbon": "^1.22",
         "maatwebsite/excel": "~2.1.0",
         "mpociot/laravel-apidoc-generator": "^1.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
