@@ -17,11 +17,11 @@ class CreateTActividadesTable extends Migration
             $table->increments('id');
             $table->string('act_titulo');
             $table->text('act_descripcion');
-            $table->integer('act_proc_id')->unsigned();
+            $table->unsignedInteger('act_proc_id');
             $table->foreign('act_proc_id')->references('id')
                   ->on('t_procesos')
                   ->onDelete('cascade');
-            $table->integer('act_ar_id')->unsigned();
+            $table->unsignedInteger('act_ar_id');
             $table->foreign('act_ar_id')->references('id')
                   ->on('t_areas')
                   ->onDelete('cascade');

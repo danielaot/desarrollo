@@ -4,7 +4,6 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
 
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
-    $scope.vocabas = angular.copy(info.vocabas);
     $scope.tempaque = angular.copy(info.tempaque);
     $scope.tembalaje = angular.copy(info.tembalaje);
     $scope.cmanipulacion = angular.copy(info.cmanipulacion);

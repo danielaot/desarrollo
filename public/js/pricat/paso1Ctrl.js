@@ -2,7 +2,8 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
   $scope.getUrl = '../pricat/paso1info';
   $scope.url = '../pricat/paso1';
   $scope.pattern = '[a-zA-Z0-9\s]+';
-
+  $scope.progress = true;
+  console.log($scope.progress);
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
@@ -32,7 +33,8 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
                       'categoria' : '',
                       'variedad' : [],
                       'tipo' : 'Regular',
-                      'fabricante' : 'Belleza Express SA'
+                      'fabricante' : 'Belleza Express SA',
+                      'proy' : 0
                     };
 
   $scope.vocabasSearch = function(query){
@@ -78,14 +80,14 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
     $scope.producto.deslogyca = '';
     $scope.producto.desbesa = '';
     $scope.producto.descorta = '';
-    //console.log('tipo', $scope.producto.tipo);
+    $scope.producto.varserie = [];
+
     if($scope.producto.tipo != 'Regular' && $scope.producto.tipo != 'Etch.'){
       $scope.producto.deslogyca += $scope.producto.tipo;
       $scope.producto.desbesa += $scope.producto.tipo;
       $scope.producto.descorta += $scope.producto.tipo;
     }
 
-    //console.log('uso', $scope.producto.uso);
     if($scope.producto.uso != undefined){
       $scope.producto.deslogyca += $scope.producto.uso.tvoc_abreviatura;
       $scope.producto.desbesa += $scope.producto.uso.tvoc_palabra;
@@ -96,13 +98,12 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
       $scope.producto.deslogyca += $scope.producto.marca.mar_nombre;
       $scope.producto.desbesa += ' '+$scope.producto.marca.mar_nombre;
       var lineas = $filter('filter')($scope.linea, {mar_nombre : $scope.producto.marca.mar_nombre});
-      $scope.producto.categoria = lineas[0].lineas[0].categorias.categorias.cat_txt_descrip;
+      $scope.producto.categoria = lineas[0].lineas[0].categorias.categorias;
     }
     else{
       $scope.producto.categoria = '';
     }
 
-    //console.log('variedad', $scope.producto.variedad);
     if($scope.producto.variedad.length > 0){
       $scope.producto.deslogyca += ' ';
       $scope.producto.desbesa += ' ';
@@ -110,6 +111,7 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
       angular.forEach($scope.producto.variedad, function(value, key) {
         $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
         $scope.producto.desbesa += ' '+value.tvoc_palabra;
+        $scope.producto.varserie.push(value.id);
       });
     }
 
@@ -127,11 +129,11 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
   }
 
   $scope.saveProducto = function(){
-    console.log($scope.producto);
-    /*$http.post($scope.url, $scope.proceso).then(function(response){
-      $scope.getInfo();
-      $scope.proceso = {};
-      $scope.procesoForm.$setPristine();
-    }, function(){});*/
+    $scope.progress = true;
+    $http.post($scope.url, $scope.producto).then(function(response){
+      console.log(response.data);
+      $scope.progress = false;
+
+    }, function(){});
   }
 }]);

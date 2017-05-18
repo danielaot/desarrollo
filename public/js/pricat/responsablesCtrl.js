@@ -1,7 +1,7 @@
 
 app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = "../pricat/responsablesinfo";
-  $scope.url = "../pricat/responsables";
+  $scope.getUrl = "responsablesinfo";
+  $scope.url = "responsables";
 
   $scope.usuario = '';
   $scope.responsableError = false;

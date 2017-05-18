@@ -15,7 +15,7 @@ class CreateTResponsablesTable extends Migration
     {
         Schema::connection('pricat')->create('t_responsables', function (Blueprint $table) {
             $table->string('res_usuario', 20);
-            $table->integer('res_ar_id')->unsigned();
+            $table->unsignedInteger('res_ar_id');
             $table->foreign('res_ar_id')->references('id')
                   ->on('t_areas')
                   ->onDelete('cascade');

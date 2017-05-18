@@ -3,7 +3,7 @@
 @section('content')
   @include('includes.titulo')
   <div ng-controller="paso7Ctrl" ng-cloak>
-    <form name="paso7Form" ng-submit="paso4Form.$valid" class="form-horizontal">
+    <form name="paso7Form" ng-submit="paso4Form.$valid" class="form-horizontal" enctype="multipart/form-data">
       <div class="panel panel-primary">
         <div class="panel-heading">Información del Producto</div>
         <div class="panel-body">
@@ -49,8 +49,44 @@
               </div>
             </div>
           </div>
-          Descripcion Embalaje Larga <br>
-          Descripcion Embalaje Corta <br>
+          <br>
+          <div class="row">
+            <div class="col-sm-6 form-group">
+              <div class="row">
+                <div class="col-sm-12">
+                  Descripcion Embalaje Larga <br>
+                  Descripcion Embalaje Corta
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 form-group">
+              <div class="row">
+                <div class="col-sm-3">
+                  <span id="dropzone" class="btn btn-success btn-sm dz-clickable">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Cargar Imágen</span>
+                  </span>
+                </div>
+                <div class="col-sm-6">
+                  <div class="table table-striped" class="files" id="previews">
+                    <div id="template" class="file-row">
+                      <!-- This is used as the file preview template -->
+                      <div>
+                        <span class="preview" style="margin: 5px 15px; border: 1px solid; display: inline-block;"><img data-dz-thumbnail /></span>
+                        <button data-dz-remove class="btn btn-danger delete">
+                          <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                      </div>
+                      <div>
+                        <strong class="error text-danger" data-dz-errormessage></strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
       <div class="panel panel-primary">
@@ -227,16 +263,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-3 form-group">
-              <div class="row">
-                <label class="col-sm-10 control-label">Unds apilables de embalaje:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.numuniapi"/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
             <div class="col-sm-2 form-group">
               <div class="row">
                 <label class="col-sm-9 control-label">Cajas x Tendido:</label>
@@ -253,6 +279,8 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row">
             <div class="col-sm-2 form-group">
               <div class="row">
                 <label class="col-sm-9 control-label">Unds x Tendido:</label>
@@ -272,7 +300,7 @@
             <div class="col-sm-2 form-group">
               <div class="row">
                 <label class="col-sm-8 control-label">Cajas x Estiba:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
+                <div class="col-sm-3" style="padding-left: 0; padding-right: 0;">
                   <input type="number" class="form-control" ng-model="patron.caest" ng-value="patron.cajten*patron.tenest" disabled/>
                 </div>
               </div>
@@ -281,7 +309,7 @@
           <br>
           <div class="row">
             <div class="text-center">
-              <button class="btn btn-primary" type="submit">Guardar</button>
+              <button class="btn btn-primary" id="submit" type="submit">Guardar</button>
             </div>
           </div>
         </div>
@@ -292,4 +320,33 @@
 
 @push('script_angularjs')
   <script src="{{url('/js/pricat/paso7Ctrl.js')}}" type="text/javascript" language="javascript"></script>
+@endpush
+@push('script_custom')
+<script type="text/javascript">
+  $(document).ready(function() {
+    var previewNode = document.getElementById("template");
+    previewNode.id = "";
+    var previewTemplate = previewNode.outerHTML;
+    previewNode.parentNode.removeChild(previewNode);
+
+    var myDropzone = new Dropzone(document.body, {
+      clickable: "#dropzone",
+      url: "storage/app/public/pricat",
+      uploadMultiple: false,
+      maxFiles: 1,
+      maxFilesize: 10,
+      thumbnailWidth: 80,
+      thumbnailHeight: 80,
+      autoProcessQueue: false,
+      previewTemplate: previewTemplate,
+      previewsContainer: "#previews",
+      acceptedFiles: ".jpeg,.jpg,.png,.gif",
+      dictDefaultMessage: "Arrastre la imagen aqui o haga click",
+      dictMaxFilesExceeded: "Solo está permitido cargar una imagen",
+      dictInvalidFileType: "Tipo de archivo inválido"
+    });
+  });
+
+  Dropzone.autoDiscover = false;
+</script>
 @endpush

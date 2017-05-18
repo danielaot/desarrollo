@@ -15,7 +15,7 @@ class CreateTNotificacionesTable extends Migration
     {
         Schema::connection('pricat')->create('t_notificaciones', function (Blueprint $table) {
             $table->string('not_usuario', 20);
-            $table->integer('not_act_id')->unsigned();
+            $table->unsignedInteger('not_act_id');
             $table->foreign('not_act_id')->references('id')
                   ->on('t_actividades')
                   ->onDelete('cascade');

@@ -18,7 +18,7 @@ class CreateTProyectosTable extends Migration
             $table->string('proy_nombre');
             $table->text('proy_descripcion');
             $table->enum('proy_estado', ['En Proceso','Terminado','Pausado','Cancelado'])->default('En Proceso');
-            $table->integer('proy_proc_id')->unsigned();
+            $table->unsignedInteger('proy_proc_id');
             $table->foreign('proy_proc_id')->references('id')
                   ->on('t_procesos')
                   ->onDelete('cascade');

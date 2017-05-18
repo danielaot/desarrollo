@@ -245,7 +245,7 @@
             <div class="col-sm-4 form-group">
               <div class="row">
                 <label class="col-sm-4 control-label">Categoria :</label>
-                <label class="col-sm-8 control-label">@{{producto.categoria}}</label>
+                <label class="col-sm-8 control-label">@{{producto.categoria.cat_txt_descrip}}</label>
               </div>
             </div>
             <div class="col-sm-4 form-group">
@@ -320,26 +320,20 @@
                 </div>
               </div>
             </div>
-
-            <!--div class="col-sm-4 form-group">
-              <div class="row">
-                <label class="col-sm-6 control-label">Referencia Homóloga:</label>
-                <div class="col-sm-6">
-                  <select class="form-control" ng-model="producto.refhomo"></select>
-                </div>
-              </div>
-            </div-->
           </div>
           <br>
           <div class="row">
             <div class="text-center">
-              {!! Form::hidden('idproyecto', $idproyecto, ['ng-model' => 'proyecto']) !!}
+              {!! Form::hidden('idproyecto', $idproyecto, ['ng-model' => 'producto.proy']) !!}
               <button class="btn btn-primary" type="submit">Solicitar</button>
             </div>
           </div>
         </div>
       </div>
     </form>
+  </div>
+  <div class="progress">
+    <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
   </div>
 @endsection
 

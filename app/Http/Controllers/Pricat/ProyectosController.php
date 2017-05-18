@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pricat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use Carbon\Carbon;
 
 use App\Models\Pricat\TProyecto as Proyecto;
 use App\Models\Pricat\TProceso as Proceso;
@@ -67,11 +68,18 @@ class ProyectosController extends Controller
                           ->first();
 
         foreach ($proceso->actividades as $actividad){
-          $estado = count($actividad->predecesoras) > 0 ? 'Pendiente' : 'En Proceso';
+          $estado  = 'Pendiente';
+          $date = NULL;
+
+          if(count($actividad->predecesoras) == 0){
+            $estado  = 'En Proceso';
+            $date = Carbon::now();
+          }
 
           $desarrollo = new Desarrollo;
           $desarrollo->dac_proy_id = $proyecto->id;
           $desarrollo->dac_act_id = $actividad->id;
+          $desarrollo->dac_fecha_inicio = $date;
           $desarrollo->dac_estado = $estado;
           $desarrollo->save();
         }
