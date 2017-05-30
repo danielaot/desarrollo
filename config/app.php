@@ -241,6 +241,7 @@ return [
         'JsValidator' => Proengsoft\JsValidation\Facades\JsValidatorFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Uuid' => Ramsey\Uuid\Uuid::class,
     ],
 
 ];
