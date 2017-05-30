@@ -54,7 +54,7 @@
                       {{ Form::button('Cancelar', ['class' => 'btn btn-primary btn-sm']) }}
                     </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 text-center">
                     <img src="{{url('/images/login.jpg')}}"/>
                   </div>
                 </div>

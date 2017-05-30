@@ -16,9 +16,13 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', ['uses' => 'Auth\LoginController@logout', 'as' => 'logout']);
 Route::get('logout', ['uses' => 'Auth\LoginController@logout', 'as' => 'logout']);
 
+Route::get('loginredirect', function () {
+  return view('loginredirect');
+});
+
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/', function () {
-    return redirect('login');
+    return view('loginredirect');
   });
 
   Route::get('home', function () {
