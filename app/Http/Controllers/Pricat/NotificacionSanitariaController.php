@@ -38,4 +38,62 @@ class NotificacionSanitariaController extends Controller
 
         return response()->json($response);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validationRules = [
+          'nosa_nombre' => 'required',
+          'nosa_notificacion' => 'required',
+          'nosa_fecha_inicio' => 'required',
+          'nosa_fecha_vencimiento' => 'required',
+          'documento' => 'required|file'
+        ];
+
+        $validator = Validator::make($request->all(), $validationRules);
+
+        if ($validator->fails()){
+          return response()->json(['errors' => $validator->errors()]);
+        }
+
+        if ($request->hasFile('documento')){
+          $file = $request->file('documento');
+          $fileName = rand(1, 999) . $file->getClientOriginalName();
+
+          $file->storePubliclyAs('/public/pricat/registrosanitario/', $fileName);
+        }
+
+        return response()->json($request->all());
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $validationRules = [
+          'nosa_nombre' => 'required',
+          'nosa_notificacion' => 'required',
+          'nosa_fecha_inicio' => 'required',
+          'nosa_fecha_vencimiento' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $validationRules);
+
+        if ($validator->fails()){
+          return response()->json(['errors' => $validator->errors()]);
+        }
+
+
+        return response()->json($request->all());
+    }
 }

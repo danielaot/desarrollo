@@ -8,29 +8,30 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Creación de Notificación Sanitaria</h4>
+          <h4 class="modal-title" ng-if="notificacion.id == undefined">Creación de Notificación Sanitaria</h4>
+          <h4 class="modal-title" ng-if="notificacion.id != undefined">Edición de Notificación Sanitaria</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-sm-12 form-group">
               <label class="control-label">Nombre<span class="required">*</span> :</label>
-              <input type="text" ng-model="notificacion.nosa_nombre" class="form-control" required/>
+              <input type="text" class="form-control" ng-model="notificacion.nosa_nombre" required/>
             </div>
             <div class="col-sm-12 form-group">
               <label class="control-label">Código<span class="required">*</span> :</label>
-              <input type="text" ng-model="notificacion.nosa_notificacion" class="form-control" required/>
+              <input type="text" class="form-control" ng-model="notificacion.nosa_notificacion" required/>
             </div>
             <div class="col-sm-6 form-group">
               <label class="control-label">Fecha Inicio<span class="required">*</span> :</label>
-              <input type="date" ng-model="notificacion.nosa_fecha_inicio" class="form-control" required/>
+              <input type="date" class="form-control" ng-model="notificacion.nosa_fecha_inicio" required/>
             </div>
             <div class="col-sm-6 form-group">
               <label class="control-label">Fecha Vencimiento<span class="required">*</span> :</label>
-              <input type="date" ng-model="notificacion.nosa_fecha_vencimiento" class="form-control" required/>
+              <input type="date" class="form-control" ng-model="notificacion.nosa_fecha_vencimiento" required/>
             </div>
             <div class="col-sm-12 form-group">
               <label class="control-label">Archivo<span class="required">*</span> :</label>
-              <input type="file" ng-model="notificacion.nosa_documento" class="form-control"/>
+              <input type="file" class="form-control" file-model="documento"/>
             </div>
             <div class="col-sm-12 form-group">
               <label class="control-label">Seleccionar Granel<span class="required">*</span> :</label>

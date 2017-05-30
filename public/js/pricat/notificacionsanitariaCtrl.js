@@ -1,6 +1,7 @@
 app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
   $scope.getUrl = "notificacionsanitariainfo";
   $scope.url = "notificacionsanitaria";
+  $scope.updateUrl = "notificacionsanitariaupdate";
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -8,8 +9,6 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
       $scope.notificaciones = angular.copy(info.notificaciones);
       $scope.graneles = angular.copy(info.graneles);
       angular.element('.close').trigger('click');
-      //console.log($scope.notificaciones);
-      /*$scope.procesos = angular.copy(info.procesos);*/
     });
   }
 
@@ -18,21 +17,24 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
   $scope.notificacion = {};
 
   $scope.granelSearch = function(query){
+    var graneles = $filter('xor')($scope.graneles, $scope.notigraneles, 'ite_id');
+
     if(query){
-      var filtrado = $filter('filter')($scope.graneles, {ite_txt_referencia : query});
+      var filtrado = $filter('filter')(graneles, {ite_txt_referencia : query});
       if(filtrado.length == 0){
-        filtrado = $filter('filter')($scope.graneles, {ite_txt_descripcion : query});
+        filtrado = $filter('filter')(graneles, {ite_txt_descripcion : query});
       }
       return filtrado;
     }
     else{
-      return $scope.graneles;
+      return graneles;
     }
   }
 
   $scope.set = function(){
     $scope.notificacion = {};
     $scope.notigraneles = [];
+    $scope.documento = '';
     $scope.notificacionForm.$setPristine();
     $scope.granelesError = false;
   }
@@ -40,10 +42,9 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
   $scope.addGranel = function(){
     if($scope.granel != ''){
       var exist = $filter('contains')($scope.notigraneles, $scope.granel);
-      console.log($scope.granel);
-      console.log($scope.notigraneles);
+
       if(!exist){
-        $scope.notigraneles.push(angular.copy($scope.granel));
+        $scope.notigraneles.push($scope.granel);
         $scope.granelesError = false;
       }
       $scope.granel = '';
@@ -60,23 +61,40 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
   }
 
   $scope.save = function(){
-    console.log($scope.notificacion);
     if($scope.notigraneles.length > 0)
       $scope.granelesError = false;
     else
       $scope.granelesError = true;
-    /*
-      if($scope.proyecto.id != undefined){
-        $http.put($scope.url+'/'+$scope.proyecto.id, $scope.proyecto).then(function(response){
-          $scope.getInfo();
+
+    if(!$scope.granelesError){
+      var formData = new FormData();
+      angular.forEach($scope.notificacion, function (value, key) {
+          formData.append(key, value);
+      });
+
+      formData.append('documento', $scope.documento);
+
+      if($scope.notificacion.id != undefined){
+        $http.post($scope.updateUrl, formData, {
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+        })
+        .then(function(response){
+          console.log(response.data);
+          //$scope.getInfo();
         }, function(){});
       }
       else{
-        $http.post($scope.url, $scope.proyecto).then(function(response){
-          $scope.getInfo();
+        $http.post($scope.url, formData, {
+          transformRequest: angular.identity,
+          headers: {'Content-Type': undefined}
+        })
+        .then(function(response){
+          console.log(response.data);
+          //$scope.getInfo();
         }, function(){});
       }
-    */
+    }
   }
 
   $scope.edit = function(idnotificacion){

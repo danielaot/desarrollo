@@ -13,16 +13,16 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="control-label">Área :</label>
-            <input type="text" ng-model="area.ar_nombre" class="form-control" required/>
+            <input type="text" class="form-control" ng-model="area.ar_nombre" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Descripción :</label>
-            <textarea ng-model="area.ar_descripcion" class="form-control" rows="2" required></textarea>
+            <textarea class="form-control" ng-model="area.ar_descripcion" rows="2" required></textarea>
           </div>
           <div class="form-group">
             <label class="control-label">Responsables :</label>
             <div class="input-group">
-              <input type="text" id="usuarios" ng-model="usuario" class="form-control" ng-class="{'has-error':responsableError}"/>
+              <input type="text" class="form-control" ng-class="{'has-error':responsableError}" id="usuarios" ng-model="usuario"/>
               <span class="input-group-btn">
                 <button class="btn btn-success" type="button" ng-click="addResponsable()">Agregar</button>
               </span>

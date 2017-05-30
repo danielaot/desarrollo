@@ -78,7 +78,8 @@ class ProcesosController extends Controller
         $validationRules = [
           'act_titulo' => 'required',
           'act_descripcion' => 'required',
-          'act_ar_id' => 'required'
+          'act_ar_id' => 'required',
+          'act_plantilla' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $validationRules);
@@ -104,7 +105,39 @@ class ProcesosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validationRules = [
+          'pro_nombre' => 'required',
+          'pro_descripcion' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $validationRules);
+
+        if ($validator->fails()) {
+          return response()->json($validator->errors());
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateActividad(Request $request, $id)
+    {
+        $validationRules = [
+          'act_titulo' => 'required',
+          'act_descripcion' => 'required',
+          'act_ar_id' => 'required',
+          'act_plantilla' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $validationRules);
+
+        if ($validator->fails()) {
+          return response()->json($validator->errors());
+        }
     }
 
     /**

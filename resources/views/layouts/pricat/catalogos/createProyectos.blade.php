@@ -14,11 +14,11 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="control-label">Nombre :</label>
-            <input type="text" ng-model="proyecto.proy_nombre" class="form-control" required/>
+            <input class="form-control" type="text" ng-model="proyecto.proy_nombre" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Proceso :</label>
-            <select ng-model="proyecto.proy_proc_id" class="form-control" ng-options="option.pro_nombre for option in procesos track by option.id" required></select>
+            <select class="form-control" ng-model="proyecto.proy_proc_id" ng-options="option.pro_nombre for option in procesos track by option.id" required></select>
           </div>
         </div>
         <div class="modal-footer">

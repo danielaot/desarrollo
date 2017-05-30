@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('procesos', 'Pricat\ProcesosController', ['except' => ['create', 'show', 'edit']]);
     Route::get('procesosinfo', 'Pricat\ProcesosController@getInfo');
     Route::post('actividades', 'Pricat\ProcesosController@storeActividad');
+    Route::put('actividades/{id}', 'Pricat\ProcesosController@updateActividad');
     Route::delete('actividades/{id}', 'Pricat\ProcesosController@destroyActividad');
 
     Route::resource('proyectos', 'Pricat\ProyectosController', ['except' => ['create', 'show', 'edit']]);
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
 
     Route::resource('notificacionsanitaria', 'Pricat\NotificacionSanitariaController');
+    Route::post('notificacionsanitariaupdate', 'Pricat\NotificacionSanitariaController@update');
     Route::get('notificacionsanitariainfo', 'Pricat\NotificacionSanitariaController@getInfo');
 
     Route::resource('paso1', 'Pricat\Paso1Controller', ['only' => ['index', 'store']]);

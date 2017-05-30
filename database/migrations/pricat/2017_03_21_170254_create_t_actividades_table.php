@@ -25,6 +25,7 @@ class CreateTActividadesTable extends Migration
             $table->foreign('act_ar_id')->references('id')
                   ->on('t_areas')
                   ->onDelete('cascade');
+            $table->string('act_plantilla');
             $table->timestamps();
         });
     }

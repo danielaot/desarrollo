@@ -48,7 +48,7 @@
                         @{{actividad.areas.ar_nombre}}
                       </div>
                       <div class="col-sm-2 text-right">
-                        <button class="btn btn-primary btn-sm" ng-click="editActividad(actividad.id)">
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal2" ng-click="editActividad(actividad.id)">
                           <i class="glyphicon glyphicon-pencil"></i>
                         </button>
                         <button class="btn btn-danger btn-sm" ng-click="deleteActividad($event, actividad.id)">

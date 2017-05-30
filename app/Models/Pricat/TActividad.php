@@ -14,7 +14,8 @@ class TActividad extends Model
         'act_titulo',
         'act_descripcion',
         'act_proc_id',
-        'act_ar_id'
+        'act_ar_id',
+        'act_plantilla'
     ];
 
     public function predecesoras()

@@ -1,7 +1,7 @@
 app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
   $scope.getUrl = "procesosinfo";
   $scope.url = "procesos";
-  $scope.urlActividades = "../pricat/actividades";
+  $scope.urlActividades = "actividades";
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -64,15 +64,27 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
     $scope.actividad.act_ar_id = $scope.actividad.act_ar_id.id;
     $scope.actividad.pre_act_pre_id = $scope.actividad.pre_act_pre_id != undefined ? $scope.actividad.pre_act_pre_id.id : '';
 
-    $http.post($scope.urlActividades, $scope.actividad).then(function(response){
-      $scope.getInfo();
-      $scope.actividad = {};
-      $scope.actividadForm.$setPristine();
-    }, function(){});
+    if($scope.actividad.id != undefined){
+      $http.put($scope.urlActividades+'/'+$scope.actividad.id, $scope.actividad).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    }
+    else{
+      $http.post($scope.urlActividades, $scope.actividad).then(function(response){
+        $scope.getInfo();
+        $scope.actividad = {};
+        $scope.actividadForm.$setPristine();
+      }, function(){});
+    }
   }
 
   $scope.editActividad = function(idactividad){
-    console.log(idactividad);
+    $scope.actividad = angular.copy($filter('filter')($scope.actividades, {id : idactividad})[0]);
+    $scope.actividad.act_ar_id = angular.copy($filter('filter')($scope.areas, {id : $scope.actividad.act_ar_id})[0]);
+    if($scope.actividad.predecesoras.length > 0){
+      var act_pre_id = $scope.actividad.predecesoras[0].pre_act_pre_id;
+      $scope.actividad.pre_act_pre_id = angular.copy($filter('filter')($scope.actividades, {id : act_pre_id})[0]);
+    }
   }
 
   $scope.deleteActividad = function(ev, idactividad){
