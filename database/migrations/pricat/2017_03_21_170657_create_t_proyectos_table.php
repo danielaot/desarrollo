@@ -16,7 +16,6 @@ class CreateTProyectosTable extends Migration
         Schema::connection('pricat')->create('t_proyectos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('proy_nombre');
-            $table->text('proy_descripcion');
             $table->enum('proy_estado', ['En Proceso','Terminado','Pausado','Cancelado'])->default('En Proceso');
             $table->unsignedInteger('proy_proc_id');
             $table->foreign('proy_proc_id')->references('id')

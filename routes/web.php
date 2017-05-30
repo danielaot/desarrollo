@@ -32,29 +32,32 @@ Route::group(['middleware' => ['auth']], function () {
    * Rutas para el aplicativo calidad de datos y homologacion
    * 21/03/2017
   */
-});
-Route::group(['prefix' => 'pricat'], function () {
-  Route::resource('responsables', 'Pricat\ResponsablesController', ['except' => ['create', 'show', 'edit']]);
-  Route::get('responsablesinfo', 'Pricat\ResponsablesController@getInfo');
+  Route::group(['prefix' => 'pricat'], function () {
+    Route::resource('responsables', 'Pricat\ResponsablesController', ['except' => ['create', 'show', 'edit']]);
+    Route::get('responsablesinfo', 'Pricat\ResponsablesController@getInfo');
 
-  Route::resource('procesos', 'Pricat\ProcesosController', ['except' => ['create', 'show', 'edit']]);
-  Route::get('procesosinfo', 'Pricat\ProcesosController@getInfo');
-  Route::post('actividades', 'Pricat\ProcesosController@storeActividad');
-  Route::delete('actividades/{id}', 'Pricat\ProcesosController@destroyActividad');
+    Route::resource('procesos', 'Pricat\ProcesosController', ['except' => ['create', 'show', 'edit']]);
+    Route::get('procesosinfo', 'Pricat\ProcesosController@getInfo');
+    Route::post('actividades', 'Pricat\ProcesosController@storeActividad');
+    Route::delete('actividades/{id}', 'Pricat\ProcesosController@destroyActividad');
 
-  Route::resource('proyectos', 'Pricat\ProyectosController', ['except' => ['create', 'show', 'edit']]);
-  Route::get('proyectosinfo', 'Pricat\ProyectosController@getInfo');
+    Route::resource('proyectos', 'Pricat\ProyectosController', ['except' => ['create', 'show', 'edit']]);
+    Route::get('proyectosinfo', 'Pricat\ProyectosController@getInfo');
 
-  Route::resource('marcas', 'Pricat\MarcasController');
-  Route::get('marcasinfo', 'Pricat\MarcasController@getInfo');
+    Route::resource('marcas', 'Pricat\MarcasController');
+    Route::get('marcasinfo', 'Pricat\MarcasController@getInfo');
 
-  Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
+    Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
 
-  Route::resource('paso1', 'Pricat\Paso1Controller');
-  Route::get('paso1info', 'Pricat\Paso1Controller@getInfo');
+    Route::resource('notificacionsanitaria', 'Pricat\NotificacionSanitariaController');
+    Route::get('notificacionsanitariainfo', 'Pricat\NotificacionSanitariaController@getInfo');
 
-  Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
+    Route::resource('paso1', 'Pricat\Paso1Controller', ['only' => ['index', 'store']]);
+    Route::get('paso1info', 'Pricat\Paso1Controller@getInfo');
 
-  Route::resource('paso7', 'Pricat\Paso7Controller');
-  Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
+    Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
+
+    Route::resource('paso7', 'Pricat\Paso7Controller');
+    Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
+  });
 });

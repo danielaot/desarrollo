@@ -33,4 +33,9 @@ class TItem extends Model
   	{
   		  return $this->hasOne('App\Models\Pricat\TProyecto', 'ite_proy');
   	}
+
+    public function tipo()
+  	{
+  		  return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ite_tproducto')->where('idItemCriterioPlanItemCriterioMayor','130');
+  	}
 }

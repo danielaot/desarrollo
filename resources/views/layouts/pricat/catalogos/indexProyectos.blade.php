@@ -11,11 +11,8 @@
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="proyecto in proyectos">
             <div class="row">
-              <div class="col-sm-3">
+              <div class="col-sm-7">
                 @{{proyecto.proy_nombre}}
-              </div>
-              <div class="col-sm-4">
-                @{{proyecto.proy_descripcion}}
               </div>
               <div class="col-sm-2">
                 @{{proyecto.proy_estado}}

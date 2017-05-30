@@ -4,8 +4,7 @@ app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', f
   $scope.url = "responsables";
 
   $scope.usuario = '';
-  $scope.responsableError = false;
-
+  
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
@@ -17,9 +16,11 @@ app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', f
 
   $scope.getInfo();
 
-  $scope.init = function(){
+  $scope.setArea = function(){
     $scope.area = {};
     $scope.responsables = [];
+    $scope.areaForm.$setPristine();
+    $scope.responsableError = false;
   }
 
   $scope.addResponsable = function(){
@@ -57,7 +58,7 @@ app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', f
   }
 
   $scope.editArea = function(idarea){
-    $scope.area = $filter('filter')($scope.areas, {id : idarea})[0];
+    $scope.area = angular.copy($filter('filter')($scope.areas, {id : idarea})[0]);
     $scope.responsables = [];
     for(var y in $scope.area.responsables){
       $scope.responsables.push($scope.area.responsables[y].usuarios);

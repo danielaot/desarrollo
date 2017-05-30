@@ -1,9 +1,9 @@
-app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = '../pricat/paso1info';
-  $scope.url = '../pricat/paso1';
-  $scope.pattern = '[a-zA-Z0-9\s]+';
-  $scope.progress = true;
-  console.log($scope.progress);
+app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($scope, $window, $http, $filter){
+  $scope.getUrl = 'paso1info';
+  $scope.url = 'paso1';
+  //$scope.pattern = '[a-zA-Z0-9\s]+';
+  $scope.progress = false;
+
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
@@ -24,17 +24,16 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
     $scope.submarca = angular.copy(info.submarca);
     $scope.regalias = angular.copy(info.regalias);
     $scope.segmento = angular.copy(info.segmento);
-    $scope.clasificacion = angular.copy(info.clasificacion);
     $scope.acondicionamiento = angular.copy(info.acondicionamiento);
     $scope.referencia = angular.copy(info.referencia);
+    $scope.items = angular.copy(info.items);
   });
 
   $scope.producto = {
                       'categoria' : '',
                       'variedad' : [],
                       'tipo' : 'Regular',
-                      'fabricante' : 'Belleza Express SA',
-                      'proy' : 0
+                      'fabricante' : 'Belleza Express SA'
                     };
 
   $scope.vocabasSearch = function(query){
@@ -61,6 +60,60 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
     }
     else{
       return $scope.catlogyca;
+    }
+  }
+
+  $scope.itemSearch = function(query){
+    if(query){
+      return $filter('filter')($scope.items, {ite_txt_referencia : query});
+    }
+    else{
+      return $scope.items;
+    }
+  }
+
+  $scope.sublineaSearch = function(query){
+    if(query){
+      return $filter('filter')($scope.sublinea, {descripcionItemCriterioMayor : query});
+    }
+    else{
+      return $scope.sublinea;
+    }
+  }
+
+  $scope.sublinmercadeoSearch = function(query){
+    if(query){
+      return $filter('filter')($scope.sublinmercadeo, {descripcionItemCriterioMayor : query});
+    }
+    else{
+      return $scope.sublinmercadeo;
+    }
+  }
+
+  $scope.sublinmercadeo2Search = function(query){
+    if(query){
+      return $filter('filter')($scope.sublinmercadeo2, {descripcionItemCriterioMayor : query});
+    }
+    else{
+      return $scope.sublinmercadeo2;
+    }
+  }
+
+  $scope.presentacionSearch = function(query){
+    if(query){
+      return $filter('filter')($scope.presentacion, {descripcionItemCriterioMayor : query});
+    }
+    else{
+      return $scope.presentacion;
+    }
+  }
+
+  $scope.variedadbesaSearch = function(query){
+    if(query){
+      return $filter('filter')($scope.variedad, {descripcionItemCriterioMayor : query});
+    }
+    else{
+      return $scope.variedad;
     }
   }
 
@@ -130,10 +183,10 @@ app.controller('paso1Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
 
   $scope.saveProducto = function(){
     $scope.progress = true;
+    //console.log($scope.producto);
     $http.post($scope.url, $scope.producto).then(function(response){
-      console.log(response.data);
       $scope.progress = false;
-
+      $window.parent.location = response.data;
     }, function(){});
   }
 }]);

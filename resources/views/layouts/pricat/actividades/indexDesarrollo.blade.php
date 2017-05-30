@@ -31,7 +31,7 @@
                       {{$desarrollo[0]->actividades->act_descripcion}}
                     </div>
                     <div class="col-sm-2 text-right">
-                      <a href="{{route('paso'.$desarrollo[0]->actividades->id.'.index', ['id' => $desarrollo[0]->dac_proy_id])}}">
+                      <a href="{{route('paso'.$desarrollo[0]->actividades->id.'.index', ['proy' => $desarrollo[0]->dac_proy_id, 'act' => $desarrollo[0]->actividades->id])}}">
                         <button class="btn btn-primary btn-sm">
                           <i class="glyphicon glyphicon-pencil"></i> Realizar
                         </button>

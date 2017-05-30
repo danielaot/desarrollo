@@ -5,7 +5,7 @@
   <div ng-controller="responsablesCtrl" ng-cloak>
     <div class="panel panel-default">
       <div class="panel-body">
-        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal" ng-click="init()">
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal" ng-click="setArea()">
           <i class="glyphicon glyphicon-plus-sign"></i> Crear
         </button><br><br>
         <ul class="list-group">

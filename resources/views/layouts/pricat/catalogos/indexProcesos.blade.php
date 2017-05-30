@@ -5,7 +5,7 @@
   <div ng-controller="procesosCtrl" ng-cloak>
     <div class="panel panel-default">
       <div class="panel-body">
-        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal1">
+        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal1" ng-click="set()">
           <i class="glyphicon glyphicon-plus"></i> Crear
         </button><br><br>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -24,7 +24,7 @@
                   <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal2" ng-click="setProceso(proceso.id)">
                     <i class="glyphicon glyphicon-plus"></i> Agregar
                   </button>
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="editProceso(proceso.id)">
+                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProceso(proceso.id)">
                     <i class="glyphicon glyphicon-pencil"></i> Editar
                   </button>
                   <button type="button" class="btn btn-danger btn-sm" ng-click="deleteProceso($event, proceso.id)">

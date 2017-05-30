@@ -1,6 +1,6 @@
-app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = '../pricat/paso7info';
-  $scope.url = '../pricat/paso7';
+app.controller('paso7Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $http, $mdDialog){
+  $scope.getUrl = 'paso7info';
+  $scope.url = 'paso7';
 
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;

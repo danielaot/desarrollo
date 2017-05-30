@@ -1,6 +1,6 @@
 app.controller('marcasCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = "../pricat/marcasinfo";
-  $scope.url = "../pricat/marcas";
+  $scope.getUrl = "marcasinfo";
+  $scope.url = "marcas";
 
   $scope.errorNombreExist = false;
   $scope.errorLineas = false;
@@ -10,7 +10,6 @@ app.controller('marcasCtrl', ['$scope', '$http', '$filter', '$mdDialog', functio
       var info = response.data;
       $scope.marcas = angular.copy(info.marcas);
       $scope.lineas = angular.copy(info.lineas);
-      console.log($scope.lineas);
       angular.element('.close').trigger('click');
     });
   }
@@ -33,8 +32,6 @@ app.controller('marcasCtrl', ['$scope', '$http', '$filter', '$mdDialog', functio
   }
 
   $scope.saveMarca = function(){
-    console.log($scope.marca);
-
     if($scope.marca.action == 'edit'){
       var marca = $scope.mar_nombre_init == $scope.marca.mar_nombre ? {'lineas' : $scope.marca.lineas} : $scope.marca;
       $http.put($scope.url+'/'+$scope.mar_nombre_init, marca).then(function(response){

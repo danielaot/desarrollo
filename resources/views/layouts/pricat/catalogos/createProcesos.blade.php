@@ -7,16 +7,17 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Creación de Procesos</h4>
+          <h4 class="modal-title" ng-if="proceso.id == undefined">Creación de Procesos</h4>
+          <h4 class="modal-title" ng-if="proceso.id != undefined">Edición de Procesos</h4>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="pro_nombre" class="control-label">Nombre :</label>
-            <input type="text" name="pro_nombre" ng-model="proceso.pro_nombre" class="form-control" required/>
+            <label class="control-label">Nombre :</label>
+            <input type="text" class="form-control" ng-model="proceso.pro_nombre" required/>
           </div>
           <div class="form-group">
-            <label for="pro_descripcion" class="control-label">Descripción :</label>
-            <textarea name="pro_descripcion" ng-model="proceso.pro_descripcion" class="form-control" rows="2" required></textarea>
+            <label class="control-label">Descripción :</label>
+            <textarea class="form-control" ng-model="proceso.pro_descripcion" rows="2" required></textarea>
           </div>
         </div>
         <div class="modal-footer">

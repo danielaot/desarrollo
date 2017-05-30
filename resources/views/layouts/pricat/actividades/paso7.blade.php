@@ -3,7 +3,7 @@
 @section('content')
   @include('includes.titulo')
   <div ng-controller="paso7Ctrl" ng-cloak>
-    <form name="paso7Form" ng-submit="paso4Form.$valid" class="form-horizontal" enctype="multipart/form-data">
+    <form name="paso7Form" ng-submit="paso7Form.$valid" class="form-horizontal" enctype="multipart/form-data">
       <div class="panel panel-primary">
         <div class="panel-heading">Información del Producto</div>
         <div class="panel-body">

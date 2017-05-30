@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Pricat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use Carbon\Carbon;
 
 use App\Models\Pricat\TVocabas as Vocabas;
 use App\Models\Pricat\TCategoriasLogyca as CatLogyca;
 use App\Models\Genericas\Itemcriterioplan as Planes;
+use App\Models\Genericas\Itemcriteriomayor as Criterio;
+use App\Models\Genericas\TItemCriterio as ItemCriterio;
 use App\Models\Pricat\TMarca as Marca;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
 use App\Models\Pricat\TItemEan as IEan;
+use App\Models\Pricat\TPredecesora as ActPre;
+use App\Models\Pricat\TDesarrolloActividad as DesAct;
 
 class Paso1Controller extends Controller
 {
@@ -26,9 +31,10 @@ class Paso1Controller extends Controller
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
         $titulo = 'Solicitud Creación Item';
 
-        $idproyecto = $request->id;
+        $idproyecto = $request->proy;
+        $idactividad = $request->act;
 
-        return view('layouts.pricat.actividades.paso1', compact('ruta', 'titulo', 'idproyecto'));
+        return view('layouts.pricat.actividades.paso1', compact('ruta', 'titulo', 'idproyecto', 'idactividad'));
     }
 
     /**
@@ -46,6 +52,10 @@ class Paso1Controller extends Controller
                                  $query->where('notaItemCriterioMayor', 'Linea Activa');
                              }])
                       ->get();
+
+        $items = ItemCriterio::where('ite_num_tipoinventario', 1051)
+                             ->whereIn('ite_num_estado', [1201, 1202, 1207])
+                             ->get();
 
         foreach ($planes as $plan) {
           $criterios = array_sort_recursive($plan->criterios->toarray());
@@ -105,7 +115,7 @@ class Paso1Controller extends Controller
 
         $referencia = 'AAA000';
 
-        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'referencia');
+        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'referencia', 'items');
 
         return response()->json($response);
     }
@@ -161,12 +171,18 @@ class Paso1Controller extends Controller
           $ref++;
         }
 
+        $tipo_producto = $request->tipo != 'Oferta' ? $request->tipo : 'Promocion';
+
+        $tipo = Criterio::where(['idItemCriterioPlanItemCriterioMayor' => 130, 'descripcionItemCriterioMayor' => $tipo_producto])
+                        ->get()
+                        ->first();
+
         $item = new Item;
         $item->ite_proy = $request->proy;
         $item->ite_referencia = $ref;
-        $item->ite_tproducto = $request->tipo;
+        $item->ite_tproducto = $tipo['idItemCriterioMayor'];
         $item->ite_eanext = $request->ean;
-        //$item->save();
+        $item->save();
 
         $detalle = new IDetalle;
         $detalle->ide_item = $item->id;
@@ -187,12 +203,10 @@ class Paso1Controller extends Controller
         $detalle->ide_tiprom = $request->tipopromo['idItemCriterioMayor'];
         $detalle->ide_presentacion = $request->presentacion['idItemCriterioMayor'];
         $detalle->ide_varbesa = $request->variedadbesa['idItemCriterioMayor'];
-
-        //$detalle->ide_comp1 = $request->ean;
-        //$detalle->ide_comp2 = $request->ean;
-        //$detalle->ide_comp3 = $request->ean;
-        //$detalle->ide_comp4 = $request->ean;
-
+        $detalle->ide_comp1 = $request->comp1['ite_txt_referencia'];
+        $detalle->ide_comp2 = $request->comp2['ite_txt_referencia'];
+        $detalle->ide_comp3 = $request->comp3['ite_txt_referencia'];
+        $detalle->ide_comp4 = $request->comp4['ite_txt_referencia'];
         $detalle->ide_categoria = $request->categoria['cat_id'];
         $detalle->ide_linea = $request->linea['mar_linea'];
         $detalle->ide_sublinea = $request->sublinea['idItemCriterioMayor'];
@@ -203,27 +217,26 @@ class Paso1Controller extends Controller
         $detalle->ide_segmento = $request->segmento['idItemCriterioMayor'];
         $detalle->ide_clasificacion = $request->clasificacion['idItemCriterioMayor'];
         $detalle->ide_acondicionamiento = $request->acondicionamiento['idItemCriterioMayor'];
-        //$detalle->save();
+        $detalle->save();
 
         $item_ean = new IEan;
+        $item_ean->iea_item = $item->id;
         $item_ean->iea_cantemb = $request->embalaje;
-        //$item_ean->save();
+        $item_ean->save();
 
-        //return response()->json([$item,$detalle,$item_ean]);
+        $fecha = Carbon::now();
+
+        $desarrollo = DesAct::where(['dac_proy_id' => $request->proy, 'dac_act_id' => $request->act])
+                            ->update(['dac_fecha_cumplimiento' => $fecha,'dac_estado' => 'Completado']);
+
+        $actdespues = ActPre::where('pre_act_pre_id', $request->act)->get();
+
+        foreach($actdespues as $actividad){
+          DesAct::where(['dac_proy_id' => $request->proy, 'dac_act_id' => $actividad->pre_act_id])
+                ->update(['dac_fecha_inicio' => $fecha,'dac_estado' => 'En Proceso']);
+        }
 
         $url = url('pricat/desarrolloactividades');
         return response($url, 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 }

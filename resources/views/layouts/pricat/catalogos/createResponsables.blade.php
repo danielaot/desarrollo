@@ -7,21 +7,22 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Creación de Área y Responsables</h4>
+          <h4 class="modal-title" ng-if="area.id == undefined">Creación de Área y Responsables</h4>
+          <h4 class="modal-title" ng-if="area.id != undefined">Edición de Área y Responsables</h4>
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label for="ar_nombre" class="control-label">Área :</label>
-            <input type="text" name="ar_nombre" ng-model="area.ar_nombre" class="form-control" required/>
+            <label class="control-label">Área :</label>
+            <input type="text" ng-model="area.ar_nombre" class="form-control" required/>
           </div>
           <div class="form-group">
-            <label for="ar_descripcion" class="control-label">Descripción :</label>
-            <textarea name="ar_descripcion" ng-model="area.ar_descripcion" class="form-control" rows="2" required></textarea>
+            <label class="control-label">Descripción :</label>
+            <textarea ng-model="area.ar_descripcion" class="form-control" rows="2" required></textarea>
           </div>
           <div class="form-group">
-            <label for="usuario" class="control-label">Responsables :</label>
+            <label class="control-label">Responsables :</label>
             <div class="input-group">
-              <input type="text" name="usuario" id="usuarios" ng-model="usuario" class="form-control" ng-class="{'has-error':responsableError}"/>
+              <input type="text" id="usuarios" ng-model="usuario" class="form-control" ng-class="{'has-error':responsableError}"/>
               <span class="input-group-btn">
                 <button class="btn btn-success" type="button" ng-click="addResponsable()">Agregar</button>
               </span>
@@ -60,7 +61,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" type="submit" ng-disabled="areaForm.$invalid">Guardar</button>
+          <button class="btn btn-primary" type="submit">Guardar</button>
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
         </div>
       </div>

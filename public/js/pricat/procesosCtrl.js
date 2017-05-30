@@ -1,6 +1,6 @@
 app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = "../pricat/procesosinfo";
-  $scope.url = "../pricat/procesos";
+  $scope.getUrl = "procesosinfo";
+  $scope.url = "procesos";
   $scope.urlActividades = "../pricat/actividades";
 
   $scope.getInfo = function(){
@@ -16,14 +16,22 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
 
   $scope.getInfo();
 
-  $scope.proceso = {};
+  $scope.set = function(){
+    $scope.proceso = {};
+    $scope.procesoForm.$setPristine();
+  }
 
   $scope.saveProceso = function(){
-    $http.post($scope.url, $scope.proceso).then(function(response){
-      $scope.getInfo();
-      $scope.proceso = {};
-      $scope.procesoForm.$setPristine();
-    }, function(){});
+    if($scope.proceso.id != undefined){
+      $http.put($scope.url+'/'+$scope.proceso.id, $scope.proceso).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    }
+    else{
+      $http.post($scope.url, $scope.proceso).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    }
   }
 
   $scope.setProceso = function(idproceso){
@@ -33,7 +41,7 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
   }
 
   $scope.editProceso = function(idproceso){
-    console.log(idproceso);
+    $scope.proceso = angular.copy($filter('filter')($scope.procesos, {id : idproceso})[0]);
   }
 
   $scope.deleteProceso = function(ev, idproceso){

@@ -12,7 +12,6 @@ class TProyecto extends Model
 
     protected $fillable = [
         'proy_nombre',
-        'proy_descripcion',
         'proy_estado',
         'proy_proc_id'
     ];

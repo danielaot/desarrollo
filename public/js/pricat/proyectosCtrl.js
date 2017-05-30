@@ -1,6 +1,6 @@
 app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
-  $scope.getUrl = "../pricat/proyectosinfo";
-  $scope.url = "../pricat/proyectos";
+  $scope.getUrl = "proyectosinfo";
+  $scope.url = "proyectos";
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
