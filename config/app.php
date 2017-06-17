@@ -188,6 +188,8 @@ return [
         Iber\Generator\ModelGeneratorProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
+        Way\Generators\GeneratorsServiceProvider::class,
+        Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
     ],
 
     /*
