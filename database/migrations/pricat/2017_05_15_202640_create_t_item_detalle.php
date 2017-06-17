@@ -50,6 +50,10 @@ class CreateTItemDetalle extends Migration
             $table->string('ide_segmento')->nullable();
             $table->string('ide_clasificacion')->nullable();
             $table->string('ide_acondicionamiento')->nullable();
+            $table->string('ide_nomtemporada')->nullable();
+            $table->string('ide_anotemporada')->nullable();
+            $table->string('ide_posarancelaria')->nullable();;
+            $table->string('ide_grupoimpositivo')->nullable();;
             $table->timestamps();
         });
     }

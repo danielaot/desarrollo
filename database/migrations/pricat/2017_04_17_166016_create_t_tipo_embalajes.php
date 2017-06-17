@@ -17,6 +17,7 @@ class CreateTTipoEmbalajes extends Migration
             $table->increments('id');
             $table->string('temb_calificador');
             $table->string('temb_nombre');
+            $table->string('temb_abreviatura');
             $table->timestamps();
         });
     }

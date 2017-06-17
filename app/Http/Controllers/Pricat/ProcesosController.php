@@ -59,7 +59,7 @@ class ProcesosController extends Controller
         $validator = Validator::make($request->all(), $validationRules);
 
         if ($validator->fails()) {
-          return response()->json($validator->errors());
+          return response()->json(['errors' => $validator->errors()]);
         }
 
         $proceso = Proceso::create($request->all());

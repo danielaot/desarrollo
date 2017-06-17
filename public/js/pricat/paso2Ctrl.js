@@ -4,10 +4,12 @@ app.controller('paso2Ctrl', ['$scope', '$window', '$http', function($scope, $win
 
   $scope.saveProducto = function(){
     $scope.progress = true;
-    console.log($scope.producto);
-    /*$http.post($scope.url, $scope.producto).then(function(response){
+    $http.put($scope.url+'/'+$scope.producto.item, $scope.producto).then(function(response){
       $scope.progress = false;
-      $window.parent.location = response.data;
-    }, function(){});*/
+      if(response.data.errores == undefined)
+        $window.location = response.data;
+      else
+        $scope.errores = angular.copy(response.data.errores);
+    }, function(){});
   }
 }]);

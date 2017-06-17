@@ -42,7 +42,11 @@ class TItemDetalle extends Model
         'ide_regalias',
         'ide_segmento',
         'ide_clasificacion',
-        'ide_acondicionamiento'
+        'ide_acondicionamiento',
+        'ide_posarancelaria',
+        'ide_grupoimpositivo',
+        'ide_nomtemporada',
+        'ide_anotemporada'
     ];
 
     public function items()
@@ -133,5 +137,10 @@ class TItemDetalle extends Model
     public function acondicionamiento()
   	{
   		  return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_acondicionamiento')->where('idItemCriterioPlanItemCriterioMayor','420');
+  	}
+
+    public function nomtemporada()
+  	{
+  		  return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_nomtemporada')->where('idItemCriterioPlanItemCriterioMayor','953');
   	}
 }

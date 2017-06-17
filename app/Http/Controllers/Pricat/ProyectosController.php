@@ -51,14 +51,13 @@ class ProyectosController extends Controller
     {
         $validationRules = [
           'proy_nombre' => 'required',
-          'proy_descripcion' => 'required',
           'proy_proc_id' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $validationRules);
 
         if ($validator->fails()) {
-          return response()->json($validator->errors());
+          return response()->json(['errors' => $validator->errors()]);
         }
 
         $proyecto = Proyecto::create($request->all());

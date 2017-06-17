@@ -7,159 +7,157 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
-            <label class="col-sm-3">Referencia:</label>
-            <p class="col-sm-6">{{$item['ite_referencia']}}</p>
+            <label class="col-sm-3 control-label">Referencia:</label>
+            <p class="col-sm-6 control-label">{{$item['ite_referencia']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Ean Externo:</label>
-            <p class="col-sm-6">{{$item['ite_eanext']}}</p>
+            <label class="col-sm-3 control-label">Ean Externo:</label>
+            <p class="col-sm-6 control-label">{{$item['ite_eanext']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Descripción:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_deslarga']}}</p>
+            <label class="col-sm-3 control-label">Descripción:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_deslarga']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Descripción Corta:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_descorta']}}</p>
+            <label class="col-sm-3 control-label">Descripción Corta:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_descorta']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Descripción Completa:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_descompleta']}}</p>
+            <label class="col-sm-3 control-label">Descripción Completa:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_descompleta']}}</p>
+          </div>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_origen')}">
+            <label class="col-sm-3 control-label">Origen:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_origen']}} - {{$item['detalles']['origen']['descripcionItemCriterioMayor']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Origen:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_origen']}} - {{$item['detalles'][0]['origen']['descripcionItemCriterioMayor']}}</p>
+            <label class="col-sm-3 control-label">Tipo de Inventario:</label>
+            <p class="col-sm-6 control-label">1051 - Producto Terminado</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Tipo de Inventario:</label>
-            <p class="col-sm-6">1051 - Producto Terminado</p>
+            <label class="col-sm-3 control-label">Clase:</label>
+            <p class="col-sm-6 control-label">1101 - Manufacturado</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Clase:</label>
-            <p class="col-sm-6">1101 - Manufacturado</p>
+            <label class="col-sm-3 control-label">Estado Criterio:</label>
+            <p class="col-sm-6 control-label">1201 - Activo</p>
+          </div>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_tmarca')}">
+            <label class="col-sm-3 control-label">Tipo de Marca:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_tmarca']}} - {{$item['detalles']['tipomarcas']['descripcionItemCriterioMayor']}}</p>
           </div>
           <div class="row">
-            <label class="col-sm-3">Estado Criterio:</label>
-            <p class="col-sm-6">1201 - Activo</p>
-          </div>
-          <div class="row">
-            <label class="col-sm-3">Tipo de Marca:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_tmarca']}} - {{$item['detalles'][0]['tipomarcas']['descripcionItemCriterioMayor']}}</p>
-          </div>
-          <div class="row">
-            <label class="col-sm-3">Tipo:</label>
-            <p class="col-sm-6">{{$item['ite_tproducto']}} - {{$tipo}}</label>
-          </div>
-          @if($tipo != 'Regular')
-            <div class="row">
-              <label class="col-sm-3">Tipo de Oferta:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_toferta']}} - {{$item['detalles'][0]['tipooferta']['descripcionItemCriterioMayor']}}</p>
-            </div>
-            <div class="row">
-              <label class="col-sm-3">Menú de Promociones:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_meprom']}} - {{$item['detalles'][0]['menuprom']['descripcionItemCriterioMayor']}}</p>
-            </div>
-            <div class="row">
-              <label class="col-sm-3">Tipo de Promoción:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_tiprom']}} - {{$item['detalles'][0]['tipoprom']['descripcionItemCriterioMayor']}}</p>
-            </div>
-          @endif
-          <div class="row">
-            <label class="col-sm-3">Presentación:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_presentacion']}} - {{$item['detalles'][0]['presentacion']['descripcionItemCriterioMayor']}}</p>
-          </div>
-          <div class="row">
-            <label class="col-sm-3">Variedad:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_varbesa']}} - {{$item['detalles'][0]['variedad']['descripcionItemCriterioMayor']}}</p>
+            <label class="col-sm-3 control-label">Tipo:</label>
+            <p class="col-sm-6 control-label">{{$item['ite_tproducto']}} - {{$tipo}}</label>
           </div>
           @if($tipo != 'Regular')
-            <div class="row">
-              <label class="col-sm-3">Ref Componente Principal:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_comp1']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_toferta')}">
+              <label class="col-sm-3 control-label">Tipo de Oferta:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_toferta']}} - {{$item['detalles']['tipooferta']['descripcionItemCriterioMayor']}}</p>
             </div>
-            <div class="row">
-              <label class="col-sm-3">Ref Componente 2:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_comp2']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_meprom')}">
+              <label class="col-sm-3 control-label">Menú de Promociones:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_meprom']}} - {{$item['detalles']['menuprom']['descripcionItemCriterioMayor']}}</p>
             </div>
-            <div class="row">
-              <label class="col-sm-3">Ref Componente 3:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_comp3']}}</p>
-            </div>
-            <div class="row">
-              <label class="col-sm-3">Ref Componente 4:</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_comp4']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_tiprom')}">
+              <label class="col-sm-3 control-label">Tipo de Promoción:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_tiprom']}} - {{$item['detalles']['tipoprom']['descripcionItemCriterioMayor']}}</p>
             </div>
           @endif
-          <div class="row">
-            <label class="col-sm-3">Categoria:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_categoria']}} - {{$categoria}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_presentacion')}">
+            <label class="col-sm-3 control-label">Presentación:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_presentacion']}} - {{$item['detalles']['presentacion']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Linea:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_linea']}} - {{$item['detalles'][0]['linea']['descripcionItemCriterioMayor']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_varbesa')}">
+            <label class="col-sm-3 control-label">Variedad:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_varbesa']}} - {{$item['detalles']['variedad']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Sublinea:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_sublinea']}} - {{$item['detalles'][0]['sublinea']['descripcionItemCriterioMayor']}}</p>
+          @if($tipo != 'Regular')
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp1')}">
+              <label class="col-sm-3 control-label">Ref Componente Principal:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp1']}}</p>
+            </div>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp2')}">
+              <label class="col-sm-3 control-label">Ref Componente 2:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp2']}}</p>
+            </div>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp3')}">
+              <label class="col-sm-3 control-label">Ref Componente 3:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp3']}}</p>
+            </div>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp4')}">
+              <label class="col-sm-3 control-label">Ref Componente 4:</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp4']}}</p>
+            </div>
+          @endif
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_categoria')}">
+            <label class="col-sm-3 control-label">Categoria:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_categoria']}} - {{$categoria}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Sublinea Mercadeo:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_sublineamer']}} - {{$item['detalles'][0]['submercadeo']['descripcionItemCriterioMayor']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_linea')}">
+            <label class="col-sm-3 control-label">Linea:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_linea']}} - {{$item['detalles']['linea']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Sublinea Mercadeo 2:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_sublineamer2']}} - {{$item['detalles'][0]['submercadeo2']['descripcionItemCriterioMayor']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_sublinea')}">
+            <label class="col-sm-3 control-label">Sublinea:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_sublinea']}} - {{$item['detalles']['sublinea']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Submarca:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_submarca']}} - {{$item['detalles'][0]['submarca']['descripcionItemCriterioMayor']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_sublineamer')}">
+            <label class="col-sm-3 control-label">Sublinea Mercadeo:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_sublineamer']}} - {{$item['detalles']['submercadeo']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Tamaño/Contenido:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_contenido']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_sublineamer2')}">
+            <label class="col-sm-3 control-label">Sublinea Mercadeo 2:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_sublineamer2']}} - {{$item['detalles']['submercadeo2']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Unidad de Medida:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_umcont']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_submarca')}">
+            <label class="col-sm-3 control-label">Submarca:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_submarca']}} - {{$item['detalles']['submarca']['descripcionItemCriterioMayor']}}</p>
           </div>
-          <div class="row">
-            <label class="col-sm-3">Regalias:</label>
-            <p class="col-sm-6">{{$item['detalles'][0]['ide_regalias']}} - {{$item['detalles'][0]['regalias']['descripcionItemCriterioMayor']}}</p>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_contenido')}">
+            <label class="col-sm-3 control-label">Tamaño/Contenido:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_contenido']}}</p>
+          </div>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_umcont')}">
+            <label class="col-sm-3 control-label">Unidad de Medida:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_umcont']}}</p>
+          </div>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_regalias')}">
+            <label class="col-sm-3 control-label">Regalias:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_regalias']}} - {{$item['detalles']['regalias']['descripcionItemCriterioMayor']}}</p>
           </div>
           @if($categoria == 'Accesorios')
-            <div class="row">
-              <label class="col-sm-3">Segmento(ACC):</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_segmento']}} - {{$item['detalles'][0]['segmento']['descripcionItemCriterioMayor']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_segmento')}">
+              <label class="col-sm-3 control-label">Segmento(ACC):</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_segmento']}} - {{$item['detalles']['segmento']['descripcionItemCriterioMayor']}}</p>
             </div>
-            <div class="row">
-              <label class="col-sm-3">Clasificación(ACC):</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_clasificacion']}} - {{$item['detalles'][0]['clasificacion']['descripcionItemCriterioMayor']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_clasificacion')}">
+              <label class="col-sm-3 control-label">Clasificación(ACC):</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_clasificacion']}} - {{$item['detalles']['clasificacion']['descripcionItemCriterioMayor']}}</p>
             </div>
-            <div class="row">
-              <label class="col-sm-3">Acondicionamiento(ACC):</label>
-              <p class="col-sm-6">{{$item['detalles'][0]['ide_acondicionamiento']}} - {{$item['detalles'][0]['acondicionamiento']['descripcionItemCriterioMayor']}}</p>
+            <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_acondicionamiento')}">
+              <label class="col-sm-3 control-label">Acondicionamiento(ACC):</label>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_acondicionamiento']}} - {{$item['detalles']['acondicionamiento']['descripcionItemCriterioMayor']}}</p>
             </div>
           @endif
-          <div class="row">
-            <div class="col-sm-1">
-              <label class="control-label">EAN13:</label>
-            </div>
-            <div class="col-sm-3">
-              <input type="number" class="form-control" ng-model="producto.ean13" required/>
-            </div>
-            <div class="col-sm-1">
-              <label class="control-label">EAN14:</label>
-            </div>
-            <div class="col-sm-3">
-              <input type="number" class="form-control" ng-model="producto.ean14" required/>
-            </div>
+          @if($tipo != 'Regular')
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_nomtemporada')}">
+            <label class="col-sm-3 control-label">Nombre Temporada:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_nomtemporada']}} - {{$item['detalles']['nomtemporada']['descripcionItemCriterioMayor']}}</p>
           </div>
+          <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_anotemporada')}">
+            <label class="col-sm-3 control-label">Año Temporada:</label>
+            <p class="col-sm-6 control-label">{{$item['detalles']['ide_anotemporada']}}</p>
+          </div>
+          @endif
           <br>
           <div class="row">
             <div class="text-center">
               <input type="hidden" ng-model="producto.proy" ng-init="producto.proy = {{$idproyecto}}"/>
               <input type="hidden" ng-model="producto.act" ng-init="producto.act = {{$idactividad}}"/>
-              <button class="btn btn-primary" type="submit">Guardar</button>
+              <input type="hidden" ng-model="producto.item" ng-init="producto.item = {{$item['id']}}"/>
+              <input type="hidden" ng-model="producto.referencia" ng-init="producto.referencia = '{{$item['ite_referencia']}}'"/>
+              <button class="btn btn-primary" type="submit">Validar</button>
             </div>
           </div>
         </div>

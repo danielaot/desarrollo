@@ -38,7 +38,7 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', func
     $scope.proyectoForm.$setPristine();
   }
 
-  $scope.deleteProyecto = function(ev, idproyecto){
+  /*$scope.deleteProyecto = function(ev, idproyecto){
     var confirm = $mdDialog.confirm()
           .title('')
           .textContent('Desea eliminar el proyecto?')
@@ -52,5 +52,5 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', func
         $scope.getInfo();
       }, function(){});
     },function(){});
-  }
+  }*/
 }]);

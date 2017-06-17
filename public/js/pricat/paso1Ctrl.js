@@ -25,7 +25,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     $scope.regalias = angular.copy(info.regalias);
     $scope.segmento = angular.copy(info.segmento);
     $scope.acondicionamiento = angular.copy(info.acondicionamiento);
-    $scope.referencia = angular.copy(info.referencia);
+    $scope.nomtemporada = angular.copy(info.nomtemporada);
     $scope.items = angular.copy(info.items);
   });
 
@@ -155,7 +155,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     }
     else{
       $scope.producto.categoria = '';
-    }
+    }    
 
     if($scope.producto.variedad.length > 0){
       $scope.producto.deslogyca += ' ';
@@ -183,10 +183,9 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
 
   $scope.saveProducto = function(){
     $scope.progress = true;
-    //console.log($scope.producto);
     $http.post($scope.url, $scope.producto).then(function(response){
       $scope.progress = false;
-      $window.parent.location = response.data;
+      $window.location = response.data;
     }, function(){});
   }
 }]);

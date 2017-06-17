@@ -24,7 +24,7 @@
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="notificacion in notificaciones | filter : {nosa_notificacion : searchtext}">
             <div class="row">
-              <div class="col-sm-3">
+              <div class="col-sm-5">
                 @{{notificacion.nosa_nombre}}
               </div>
               <div class="col-sm-2">
@@ -36,12 +36,9 @@
               <div class="col-sm-2">
                 @{{notificacion.nosa_fecha_vencimiento}}
               </div>
-              <div class="col-sm-3 text-right">
+              <div class="col-sm-1 text-right">
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="edit(notificacion.id)">
                   <i class="glyphicon glyphicon-pencil"></i> Editar
-                </button>
-                <button type="button" class="btn btn-danger btn-sm" ng-click="delete($event, notificacion.id)">
-                  <i class="glyphicon glyphicon-trash"></i> Borrar
                 </button>
               </div>
             </div>

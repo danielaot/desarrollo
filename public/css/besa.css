@@ -181,3 +181,7 @@ a.pro-name{
 .interno .row .row>div[class^="col-sm"] {
   padding-left: 0;
 }
+
+.panel-group, .list-group {
+  margin-bottom: 0px;
+}

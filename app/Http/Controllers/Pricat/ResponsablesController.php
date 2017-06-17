@@ -56,7 +56,7 @@ class ResponsablesController extends Controller
         $validator = Validator::make($request->all(), $validationRules);
 
         if ($validator->fails()){
-          return response()->json($validator->errors());
+          return response()->json(['errors' => $validator->errors()]);
         }
 
         $area = Area::create($request->all());

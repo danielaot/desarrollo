@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Pricat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Pricat\DesarrolloActividadesController as DesarrolloCtrl;
 use Validator;
 use Carbon\Carbon;
+use Auth;
 
 use App\Models\Pricat\TVocabas as Vocabas;
 use App\Models\Pricat\TCategoriasLogyca as CatLogyca;
@@ -16,8 +18,6 @@ use App\Models\Pricat\TMarca as Marca;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
 use App\Models\Pricat\TItemEan as IEan;
-use App\Models\Pricat\TPredecesora as ActPre;
-use App\Models\Pricat\TDesarrolloActividad as DesAct;
 
 class Paso1Controller extends Controller
 {
@@ -30,7 +30,6 @@ class Paso1Controller extends Controller
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
         $titulo = 'Solicitud Creación Item';
-
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
@@ -110,12 +109,13 @@ class Paso1Controller extends Controller
             case '610':
                 $acondicionamiento = $criterios;
               break;
+            case '953':
+                $nomtemporada = $criterios;
+              break;
           }
         }
 
-        $referencia = 'AAA000';
-
-        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'referencia', 'items');
+        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'nomtemporada', 'items');
 
         return response()->json($response);
     }
@@ -158,7 +158,7 @@ class Paso1Controller extends Controller
         $validator = Validator::make($request->all(), $validationRules);
 
         if ($validator->fails()) {
-          return response()->json($validator->errors());
+          return response()->json(['errors' => $validator->errors()]);
         }
 
         $last_ref = Item::all()->last();
@@ -174,8 +174,7 @@ class Paso1Controller extends Controller
         $tipo_producto = $request->tipo != 'Oferta' ? $request->tipo : 'Promocion';
 
         $tipo = Criterio::where(['idItemCriterioPlanItemCriterioMayor' => 130, 'descripcionItemCriterioMayor' => $tipo_producto])
-                        ->get()
-                        ->first();
+                        ->get()->first();
 
         $item = new Item;
         $item->ite_proy = $request->proy;
@@ -217,6 +216,8 @@ class Paso1Controller extends Controller
         $detalle->ide_segmento = $request->segmento['idItemCriterioMayor'];
         $detalle->ide_clasificacion = $request->clasificacion['idItemCriterioMayor'];
         $detalle->ide_acondicionamiento = $request->acondicionamiento['idItemCriterioMayor'];
+        $detalle->ide_nomtemporada = $request->nomtemporada['idItemCriterioMayor'];
+        $detalle->ide_anotemporada = $request->anotemporada;
         $detalle->save();
 
         $item_ean = new IEan;
@@ -224,17 +225,7 @@ class Paso1Controller extends Controller
         $item_ean->iea_cantemb = $request->embalaje;
         $item_ean->save();
 
-        $fecha = Carbon::now();
-
-        $desarrollo = DesAct::where(['dac_proy_id' => $request->proy, 'dac_act_id' => $request->act])
-                            ->update(['dac_fecha_cumplimiento' => $fecha,'dac_estado' => 'Completado']);
-
-        $actdespues = ActPre::where('pre_act_pre_id', $request->act)->get();
-
-        foreach($actdespues as $actividad){
-          DesAct::where(['dac_proy_id' => $request->proy, 'dac_act_id' => $actividad->pre_act_id])
-                ->update(['dac_fecha_inicio' => $fecha,'dac_estado' => 'En Proceso']);
-        }
+        DesarrolloCtrl::update($request->proy, $request->act);
 
         $url = url('pricat/desarrolloactividades');
         return response($url, 200);

@@ -11,19 +11,22 @@
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="proyecto in proyectos">
             <div class="row">
-              <div class="col-sm-7">
+              <div class="col-sm-6">
                 @{{proyecto.proy_nombre}}
+              </div>
+              <div class="col-sm-2">
+                @{{proyecto.procesos.pro_nombre}}
               </div>
               <div class="col-sm-2">
                 @{{proyecto.proy_estado}}
               </div>
-              <div class="col-sm-3 text-right">
+              <div class="col-sm-2 text-right">
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProyecto(proyecto.id)">
                   <i class="glyphicon glyphicon-pencil"></i> Editar
                 </button>
-                <button class="btn btn-danger btn-sm" ng-click="deleteProyecto($event, proyecto.id)">
+                <!--button class="btn btn-danger btn-sm" ng-click="deleteProyecto($event, proyecto.id)">
                   <i class="glyphicon glyphicon-trash"></i> Borrar
-                </button>
+                </button-->
               </div>
             </div>
           </li>

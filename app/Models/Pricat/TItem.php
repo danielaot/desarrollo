@@ -21,7 +21,7 @@ class TItem extends Model
 
     public function detalles()
   	{
-  		  return $this->hasMany('App\Models\Pricat\TItemDetalle', 'ide_item');
+  		  return $this->hasOne('App\Models\Pricat\TItemDetalle', 'ide_item');
   	}
 
     public function eanes()

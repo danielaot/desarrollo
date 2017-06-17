@@ -23,11 +23,11 @@
             </div>
             <div class="col-sm-6 form-group">
               <label class="control-label">Fecha Inicio<span class="required">*</span> :</label>
-              <input type="date" class="form-control" ng-model="notificacion.nosa_fecha_inicio" required/>
+              <input type="date" class="form-control" ng-model="nosa_fecha_inicio" required/>
             </div>
             <div class="col-sm-6 form-group">
               <label class="control-label">Fecha Vencimiento<span class="required">*</span> :</label>
-              <input type="date" class="form-control" ng-model="notificacion.nosa_fecha_vencimiento" required/>
+              <input type="date" class="form-control" ng-model="nosa_fecha_vencimiento" required/>
             </div>
             <div class="col-sm-12 form-group">
               <label class="control-label">Archivo<span class="required">*</span> :</label>

@@ -52,6 +52,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('marcas', 'Pricat\MarcasController');
     Route::get('marcasinfo', 'Pricat\MarcasController@getInfo');
 
+    Route::resource('criterios', 'Pricat\CriteriosController');
+    Route::get('criteriosinfo', 'Pricat\CriteriosController@getInfo');
+
     Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
 
     Route::resource('notificacionsanitaria', 'Pricat\NotificacionSanitariaController');
@@ -63,7 +66,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
 
-    Route::resource('paso7', 'Pricat\Paso7Controller');
-    Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
+    Route::resource('paso3', 'Pricat\Paso3Controller', ['only' => ['index']]);
+
+    Route::resource('paso4', 'Pricat\Paso4Controller', ['only' => ['index', 'update']]);
+
+    Route::resource('paso5', 'Pricat\Paso5Controller', ['only' => ['index', 'update']]);
+
+    Route::resource('paso6', 'Pricat\Paso6Controller');
+    Route::get('paso6info', 'Pricat\Paso6Controller@getInfo');
   });
 });
