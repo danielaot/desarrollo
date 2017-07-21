@@ -45,44 +45,24 @@ return [
     */
 
     'connections' => [
-
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => '',
-        ],
-
         'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
+            'database' => env('DB_DATABASE', 'bd_laravel'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => true,
-            'engine' => null,
-        ],
-
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+            'engine' => 'InnoDB',
         ],
 
         'besa' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_SQL_HOST', 'localhost'),
-            'database' => env('DB_SQL_DATABASE', 'BESA'),
+            'database' => 'BESA',
             'username' => env('DB_SQL_USERNAME', 'forge'),
             'password' => env('DB_SQL_PASSWORD', ''),
             'charset' => 'utf8',
@@ -92,7 +72,7 @@ return [
         'unoeereal' => [
           'driver' => 'sqlsrv',
           'host' => env('DB_SQL_HOST', 'localhost'),
-          'database' => env('DB_SQL_DATABASE_UNOEEREAL', 'unoeereal'),
+          'database' => 'unoeereal',
           'username' => env('DB_SQL_USERNAME', 'forge'),
           'password' => env('DB_SQL_PASSWORD', ''),
           'charset' => 'utf8',
@@ -103,28 +83,28 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_A_DATABASE', 'bd_aplicativos'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => 'bd_aplicativos',
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_spanish2_ci',
             'prefix' => '',
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
         ],
 
         'genericas' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_G_DATABASE', 'bd_genericas'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => 'bd_genericas',
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_spanish2_ci',
             'prefix' => '',
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
         ],
     ],
 
