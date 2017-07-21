@@ -10,6 +10,7 @@ use DB;
 
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
+use App\Models\BESA\AppwebPosarancelaria as Posarancelaria;
 
 class Paso4Controller extends Controller
 {
@@ -25,9 +26,7 @@ class Paso4Controller extends Controller
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
-        $posarancelaria = DB::connection('besa')
-                            ->table('9000-appweb_posarancelaria')
-                            ->get();
+        $posarancelaria = Posarancelaria::all();
 
         $item = Item::with('detalles.categoria','detalles.linea','tipo')
                     ->where('ite_proy', $idproyecto)

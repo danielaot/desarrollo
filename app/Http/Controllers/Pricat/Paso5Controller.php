@@ -10,6 +10,8 @@ use DB;
 
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
+use App\Models\BESA\AppwebPosarancelaria as Posarancelaria;
+use App\Models\BESA\AppwebGrupoimpo as Grupoimpo;
 
 class Paso5Controller extends Controller
 {
@@ -25,18 +27,14 @@ class Paso5Controller extends Controller
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
-        $grupoimpositivo = DB::connection('besa')
-                             ->table('9000-appweb_grupoimpo')
-                             ->get();
+        $grupoimpositivo = Grupoimpo::all();
 
         $item = Item::with('detalles.categoria','detalles.linea')
                     ->where('ite_proy', $idproyecto)
                     ->get()->first();
 
-        $posarancelaria = DB::connection('besa')
-                           ->table('9000-appweb_posarancelaria')
-                           ->where('id_pos_arancelaria', $item->detalles['ide_posarancelaria'])
-                           ->get()->first();
+        $posarancelaria = Posarancelaria::where('id_pos_arancelaria', $item->detalles['ide_posarancelaria'])
+                                        ->get()->first();
 
         return view('layouts.pricat.actividades.paso5', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'grupoimpositivo', 'posarancelaria', 'item'));
     }

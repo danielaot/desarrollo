@@ -12,6 +12,10 @@ use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
 use App\Models\Pricat\TItemEan as IEan;
 use App\Models\Pricat\TCriteriosItem as Criterios;
+use App\Models\BESA\ItemCriteriosCompletos;
+use App\Models\BESA\EANReferencia;
+use App\Models\BESA\EANReferenciaEAN14 as EAN14Referencia;
+use App\Models\BESA\ItemCriteriosCompletos;
 
 class Paso2Controller extends Controller
 {
@@ -79,10 +83,8 @@ class Paso2Controller extends Controller
                                ->get()
                                ->first();
 
-        $itemunoe = DB::connection('besa')
-                      ->table('888_Item_Criterios_Completos')
-                      ->where('referencia', $request->referencia)
-                      ->get()->first();
+        $itemunoe = ItemCriteriosCompletos::where('referencia', $request->referencia)
+                                          ->get()->first();
 
         $errores = [];
 
@@ -107,18 +109,14 @@ class Paso2Controller extends Controller
           return response()->json(compact('errores'));
         }
         else{
-          $ean13 = DB::connection('besa')
-                     ->table('000_EANReferencia')
-                     ->where('Referencia', $request->referencia)
-                     ->get()->first();
+          $ean13 = EANReferencia::where('Referencia', $request->referencia)
+                                ->get()->first();
 
           $item->ite_ean13 = $ean13->EAN;
           $item->save();
 
-          $ean14 = DB::connection('besa')
-                     ->table('000_EANReferencia_EAN14')
-                     ->where('Referencia', $request->referencia)
-                     ->get()->first();
+          $ean14 = EAN14Referencia::where('Referencia', $request->referencia)
+                                  ->get()->first();
 
           $itemean = IEan::where('iea_item', $id)
                          ->update(['iea_ean' => $ean14->EAN, 'iea_principal' => 1]);

@@ -15,6 +15,7 @@ use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as ItemDetalle;
 use App\Models\Pricat\TItemEan as ItemEan;
 use App\Models\Pricat\TItemPatron as ItemPatron;
+use App\Models\BESA\AppwebListaMateriales as ListaMateriales;
 use App\Models\Desarrollo\TFormulamaestra as FormulaMaestra;
 
 class Paso6Controller extends Controller
@@ -39,10 +40,8 @@ class Paso6Controller extends Controller
         $deslarga = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_deslarga);
 
         if($item->ite_tproducto == '1301'){
-          $lista = DB::connection('besa')
-                     ->table('9000-appweb_lista_materiales')
-                     ->where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG'])
-                     ->get()->first();
+          $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG'])
+                                  ->get()->first();
 
           $formula = FormulaMaestra::where('frm_txt_codigounoe', $lista->Cod_Item_Componente)
                                    ->get()->first();
