@@ -20,7 +20,16 @@ class CreateTItemEan extends Migration
                   ->on('t_items')
                   ->onDelete('cascade');
             $table->string('iea_ean')->nullable();
-            $table->string('iea_cantemb');
+            $table->unsignedInteger('iea_cantemb');
+            $table->string('ide_descorta');
+      			$table->string('ide_deslarga');
+            $table->float('iea_alto', 11, 3);
+            $table->float('iea_ancho', 11, 3);
+            $table->float('iea_profundo', 11, 3);
+            $table->float('iea_volumen', 11, 3);
+            $table->float('iea_pesobruto', 11, 3);
+            $table->float('iea_pesoneto', 11, 3);
+            $table->float('iea_tara', 11, 3);
             $table->boolean('iea_principal')->default(false);
             $table->timestamps();
         });

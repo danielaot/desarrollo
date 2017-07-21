@@ -28,7 +28,7 @@ class TProyecto extends Model
 
     public function items()
   	{
-  		  return $this->belongsTo('App\Models\Pricat\TItem', 'ite_proy');
+  		  return $this->belongsTo('App\Models\Pricat\TItem', 'ite_proy', 'id');
   	}
 
 }

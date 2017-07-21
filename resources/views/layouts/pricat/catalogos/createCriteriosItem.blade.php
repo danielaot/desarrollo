@@ -2,7 +2,6 @@
 <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <form name="criterioForm" ng-submit="criterioForm.$valid && saveCriterio()" novalidate>
-      {{ csrf_field() }}
       <div class="modal-content panel-primary">
         <div class="modal-header panel-heading">
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">

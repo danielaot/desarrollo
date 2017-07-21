@@ -86,14 +86,19 @@ class Paso2Controller extends Controller
 
         $errores = [];
 
-        foreach ($criterios as $key => $value) {
-          $colitem = $value->cri_col_item;
-          $colunoe = $value->cri_col_unoe;
+        if($itemunoe == NULL){
+          array_push($errores,'referencia');
+        }
+        else{
+          foreach ($criterios as $key => $value) {
+            $colitem = $value->cri_col_item;
+            $colunoe = $value->cri_col_unoe;
 
-          if($colunoe != 'cod_tipo_pr'){
-            $igual = strtoupper($itemdetalle->$colitem) == strtoupper($itemunoe->$colunoe);
-            if(!$igual){
-              array_push($errores,$colitem);
+            if($colunoe != 'cod_tipo_pr'){
+              $igual = strtoupper($itemdetalle->$colitem) == strtoupper($itemunoe->$colunoe);
+              if(!$igual){
+                array_push($errores,$colitem);
+              }
             }
           }
         }

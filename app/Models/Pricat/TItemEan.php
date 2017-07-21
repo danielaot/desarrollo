@@ -14,6 +14,16 @@ class TItemEan extends Model
         'iea_item',
         'iea_ean',
         'iea_cantemb',
+        'iea_temb',
+        'iea_descorta',
+        'iea_deslarga',
+        'iea_alto',
+        'iea_ancho',
+        'iea_profundo',
+        'iea_volumen',
+        'iea_pesobruto',
+        'iea_pesoneto',
+        'iea_tara',
         'iea_principal'
     ];
 

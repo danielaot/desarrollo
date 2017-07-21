@@ -22,19 +22,46 @@
         </div>
         <br><br>
         <ul class="list-group">
-          <li class="list-group-item" ng-repeat="notificacion in notificaciones | filter : {nosa_notificacion : searchtext}">
+          <li class="list-group-item">
             <div class="row">
-              <div class="col-sm-5">
+              <div class="col-sm-6 text-center">
+                <label class="label-control">Nombre</label>
+              </div>
+              <div class="col-sm-2 text-center">
+                <label class="label-control">Notificación</label>
+              </div>
+              <div class="col-sm-1 text-center">
+                <label class="label-control">Inicio</label>
+              </div>
+              <div class="col-sm-1 text-center">
+                <label class="label-control">Fin</label>
+              </div>
+              <div class="col-sm-1">
+
+              </div>
+              <div class="col-sm-1">
+
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item" ng-repeat="notificacion in notificaciones | filterBy: ['nosa_notificacion', 'nosa_nombre']: searchtext">
+            <div class="row">
+              <div class="col-sm-6">
                 @{{notificacion.nosa_nombre}}
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-2 text-center">
                 @{{notificacion.nosa_notificacion}}
               </div>
-              <div class="col-sm-2">
-                @{{notificacion.nosa_fecha_inicio}}
+              <div class="col-sm-1 text-center">
+                @{{notificacion.nosa_fecha_inicio | date : 'dd/MM/yy'}}
               </div>
-              <div class="col-sm-2">
-                @{{notificacion.nosa_fecha_vencimiento}}
+              <div class="col-sm-1 text-center">
+                @{{notificacion.nosa_fecha_vencimiento | date : 'dd/MM/yy'}}
+              </div>
+              <div class="col-sm-1 text-center">
+                <button type="button" class="btn btn-info btn-sm" ng-if="notificacion.nosa_documento">
+                  <i class="glyphicon glyphicon-eye-open"></i>
+                </button>
               </div>
               <div class="col-sm-1 text-right">
                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="edit(notificacion.id)">

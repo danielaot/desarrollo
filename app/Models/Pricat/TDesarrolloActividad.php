@@ -14,10 +14,8 @@ class TDesarrolloActividad extends Model
         'dac_proy_id',
         'dac_act_id',
         'dac_fecha_inicio',
-        'dac_fecha_final',
         'dac_fecha_cumplimiento',
         'dac_usuario',
-        'dac_observacion',
         'dac_estado'
     ];
 

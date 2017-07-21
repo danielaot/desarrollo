@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('criteriosinfo', 'Pricat\CriteriosController@getInfo');
 
     Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
+    Route::get('workflow', 'Pricat\DesarrolloActividadesController@workflow');
+    Route::get('workflowinfo', 'Pricat\DesarrolloActividadesController@getInfo');
 
     Route::resource('notificacionsanitaria', 'Pricat\NotificacionSanitariaController');
     Route::post('notificacionsanitariaupdate', 'Pricat\NotificacionSanitariaController@update');
@@ -66,13 +68,33 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
 
-    Route::resource('paso3', 'Pricat\Paso3Controller', ['only' => ['index']]);
+    Route::get('paso3', ['uses' => 'Pricat\Paso3Controller@index', 'as' => 'paso3.index']);
 
     Route::resource('paso4', 'Pricat\Paso4Controller', ['only' => ['index', 'update']]);
 
     Route::resource('paso5', 'Pricat\Paso5Controller', ['only' => ['index', 'update']]);
 
     Route::resource('paso6', 'Pricat\Paso6Controller');
+    Route::post('paso6update', 'Pricat\Paso6Controller@update');
     Route::get('paso6info', 'Pricat\Paso6Controller@getInfo');
+    Route::post('uploaditems', 'Pricat\Paso6Controller@upload');
+
+    Route::resource('paso7', 'Pricat\Paso7Controller');
+
+    Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
+    Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');
+    Route::get('confirmsubempaque', ['uses' => 'Pricat\ConfirmSubempaqueController@index', 'as' => 'confirmsubempaque.index']);
+
+    Route::resource('clientes', 'Pricat\ClientesController');
+    Route::get('clientesinfo', 'Pricat\ClientesController@getInfo');
+
+    Route::resource('segmentos', 'Pricat\SegmentosController');
+    Route::get('segmentosinfo', 'Pricat\SegmentosController@getInfo');
+
+    Route::resource('solicitud', 'Pricat\SolicitudesController');
+    Route::get('solicitudinfo', 'Pricat\SolicitudesController@getInfo');
+    Route::get('solicitudcreateinfo', 'Pricat\SolicitudesController@getCreateInfo');
+
+    Route::resource('generar', 'Pricat\PricatController');
   });
 });

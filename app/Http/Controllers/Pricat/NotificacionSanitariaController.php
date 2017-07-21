@@ -126,7 +126,7 @@ class NotificacionSanitariaController extends Controller
 
           $notificacion->nosa_documento = $filePath.$fileName;
         }
-
+        
         $notificacion->nosa_nombre = $request->nosa_nombre;
         $notificacion->nosa_notificacion = $request->nosa_notificacion;
         $notificacion->nosa_fecha_inicio = Carbon::createFromFormat('D M d Y', $request->nosa_fecha_inicio)->toDateString();

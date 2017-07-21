@@ -81,7 +81,7 @@
                 <select class="form-control" name="grupoimpo" required>
                   <option value=""></option>
                   @foreach($grupoimpositivo as $grupo)
-                    <option value="{{$grupo->cod_grupoimpo}}">{{$grupo->desc_grupoimpo}}</option>
+                    <option value="{{$grupo->cod_grupoimpo}}">{{$grupo->cod_grupoimpo}} - {{$grupo->desc_grupoimpo}}</option>
                   @endforeach
                 </select>
               </div>

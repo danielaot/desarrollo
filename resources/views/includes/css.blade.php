@@ -16,6 +16,7 @@
 <!-- CSS Dropzone -->
 <link href="{{url('/css/dropzone.css')}}" type="text/css" rel="stylesheet"/>
 
+<link href="{{url('/css/fileinput.min.css')}}" type="text/css" rel="stylesheet"/>
 <!-- CSS BESA -->
 <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
 

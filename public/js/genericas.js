@@ -1,6 +1,7 @@
 /*
  * Funciones generales
  */
+//Dropzone.autoDiscover = false;
 // Declaración de Modulo AngularJs
 var app = angular.module('aplicativos', ['angular.filter','ngMaterial']);
 
@@ -9,6 +10,15 @@ app.config(function($mdThemingProvider){
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
     .accentPalette('light-green');
+
+  /*dropzoneOpsProvider.setOptions({
+    url : '/',
+    acceptedFiles : 'image/jpeg, images/jpg, image/png',
+    addRemoveLinks : false,
+    dictDefaultMessage : 'Click para agregar o arrastrar imágenes',
+    dictRemoveFile : 'Quitar imágen',
+    dictResponseError : 'No se pudo cargar la imágen'
+  });*/
 });
 
 // Declaracion de directiva para restringir caracteres en los campos de texto o textareas

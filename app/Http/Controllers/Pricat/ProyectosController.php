@@ -97,7 +97,6 @@ class ProyectosController extends Controller
     {
         $proyecto = Proyecto::find($id);
         $proyecto->proy_nombre = $request->proy_nombre;
-        $proyecto->proy_descripcion = $request->proy_descripcion;
         $proyecto->proy_proc_id = $request->proy_proc_id;
         $proyecto->save();
 

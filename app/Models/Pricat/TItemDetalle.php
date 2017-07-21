@@ -43,15 +43,30 @@ class TItemDetalle extends Model
         'ide_segmento',
         'ide_clasificacion',
         'ide_acondicionamiento',
+        'ide_nomtemporada',
+        'ide_anotemporada',
         'ide_posarancelaria',
         'ide_grupoimpositivo',
-        'ide_nomtemporada',
-        'ide_anotemporada'
+        'ide_alto',
+        'ide_ancho',
+        'ide_profundo',
+        'ide_volumen',
+        'ide_pesobruto',
+        'ide_pesoneto',
+        'ide_tara',
+        'ide_condman',
+        'ide_regsan',
+        'ide_imagen'
     ];
 
     public function items()
   	{
   		  return $this->belongsTo('App\Models\Pricat\TItem', 'ide_item');
+  	}
+
+    public function logcategorias()
+  	{
+  		  return $this->hasOne('App\Models\Pricat\TCategoriasLogyca', 'id', 'ide_catlogyca');
   	}
 
     public function origen()
@@ -142,5 +157,10 @@ class TItemDetalle extends Model
     public function nomtemporada()
   	{
   		  return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_nomtemporada')->where('idItemCriterioPlanItemCriterioMayor','953');
+  	}
+
+    public function condmanipulacion()
+  	{
+  		  return $this->hasOne('App\Models\Pricat\TCondManipulacion', 'id', 'ide_condman');
   	}
 }

@@ -1,8 +1,9 @@
-app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($scope, $window, $http, $filter){
+app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog', function($scope, $window, $http, $filter, $mdDialog){
   $scope.getUrl = 'paso1info';
   $scope.url = 'paso1';
   //$scope.pattern = '[a-zA-Z0-9\s]+';
   $scope.progress = false;
+  $scope.descvariedad = '';
 
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
@@ -10,6 +11,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     $scope.catlogyca = $filter('orderBy')(angular.copy(info.catlogyca), 'tcl_descripcion');
     $scope.marca = angular.copy(info.marca);
     $scope.origen = angular.copy(info.origen);
+    $scope.clase = angular.copy(info.clase);
     $scope.tipomarca = angular.copy(info.tipomarca);
     $scope.tipooferta = angular.copy(info.tipooferta);
     $scope.menupromociones = angular.copy(info.menupromociones);
@@ -129,7 +131,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     $scope.createDescripciones();
   }
 
-  $scope.createDescripciones = function(){
+  $scope.createDescripciones = function(change=false){
     $scope.producto.deslogyca = '';
     $scope.producto.desbesa = '';
     $scope.producto.descorta = '';
@@ -155,17 +157,25 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     }
     else{
       $scope.producto.categoria = '';
-    }    
+    }
 
     if($scope.producto.variedad.length > 0){
       $scope.producto.deslogyca += ' ';
       $scope.producto.desbesa += ' ';
 
-      angular.forEach($scope.producto.variedad, function(value, key) {
-        $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
-        $scope.producto.desbesa += ' '+value.tvoc_palabra;
-        $scope.producto.varserie.push(value.id);
-      });
+      if(change){
+        //$scope.producto.deslogyca += $filter('lowercase')($scope.descvariedad);
+        //console.log($scope.descvariedad);
+      }
+      else{
+        $scope.descvariedad = ' ';
+        angular.forEach($scope.producto.variedad, function(value, key) {
+          $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
+          $scope.producto.desbesa += ' '+value.tvoc_palabra;
+          $scope.descvariedad += $filter('lowercase')(value.tvoc_abreviatura);
+          $scope.producto.varserie.push(value.id);
+        });
+      }
     }
 
     if($scope.producto.contenido != undefined){
@@ -181,11 +191,27 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', function($
     }
   }
 
-  $scope.saveProducto = function(){
-    $scope.progress = true;
-    $http.post($scope.url, $scope.producto).then(function(response){
-      $scope.progress = false;
-      $window.location = response.data;
-    }, function(){});
+  $scope.saveProducto = function(ev){
+    if($scope.producto.descorta.length > 18 || $scope.producto.deslogyca.length > 40){
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('.interno')))
+          .clickOutsideToClose(true)
+          .title('')
+          .textContent('Revisar las descripciones antes de continuar')
+          .ariaLabel('Descripciones')
+          .ok('Aceptar')
+          .targetEvent(ev)
+      );
+    }
+    else{
+      $scope.progress = true;
+      $scope.producto.captura = new Date($scope.captura).toDateString();
+
+      $http.post($scope.url, $scope.producto).then(function(response){
+        $scope.progress = false;
+        $window.location = response.data;
+      }, function(){});
+    }
   }
 }]);

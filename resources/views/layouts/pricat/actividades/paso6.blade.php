@@ -2,8 +2,8 @@
 
 @section('content')
   @include('includes.titulo')
-  <div ng-controller="paso6Ctrl" ng-cloak>
-    <form name="paso6Form" ng-submit="paso6Form.$valid" class="form-horizontal" enctype="multipart/form-data">
+  <div id="medidas" ng-controller="paso6Ctrl" ng-cloak>
+    <form name="paso6Form" ng-submit="saveProducto()" class="form-horizontal" enctype="multipart/form-data" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Información del Producto</div>
         <div class="panel-body">
@@ -26,14 +26,6 @@
           <div class="row">
             <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-6 control-label">Tipo de Empaque:</label>
-                <div class="col-sm-5">
-                  <select class="form-control" ng-model="producto.tempaque" ng-options="opt.temp_nombre for opt in tempaque track by opt.temp_calificador" required></select>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4 form-group">
-              <div class="row">
                 <label class="col-sm-6 control-label">Tipo de Embalaje:</label>
                 <div class="col-sm-5">
                   <select class="form-control" ng-model="producto.tembalaje" ng-options="opt.temb_nombre for opt in tembalaje track by opt.temb_calificador" required></select>
@@ -42,7 +34,15 @@
             </div>
             <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-7 control-label">Condiciones de Manipulacion:</label>
+                <label class="col-sm-6 control-label">Tipo de Empaque:</label>
+                <div class="col-sm-5">
+                  <select class="form-control" ng-model="producto.tempaque" ng-options="opt.temp_nombre for opt in tempaque track by opt.temp_calificador" required></select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4 form-group">
+              <div class="row">
+                <label class="col-sm-7 control-label" style="padding-top: 0;">Condiciones de Manipulacion:</label>
                 <div class="col-sm-5">
                   <select class="form-control" ng-model="producto.manipulacion" ng-options="opt.tcman_nombre for opt in cmanipulacion track by opt.tcman_calificador" required></select>
                 </div>
@@ -53,26 +53,40 @@
           <div class="row">
             <div class="col-sm-6 form-group">
               <div class="row">
-                <div class="col-sm-12">
-                  Descripcion Embalaje Larga <br>
-                  Descripcion Embalaje Corta
-                </div>
+                <p class="col-sm-4"><label>Descripción Larga: </label></p>
+                <p class="col-sm-8">@{{producto.tembalaje.temb_abreviatura}} {{$deslarga}}@{{producto.cantemb}}art</p>
+              </div>
+              <div class="row">
+                <p class="col-sm-4"><label>Descripción Corta: </label></p>
+                <p class="col-sm-8">@{{producto.tembalaje.temb_abreviatura}} {{$descorta}}@{{producto.cantemb}}art</p>
               </div>
             </div>
             <div class="col-sm-6 form-group">
-              <div class="row">
+              <input id="image" type="file" class="file" multiple=false data-preview-file-type="any">
+              <!--div class="input-group">
+                <input type="file" class="form-control"/>
+                <div class="input-group-btn">
+                  <span class="btn btn-success btn-sm">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Cargar Imágen</span>
+                  </span>
+                </div>
+              </div-->
+              <!--div class="row">
                 <div class="col-sm-3">
-                  <span id="dropzone" class="btn btn-success btn-sm dz-clickable">
+                  <span id="dropzone" class="btn btn-success btn-sm">
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Cargar Imágen</span>
                   </span>
                 </div>
                 <div class="col-sm-6">
+                  <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone style="display: none;"></div>
                   <div class="table table-striped" class="files" id="previews">
                     <div id="template" class="file-row">
-                      <!-- This is used as the file preview template -->
                       <div>
-                        <span class="preview" style="margin: 5px 15px; border: 1px solid; display: inline-block;"><img data-dz-thumbnail /></span>
+                        <span class="preview" style="margin: 5px 15px; border: 1px solid; display: inline-block;">
+                          <img data-dz-thumbnail />
+                        </span>
                         <button data-dz-remove class="btn btn-danger delete">
                           <i class="glyphicon glyphicon-trash"></i>
                         </button>
@@ -83,10 +97,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div-->
             </div>
           </div>
-
         </div>
       </div>
       <div class="panel panel-primary">
@@ -97,7 +110,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Alto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.alto"/>
+                  <input type="number" class="form-control" ng-model="producto.alto" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -106,7 +119,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Ancho:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.ancho"/>
+                  <input type="number" class="form-control" ng-model="producto.ancho" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -115,7 +128,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Profundo:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.profundo"/>
+                  <input type="number" class="form-control" ng-model="producto.profundo" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -124,7 +137,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Volumen:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.volumen" ng-value="producto.alto*producto.ancho*producto.profundo" disabled/>
+                  <input type="number" class="form-control" ng-model="producto.volumen" ng-value="producto.alto*producto.ancho*producto.profundo" min="0" readonly/>
                   <div class="input-group-addon">mm<sup>3</sup></div>
                 </div>
               </div>
@@ -133,18 +146,18 @@
           <div class="row">
             <div class="col-sm-3 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Peso Neto:</label>
+                <label class="col-sm-5 control-label">Peso Bruto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.pesoneto"/>
+                  <input type="number" class="form-control" ng-model="producto.pesobruto" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
             </div>
             <div class="col-sm-3 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Peso Bruto:</label>
+                <label class="col-sm-5 control-label">Peso Neto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.pesobruto"/>
+                  <input type="number" class="form-control" ng-model="producto.pesoneto" ng-init="producto.pesoneto = {{$pesoneto}}" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
@@ -153,7 +166,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Tara:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="producto.tara" ng-value="producto.pesoneto-producto.pesobruto" disabled/>
+                  <input type="number" class="form-control" ng-model="producto.tara" ng-value="producto.pesobruto-producto.pesoneto" readonly/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
@@ -169,7 +182,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Alto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.alto"/>
+                  <input type="number" class="form-control" ng-model="empaque.alto" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -178,7 +191,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Ancho:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.ancho"/>
+                  <input type="number" class="form-control" ng-model="empaque.ancho" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -187,7 +200,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Profundo:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.profundo"/>
+                  <input type="number" class="form-control" ng-model="empaque.profundo" min="0" required/>
                   <div class="input-group-addon">mm</div>
                 </div>
               </div>
@@ -196,7 +209,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Volumen:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.volumen" ng-value="empaque.alto*empaque.ancho*empaque.profundo" disabled/>
+                  <input type="number" class="form-control" ng-model="empaque.volumen" ng-value="empaque.alto*empaque.ancho*empaque.profundo" min="0" readonly/>
                   <div class="input-group-addon">mm<sup>3</sup></div>
                 </div>
               </div>
@@ -205,18 +218,18 @@
           <div class="row">
             <div class="col-sm-3 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Peso Neto:</label>
+                <label class="col-sm-5 control-label">Peso Bruto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.pesoneto"/>
+                  <input type="number" class="form-control" ng-model="empaque.pesobruto" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
             </div>
             <div class="col-sm-3 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Peso Bruto:</label>
+                <label class="col-sm-5 control-label">Peso Neto:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.pesobruto"/>
+                  <input type="number" class="form-control" ng-model="empaque.pesoneto" ng-value="producto.cantemb*producto.pesoneto" ng-init="empaque.pesoneto = {{$pesoneto*$item['eanes'][0]['iea_cantemb']}}" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
@@ -225,7 +238,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Tara:</label>
                 <div class="col-sm-6 input-group">
-                  <input type="number" class="form-control" ng-model="empaque.tara" ng-value="empaque.pesoneto-empaque.pesobruto" disabled/>
+                  <input type="number" class="form-control" ng-model="empaque.tara" ng-value="empaque.pesobruto-(producto.cantemb*producto.pesoneto)" readonly/>
                   <div class="input-group-addon">Kg</div>
                 </div>
               </div>
@@ -242,66 +255,68 @@
                 <label class="col-sm-6 control-label">Unidad de Empaque:</label>
                 <div class="col-sm-4">
                   <div class="input-group">
-                    <input type="text" class="form-control" ng-model="producto.cantemb" maxlength="3"/>
+                    <input type="text" class="form-control" ng-model="producto.cantemb" maxlength="3" ng-init="producto.cantemb = {{$item['eanes'][0]['iea_cantemb']}}" required/>
                     <div class="input-group-addon">unds</div>
                   </div>
                 </div>
                 <div class="col-sm-1">
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" value="1"/>
+                      <input type="checkbox" ng-model="confirm" value="1"/>
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-sm-3 form-group">
+          </div>
+          <div class="row">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-7 control-label">Tendidos x Caja:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.numtendidos" maxlength="3"/>
+                <label class="col-sm-6 control-label">Tendidos x Caja:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.numtendidos" maxlength="3" min="0" required/>
                 </div>
               </div>
             </div>
-            <div class="col-sm-2 form-group">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-9 control-label">Cajas x Tendido:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.cajten"/>
+                <label class="col-sm-6 control-label">Cajas x Tendido:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.cajten" min="0" required/>
                 </div>
               </div>
             </div>
-            <div class="col-sm-2 form-group">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-10 control-label">Tendidos x Estiba:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0; margin-left: -15px;">
-                  <input type="number" class="form-control" ng-model="patron.tenest"/>
+                <label class="col-sm-6 control-label">Tendidos x Estiba:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.tenest" min="0" required/>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-2 form-group">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-9 control-label">Unds x Tendido:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.undten" ng-value="producto.cantemb*patron.cajten" disabled/>
+                <label class="col-sm-6 control-label">Unds x Tendido:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.undten" ng-value="producto.cantemb*patron.cajten" min="0" readonly/>
                 </div>
               </div>
             </div>
-            <div class="col-sm-2 form-group">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-8 control-label">Unds x Estiba:</label>
-                <div class="col-sm-2" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.undest" ng-value="patron.undten*patron.tenest" disabled/>
+                <label class="col-sm-6 control-label">Unds x Estiba:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.undest" ng-value="producto.cantemb*patron.cajten*patron.tenest" readonly/>
                 </div>
               </div>
             </div>
-            <div class="col-sm-2 form-group">
+            <div class="col-sm-4 form-group">
               <div class="row">
-                <label class="col-sm-8 control-label">Cajas x Estiba:</label>
-                <div class="col-sm-3" style="padding-left: 0; padding-right: 0;">
-                  <input type="number" class="form-control" ng-model="patron.caest" ng-value="patron.cajten*patron.tenest" disabled/>
+                <label class="col-sm-6 control-label">Cajas x Estiba:</label>
+                <div class="col-sm-3">
+                  <input type="number" class="form-control" ng-model="patron.caest" ng-value="patron.cajten*patron.tenest" min="0" readonly/>
                 </div>
               </div>
             </div>
@@ -309,6 +324,10 @@
           <br>
           <div class="row">
             <div class="text-center">
+              <input type="hidden" ng-model="producto.proy" ng-init="producto.proy = {{$idproyecto}}"/>
+              <input type="hidden" ng-model="producto.act" ng-init="producto.act = {{$idactividad}}"/>
+              <input type="hidden" ng-model="producto.item" ng-init="producto.item = {{$item['id']}}"/>
+              <input type="hidden" ng-model="producto.ref" ng-init="producto.ref = {{$item['ite_referencia']}}"/>
               <button class="btn btn-primary" id="submit" type="submit">Guardar</button>
             </div>
           </div>
@@ -322,31 +341,38 @@
   <script src="{{url('/js/pricat/paso6Ctrl.js')}}" type="text/javascript" language="javascript"></script>
 @endpush
 @push('script_custom')
-<script type="text/javascript">
+  <script type="text/javascript">
   $(document).ready(function() {
-    var previewNode = document.getElementById("template");
-    previewNode.id = "";
-    var previewTemplate = previewNode.outerHTML;
-    previewNode.parentNode.removeChild(previewNode);
-
-    var myDropzone = new Dropzone(document.body, {
-      clickable: "#dropzone",
-      url: "storage/app/public/pricat",
-      uploadMultiple: false,
-      maxFiles: 1,
-      maxFilesize: 10,
-      thumbnailWidth: 80,
-      thumbnailHeight: 80,
-      autoProcessQueue: false,
-      previewTemplate: previewTemplate,
-      previewsContainer: "#previews",
-      acceptedFiles: ".jpeg,.jpg,.png,.gif",
-      dictDefaultMessage: "Arrastre la imagen aqui o haga click",
-      dictMaxFilesExceeded: "Solo está permitido cargar una imagen",
-      dictInvalidFileType: "Tipo de archivo inválido"
+    $("#image").fileinput({
+      language: "es",
+      allowedFileExtensions: ["jpg", "png", "gif"]
     });
   });
 
-  Dropzone.autoDiscover = false;
-</script>
+    /*$(document).ready(function() {
+      var previewNode = document.getElementById("template");
+      previewNode.id = "";
+      var previewTemplate = previewNode.outerHTML;
+      previewNode.parentNode.removeChild(previewNode);
+
+      var myDropzone = new Dropzone(document.body, {
+        clickable: "#dropzone",
+        url: "storage/app/public/pricat/items",
+        uploadMultiple: false,
+        maxFiles: 1,
+        maxFilesize: 10,
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        autoProcessQueue: false,
+        previewTemplate: previewTemplate,
+        previewsContainer: "#previews",
+        acceptedFiles: ".jpeg,.jpg,.png,.gif",
+        dictDefaultMessage: "Arrastre la imagen aqui o haga click",
+        dictMaxFilesExceeded: "Solo está permitido cargar una imagen",
+        dictInvalidFileType: "Tipo de archivo inválido"
+      });
+    });*/
+
+    //Dropzone.autoDiscover = false;
+  </script>
 @endpush

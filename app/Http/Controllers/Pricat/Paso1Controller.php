@@ -62,6 +62,9 @@ class Paso1Controller extends Controller
             case '100':
                 $origen = $criterios;
               break;
+            case '110':
+                $clase = $criterios;
+              break;
             case '129':
                 $criterios = collect($criterios);
                 $criterios->pop();
@@ -115,7 +118,7 @@ class Paso1Controller extends Controller
           }
         }
 
-        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'nomtemporada', 'items');
+        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'nomtemporada', 'items');
 
         return response()->json($response);
     }
@@ -171,7 +174,17 @@ class Paso1Controller extends Controller
           $ref++;
         }
 
-        $tipo_producto = $request->tipo != 'Oferta' ? $request->tipo : 'Promocion';
+        switch ($request->tipo) {
+          case 'Regular':
+              $tipo_producto = $request->tipo;
+            break;
+          case 'Oft.':
+              $tipo_producto = 'Promocion';
+            break;
+          case 'Etch.':
+              $tipo_producto = 'Estuche';
+            break;
+        }
 
         $tipo = Criterio::where(['idItemCriterioPlanItemCriterioMayor' => 130, 'descripcionItemCriterioMayor' => $tipo_producto])
                         ->get()->first();
@@ -181,6 +194,7 @@ class Paso1Controller extends Controller
         $item->ite_referencia = $ref;
         $item->ite_tproducto = $tipo['idItemCriterioMayor'];
         $item->ite_eanext = $request->ean;
+        $item->ite_dat_captura = Carbon::createFromFormat('D M d Y', $request->captura)->toDateString();
         $item->save();
 
         $detalle = new IDetalle;
@@ -193,19 +207,13 @@ class Paso1Controller extends Controller
         $detalle->ide_descorta = $request->descorta;
         $detalle->ide_deslarga = $request->deslogyca;
         $detalle->ide_descompleta = $request->desbesa;
-        $detalle->ide_catlogyca = $request->catlogyca['tcl_codigo'];
+        $detalle->ide_catlogyca = $request->catlogyca['id'];
         $detalle->ide_nomfab = $request->fabricante;
         $detalle->ide_origen = $request->origen['idItemCriterioMayor'];
+        $detalle->ide_clase = $request->clase['idItemCriterioMayor'];
         $detalle->ide_tmarca = $request->tipomarca['idItemCriterioMayor'];
-        $detalle->ide_toferta = $request->tipooferta['idItemCriterioMayor'];
-        $detalle->ide_meprom = $request->menupromo['idItemCriterioMayor'];
-        $detalle->ide_tiprom = $request->tipopromo['idItemCriterioMayor'];
         $detalle->ide_presentacion = $request->presentacion['idItemCriterioMayor'];
         $detalle->ide_varbesa = $request->variedadbesa['idItemCriterioMayor'];
-        $detalle->ide_comp1 = $request->comp1['ite_txt_referencia'];
-        $detalle->ide_comp2 = $request->comp2['ite_txt_referencia'];
-        $detalle->ide_comp3 = $request->comp3['ite_txt_referencia'];
-        $detalle->ide_comp4 = $request->comp4['ite_txt_referencia'];
         $detalle->ide_categoria = $request->categoria['cat_id'];
         $detalle->ide_linea = $request->linea['mar_linea'];
         $detalle->ide_sublinea = $request->sublinea['idItemCriterioMayor'];
@@ -213,11 +221,22 @@ class Paso1Controller extends Controller
         $detalle->ide_sublineamer2 = $request->sublinmercadeo2['idItemCriterioMayor'];
         $detalle->ide_submarca = $request->submarca['idItemCriterioMayor'];
         $detalle->ide_regalias = $request->regalias['idItemCriterioMayor'];
-        $detalle->ide_segmento = $request->segmento['idItemCriterioMayor'];
-        $detalle->ide_clasificacion = $request->clasificacion['idItemCriterioMayor'];
-        $detalle->ide_acondicionamiento = $request->acondicionamiento['idItemCriterioMayor'];
-        $detalle->ide_nomtemporada = $request->nomtemporada['idItemCriterioMayor'];
-        $detalle->ide_anotemporada = $request->anotemporada;
+        $detalle->ide_toferta = $request->tipooferta ? $request->tipooferta['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_meprom = $request->menupromo ? $request->menupromo['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_tiprom = $request->tipopromo ? $request->tipopromo['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_comp1 = $request->comp1 ? $request->comp1['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp2 = $request->comp2 ? $request->comp2['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp3 = $request->comp3 ? $request->comp3['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp4 = $request->comp4 ? $request->comp4['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp5 = $request->comp5 ? $request->comp5['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp6 = $request->comp6 ? $request->comp6['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp7 = $request->comp7 ? $request->comp7['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_comp8 = $request->comp8 ? $request->comp8['ite_txt_referencia'] : 'No Catalogado';
+        $detalle->ide_segmento = $request->segmento ? $request->segmento['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_clasificacion = $request->clasificacion ? $request->clasificacion['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_acondicionamiento = $request->acondicionamiento ? $request->acondicionamiento['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_nomtemporada = $request->nomtemporada ? $request->nomtemporada['idItemCriterioMayor'] : 'noap';
+        $detalle->ide_anotemporada = $request->anotemporada ? $request->anotemporada : 'No Catalogado';
         $detalle->save();
 
         $item_ean = new IEan;

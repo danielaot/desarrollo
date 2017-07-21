@@ -23,6 +23,7 @@ class CreateTItems extends Migration
             $table->string('ite_eanext')->nullable();
             $table->string('ite_ean13')->nullable();
             $table->string('ite_estado')->default('1201');
+            $table->enum('ite_est_logyca', ['Certificado','Capturado','No Capturado'])->default('No Capturado');
             $table->timestamps();
         });
     }

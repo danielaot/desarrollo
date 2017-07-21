@@ -67,8 +67,9 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
       $scope.granelesError = true;
 
     if(!$scope.granelesError){
-      $scope.notificacion.nosa_fecha_inicio = new Date($scope.nosa_fecha_inicio).toDateString("yyyy-MM-dd");
-      $scope.notificacion.nosa_fecha_vencimiento = new Date($scope.nosa_fecha_vencimiento).toDateString("yyyy-MM-dd");
+      $scope.notificacion.nosa_fecha_inicio = new Date($scope.nosa_fecha_inicio).toDateString();
+      $scope.notificacion.nosa_fecha_vencimiento = new Date($scope.nosa_fecha_vencimiento).toDateString();
+
       var formData = new FormData();
       angular.forEach($scope.notificacion, function (value, key) {
         formData.append(key, value);
@@ -86,12 +87,12 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
       else{
         var url = $scope.url;
       }
+
       $http.post(url, formData, {
         transformRequest: angular.identity,
         headers: {'Content-Type': undefined}
       })
       .then(function(response){
-        console.log(response.data);
         $scope.getInfo();
       }, function(){});
     }

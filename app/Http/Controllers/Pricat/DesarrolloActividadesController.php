@@ -9,6 +9,7 @@ use Auth;
 
 use App\Models\Pricat\TDesarrolloActividad as Desarrollo;
 use App\Models\Pricat\TPredecesora as ActPre;
+use App\Models\Pricat\TProyecto as Proyecto;
 
 class DesarrolloActividadesController extends Controller
 {
@@ -29,8 +30,10 @@ class DesarrolloActividadesController extends Controller
                                         })
                                  ->get()
                                  ->groupBy('dac_proy_id');
+        
+        $response = compact('ruta', 'titulo','desarrollos');
 
-        return view('layouts.pricat.actividades.indexDesarrollo', compact('ruta', 'titulo','desarrollos'));
+        return view('layouts.pricat.actividades.indexDesarrollo', $response);
     }
 
     /**
@@ -55,5 +58,41 @@ class DesarrolloActividadesController extends Controller
         }
 
         return $desarrollo;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function workflow()
+    {
+        $ruta = 'Calidad de Datos y Homologación // WorkFlow';
+        $titulo = 'WorkFlow';
+
+        $proyectos = Proyecto::all();
+
+        $estilos = ['btn-primary','btn-success','btn-danger','btn-warning'];
+
+        $response = compact('ruta', 'titulo', 'proyectos', 'estilos');
+
+        return view('layouts.pricat.actividades.indexWorkFlow', $response);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getInfo()
+    {
+        $proyectos = Proyecto::with('desarrollos.actividades')
+                             ->get();
+
+        $estilos = ['btn-primary','btn-success','btn-danger','btn-warning'];
+
+        $response = compact('proyectos', 'estilos');
+
+        return response()->json($response);
     }
 }

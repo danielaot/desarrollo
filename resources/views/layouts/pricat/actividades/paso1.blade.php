@@ -3,7 +3,7 @@
 @section('content')
   @include('includes.titulo')
   <div ng-controller="paso1Ctrl" ng-cloak>
-    <form name="paso1Form" ng-submit="paso1Form.$valid && saveProducto()" class="form-horizontal" novalidate>
+    <form name="paso1Form" ng-submit="paso1Form.$valid && saveProducto($event)" class="form-horizontal" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Descripción Interna Logyca</div>
         <div class="panel-body">
@@ -44,68 +44,64 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-6">
+              <label class="control-label">Uso<span class="required">*</span> :</label>
+              <md-autocomplete md-search-text="usoSearchText"
+                               md-items="uso in vocabasSearch(usoSearchText)"
+                               md-item-text="uso.tvoc_palabra"
+                               md-selected-item="producto.uso"
+                               md-selected-item-change="createDescripciones()"
+                               md-min-length="0"
+                               ng-disabled="usodisabled"
+                               required>
+                <md-item-template>
+                  <span md-highlight-text="usoSearchText" md-highlight-flags="^i">@{{uso.tvoc_palabra}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{usoSearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label">Marca<span class="required">*</span> :</label>
+              <md-autocomplete md-search-text="marcaSearchText"
+                               md-items="marca in marcaSearch(marcaSearchText)"
+                               md-item-text="marca.mar_nombre"
+                               md-selected-item="producto.marca"
+                               md-selected-item-change="createDescripciones()"
+                               md-min-length="0"
+                               required>
+                <md-item-template>
+                  <span md-highlight-text="marcaSearchText" md-highlight-flags="^i">@{{marca.mar_nombre}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{marcaSearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="control-label">Variedad<span class="required">*</span> :</label>
+              <md-chips ng-model="producto.variedad" md-require-match="true" md-on-add="createDescripciones()" md-on-remove="createDescripciones()">
+                <md-autocomplete md-search-text="variedadSearchText"
+                                 md-items="variedad in vocabasSearch(variedadSearchText)"
+                                 md-item-text="variedad.tvoc_palabra"
+                                 md-no-cache="true"
+                                 md-min-length="0">
+                  <md-item-template>
+                    <span md-highlight-text="variedadSearchText">@{{variedad.tvoc_palabra}}</span>
+                  </md-item-template>
+                </md-autocomplete>
+                <md-chip-template>
+                  <span>@{{$chip.tvoc_palabra}}</span>
+                </md-chip-template>
+              </md-chips>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label">Contenido<span class="required">*</span> :</label>
               <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Uso<span class="required">*</span> :</label>
-                  <md-autocomplete md-search-text="usoSearchText"
-                                   md-items="uso in vocabasSearch(usoSearchText)"
-                                   md-item-text="uso.tvoc_palabra"
-                                   md-selected-item="producto.uso"
-                                   md-selected-item-change="createDescripciones()"
-                                   md-min-length="0"
-                                   ng-disabled="usodisabled"
-                                   required>
-                    <md-item-template>
-                      <span md-highlight-text="usoSearchText" md-highlight-flags="^i">@{{uso.tvoc_palabra}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                      No se encontraron resultados para "@{{usoSearchText}}".
-                    </md-not-found>
-                  </md-autocomplete>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Marca<span class="required">*</span> :</label>
-                  <md-autocomplete md-search-text="marcaSearchText"
-                                   md-items="marca in marcaSearch(marcaSearchText)"
-                                   md-item-text="marca.mar_nombre"
-                                   md-selected-item="producto.marca"
-                                   md-selected-item-change="createDescripciones()"
-                                   md-min-length="0"
-                                   required>
-                    <md-item-template>
-                      <span md-highlight-text="marcaSearchText" md-highlight-flags="^i">@{{marca.mar_nombre}}</span>
-                    </md-item-template>
-                    <md-not-found>
-                      No se encontraron resultados para "@{{marcaSearchText}}".
-                    </md-not-found>
-                  </md-autocomplete>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Variedad<span class="required">*</span> :</label>
-                  <md-chips ng-model="producto.variedad" md-require-match="true" md-on-add="createDescripciones()">
-                    <md-autocomplete md-search-text="variedadSearchText"
-                                     md-items="variedad in vocabasSearch(variedadSearchText)"
-                                     md-item-text="variedad.tvoc_palabra"
-                                     md-no-cache="true"
-                                     md-min-length="0">
-                      <md-item-template>
-                        <span md-highlight-text="variedadSearchText">@{{variedad.tvoc_palabra}}</span>
-                      </md-item-template>
-                    </md-autocomplete>
-                    <md-chip-template>
-                      <span>@{{$chip.tvoc_palabra}}</span>
-                    </md-chip-template>
-                  </md-chips>
-                </div>
-              </div>
-              <br>
-              <div class="row">
-                <label class="col-sm-12 control-label">Contenido<span class="required">*</span> :</label>
                 <div class="col-sm-4">
                   <input type="number" class="form-control" ng-model="producto.contenido" ng-change="createDescripciones()" required/>
                 </div>
@@ -119,30 +115,25 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-7">
-              <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Descripción Larga:</label><br>
-                  <p>@{{producto.deslogyca}}</p>
-                  <span>@{{producto.deslogyca.length}}</span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Descripción Corta:</label><br>
-                  <p>@{{producto.descorta}}</p>
-                  <span>@{{producto.descorta.length}}</span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <label class="control-label">Descripción Completa BESA:</label><br>
-                  <p>@{{producto.desbesa}}</p>
-                </div>
-              </div>
-            </div>
           </div>
           <br>
+          <div class="row">
+            <p class="col-sm-3"><label>Descripción Larga:</label></p>
+            <p class="col-sm-5">@{{producto.deslogyca}} <span ng-class="{'has-error':producto.deslogyca.length > 40}">(@{{producto.deslogyca.length}})</span></p>
+            <p class="has-error" ng-if="producto.deslogyca.length > 40">Este campo tiene una restricción de 40 caracteres</p>
+            <p class="col-sm-4 col-offset-3" ng-if="producto.deslogyca.length > 40">
+              <input type="text" class="form-control" ng-model="descvariedad"/>
+            </p>
+          </div>
+          <div class="row">
+            <p class="col-sm-3"><label>Descripción Corta:</label></p>
+            <p class="col-sm-5">@{{producto.descorta}} <span ng-class="{'has-error':producto.descorta.length > 18}">(@{{producto.descorta.length}})</span></p>
+            <p class="has-error" ng-if="producto.descorta.length >18">Este campo tiene una restricción de 18 caracteres</p>
+          </div>
+          <div class="row">
+            <p class="col-sm-3"><label>Descripción Completa:</label></p>
+            <p class="col-sm-5">@{{producto.desbesa}}</p>
+          </div>
           <div class="row">
             <div class="col-sm-8 form-group">
               <div class="row">
@@ -194,12 +185,16 @@
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.origen" ng-options="opt.descripcionItemCriterioMayor for opt in origen track by opt.idItemCriterioMayor" required></select>
             </div>
+            <label class="col-sm-2 control-label">Clase<span class="required">*</span> :</label>
+            <div class="col-sm-4">
+              <select class="form-control" ng-model="producto.clase" ng-options="opt.descripcionItemCriterioMayor for opt in clase track by opt.idItemCriterioMayor" required></select>
+            </div>
+          </div>
+          <div class="row form-group">
             <label class="col-sm-2 control-label">Tipo Marca<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.tipomarca" ng-options="opt.descripcionItemCriterioMayor for opt in tipomarca track by opt.idItemCriterioMayor" required></select>
             </div>
-          </div>
-          <div class="row form-group">
             <label class="col-sm-2 control-label">Presentación<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="presentacionSearchText"
@@ -216,6 +211,8 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+          </div>
+          <div class="row form-group">
             <label class="col-sm-2 control-label">Variedad<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="variedadbesaSearchText"
@@ -233,16 +230,16 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+            <label class="col-sm-2 control-label">Categoria :</label>
+            <div class="col-sm-4">
+              <label>@{{producto.categoria.cat_txt_descrip}}</label>&nbsp;
+            </div>
           </div>
           <div class="row form-group">
-            <label class="col-sm-2 control-label">Categoria :</label>
-            <label class="col-sm-4 control-label">@{{producto.categoria.cat_txt_descrip}}</label>
             <label class="col-sm-2 control-label">Linea<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.linea" ng-options="opt.lineas[0].descripcionItemCriterioMayor for opt in (linea | filter : {mar_nombre : producto.marca.mar_nombre}) track by opt.lineas[0].idItemCriterioMayor" required></select>
             </div>
-          </div>
-          <div class="row form-group">
             <label class="col-sm-2 control-label">Sublinea<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="sublineaSearchText"
@@ -259,7 +256,9 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
-            <label class="col-sm-2 control-label">Sublinea Mercadeo :</label>
+          </div>
+          <div class="row form-group">
+            <label class="col-sm-2 control-label">Sublinea Mercadeo<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="sublinmercadeoSearchText"
                                md-items="sublinmercadeo in sublinmercadeoSearch(sublinmercadeoSearchText)"
@@ -275,9 +274,7 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
-          </div>
-          <div class="row form-group">
-            <label class="col-sm-2 control-label">Sublinea Mercadeo 2 :</label>
+            <label class="col-sm-2 control-label">Sublinea Mercadeo2<span class="required">*</span>:</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="sublinmercadeo2SearchText"
                                md-items="sublinmercadeo2 in sublinmercadeo2Search(sublinmercadeo2SearchText)"
@@ -293,32 +290,32 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+          </div>
+          <div class="row form-group">
             <label class="col-sm-2 control-label">Submarca<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.submarca" ng-options="opt.descripcionItemCriterioMayor for opt in submarca track by opt.idItemCriterioMayor" required></select>
             </div>
-          </div>
-          <div class="row form-group">
-            <label class="col-sm-2 control-label">Regalias :</label>
+            <label class="col-sm-2 control-label">Regalias<span class="required">*</span> :</label>
             <div class="col-sm-4">
-              <select class="form-control" ng-model="producto.regalias" ng-options="opt.descripcionItemCriterioMayor for opt in regalias track by opt.idItemCriterioMayor"></select>
-            </div>
-            <label class="col-sm-2 control-label" ng-if="producto.tipo != 'Regular'">Tipo Oferta<span class="required">*</span> :</label>
-            <div class="col-sm-4" ng-if="producto.tipo != 'Regular'">
-              <select class="form-control" ng-model="producto.tipooferta" ng-options="opt.descripcionItemCriterioMayor for opt in tipooferta track by opt.idItemCriterioMayor" required></select>
+              <select class="form-control" ng-model="producto.regalias" ng-options="opt.descripcionItemCriterioMayor for opt in regalias track by opt.idItemCriterioMayor" required></select>
             </div>
           </div>
           <div class="row form-group" ng-if="producto.tipo != 'Regular'">
+            <label class="col-sm-2 control-label">Tipo Oferta<span class="required">*</span> :</label>
+            <div class="col-sm-4" ng-if="producto.tipo != 'Regular'">
+              <select class="form-control" ng-model="producto.tipooferta" ng-options="opt.descripcionItemCriterioMayor for opt in tipooferta track by opt.idItemCriterioMayor" required></select>
+            </div>
             <label class="col-sm-2 control-label">Menu de Promociones<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.menupromo" ng-options="opt.descripcionItemCriterioMayor for opt in menupromociones track by opt.idItemCriterioMayor" required></select>
             </div>
+          </div>
+          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
             <label class="col-sm-2 control-label">Tipo Promoción<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.tipopromo" ng-options="opt.descripcionItemCriterioMayor for opt in tipopromocion track by opt.idItemCriterioMayor" required></select>
             </div>
-          </div>
-          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
             <label class="col-sm-2 control-label">Ref 1<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="item1SearchText"
@@ -335,6 +332,8 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+          </div>
+          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
             <label class="col-sm-2 control-label">Ref 2<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="item2SearchText"
@@ -351,8 +350,6 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
-          </div>
-          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
             <label class="col-sm-2 control-label">Ref 3 :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="item3SearchText"
@@ -368,6 +365,8 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+          </div>
+          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
             <label class="col-sm-2 control-label">Ref 4 :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="item4SearchText"
@@ -383,9 +382,73 @@
                 </md-not-found>
               </md-autocomplete>
             </div>
+            <label class="col-sm-2 control-label">Ref 5 :</label>
+            <div class="col-sm-4">
+              <md-autocomplete md-search-text="item5SearchText"
+                               md-items="item5 in itemSearch(item5SearchText)"
+                               md-item-text="[item5.ite_txt_referencia,item5.ite_txt_descripcion].join(' - ')"
+                               md-selected-item="producto.comp5"
+                               md-min-length="0">
+                <md-item-template>
+                  <span md-highlight-text="item5SearchText" md-highlight-flags="^i">@{{[item5.ite_txt_referencia,item5.ite_txt_descripcion].join(' - ')}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{item5SearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
           </div>
           <div class="row form-group" ng-if="producto.tipo != 'Regular'">
-            <label class="col-sm-2 control-label">Nombre Temporada :</label>
+            <label class="col-sm-2 control-label">Ref 6 :</label>
+            <div class="col-sm-4">
+              <md-autocomplete md-search-text="item6SearchText"
+                               md-items="item6 in itemSearch(item6SearchText)"
+                               md-item-text="[item6.ite_txt_referencia,item6.ite_txt_descripcion].join(' - ')"
+                               md-selected-item="producto.comp6"
+                               md-min-length="0">
+                <md-item-template>
+                  <span md-highlight-text="item6SearchText" md-highlight-flags="^i">@{{[item6.ite_txt_referencia,item6.ite_txt_descripcion].join(' - ')}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{item6SearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
+            <label class="col-sm-2 control-label">Ref 7 :</label>
+            <div class="col-sm-4">
+              <md-autocomplete md-search-text="item7SearchText"
+                               md-items="item7 in itemSearch(item7SearchText)"
+                               md-item-text="[item7.ite_txt_referencia,item7.ite_txt_descripcion].join(' - ')"
+                               md-selected-item="producto.comp7"
+                               md-min-length="0">
+                <md-item-template>
+                  <span md-highlight-text="item7SearchText" md-highlight-flags="^i">@{{[item7.ite_txt_referencia,item7.ite_txt_descripcion].join(' - ')}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{item7SearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
+          </div>
+          <div class="row form-group" ng-if="producto.tipo != 'Regular'">
+            <label class="col-sm-2 control-label">Ref 8 :</label>
+            <div class="col-sm-4">
+              <md-autocomplete md-search-text="item8SearchText"
+                               md-items="item8 in itemSearch(item8SearchText)"
+                               md-item-text="[item8.ite_txt_referencia,item8.ite_txt_descripcion].join(' - ')"
+                               md-selected-item="producto.comp8"
+                               md-min-length="0">
+                <md-item-template>
+                  <span md-highlight-text="item8SearchText" md-highlight-flags="^i">@{{[item8.ite_txt_referencia,item8.ite_txt_descripcion].join(' - ')}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{item8SearchText}}".
+                </md-not-found>
+              </md-autocomplete>
+            </div>
+          </div>
+          <div class="row form-group" ng-if="producto.tipo == 'Etch.'">
+            <label class="col-sm-2 control-label">Nombre Temporada<span class="required">*</span> :</label>
             <div class="col-sm-4">
               <select class="form-control" ng-model="producto.nomtemporada" ng-options="opt.descripcionItemCriterioMayor for opt in nomtemporada track by opt.idItemCriterioMayor" required></select>
             </div>
@@ -407,20 +470,12 @@
         </div>
       </div>
       <div class="panel panel-primary">
-        <div class="panel-heading">Fechas de Captura de Medidas</div>
+        <div class="panel-heading">Fecha de Captura de Medidas</div>
         <div class="panel-body">
           <div class="row form-group">
             <label class="col-sm-2 control-label">Fecha de Captura<span class="required">*</span> :</label>
             <div class="col-sm-4">
-              <input type="month" class="form-control" ng-model="producto.captura"/>
-            </div>
-            <label class="col-sm-2 control-label">Fecha de Codificación<span class="required">*</span> :</label>
-            <div class="col-sm-4">
-              <input type="month" class="form-control" ng-model="producto.codificacion"/>
-            </div>
-            <label class="col-sm-2 control-label">Fecha de Lanzamiento<span class="required">*</span> :</label>
-            <div class="col-sm-4">
-              <input type="month" class="form-control" ng-model="producto.lanzamiento"/>
+              <input type="date" class="form-control" ng-model="captura" required/>
             </div>
           </div>
           <div class="row">

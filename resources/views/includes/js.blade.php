@@ -36,6 +36,9 @@
 <!-- Dropzone -->
 <script src="{{url('/js/dropzone.js')}}" type="text/javascript" language="javascript"></script>
 
+<script src="{{url('/js/fileinput.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/fileinput-es.js')}}" type="text/javascript" language="javascript"></script>
+
 <script src="{{url('/js/genericas.js')}}" type="text/javascript" language="javascript"></script>
 
 @stack('script_data_table')
