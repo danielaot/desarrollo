@@ -2,7 +2,7 @@
  * Funciones generales
  */
 // Declaración de Modulo AngularJs
-var app = angular.module('aplicativos', ['angular.filter','ngMaterial']);
+var app = angular.module('aplicativos', ['angular.filter','ngMaterial','datatables']);
 
 //Declaracion de la paleta de colores para Angular Material
 app.config(function($mdThemingProvider){
