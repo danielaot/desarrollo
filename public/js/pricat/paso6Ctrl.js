@@ -42,9 +42,10 @@ app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
 
   $scope.saveProducto = function(){
     if($scope.confirm){
-      //$scope.dzMethods.processQueue();
       $scope.progress = true;
+
       var formData = new FormData();
+
       angular.forEach($scope.producto, function (value, key) {
         if(key == 'manipulacion' || key == 'tembalaje' || key == 'tempaque')
           formData.append('producto['+key+']', value.id);
@@ -68,7 +69,6 @@ app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
       })
       .then(function(response){
         $scope.progress = false;
-        console.log(response.data);
         $window.location = response.data;
       }, function(){});
     }
@@ -78,7 +78,7 @@ app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
           .parent(angular.element(document.querySelector('body')))
           .clickOutsideToClose(true)
           .title('')
-          .textContent('Confirme la Unidad de Empaque para poder continuar')
+          .textContent('Confirme la Unidad de Empaque para poder continuar.')
           .ariaLabel('Embalaje')
           .ok('Aceptar')
           .targetEvent()

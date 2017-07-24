@@ -79,6 +79,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('uploaditems', 'Pricat\Paso6Controller@upload');
 
     Route::resource('paso7', 'Pricat\Paso7Controller');
+    Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');

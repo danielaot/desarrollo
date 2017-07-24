@@ -10,7 +10,7 @@
  */
 (function ($) {
     "use strict";
-    console.log($.fn.fileinputLocales);
+
     $.fn.fileinputLocales['es'] = {
         fileSingle: 'archivo',
         filePlural: 'archivos',

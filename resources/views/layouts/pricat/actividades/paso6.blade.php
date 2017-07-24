@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="col-sm-6 form-group">
-              <input id="image" type="file" class="file" multiple=false data-preview-file-type="any">
+              <input id="imagen" type="file" class="file"/>
               <!--div class="input-group">
                 <input type="file" class="form-control"/>
                 <div class="input-group-btn">
@@ -340,39 +340,13 @@
 @push('script_angularjs')
   <script src="{{url('/js/pricat/paso6Ctrl.js')}}" type="text/javascript" language="javascript"></script>
 @endpush
-@push('script_custom')
-  <script type="text/javascript">
-  $(document).ready(function() {
-    $("#image").fileinput({
-      language: "es",
-      allowedFileExtensions: ["jpg", "png", "gif"]
+@push('script_after')
+  <script>
+    $("#imagen").fileinput({
+      language: 'es',
+      uploadUrl: '#',
+      theme: "explorer",
+      allowedFileExtensions: ['jpg', 'png', 'gif']
     });
-  });
-
-    /*$(document).ready(function() {
-      var previewNode = document.getElementById("template");
-      previewNode.id = "";
-      var previewTemplate = previewNode.outerHTML;
-      previewNode.parentNode.removeChild(previewNode);
-
-      var myDropzone = new Dropzone(document.body, {
-        clickable: "#dropzone",
-        url: "storage/app/public/pricat/items",
-        uploadMultiple: false,
-        maxFiles: 1,
-        maxFilesize: 10,
-        thumbnailWidth: 80,
-        thumbnailHeight: 80,
-        autoProcessQueue: false,
-        previewTemplate: previewTemplate,
-        previewsContainer: "#previews",
-        acceptedFiles: ".jpeg,.jpg,.png,.gif",
-        dictDefaultMessage: "Arrastre la imagen aqui o haga click",
-        dictMaxFilesExceeded: "Solo está permitido cargar una imagen",
-        dictInvalidFileType: "Tipo de archivo inválido"
-      });
-    });*/
-
-    //Dropzone.autoDiscover = false;
   </script>
 @endpush

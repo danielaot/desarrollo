@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Pricat\DesarrolloActividadesController as DesarrolloCtrl;
 use Validator;
 
+use App\Models\Pricat\TVocabas as Vocabas;
+use App\Models\Pricat\TMarca as Marca;
 use App\Models\Pricat\TItem as Item;
 
 class Paso7Controller extends Controller
@@ -37,15 +39,14 @@ class Paso7Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getInfo()
+    public function getInfo(Request $request)
     {
-        $cmanipulacion = CManipulacion::all();
-        $tempaque = TEmpaque::all();
-        $tembalaje = TEmbalaje::all();
+        $vocabas = Vocabas::all();
+        $marca = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
 
-        $response = compact('cmanipulacion', 'tempaque', 'tembalaje');
+        $response = compact('vocabas', 'marca');
 
-        return response()->json($response);
+        return response()->json($request->all());
     }
 
     /**
@@ -57,7 +58,7 @@ class Paso7Controller extends Controller
      */
     public function update(Request $request)
     {
-        $validationRules = [
+        /*$validationRules = [
           'producto.proy' => 'required|numeric',
           'producto.act' => 'required|numeric',
           'producto.item' => 'required|numeric',
@@ -122,6 +123,6 @@ class Paso7Controller extends Controller
         DesarrolloCtrl::update($producto['proy'], $producto['act']);
 
         $url = url('pricat/desarrolloactividades');
-        return response($url, 200);
+        return response($url, 200);*/
     }
 }
