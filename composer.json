@@ -16,7 +16,8 @@
         "mpociot/laravel-apidoc-generator": "^1.0",
         "doctrine/dbal": "^2.5",
         "guzzlehttp/guzzle": "^6.2",
-        "ramsey/uuid": "^3.6"
+        "ramsey/uuid": "^3.6",
+        "iatstuti/laravel-cascade-soft-deletes": "1.0.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
