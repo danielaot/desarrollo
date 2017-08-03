@@ -79,6 +79,16 @@ return [
           'prefix' => '',
         ],
 
+        'qlikview' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_HOST', 'localhost'),
+            'database' => 'Qlikview',
+            'username' => env('DB_SQL_USERNAME', 'forge'),
+            'password' => env('DB_SQL_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
         'aplicativos' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
