@@ -44,6 +44,10 @@ input::-webkit-inner-spin-button {
   color: rgba(221, 44, 40, 1);
 }
 
+.has-error {
+  color: rgba(221, 44, 40, 1);
+}
+
 /* Estilo barra de ruta de navegacion */
 .breadcumbs{
   padding: 6px;
