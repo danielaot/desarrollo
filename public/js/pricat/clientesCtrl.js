@@ -1,6 +1,8 @@
-app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
+app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
   $scope.getUrl = "clientesinfo";
   $scope.url = "clientes";
+
+  $scope.progress = true;
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -8,8 +10,14 @@ app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
       $scope.terceros = angular.copy(info.terceros);
       $scope.clientes = angular.copy(info.clientes);
       angular.element('.close').trigger('click');
+      $scope.progress = false;
     });
   }
+
+  $scope.dtOptions = DTOptionsBuilder.newOptions();
+  $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(6).notSortable()
+  ];
 
   $scope.getInfo();
 

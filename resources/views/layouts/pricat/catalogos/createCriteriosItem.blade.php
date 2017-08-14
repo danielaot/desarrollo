@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <form name="criterioForm" ng-submit="criterioForm.$valid && saveCriterio()" novalidate>
       <div class="modal-content panel-primary">

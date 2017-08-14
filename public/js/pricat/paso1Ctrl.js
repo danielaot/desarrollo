@@ -8,7 +8,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
     $scope.catlogyca = $filter('orderBy')(angular.copy(info.catlogyca), 'tcl_descripcion');
-    $scope.marca = angular.copy(info.marca);
+    $scope.marcas = angular.copy(info.marcas);
     $scope.origen = angular.copy(info.origen);
     $scope.clase = angular.copy(info.clase);
     $scope.tipomarca = angular.copy(info.tipomarca);
@@ -31,6 +31,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     $scope.progress = false;
   });
 
+  $scope.hoy = new Date();
   $scope.producto = {
                       'categoria' : '',
                       'variedad' : [],
@@ -51,10 +52,10 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
 
   $scope.marcaSearch = function(query){
     if(query){
-      return $filter('filter')($scope.marca, {mar_nombre : query});
+      return $filter('filter')($scope.marcas, {mar_nombre : query});
     }
     else{
-      return $scope.marca;
+      return $scope.marcas;
     }
   }
 

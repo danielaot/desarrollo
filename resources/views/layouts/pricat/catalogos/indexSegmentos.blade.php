@@ -72,8 +72,8 @@
                       @{{segmento.cse_orden}}
                     </div>
                     <div class="col-sm-1 text-right">
-                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,key)">
-                        <i class="glyphicon glyphicon-pencil"></i> Editar
+                      <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,key)">
+                        <i class="glyphicon glyphicon-edit"></i> Editar
                       </button>
                     </div>
                   </div>
@@ -105,8 +105,8 @@
                       @{{segmento.cse_segmento}}
                     </div>
                     <div class="col-sm-1 text-right">
-                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'cierre')">
-                        <i class="glyphicon glyphicon-pencil"></i> Editar
+                      <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'cierre')">
+                        <i class="glyphicon glyphicon-edit"></i> Editar
                       </button>
                     </div>
                   </div>
@@ -118,6 +118,9 @@
       </div>
     </div>
     @include('layouts.pricat.catalogos.createSegmentos')
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
   </div>
 @endsection
 

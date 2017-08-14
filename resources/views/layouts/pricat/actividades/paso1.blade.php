@@ -473,7 +473,7 @@
           <div class="row form-group">
             <label class="col-sm-2 control-label">Fecha de Captura<span class="required">*</span> :</label>
             <div class="col-sm-4">
-              <input type="date" class="form-control" ng-model="captura" required/>
+              <input type="date" class="form-control" ng-model="captura" min="@{{hoy}}" required/>
             </div>
           </div>
           <div class="row">

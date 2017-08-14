@@ -36,6 +36,9 @@
       </div>
     </div>
     @include('layouts.pricat.catalogos.createResponsables')
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
   </div>
 @endsection
 

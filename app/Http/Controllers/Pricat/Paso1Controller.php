@@ -56,7 +56,7 @@ class Paso1Controller extends Controller
         $vocabas = Vocabas::all();
         $catlogyca = CatLogyca::all();
         $planes = Planes::with('criterios')->get();
-        $marca = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
+        $marcas = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
         $linea = Marca::with(['lineas.categorias.categorias', 'lineas' => function ($query) {
                                  $query->where('notaItemCriterioMayor', 'Linea Activa');
                              }])
@@ -128,7 +128,7 @@ class Paso1Controller extends Controller
           }
         }
 
-        $response = compact('vocabas', 'catlogyca', 'marca', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'nomtemporada', 'items');
+        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento', 'clasificacion', 'acondicionamiento', 'nomtemporada', 'items');
 
         return response()->json($response);
     }
@@ -211,7 +211,7 @@ class Paso1Controller extends Controller
         $detalle->ide_item = $item->id;
         $detalle->ide_uso = $request->uso['id'];
         $detalle->ide_marca = $request->marca['mar_nombre'];
-        $detalle->ide_variedad = serialize($request->varserie);
+        $detalle->ide_variedad = $request->varserie;
         $detalle->ide_contenido = $request->contenido;
         $detalle->ide_umcont = $request->contum;
         $detalle->ide_descorta = $request->descorta;

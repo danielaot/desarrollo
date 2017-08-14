@@ -25,7 +25,7 @@ class Paso7Controller extends Controller
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
-        $item = Item::with('detalles','eanes')
+        $item = Item::with('detalles.uso','eanes')
                     ->where('ite_proy', $idproyecto)
                     ->get()->first();
 
@@ -42,11 +42,11 @@ class Paso7Controller extends Controller
     public function getInfo(Request $request)
     {
         $vocabas = Vocabas::all();
-        $marca = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
+        $marcas = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
 
-        $response = compact('vocabas', 'marca');
+        $response = compact('vocabas', 'marcas');
 
-        return response()->json($request->all());
+        return response()->json($response);
     }
 
     /**

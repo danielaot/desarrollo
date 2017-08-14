@@ -59,9 +59,24 @@ class TItemDetalle extends Model
         'ide_imagen'
     ];
 
+    public function setIdeVariedadAttribute($value)
+    {
+        $this->attributes['ide_variedad'] = serialize($value);
+    }
+
+    public function getIdeVariedadAttribute($value)
+    {
+        return unserialize($value);
+    }
+
     public function items()
   	{
   		  return $this->belongsTo('App\Models\Pricat\TItem', 'ide_item');
+  	}
+
+    public function uso()
+  	{
+  		  return $this->hasOne('App\Models\Pricat\TVocabas', 'id', 'ide_uso');
   	}
 
     public function logcategorias()

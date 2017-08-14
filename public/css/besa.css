@@ -15,7 +15,7 @@ footer {
 .wrap {
   width: 92%;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 20px 0 0;
 }
 
 .txt-center {
@@ -78,6 +78,10 @@ input::-webkit-inner-spin-button {
 table.dataTable thead{
   background-color: #366092;
   color: #fff;
+}
+
+table.dataTable thead th {
+  text-align: center;
 }
 
 /* Estilos del autocompletar */

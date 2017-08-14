@@ -18,6 +18,7 @@
                              md-item-text="[tercero.idTercero,tercero.razonSocialTercero].join(' - ')"
                              md-selected-item="cliente.tercero"
                              md-min-length="1"
+                             md-no-cache="true"
                              required>
               <md-item-template>
                 <span md-highlight-text="terceroSearchText" md-highlight-flags="^i">@{{[tercero.idTercero,tercero.razonSocialTercero].join(' - ')}}</span>

@@ -7,39 +7,41 @@
       <div class="panel-body">
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal" ng-click="setCliente()">
           <i class="glyphicon glyphicon-plus"></i> Crear
-        </button><br><br>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="cliente in clientes">
-            <div class="row">
-              <div class="col-sm-3">
-                <label class="control-label">@{{cliente.cli_nit}}</label>
-              </div>
-              <div class="col-sm-1">
-                <span ng-if="cliente.cli_codificacion">Codificación</span>
-              </div>
-              <div class="col-sm-1">
-                <span ng-if="cliente.cli_modificacion">Modificación</span>
-              </div>
-              <div class="col-sm-1">
-                <span ng-if="cliente.cli_eliminacion">Eliminación</span>
-              </div>
-              <div class="col-sm-2">
-                <span>@{{cliente.cli_kam}}</span>
-              </div>
-              <div class="col-sm-2">
-                <span>@{{cliente.cli_gln}}</span>
-              </div>
-              <div class="col-sm-2 text-right">
-                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editCliente(cliente.id)">
+        </button><br>
+        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+          <thead>
+            <tr>
+              <th>Nit Cliente</th>
+              <th>Codificación</th>
+              <th>Modificación</th>
+              <th>Eliminación</th>
+              <th>KAM</th>
+              <th>GLN</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="cliente in clientes">
+              <td>@{{cliente.cli_nit}}</td>
+              <td class="text-center"><span ng-if="cliente.cli_codificacion">X</span></td>
+              <td class="text-center"><span ng-if="cliente.cli_modificacion">X</span></td>
+              <td class="text-center"><span ng-if="cliente.cli_eliminacion">X</span></td>
+              <td>@{{cliente.cli_kam}}</td>
+              <td>@{{cliente.cli_gln}}</td>
+              <td class="text-right">
+                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editCliente(cliente.id)">
                   <i class="glyphicon glyphicon-edit"></i> Editar
                 </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     @include('layouts.pricat.catalogos.createClientes')
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
   </div>
 @endsection
 

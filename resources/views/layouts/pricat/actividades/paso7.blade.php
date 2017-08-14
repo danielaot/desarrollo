@@ -33,7 +33,6 @@
                                md-items="uso in vocabasSearch(usoSearchText)"
                                md-item-text="uso.tvoc_palabra"
                                md-selected-item="producto.uso"
-                               md-selected-item-change="createDescripciones()"
                                md-min-length="0"
                                ng-disabled="usodisabled"
                                required>
@@ -51,7 +50,6 @@
                                md-items="marca in marcaSearch(marcaSearchText)"
                                md-item-text="marca.mar_nombre"
                                md-selected-item="producto.marca"
-                               md-selected-item-change="createDescripciones()"
                                md-min-length="0"
                                required>
                 <md-item-template>
@@ -67,7 +65,7 @@
           <div class="row">
             <div class="col-sm-6">
               <label class="control-label">Variedad<span class="required">*</span> :</label>
-              <md-chips ng-model="producto.variedad" md-require-match="true" md-on-add="createDescripciones()" md-on-remove="createDescripciones()">
+              <md-chips ng-model="producto.variedad" md-require-match="true">
                 <md-autocomplete md-search-text="variedadSearchText"
                                  md-items="variedad in vocabasSearch(variedadSearchText)"
                                  md-item-text="variedad.tvoc_palabra"
@@ -102,11 +100,9 @@
           <br>
           <div class="row">
             <p class="col-sm-3"><label>Descripción Larga:</label></p>
-            <p class="col-sm-5">@{{producto.deslogyca}} <span ng-class="{'has-error':producto.deslogyca.length > 40}">(@{{producto.deslogyca.length}})</span></p>
+            <p class="col-sm-5">@{{producto.deslogyca}} <span ng-class="{'has-error':producto.deslogyca.length > 40}">(@{{producto.deslogyca.length}})</span><br>
+            <input type="text" class="form-control" ng-show="producto.deslogyca.length > 40" ng-model="descvariedad" ng-change="modifyDescripciones()"/></p>
             <p class="has-error" ng-if="producto.deslogyca.length > 40">Este campo tiene una restricción de 40 caracteres</p>
-            <p class="col-sm-4 col-offset-3" ng-if="producto.deslogyca.length > 40">
-              <input type="text" class="form-control" ng-model="descvariedad"/>
-            </p>
           </div>
           <div class="row">
             <p class="col-sm-3"><label>Descripción Corta:</label></p>
