@@ -1,7 +1,9 @@
-app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
+app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
   $scope.getUrl = "notificacionsanitariainfo";
   $scope.url = "notificacionsanitaria";
   $scope.updateUrl = "notificacionsanitariaupdate";
+
+  $scope.progress = true;
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -9,8 +11,15 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
       $scope.notificaciones = angular.copy(info.notificaciones);
       $scope.graneles = angular.copy(info.graneles);
       angular.element('.close').trigger('click');
+      $scope.progress = false;
     });
   }
+
+  $scope.dtOptions = DTOptionsBuilder.newOptions();
+  $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(4).notSortable(),
+    DTColumnDefBuilder.newColumnDef(5).notSortable()
+  ];
 
   $scope.getInfo();
 
@@ -34,6 +43,8 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
   $scope.set = function(){
     $scope.notificacion = {};
     $scope.notigraneles = [];
+    $scope.nosa_fecha_inicio = '';
+    $scope.nosa_fecha_vencimiento = '';
     angular.element("input[type='file']").val(null);
     $scope.notificacionForm.$setPristine();
     $scope.granelesError = false;
@@ -67,6 +78,7 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
       $scope.granelesError = true;
 
     if(!$scope.granelesError){
+      $scope.progress = true;
       $scope.notificacion.nosa_fecha_inicio = new Date($scope.nosa_fecha_inicio).toDateString();
       $scope.notificacion.nosa_fecha_vencimiento = new Date($scope.nosa_fecha_vencimiento).toDateString();
 
@@ -118,20 +130,20 @@ app.controller('notificacionsanitariaCtrl', ['$scope', '$http', '$filter', '$mdD
     $scope.notificacionForm.$setPristine();
   }
 
-  $scope.delete = function(ev, idnotificacion){
-    var confirm = $mdDialog.confirm()
-          .title('')
-          .textContent('Desea eliminar la notificación?')
-          .ariaLabel('notificacion')
-          .targetEvent(ev)
-          .ok('Eliminar')
-          .cancel('Cancelar');
-
-    $mdDialog.show(confirm).then(function(){
-      console.log($scope.notificacion);
-      /*$http.delete($scope.url+'/'+idnotificacion).then(function(response){
-        $scope.getInfo();
-      }, function(){});*/
-    },function(){});
-  }
+  // $scope.delete = function(ev, idnotificacion){
+  //   var confirm = $mdDialog.confirm()
+  //         .title('')
+  //         .textContent('Desea eliminar la notificación?')
+  //         .ariaLabel('notificacion')
+  //         .targetEvent(ev)
+  //         .ok('Eliminar')
+  //         .cancel('Cancelar');
+  //
+  //   $mdDialog.show(confirm).then(function(){
+  //     console.log($scope.notificacion);
+  //     $http.delete($scope.url+'/'+idnotificacion).then(function(response){
+  //       $scope.getInfo();
+  //     }, function(){});
+  //   },function(){});
+  // }
 }]);

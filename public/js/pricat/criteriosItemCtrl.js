@@ -1,6 +1,8 @@
-app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
+app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
   $scope.getUrl = "criteriosinfo";
   $scope.url = "criterios";
+
+  $scope.progress = true;
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -13,8 +15,14 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', func
           $scope.planes.push(angular.copy(value));
       });
       angular.element('.close').trigger('click');
+      $scope.progress = false;
     });
   }
+
+  $scope.dtOptions = DTOptionsBuilder.newOptions();
+  $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(5).notSortable()
+  ];
 
   $scope.getInfo();
 

@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-6 form-group">
               <label class="control-label">Fecha Vencimiento<span class="required">*</span> :</label>
-              <input type="date" class="form-control" ng-model="nosa_fecha_vencimiento" required/>
+              <input type="date" class="form-control" ng-model="nosa_fecha_vencimiento" ng-min="nosa_fecha_inicio"required/>
             </div>
             <div class="col-sm-12 form-group">
               <label class="control-label">Archivo<span class="required">*</span> :</label>
@@ -41,6 +41,7 @@
                                  md-item-text="[granel.ite_txt_referencia,granel.ite_txt_descripcion].join(' - ')"
                                  md-selected-item="granel"
                                  md-min-length="1"
+                                 md-no-cache="true"
                                  md-menu-class="autocomplete">
                   <md-item-template>
                     <span md-highlight-text="granelSearchText" md-highlight-flags="^i">@{{[granel.ite_txt_referencia,granel.ite_txt_descripcion].join(' - ')}}</span>
@@ -72,7 +73,7 @@
                         <td>@{{granel.ite_txt_descripcion}}</td>
                         <td class="text-right">
                           <button class="btn btn-danger btn-sm" ng-click="deleteGranel(granel.ite_id)">
-                            <i class="glyphicon glyphicon-trash"></i> Borrar
+                            <i class="glyphicon glyphicon-trash"></i>
                           </button>
                         </td>
                       </tr>

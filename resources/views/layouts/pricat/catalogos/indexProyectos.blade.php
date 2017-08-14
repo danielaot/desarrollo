@@ -7,33 +7,35 @@
       <div class="panel-body">
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal1" ng-click="setProyecto()">
           <i class="glyphicon glyphicon-plus"></i> Crear
-        </button><br><br>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="proyecto in proyectos">
-            <div class="row">
-              <div class="col-sm-6">
-                @{{proyecto.proy_nombre}}
-              </div>
-              <div class="col-sm-2">
-                @{{proyecto.procesos.pro_nombre}}
-              </div>
-              <div class="col-sm-2">
-                @{{proyecto.proy_estado}}
-              </div>
-              <div class="col-sm-2 text-right">
-                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProyecto(proyecto.id)">
+        </button><br>
+        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Proceso</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="proyecto in proyectos">
+              <td>@{{proyecto.proy_nombre}}</td>
+              <td>@{{proyecto.procesos.pro_nombre}}</td>
+              <td>@{{proyecto.proy_estado}}</td>
+              <td class="text-right">
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editProyecto(proyecto.id)">
                   <i class="glyphicon glyphicon-edit"></i> Editar
                 </button>
-                <!--button class="btn btn-danger btn-sm" ng-click="deleteProyecto($event, proyecto.id)">
-                  <i class="glyphicon glyphicon-trash"></i> Borrar
-                </button-->
-              </div>
-            </div>
-          </li>
-        </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     @include('layouts.pricat.catalogos.createProyectos')
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
   </div>
 @endsection
 
