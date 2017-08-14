@@ -2,8 +2,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
   $scope.getUrl = 'paso1info';
   $scope.url = 'paso1';
   //$scope.pattern = '[a-zA-Z0-9\s]+';
-  $scope.progress = false;
-  $scope.descvariedad = '';
+  $scope.progress = true;
 
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
@@ -29,6 +28,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     $scope.acondicionamiento = angular.copy(info.acondicionamiento);
     $scope.nomtemporada = angular.copy(info.nomtemporada);
     $scope.items = angular.copy(info.items);
+    $scope.progress = false;
   });
 
   $scope.producto = {
@@ -37,6 +37,8 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
                       'tipo' : 'Regular',
                       'fabricante' : 'Belleza Express SA'
                     };
+
+  $scope.descvariedad = '';
 
   $scope.vocabasSearch = function(query){
     if(query){
@@ -131,7 +133,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     $scope.createDescripciones();
   }
 
-  $scope.createDescripciones = function(change=false){
+  $scope.createDescripciones = function(){
     $scope.producto.deslogyca = '';
     $scope.producto.desbesa = '';
     $scope.producto.descorta = '';
@@ -162,20 +164,14 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     if($scope.producto.variedad.length > 0){
       $scope.producto.deslogyca += ' ';
       $scope.producto.desbesa += ' ';
+      $scope.descvariedad = ' ';
 
-      if(change){
-        //$scope.producto.deslogyca += $filter('lowercase')($scope.descvariedad);
-        //console.log($scope.descvariedad);
-      }
-      else{
-        $scope.descvariedad = ' ';
-        angular.forEach($scope.producto.variedad, function(value, key) {
-          $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
-          $scope.producto.desbesa += ' '+value.tvoc_palabra;
-          $scope.descvariedad += $filter('lowercase')(value.tvoc_abreviatura);
-          $scope.producto.varserie.push(value.id);
-        });
-      }
+      angular.forEach($scope.producto.variedad, function(value, key) {
+        $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
+        $scope.producto.desbesa += ' '+value.tvoc_palabra;
+        $scope.descvariedad += $filter('lowercase')(value.tvoc_abreviatura);
+        $scope.producto.varserie.push(value.id);
+      });
     }
 
     if($scope.producto.contenido != undefined){
@@ -189,6 +185,29 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
       $scope.producto.desbesa += $scope.producto.contum;
       $scope.producto.descorta += $scope.producto.contum;
     }
+  }
+
+  $scope.modifyDescripciones = function(){
+    $scope.producto.deslogyca = '';
+
+    if($scope.producto.tipo != 'Regular' && $scope.producto.tipo != 'Etch.')
+      $scope.producto.deslogyca += $scope.producto.tipo;
+
+    if($scope.producto.uso != undefined)
+      $scope.producto.deslogyca += $scope.producto.uso.tvoc_abreviatura;
+
+    if($scope.producto.marca != undefined)
+      $scope.producto.deslogyca += $scope.producto.marca.mar_nombre;
+
+    if($scope.producto.variedad.length > 0){
+      $scope.producto.deslogyca += ' '+$filter('lowercase')($scope.descvariedad);
+    }
+
+    if($scope.producto.contenido != undefined)
+      $scope.producto.deslogyca += 'X'+$scope.producto.contenido;
+
+    if($scope.producto.contum != undefined)
+      $scope.producto.deslogyca += $scope.producto.contum;
   }
 
   $scope.saveProducto = function(ev){

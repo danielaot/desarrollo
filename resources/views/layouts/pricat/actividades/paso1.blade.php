@@ -11,7 +11,7 @@
             <div class="col-sm-5 form-group">
               <div class="row">
                 <label class="col-sm-4 control-label">Referencia:</label>
-                <label class="col-sm-6 control-label">AAA000</label>
+                <label class="col-sm-6 control-label">{{$referencia}}</label>
               </div>
             </div>
           </div>
@@ -119,11 +119,9 @@
           <br>
           <div class="row">
             <p class="col-sm-3"><label>Descripción Larga:</label></p>
-            <p class="col-sm-5">@{{producto.deslogyca}} <span ng-class="{'has-error':producto.deslogyca.length > 40}">(@{{producto.deslogyca.length}})</span></p>
+            <p class="col-sm-5">@{{producto.deslogyca}} <span ng-class="{'has-error':producto.deslogyca.length > 40}">(@{{producto.deslogyca.length}})</span><br>
+            <input type="text" class="form-control" ng-show="producto.deslogyca.length > 40" ng-model="descvariedad" ng-change="modifyDescripciones()"/></p>
             <p class="has-error" ng-if="producto.deslogyca.length > 40">Este campo tiene una restricción de 40 caracteres</p>
-            <p class="col-sm-4 col-offset-3" ng-if="producto.deslogyca.length > 40">
-              <input type="text" class="form-control" ng-model="descvariedad"/>
-            </p>
           </div>
           <div class="row">
             <p class="col-sm-3"><label>Descripción Corta:</label></p>

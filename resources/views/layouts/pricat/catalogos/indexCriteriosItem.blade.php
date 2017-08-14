@@ -27,8 +27,8 @@
                 <span ng-if="criterio.cri_oferta">Oferta</span>
               </div>
               <div class="col-sm-2 text-right">
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editCriterio(criterio.id)">
-                  <i class="glyphicon glyphicon-pencil"></i> Editar
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editCriterio(criterio.id)">
+                  <i class="glyphicon glyphicon-edit"></i> Editar
                 </button>
                 <!--button class="btn btn-danger btn-sm" ng-click="deleteProyecto($event, proyecto.id)">
                   <i class="glyphicon glyphicon-trash"></i> Borrar

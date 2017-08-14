@@ -23,8 +23,8 @@
                 </span>
               </div>
               <div class="col-sm-3 text-right">
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="editArea(area.id)">
-                  <i class="glyphicon glyphicon-pencil"></i> Editar
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editArea(area.id)">
+                  <i class="glyphicon glyphicon-edit"></i> Editar
                 </button>
                 <button class="btn btn-danger btn-sm" ng-click="deleteArea($event, area.id)">
                   <i class="glyphicon glyphicon-trash"></i> Borrar

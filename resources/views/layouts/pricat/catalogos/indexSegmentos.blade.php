@@ -33,8 +33,8 @@
                       @{{segmento.cse_segmento}}
                     </div>
                     <div class="col-sm-1 text-right">
-                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'encabezado')">
-                        <i class="glyphicon glyphicon-pencil"></i> Editar
+                      <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'encabezado')">
+                        <i class="glyphicon glyphicon-edit"></i> Editar
                       </button>
                     </div>
                   </div>

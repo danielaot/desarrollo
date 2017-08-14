@@ -24,8 +24,8 @@
                   <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal2" ng-click="setProceso(proceso.id)">
                     <i class="glyphicon glyphicon-plus"></i> Agregar
                   </button>
-                  <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProceso(proceso.id)">
-                    <i class="glyphicon glyphicon-pencil"></i> Editar
+                  <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProceso(proceso.id)">
+                    <i class="glyphicon glyphicon-edit"></i> Editar
                   </button>
                   <!--button type="button" class="btn btn-danger btn-sm" ng-click="deleteProceso($event, proceso.id)">
                     <i class="glyphicon glyphicon-trash"></i> Borrar
@@ -48,8 +48,8 @@
                         @{{actividad.areas.ar_nombre}}
                       </div>
                       <div class="col-sm-2 text-right">
-                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal2" ng-click="editActividad(actividad.id)">
-                          <i class="glyphicon glyphicon-pencil"></i>
+                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal2" ng-click="editActividad(actividad.id)">
+                          <i class="glyphicon glyphicon-edit"></i>
                         </button>
                         <button class="btn btn-danger btn-sm" ng-click="deleteActividad($event, actividad.id)">
                           <i class="glyphicon glyphicon-trash"></i>

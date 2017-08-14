@@ -6,10 +6,11 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
     $scope.marca = angular.copy(info.marca);
+    $scope.producto.deslogyca = angular.copy($scope.item.detalles.ide_deslarga);
+    $scope.producto.desbesa = angular.copy($scope.item.detalles.ide_descompleta);
+    $scope.producto.descorta = angular.copy($scope.item.detalles.ide_descorta);
     console.log($scope.item);
-    $scope.producto.deslogyca = angular.copy($scope.item.);
-    $scope.producto.desbesa = '';
-    $scope.producto.descorta = '';
+    $scope.producto.contenido = angular.copy($scope.item.detalles.ide_contenido);
   });
 
   $scope.vocabasSearch = function(query){
@@ -30,7 +31,7 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
     }
   }
 
-  $scope.createDescripciones = function(change=false){
+  $scope.createDescripciones = function(){
     $scope.producto.deslogyca = '';
     $scope.producto.desbesa = '';
     $scope.producto.descorta = '';
@@ -61,20 +62,13 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
     if($scope.producto.variedad.length > 0){
       $scope.producto.deslogyca += ' ';
       $scope.producto.desbesa += ' ';
-
-      if(change){
-        //$scope.producto.deslogyca += $filter('lowercase')($scope.descvariedad);
-        //console.log($scope.descvariedad);
-      }
-      else{
-        $scope.descvariedad = ' ';
-        angular.forEach($scope.producto.variedad, function(value, key) {
-          $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
-          $scope.producto.desbesa += ' '+value.tvoc_palabra;
-          $scope.descvariedad += $filter('lowercase')(value.tvoc_abreviatura);
-          $scope.producto.varserie.push(value.id);
-        });
-      }
+      $scope.descvariedad = ' ';
+      angular.forEach($scope.producto.variedad, function(value, key) {
+        $scope.producto.deslogyca += $filter('lowercase')(value.tvoc_abreviatura);
+        $scope.producto.desbesa += ' '+value.tvoc_palabra;
+        $scope.descvariedad += $filter('lowercase')(value.tvoc_abreviatura);
+        $scope.producto.varserie.push(value.id);
+      });
     }
 
     if($scope.producto.contenido != undefined){
@@ -91,6 +85,6 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
   }
 
   $scope.saveProducto = function(){
-
+    console.log($scope.producto);
   }
 }]);

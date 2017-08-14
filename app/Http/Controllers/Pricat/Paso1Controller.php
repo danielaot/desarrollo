@@ -33,7 +33,17 @@ class Paso1Controller extends Controller
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
-        return view('layouts.pricat.actividades.paso1', compact('ruta', 'titulo', 'idproyecto', 'idactividad'));
+        $last_ref = Item::all()->last();
+
+        if(!$last_ref){
+          $referencia = 'AAA000';
+        }
+        else{
+          $referencia = $last_ref->ite_referencia;
+          $referencia++;
+        }
+
+        return view('layouts.pricat.actividades.paso1', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'referencia'));
     }
 
     /**
