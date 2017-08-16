@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Auth;
+use Mail;
 
+use App\Mail\DesarrolloActividad;
+
+use App\Models\Aplicativos\User;
 use App\Models\Pricat\TDesarrolloActividad as Desarrollo;
 use App\Models\Pricat\TPredecesora as ActPre;
 use App\Models\Pricat\TProyecto as Proyecto;
@@ -30,7 +34,7 @@ class DesarrolloActividadesController extends Controller
                                         })
                                  ->get()
                                  ->groupBy('dac_proy_id');
-        
+
         $response = compact('ruta', 'titulo','desarrollos');
 
         return view('layouts.pricat.actividades.indexDesarrollo', $response);
@@ -50,12 +54,26 @@ class DesarrolloActividadesController extends Controller
         $desarrollo = Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $act])
                                 ->update(['dac_fecha_cumplimiento' => $fecha, 'dac_usuario' => Auth::user()->login, 'dac_estado' => 'Completado']);
 
-        $actdespues = ActPre::where('pre_act_pre_id', $act)->get();
+        $actividaddesp = ActPre::with('actividades.areas.responsables','actividadespre.areas.responsables')
+                            ->where('pre_act_pre_id', $act)
+                            ->get();
 
-        foreach($actdespues as $actividad){
+        $responsables = [];
+
+        foreach($actividaddesp as $actividad){
           Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $actividad->pre_act_id])
                     ->update(['dac_fecha_inicio' => $fecha, 'dac_estado' => 'En Proceso']);
+
+          foreach($actividad['actividades']['areas']['responsables'] as $responsable){
+            $responsables[] = $responsable->res_usuario;
+          }
         }
+
+        $usuarios = User::with('dirnacional')->whereIn('idTerceroUsuario', $responsables)->get();
+
+        Mail::to(['japalacios@bellezaexpress.com'])->send(new DesarrolloActividad($actividaddesp));
+        // $usuarios->notify(new DesarrolloActividad($actdespues));
+        //Notification::send($usuarios, new DesarrolloActividad($actdespues));
 
         return $desarrollo;
     }

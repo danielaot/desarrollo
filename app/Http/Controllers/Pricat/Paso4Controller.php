@@ -11,6 +11,7 @@ use DB;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as IDetalle;
 use App\Models\BESA\AppwebPosarancelaria as Posarancelaria;
+use App\Models\Pricat\TPredecesora as ActPre;
 
 class Paso4Controller extends Controller
 {
@@ -56,11 +57,11 @@ class Paso4Controller extends Controller
         return response()->json(['errors' => $validator->errors()]);
       }
 
-      IDetalle::where('ide_item', $id)
-              ->update(['ide_posarancelaria' => $request->arancelaria]);
+      // IDetalle::where('ide_item', $id)
+      //         ->update(['ide_posarancelaria' => $request->arancelaria]);
 
       DesarrolloCtrl::update($request->proy, $request->act);
-
+      // return response()->json($response);
       return redirect('pricat/desarrolloactividades');
     }
 }

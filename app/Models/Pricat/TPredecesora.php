@@ -20,4 +20,8 @@ class TPredecesora extends Model
   		  return $this->belongsTo('App\Models\Pricat\TActividad', 'pre_act_id');
   	}
 
+    public function actividadespre()
+  	{
+  		  return $this->belongsTo('App\Models\Pricat\TActividad', 'pre_act_pre_id');
+  	}
 }

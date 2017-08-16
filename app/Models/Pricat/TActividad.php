@@ -28,11 +28,6 @@ class TActividad extends Model
   		  return $this->belongsTo('App\Models\Pricat\TArea', 'act_ar_id');
   	}
 
-    public function notificaciones()
-  	{
-  		  return $this->hasMany('App\Models\Pricat\TNotificacion', 'not_act_id');
-  	}
-
     public function procesos()
   	{
   		  return $this->belongsTo('App\Models\Pricat\TProceso', 'act_proc_id');
