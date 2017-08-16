@@ -15,6 +15,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 } );
 </script>
 
+<!-- Moment -->
+<script src="{{url('/js/moment.min.js')}}" type="text/javascript" language="javascript"></script>
+
 <!-- AngularJs -->
 <script src="{{url('/js/angularJs/angular.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-filter.min.js')}}" type="text/javascript" language="javascript"></script>
@@ -23,10 +26,12 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script src="{{url('/js/angularJs/angular-messages.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-material.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-locale_es-co.js')}}"></script>
 
-<!-- Moment -->
-<script src="{{url('/js/moment.min.js')}}" type="text/javascript" language="javascript"></script>
+<!-- FullCalendarJs -->
+<script src="{{url('/js/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/fullcalendarjs/gcal.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- Bootstrap 3.3.7 -->
 <script src="{{url('/js/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
