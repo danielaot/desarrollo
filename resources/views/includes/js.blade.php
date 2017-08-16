@@ -23,6 +23,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script src="{{url('/js/angularJs/angular-messages.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-material.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/angularJs/angular-locale_es-co.js')}}"></script>
 
 <!-- Moment -->
 <script src="{{url('/js/moment.min.js')}}" type="text/javascript" language="javascript"></script>
