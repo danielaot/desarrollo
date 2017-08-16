@@ -54,26 +54,17 @@ class DesarrolloActividadesController extends Controller
         $desarrollo = Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $act])
                                 ->update(['dac_fecha_cumplimiento' => $fecha, 'dac_usuario' => Auth::user()->login, 'dac_estado' => 'Completado']);
 
-        $actividaddesp = ActPre::with('actividades.areas.responsables','actividadespre.areas.responsables')
+        $actividaddesp = ActPre::with('actividades.areas.responsables.usuarios','actividadespre.areas.responsables.usuarios')
                             ->where('pre_act_pre_id', $act)
                             ->get();
-
-        $responsables = [];
 
         foreach($actividaddesp as $actividad){
           Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $actividad->pre_act_id])
                     ->update(['dac_fecha_inicio' => $fecha, 'dac_estado' => 'En Proceso']);
 
-          foreach($actividad['actividades']['areas']['responsables'] as $responsable){
-            $responsables[] = $responsable->res_usuario;
-          }
+          $usuarios = $actividad['actividades']['areas']['responsables']->pluck('usuarios.dir_txt_email');
+          Mail::to($usuarios)->send(new DesarrolloActividad($actividad));
         }
-
-        $usuarios = User::with('dirnacional')->whereIn('idTerceroUsuario', $responsables)->get();
-
-        Mail::to(['japalacios@bellezaexpress.com'])->send(new DesarrolloActividad($actividaddesp));
-        // $usuarios->notify(new DesarrolloActividad($actdespues));
-        //Notification::send($usuarios, new DesarrolloActividad($actdespues));
 
         return $desarrollo;
     }

@@ -19,7 +19,7 @@
               </div>
               <div class="col-sm-3">
                 <span ng-repeat="responsable in area.responsables">
-                  @{{responsable.usuarios.dir_txt_nombre}}
+                  @{{responsable.usuarios.dir_txt_nombre}}<br>
                 </span>
               </div>
               <div class="col-sm-3 text-right">

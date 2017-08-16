@@ -29,11 +29,12 @@ class DesarrolloActividad extends Mailable
      */
     public function build()
     {
+        $style = ['body-line' => 'margin: 0 20px 12px; font-size: 13px; line-height: 21px; color: #4f4f4f; font-family: sans-serif;'];
         $titulo = 'Desarrollo de Actividad';
         $actividad = $this->actividad;
 
         return $this->subject('Calidad de Datos y Homologación')
                     ->view('emails.pricat.desarrolloActividad')
-                    ->with(compact('titulo', 'actividad'));
+                    ->with(compact('style', 'titulo', 'actividad'));
     }
 }

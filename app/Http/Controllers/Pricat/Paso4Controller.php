@@ -57,11 +57,11 @@ class Paso4Controller extends Controller
         return response()->json(['errors' => $validator->errors()]);
       }
 
-      // IDetalle::where('ide_item', $id)
-      //         ->update(['ide_posarancelaria' => $request->arancelaria]);
+      IDetalle::where('ide_item', $id)
+              ->update(['ide_posarancelaria' => $request->arancelaria]);
 
       DesarrolloCtrl::update($request->proy, $request->act);
-      // return response()->json($response);
+
       return redirect('pricat/desarrolloactividades');
     }
 }
