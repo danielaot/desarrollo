@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function dirnacional()
     {
-        return $this->hasOne('App\Models\Genericas\DirNacional','dir_txt_cedula','idTerceroUsuario');
+        return $this->hasOne('App\Models\Genericas\TDirNacional','dir_txt_cedula','idTerceroUsuario');
     }
 
     public function logusuario()

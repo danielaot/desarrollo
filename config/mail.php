@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => 'smtp',
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+    'host' => 'smtp.office365.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 465),
+    'port' => 587,
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'tecnologia.besa@gmail.com',
-        'name' => 'Aplicativos Belleza Express S.A.',
+        'address' => 'sistemas@bellezaexpress.com',
+        'name' => 'Notificaciones Aplicativos Belleza Express S.A.',
     ],
 
     /*
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => 'tls',
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME'),
+    'username' => 'sistemas@bellezaexpress.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -97,7 +97,7 @@ return [
     |
     */
 
-    'password' => env('MAIL_PASSWORD'),
+    'password' => 'Be800118@',
 
     /*
     |--------------------------------------------------------------------------
