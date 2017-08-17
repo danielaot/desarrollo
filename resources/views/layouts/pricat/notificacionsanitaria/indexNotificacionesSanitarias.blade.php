@@ -26,6 +26,7 @@
               <td>@{{notificacion.nosa_fecha_inicio | date : 'dd/MM/yy'}}</td>
               <td>@{{notificacion.nosa_fecha_vencimiento | date : 'dd/MM/yy'}}</td>
               <td class="text-center">
+<<<<<<< HEAD
                 <a href="../../storage/app@{{notificacion.nosa_documento}}" target="_blank">
                   <button type="button" class="btn btn-info btn-sm" ng-if="notificacion.nosa_documento">
                     <i class="glyphicon glyphicon-eye-open"></i>
@@ -37,6 +38,17 @@
                   <i class="glyphicon glyphicon-edit"></i> Editar
                 </button>
               </td>
+=======
+                <button type="button" class="btn btn-info btn-sm" ng-if="notificacion.nosa_documento">
+                  <i class="glyphicon glyphicon-eye-open"></i>
+                </button>
+              </td>
+              <td class="text-right">
+                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="edit(notificacion.id)">
+                  <i class="glyphicon glyphicon-edit"></i> Editar
+                </button>
+              </td>
+>>>>>>> 0e5b3f269ebbb686b3b084530889ad34b87d95ee
             </tr>
           </tbody>
         </table>
