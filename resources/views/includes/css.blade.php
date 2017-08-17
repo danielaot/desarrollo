@@ -20,7 +20,8 @@
 <!-- CSS Dropzone -->
 <link href="{{url('/css/dropzone.css')}}" type="text/css" rel="stylesheet"/>
 
+<!-- CSS FontAwesome -->
+<link href="{{url('/css/font-awesome.min.css')}}" type="text/css" rel="stylesheet"/>
+
 <!-- CSS BESA -->
 <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
-
-<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
