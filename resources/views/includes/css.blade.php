@@ -6,6 +6,9 @@
 <!-- CSS AngularMaterial 1.1.3 -->
 <link href="{{url('/js/angularJs/angular-material.min.css')}}" type="text/css" rel="stylesheet"/>
 
+<!-- FullCalendarJs -->
+<link href="{{url('/js/fullcalendarjs/fullcalendar.min.css')}}" type="text/css" rel="stylesheet"/>
+
 <!-- CSS BOOTSTRAP 3.3.7 -->
 <link href="{{url('/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet"/>
 <link href="{{url('/css/bootstrap-datetimepicker.min.css')}}" type="text/css" rel="stylesheet"/>

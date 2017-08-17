@@ -3,7 +3,7 @@
  */
 //Dropzone.autoDiscover = false;
 // Declaración de Modulo AngularJs
-var app = angular.module('aplicativos', ['angular.filter','ngMaterial','datatables']);
+var app = angular.module('aplicativos', ['angular.filter','ngMaterial','datatables','ui.calendar']);
 
 //Declaracion de la paleta de colores para Angular Material
 app.config(function($mdThemingProvider){
