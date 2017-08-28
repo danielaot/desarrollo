@@ -24,6 +24,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script src="{{url('/js/angularJs/angular-animate.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-aria.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-messages.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/angularJs/angular-sanitize.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-material.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
