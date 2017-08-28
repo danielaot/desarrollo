@@ -33,6 +33,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 <!-- FullCalendarJs -->
 <script src="{{url('/js/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/js/fullcalendarjs/gcal.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/fullcalendarjs/scheduler.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- Bootstrap 3.3.7 -->
 <script src="{{url('/js/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
