@@ -8,6 +8,7 @@
 
 <!-- FullCalendarJs -->
 <link href="{{url('/js/fullcalendarjs/fullcalendar.min.css')}}" type="text/css" rel="stylesheet"/>
+<link href="{{url('/js/fullcalendarjs/scheduler.min.css')}}" type="text/css" rel="stylesheet"/>
 
 <!-- CSS BOOTSTRAP 3.3.7 -->
 <link href="{{url('/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet"/>
@@ -22,7 +23,8 @@
 <link href="{{url('/css/fileinput-rtl.min.css')}}" type="text/css" rel="stylesheet"/>
 <link href="{{url('/js/fileinput/themes/explorer/theme.css')}}" type="text/css" rel="stylesheet"/>
 
+<!-- CSS FontAwesome -->
+<link href="{{url('/css/font-awesome.min.css')}}" type="text/css" rel="stylesheet"/>
+
 <!-- CSS BESA -->
 <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
-
-<link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
