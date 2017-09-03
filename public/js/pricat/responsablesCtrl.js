@@ -1,18 +1,25 @@
 
-app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
+app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
   $scope.getUrl = "responsablesinfo";
   $scope.url = "responsables";
 
   $scope.usuario = '';
-  
+  $scope.progress = true;
+
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       $scope.usuarios = angular.copy(info.usuarios);
       $scope.areas = angular.copy(info.areas);
+      $scope.progress = false;
       angular.element('.close').trigger('click');
     });
   }
+
+  $scope.dtOptions = DTOptionsBuilder.newOptions();
+  $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(3).notSortable()
+  ];
 
   $scope.getInfo();
 
@@ -43,6 +50,7 @@ app.controller('responsablesCtrl', ['$scope', '$http', '$filter', '$mdDialog', f
       $scope.responsableError = true;
 
     if(!$scope.responsableError){
+      $scope.progress = true;
       $scope.area.responsables = $scope.responsables;
       if($scope.area.id != undefined){
         $http.put($scope.url+'/'+$scope.area.id, $scope.area).then(function(response){

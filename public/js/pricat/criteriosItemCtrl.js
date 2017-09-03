@@ -14,8 +14,8 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
         if(pick.length == 0)
           $scope.planes.push(angular.copy(value));
       });
-      angular.element('.close').trigger('click');
       $scope.progress = false;
+      angular.element('.close').trigger('click');
     });
   }
 
