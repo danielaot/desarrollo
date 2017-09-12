@@ -12,11 +12,6 @@ use App\Models\BESA\AppwebListaMateriales as ListaMateriales;
 
 class Paso3Controller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $item = Item::where('ite_proy', $request->proy)

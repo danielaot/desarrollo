@@ -1,11 +1,12 @@
-app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function($scope, $http, $filter, $mdDialog){
+app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$window', '$mdDialog', function($scope, $http, $filter, $window, $mdDialog){
   $scope.getUrl = 'paso7info';
-  $scope.url = 'paso7update';
+  $scope.url = 'paso7';
 
   $http.get($scope.getUrl).then(function(response){
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
     $scope.marcas = angular.copy(info.marcas);
+    $scope.producto.item = angular.copy($scope.item.detalles.ide_item);
     $scope.producto.deslogyca = angular.copy($scope.item.detalles.ide_deslarga);
     $scope.producto.desbesa = angular.copy($scope.item.detalles.ide_descompleta);
     $scope.producto.descorta = angular.copy($scope.item.detalles.ide_descorta);
@@ -92,6 +93,27 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$mdDialog', function
   }
 
   $scope.saveProducto = function(){
-    console.log($scope.producto);
+    if($scope.producto.descorta.length > 18 || $scope.producto.deslogyca.length > 40){
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('body')))
+          .clickOutsideToClose(true)
+          .title('')
+          .textContent('Revisar las descripciones antes de continuar')
+          .ariaLabel('Descripciones')
+          .ok('Aceptar')
+          .targetEvent(ev)
+      );
+    }
+    else{
+      $scope.progress = true;
+      $http.put($scope.url+'/'+$scope.producto.item, $scope.producto).then(function(response){
+        $scope.progress = false;
+        if(response.data.errores == undefined)
+          $window.location = response.data;
+        else
+          console.log(response.data.errores);
+      }, function(){});
+    }
   }
 }]);

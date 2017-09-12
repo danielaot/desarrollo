@@ -14,7 +14,7 @@ app.controller('paso2Ctrl', ['$scope', '$window', '$http', '$mdDialog', function
         if($scope.errores[0] == 'referencia'){
           $mdDialog.show(
             $mdDialog.alert()
-              .parent(angular.element(document.querySelector('.panel-body')))
+              .parent(angular.element(document.querySelector('body')))
               .clickOutsideToClose(true)
               .title('')
               .textContent('Verifique que el item este creado en el UnoE para poder continuar')

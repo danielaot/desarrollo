@@ -20,11 +20,6 @@ use App\Models\Desarrollo\TFormulamaestra as FormulaMaestra;
 
 class Paso6Controller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
@@ -39,11 +34,13 @@ class Paso6Controller extends Controller
         $descorta = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_descorta);
         $deslarga = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_deslarga);
 
+        $pesoneto = 0;
+
         if($item->ite_tproducto == '1301'){
-          $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG'])
+          $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
                                   ->get()->first();
 
-          $formula = FormulaMaestra::where('frm_txt_codigounoe', $lista->Cod_Item_Componente)
+          $formula = FormulaMaestra::where('frm_txt_codigounoe', trim($lista->Cod_Item_Componente))
                                    ->get()->first();
 
           $densidad = $formula->frm_txt_densidad;
@@ -56,11 +53,6 @@ class Paso6Controller extends Controller
         return view('layouts.pricat.actividades.paso6', $response);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $cmanipulacion = CManipulacion::all();
@@ -72,12 +64,6 @@ class Paso6Controller extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function upload(Request $request)
     {
         /*$filePath = '/public/pricat/items/';
@@ -91,13 +77,6 @@ class Paso6Controller extends Controller
         return response()->json($request->all());*/
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $validationRules = [

@@ -11,11 +11,6 @@ use App\Models\Genericas\Tercero;
 
 class ClientesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Clientes Pricat';
@@ -24,27 +19,16 @@ class ClientesController extends Controller
         return view('layouts.pricat.catalogos.indexClientes', compact('ruta', 'titulo'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $terceros = Tercero::all();
-        $clientes = Cliente::all();
+        $clientes = Cliente::with('terceros')->get();
 
         $response = compact('terceros','clientes');
 
         return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [

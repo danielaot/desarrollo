@@ -32,10 +32,10 @@
               </div>
               <div class="col-sm-4 text-right">
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editMarca(marca)">
-                  <i class="glyphicon glyphicon-edit"></i> Editar
+                  <i class="glyphicon glyphicon-edit"></i>
                 </button>
                 <button class="btn btn-danger btn-sm" ng-click="deleteMarca($event, marca)">
-                  <i class="glyphicon glyphicon-trash"></i> Borrar
+                  <i class="glyphicon glyphicon-trash"></i>
                 </button>
               </div>
             </div>

@@ -11,11 +11,6 @@ use App\Models\Genericas\Itemcriteriomayor as Criterio;
 
 class MarcasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Marcas';
@@ -24,11 +19,6 @@ class MarcasController extends Controller
         return view('layouts.pricat.catalogos.indexMarcas', compact('ruta', 'titulo'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $marcas = Criterio::where(['idItemCriterioPlanItemCriterioMayor' => '300', 'notaItemCriterioMayor' => 'Linea Activa'])
@@ -45,12 +35,6 @@ class MarcasController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [
@@ -74,13 +58,6 @@ class MarcasController extends Controller
         return response()->json($request->lineas);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
 

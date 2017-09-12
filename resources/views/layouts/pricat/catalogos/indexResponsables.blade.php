@@ -6,7 +6,7 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal" ng-click="setArea()">
-          <i class="glyphicon glyphicon-plus-sign"></i> Crear
+          <i class="glyphicon glyphicon-plus"></i> Crear
         </button><br>
         <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
           <thead>

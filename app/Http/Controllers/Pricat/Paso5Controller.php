@@ -9,17 +9,12 @@ use Validator;
 use DB;
 
 use App\Models\Pricat\TItem as Item;
-use App\Models\Pricat\TItemDetalle as IDetalle;
+use App\Models\Pricat\TItemDetalle as ItemDetalle;
 use App\Models\BESA\AppwebPosarancelaria as Posarancelaria;
 use App\Models\BESA\AppwebGrupoimpo as Grupoimpo;
 
 class Paso5Controller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
@@ -39,13 +34,6 @@ class Paso5Controller extends Controller
         return view('layouts.pricat.actividades.paso5', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'grupoimpositivo', 'posarancelaria', 'item'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
       $validationRules = [
@@ -60,8 +48,8 @@ class Paso5Controller extends Controller
         return response()->json(['errors' => $validator->errors()]);
       }
 
-      IDetalle::where('ide_item', $id)
-              ->update(['ide_grupoimpositivo' => $request->grupoimpo]);
+      ItemDetalle::where('ide_item', $id)
+                 ->update(['ide_grupoimpositivo' => $request->grupoimpo]);
 
       DesarrolloCtrl::update($request->proy, $request->act);
 

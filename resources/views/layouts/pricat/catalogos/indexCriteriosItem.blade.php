@@ -28,7 +28,7 @@
               <td class="text-center"><span ng-if="criterio.cri_oferta">X</span></td>
               <td class="text-right">
                 <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editCriterio(criterio.id)">
-                  <i class="glyphicon glyphicon-edit"></i> Editar
+                  <i class="glyphicon glyphicon-edit"></i>
                 </button>
               </td>
             </tr>

@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-sm-1 text-right">
                       <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'encabezado')">
-                        <i class="glyphicon glyphicon-edit"></i> Editar
+                        <i class="glyphicon glyphicon-edit"></i>
                       </button>
                     </div>
                   </div>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-sm-1 text-right">
                       <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,key)">
-                        <i class="glyphicon glyphicon-edit"></i> Editar
+                        <i class="glyphicon glyphicon-edit"></i>
                       </button>
                     </div>
                   </div>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="col-sm-1 text-right">
                       <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editSegmento(segmento.id,'cierre')">
-                        <i class="glyphicon glyphicon-edit"></i> Editar
+                        <i class="glyphicon glyphicon-edit"></i>
                       </button>
                     </div>
                   </div>

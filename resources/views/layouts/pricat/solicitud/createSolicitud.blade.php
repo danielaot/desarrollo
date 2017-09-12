@@ -7,21 +7,23 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="col-sm-12">
-            <div class="form-group">
-              <label class="control-label">Tipo de Novedad<span class="required">*</span> :</label>
-              <select class="form-control" ng-model="solicitud.tnovedad" ng-change="changeNovedad()">
-                <option value="codificacion">Codificación</option>
-                <option value="modificacion">Modificación</option>
-                <option value="eliminacion">Eliminación</option>
-              </select>
-            </div>
-            <div class="form-group" ng-if="solicitud.tnovedad == 'modificacion'">
-              <label class="control-label">Tipo de Modificación :</label>
-              <select class="form-control" ng-model="solicitud.tmodifica" ng-change="changeNovedad()">
-                <option value="activacion">Activación</option>
-                <option value="suspension">Suspensión</option>
-                <option value="precios">Cambio de Precios</option>
-              </select>
+            <div class="row">
+              <div class="form-group col-sm-4">
+                <label class="control-label">Tipo de Novedad<span class="required">*</span> :</label>
+                <select class="form-control" ng-model="solicitud.tnovedad" ng-change="changeNovedad()">
+                  <option value="codificacion">Codificación</option>
+                  <option value="modificacion">Modificación</option>
+                  <option value="eliminacion">Eliminación</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-4" ng-if="solicitud.tnovedad == 'modificacion'">
+                <label class="control-label">Tipo de Modificación :</label>
+                <select class="form-control" ng-model="solicitud.tmodifica" ng-change="changeNovedad()">
+                  <option value="activacion">Activación</option>
+                  <option value="suspension">Suspensión</option>
+                  <option value="precios">Cambio de Precios</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="col-sm-12" style="padding-top: 20px;">

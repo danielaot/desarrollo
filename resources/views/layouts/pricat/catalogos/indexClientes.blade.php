@@ -22,15 +22,15 @@
           </thead>
           <tbody>
             <tr ng-repeat="cliente in clientes">
-              <td>@{{cliente.cli_nit}}</td>
+              <td>@{{cliente.cli_nit}} - @{{cliente.terceros.razonSocialTercero}}</td>
               <td class="text-center"><span ng-if="cliente.cli_codificacion">X</span></td>
               <td class="text-center"><span ng-if="cliente.cli_modificacion">X</span></td>
               <td class="text-center"><span ng-if="cliente.cli_eliminacion">X</span></td>
-              <td>@{{cliente.cli_kam}}</td>
-              <td>@{{cliente.cli_gln}}</td>
+              <td class="text-center">@{{cliente.cli_kam}}</td>
+              <td class="text-center">@{{cliente.cli_gln}}</td>
               <td class="text-right">
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editCliente(cliente.id)">
-                  <i class="glyphicon glyphicon-edit"></i> Editar
+                  <i class="glyphicon glyphicon-edit"></i>
                 </button>
               </td>
             </tr>

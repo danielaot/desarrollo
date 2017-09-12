@@ -30,13 +30,13 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
     $scope.showFfin = false;
     if($scope.solicitud.tnovedad == 'modificacion'){
       switch ($scope.solicitud.tmodifica) {
-        case 'activacion':
         case 'suspension':
             $scope.showRef = true;
             $scope.showPre = false;
             $scope.showFini = true;
             $scope.showFfin = true;
           break;
+        case 'activacion':
         case 'precios':
             $scope.showRef = true;
             $scope.showPre = true;

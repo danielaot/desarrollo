@@ -7,7 +7,6 @@ app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
     $scope.tempaque = angular.copy(info.tempaque);
     $scope.tembalaje = angular.copy(info.tembalaje);
     $scope.cmanipulacion = angular.copy(info.cmanipulacion);
-    //$scope.item = angular.copy(info.item);
   });
 
   /*var previewNode = document.getElementById("template");
@@ -69,7 +68,10 @@ app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $h
       })
       .then(function(response){
         $scope.progress = false;
-        $window.location = response.data;
+        if(response.data.errores == undefined)
+          $window.location = response.data;
+        else
+          console.log(response.data.errores);
       }, function(){});
     }
     else{

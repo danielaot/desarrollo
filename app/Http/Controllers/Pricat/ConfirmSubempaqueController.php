@@ -12,11 +12,6 @@ use App\Models\Pricat\TItemEan as ItemEan;
 
 class ConfirmSubempaqueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $solicitud = SolSubempaque::with('items')

@@ -54,6 +54,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('criterios', 'Pricat\CriteriosController');
     Route::get('criteriosinfo', 'Pricat\CriteriosController@getInfo');
 
+    Route::resource('vocabas', 'Pricat\VocabasController', ['except' => ['create', 'show', 'edit']]);
+    Route::get('vocabasinfo', 'Pricat\VocabasController@getInfo');
+
     Route::get('desarrolloactividades', 'Pricat\DesarrolloActividadesController@index');
     Route::get('workflow', 'Pricat\DesarrolloActividadesController@workflow');
     Route::get('workflowinfo', 'Pricat\DesarrolloActividadesController@getInfo');
@@ -80,6 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('paso7', 'Pricat\Paso7Controller');
     Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
+
+    Route::resource('paso8', 'Pricat\Paso8Controller');
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');

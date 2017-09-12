@@ -17,11 +17,6 @@ use App\Models\Pricat\TProyecto as Proyecto;
 
 class DesarrolloActividadesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
@@ -40,13 +35,6 @@ class DesarrolloActividadesController extends Controller
         return view('layouts.pricat.actividades.indexDesarrollo', $response);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public static function update($proy, $act)
     {
         $fecha = Carbon::now();
@@ -69,11 +57,6 @@ class DesarrolloActividadesController extends Controller
         return $desarrollo;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function workflow()
     {
         $ruta = 'Calidad de Datos y Homologación // WorkFlow';
@@ -88,11 +71,6 @@ class DesarrolloActividadesController extends Controller
         return view('layouts.pricat.actividades.indexWorkFlow', $response);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $proyectos = Proyecto::with('desarrollos.actividades')

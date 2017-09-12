@@ -16,16 +16,11 @@ use App\Models\Genericas\Itemcriteriomayor as Criterio;
 use App\Models\Genericas\TItemCriterio as ItemCriterio;
 use App\Models\Pricat\TMarca as Marca;
 use App\Models\Pricat\TItem as Item;
-use App\Models\Pricat\TItemDetalle as IDetalle;
+use App\Models\Pricat\TItemDetalle as ItemDetalle;
 use App\Models\Pricat\TItemEan as IEan;
 
 class Paso1Controller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
@@ -46,11 +41,6 @@ class Paso1Controller extends Controller
         return view('layouts.pricat.actividades.paso1', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'referencia'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $vocabas = Vocabas::all();
@@ -133,12 +123,6 @@ class Paso1Controller extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [
@@ -207,7 +191,7 @@ class Paso1Controller extends Controller
         $item->ite_dat_captura = Carbon::createFromFormat('D M d Y', $request->captura)->toDateString();
         $item->save();
 
-        $detalle = new IDetalle;
+        $detalle = new ItemDetalle;
         $detalle->ide_item = $item->id;
         $detalle->ide_uso = $request->uso['id'];
         $detalle->ide_marca = $request->marca['mar_nombre'];

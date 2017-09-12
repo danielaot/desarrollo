@@ -15,11 +15,6 @@ use App\Models\Genericas\TItemCriterio as ItemCriterio;
 
 class NotificacionSanitariaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Notificación Sanitaria';
@@ -28,11 +23,6 @@ class NotificacionSanitariaController extends Controller
         return view('layouts.pricat.notificacionsanitaria.indexNotificacionesSanitarias', compact('ruta', 'titulo'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $notificaciones = NotSanitaria::with('graneles')->get();
@@ -43,12 +33,6 @@ class NotificacionSanitariaController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [
@@ -90,13 +74,6 @@ class NotificacionSanitariaController extends Controller
         return response()->json($notificacion);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $validationRules = [

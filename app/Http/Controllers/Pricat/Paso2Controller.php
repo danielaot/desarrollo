@@ -9,21 +9,15 @@ use Validator;
 use DB;
 
 use App\Models\Pricat\TItem as Item;
-use App\Models\Pricat\TItemDetalle as IDetalle;
+use App\Models\Pricat\TItemDetalle as ItemDetalle;
 use App\Models\Pricat\TItemEan as IEan;
 use App\Models\Pricat\TCriteriosItem as Criterios;
 use App\Models\BESA\ItemCriteriosCompletos;
 use App\Models\BESA\EANReferencia;
 use App\Models\BESA\EANReferenciaEAN14 as EAN14Referencia;
-use App\Models\BESA\ItemCriteriosCompletos;
 
 class Paso2Controller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
@@ -45,13 +39,6 @@ class Paso2Controller extends Controller
         return view('layouts.pricat.actividades.paso2', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'tipo', 'categoria', 'item'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $validationRules = [
@@ -79,9 +66,8 @@ class Paso2Controller extends Controller
         $criterios = Criterios::where($campo, 1)
                               ->get();
 
-        $itemdetalle = IDetalle::where('ide_item', $id)
-                               ->get()
-                               ->first();
+        $itemdetalle = ItemDetalle::where('ide_item', $id)
+                                  ->get()->first();
 
         $itemunoe = ItemCriteriosCompletos::where('referencia', $request->referencia)
                                           ->get()->first();
