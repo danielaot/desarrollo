@@ -24,10 +24,6 @@ Route::group(['middleware' => ['auth']], function () {
     return view('loginredirect');
   });
 
-  Route::get('home', function () {
-    return redirect(env('APPV1_URL'));
-  });
-
   Route::get('autocomplete', ['uses' => 'GenericasController@autocomplete', 'as' => 'autocomplete']);
 
   /*
