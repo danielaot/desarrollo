@@ -86,6 +86,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('paso8', 'Pricat\Paso8Controller');
 
+    Route::resource('paso9', 'Pricat\Paso9Controller');
+
+    Route::resource('paso10', 'Pricat\Paso10Controller');
+
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');
     Route::get('confirmsubempaque', ['uses' => 'Pricat\ConfirmSubempaqueController@index', 'as' => 'confirmsubempaque.index']);

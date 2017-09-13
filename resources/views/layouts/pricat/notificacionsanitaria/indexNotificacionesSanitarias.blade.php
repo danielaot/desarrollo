@@ -34,7 +34,7 @@
               </td>
               <td class="text-right">
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="edit(notificacion.id)">
-                  <i class="glyphicon glyphicon-edit"></i> Editar
+                  <i class="glyphicon glyphicon-edit"></i>
                 </button>
               </td>
             </tr>
