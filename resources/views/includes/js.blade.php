@@ -1,11 +1,11 @@
 <!-- jQuery 3.1.1 -->
-<script src="{{url('/js/jquery.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/jquery.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- jQuery.UI -->
-<script src="{{url('/js/jquery-ui.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/jquery-ui.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- DataTables 1.10.13 -->
-<script src="{{url('/js/jquery.dataTables.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/jquery.dataTables.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <script type="text/javascript">
 $.extend( true, $.fn.dataTable.defaults, {
@@ -16,34 +16,34 @@ $.extend( true, $.fn.dataTable.defaults, {
 </script>
 
 <!-- Moment -->
-<script src="{{url('/js/moment.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/moment.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- AngularJs -->
-<script src="{{url('/js/angularJs/angular.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-filter.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-animate.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-aria.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-messages.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-sanitize.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-material.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/angularJs/angular-locale_es-co.js')}}"></script>
+<script src="{{url('/lib/angularJs/angular.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-filter.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-animate.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-aria.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-messages.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-sanitize.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-material.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/angularJs/angular-locale_es-co.js')}}"></script>
 
 <!-- FullCalendarJs -->
-<script src="{{url('/js/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/fullcalendarjs/gcal.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/fullcalendarjs/scheduler.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/fullcalendarjs/gcal.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/fullcalendarjs/scheduler.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- Bootstrap 3.3.7 -->
-<script src="{{url('/js/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
-<script src="{{url('/js/bootstrap-datetimepicker.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/bootstrap.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/bootstrap-datetimepicker.min.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- Laravel Javascript Validation -->
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- Dropzone -->
-<script src="{{url('/js/dropzone.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/lib/dropzone.js')}}" type="text/javascript" language="javascript"></script>
 
 <script src="{{url('/js/genericas.js')}}" type="text/javascript" language="javascript"></script>
 
