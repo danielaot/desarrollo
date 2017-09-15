@@ -5,7 +5,8 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
-      $scope.items = angular.copy(info.items);
+      $scope.itemslogyca = angular.copy(info.itemslogyca);
+      $scope.itemserp = angular.copy(info.itemserp);
       angular.element('.close').trigger('click');
     });
   }
@@ -19,7 +20,7 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
 
   $scope.hoy = new Date();
   $scope.referencias = [];
-  $scope.solicitud = { 'tnovedad' : '' };
+  $scope.solicitud = { 'tnovedad' : '', 'fecini' : $scope.hoy };
 
   $scope.changeNovedad = function(){
     $scope.referencias = [];
@@ -28,7 +29,9 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
     $scope.showPre = false;
     $scope.showFini = false;
     $scope.showFfin = false;
+
     if($scope.solicitud.tnovedad == 'modificacion'){
+      $scope.showIteLog = false;
       switch ($scope.solicitud.tmodifica) {
         case 'suspension':
             $scope.showRef = true;
@@ -48,29 +51,52 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
     else{
       $scope.showRef = true;
       $scope.showFini = true;
+      $scope.showIteLog = false;
       if($scope.solicitud.tnovedad == 'codificacion'){
         $scope.showPre = true;
         $scope.showFfin = true;
+        $scope.showIteLog = true;
       }
     }
   }
 
-  $scope.itemSearch = function(query){
+  $scope.itemSearchErp = function(query){
     if(query){
-      var filtrado = $filter('filter')($scope.items, {ite_referencia : query});
-      if(filtrado.length == 0){
-        filtrado = $filter('filter')($scope.items, {ite_ean13 : query});
-      }
-      return filtrado;
+      return $filter('filter')($scope.itemserp, {referenciaItem : query});
     }
     else{
-      return $scope.items;
+      return $scope.itemserp;
+    }
+  }
+
+  $scope.itemSearchLog = function(query){
+    if(query){
+      return $filter('filter')($scope.itemslogyca, {ite_referencia : query});
+    }
+    else{
+      return $scope.itemslogyca;
     }
   }
 
   $scope.addReferencia = function(){
     if($scope.solicitudForm.$valid){
-      $scope.referencias.push(angular.copy($scope.referencia));
+      if($scope.solicitud.tnovedad == 'codificacion'){
+        var referencia = {
+            'referencia' : $scope.referencia.ref.ite_referencia,
+            'descripcion' : $scope.referencia.ref.detalles.ide_descompleta
+        };
+      }
+      else{
+        var referencia = {
+            'referencia' : $scope.referencia.ref.referenciaItem,
+            'descripcion' : $scope.referencia.ref.descripcionItem
+        };
+      }
+      referencia['prebru'] = $scope.referencia.prebru == undefined ? '' : $scope.referencia.prebru;
+      referencia['presug'] = $scope.referencia.presug == undefined ? '' : $scope.referencia.presug;
+      console.log(referencia);
+
+      $scope.referencias.push(referencia);
       $scope.referencia = {};
       $scope.solicitudForm.$setPristine();
     }

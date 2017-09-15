@@ -9,21 +9,38 @@ use Carbon\Carbon;
 use Uuid;
 use Storage;
 
+use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TSolPricat as SolPricat;
 use App\Models\Pricat\TCampSegmento as CampSegmento;
 
 class PricatController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Pricat // Generar';
         $titulo = 'Generar';
 
+        // $solicitadas = SolPricat::with('clientes.terceros')
+        //                         ->where('sop_estado', 'solicitada')
+        //                         ->get();
+        //
+        // $generadas = SolPricat::with('clientes.terceros')
+        //                         ->where('sop_estado', 'creada')
+        //                         ->get();
+        //
+        // $items = Item::with('detalles')
+        //              ->whereHas('proyectos', function($q){
+        //                             $q->where('proy_estado', 'Por Certificar');
+        //                         })
+        //              ->get();
+
+        $response = compact('ruta', 'titulo');
+
+        return view('layouts.pricat.solicitud.indexGenerar', $response);
+    }
+
+    public function getInfo()
+    {
         $solicitadas = SolPricat::with('clientes.terceros')
                                 ->where('sop_estado', 'solicitada')
                                 ->get();
@@ -32,21 +49,17 @@ class PricatController extends Controller
                                 ->where('sop_estado', 'creada')
                                 ->get();
 
-        $logyca = SolPricat::with('clientes.terceros')
-                           ->where('sop_estado', 'logyca')
-                           ->get();
+        $items = Item::with('detalles')
+                     ->whereHas('proyectos', function($q){
+                                    $q->where('proy_estado', 'Por Certificar');
+                                })
+                     ->get();
 
-        $response = compact('ruta', 'titulo', 'solicitadas', 'generadas', 'logyca');
+        $response = compact('solicitadas', 'generadas', 'items');
 
-        return view('layouts.pricat.solicitud.indexGenerar', $response);
+        return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [

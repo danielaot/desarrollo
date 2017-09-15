@@ -8,6 +8,7 @@ use Validator;
 use Carbon\Carbon;
 use Auth;
 
+use App\Models\Genericas\Item as ItemERP;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TCliente as Cliente;
 use App\Models\Pricat\TSolPricat as SolPricat;
@@ -15,11 +16,6 @@ use App\Models\Pricat\TSolPricatDetalle as SolPricatDetalle;
 
 class SolicitudesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Pricat // Mis Solicitudes';
@@ -33,27 +29,17 @@ class SolicitudesController extends Controller
         return view('layouts.pricat.solicitud.indexSolicitudes', $response);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
-      $solicitudes = SolPricat::with('detalles.items.detalles')
-                              ->where('sop_kam', Auth::user()->idTerceroUsuario)
-                              ->get();
+        $solicitudes = SolPricat::with('detalles.items.detalles')
+                                ->where('sop_kam', Auth::user()->idTerceroUsuario)
+                                ->get();
 
         $response = compact('solicitudes');
 
         return response()->json($response);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $ruta = 'Calidad de Datos y Homologación // Pricat // Crear Solicitud';
@@ -75,22 +61,24 @@ class SolicitudesController extends Controller
                           ->get()->count();
 
         if($cliente > 0){
-          $items = Item::with('detalles')
-                       ->whereHas('proyectos', function($q){
-                                      $q->where('proy_estado', 'Terminado');
-                                })
-                       ->get();
+          $itemslogyca = Item::with('detalles')
+                             ->whereHas('proyectos', function($q){
+                                            $q->where('proy_estado', 'Terminado');
+                                      })
+                             ->get();
         }
         else{
-          $items = Item::with('detalles')
-                       ->whereHas('proyectos', function($q){
-                                      $q->where('proy_estado', 'Terminado');
-                                })
-                       ->where('ite_est_logyca','<>','No Capturado')
-                       ->get();
+          $itemslogyca = Item::with('detalles')
+                             ->whereHas('proyectos', function($q){
+                                            $q->where('proy_estado', 'Terminado');
+                                      })
+                             ->where('ite_est_logyca','<>','No Capturado')
+                             ->get();
         }
 
-        $response = compact('items');
+        $itemserp = ItemERP::all();
+
+        $response = compact('itemserp', 'itemslogyca');
 
         return response()->json($response);
     }

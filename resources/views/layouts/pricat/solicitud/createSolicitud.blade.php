@@ -33,24 +33,40 @@
             </div>
             <div class="form-group" ng-if="showFfin">
               <label class="control-label">Fecha Fin<span class="required">*</span> :</label><br>
-              <input type="date" class="form-control" ng-model="solicitud.fecfin" ng-min="referencia.fecini" required/>
+              <input type="date" class="form-control" ng-model="solicitud.fecfin" min="@{{solicitud.fecini}}" required/>
             </div>
           </div>
           <div class="col-sm-12" style="padding-top: 20px;">
             <div class="form-group" ng-if="showRef">
               <label class="control-label">Referencia<span class="required">*</span> :</label><br>
-              <md-autocomplete md-search-text="itemSearchText"
-                               md-items="item in itemSearch(itemSearchText)"
+              <md-autocomplete md-search-text="itemSearchLogText"
+                               md-items="item in itemSearchLog(itemSearchLogText)"
                                md-item-text="[item.ite_referencia,item.detalles.ide_descompleta].join(' - ')"
                                md-selected-item="referencia.ref"
-                               md-min-length="0"
+                               md-min-length="1"
                                required
-                               style="min-width: 330px;">
+                               style="min-width: 330px;"
+                               ng-if="showIteLog">
                 <md-item-template>
-                  <span md-highlight-text="itemSearchText" md-highlight-flags="^i">@{{[item.ite_referencia,item.detalles.ide_descompleta].join(' - ')}}</span>
+                  <span md-highlight-text="itemSearchLogText" md-highlight-flags="^i">@{{[item.ite_referencia,item.detalles.ide_descompleta].join(' - ')}}</span>
                 </md-item-template>
                 <md-not-found>
-                  No se encontraron resultados para "@{{itemSearchText}}".
+                  No se encontraron resultados para "@{{itemSearchLogText}}".
+                </md-not-found>
+              </md-autocomplete>
+              <md-autocomplete md-search-text="itemSearchErpText"
+                               md-items="item in itemSearchErp(itemSearchErpText)"
+                               md-item-text="[item.referenciaItem,item.descripcionItem].join(' - ')"
+                               md-selected-item="referencia.ref"
+                               md-min-length="1"
+                               required
+                               style="min-width: 330px;"
+                               ng-if="!showIteLog">
+                <md-item-template>
+                  <span md-highlight-text="itemSearchErpText" md-highlight-flags="^i">@{{[item.referenciaItem,item.descripcionItem].join(' - ')}}</span>
+                </md-item-template>
+                <md-not-found>
+                  No se encontraron resultados para "@{{itemSearchErpText}}".
                 </md-not-found>
               </md-autocomplete>
             </div>
@@ -82,13 +98,13 @@
               </thead>
               <tbody>
                 <tr ng-repeat="refer in referencias">
-                  <td>@{{refer.ref.ite_referencia}}</td>
+                  <td>@{{refer.referencia}} - @{{refer.descripcion}}</td>
                   <td ng-if="showPre">@{{refer.prebru}}</td>
                   <td ng-if="showPre">@{{refer.presug}}</td>
-                  <td ng-if="showFini">@{{solicitud.fecini | date : 'MM/dd/yyyy' }}</td>
-                  <td ng-if="showFfin">@{{solicitud.fecfin | date : 'MM/dd/yyyy' }}</td>
+                  <td ng-if="showFini">@{{solicitud.fecini | date : 'dd/MM/yyyy' }}</td>
+                  <td ng-if="showFfin">@{{solicitud.fecfin | date : 'dd/MM/yyyy' }}</td>
                   <td>
-                    <button type="button" class="btn btn-danger" ng-click="removeReferencia()">
+                    <button type="button" class="btn btn-danger" ng-click="removeReferencia(refer.referencia)">
                       <span class="glyphicon glyphicon-minus"></span>
                     </button>
                   </td>

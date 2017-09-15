@@ -107,5 +107,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('solicitudcreateinfo', 'Pricat\SolicitudesController@getCreateInfo');
 
     Route::resource('generar', 'Pricat\PricatController');
+    Route::get('generarinfo', 'Pricat\PricatController@getInfo');
   });
 });

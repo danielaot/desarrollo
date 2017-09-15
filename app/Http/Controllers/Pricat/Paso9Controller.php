@@ -14,6 +14,7 @@ use App\Models\Pricat\TItemEan as IEan;
 use App\Models\Pricat\TCriteriosItem as Criterios;
 use App\Models\BESA\ItemCriteriosCompletos;
 use App\Models\BESA\AppwebRefImpositivoArancelaria as RefImpoAran;
+use App\Models\Pricat\TProyecto as Proyecto;
 
 class Paso9Controller extends Controller
 {
@@ -104,6 +105,8 @@ class Paso9Controller extends Controller
           return response()->json(compact('errores'));
         }
         else{
+          Proyecto::where('id', $request->proy)->update(['proy_estado' => 'Por Certificar']);
+
           DesarrolloCtrl::update($request->proy, $request->act);
 
           $url = url('pricat/desarrolloactividades');
