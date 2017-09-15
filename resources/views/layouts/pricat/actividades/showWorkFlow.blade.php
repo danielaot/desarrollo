@@ -35,13 +35,15 @@
               <tbody>
                 <tr>
                   <th></th>
-                  <th ng-repeat="actividad in proyecto.desarrollos"><span class="label @{{estados[actividad.dac_estado].label}}">@{{actividad.dac_act_id}}</span></th>
+                  <th ng-repeat="actividad in actividades">
+                    <span class="label @{{estados[actividad.dac_estado].label}}">@{{actividad.dac_act_id}}</span>
+                  </th>
                 </tr>
                 <tr class="body-wf">
                   <th class="act-title">
                     <div>Desarrollo<br>Actividad</div>
                   </th>
-                  <th class="act" ng-repeat="actividad in proyecto.desarrollos">
+                  <th class="act" ng-repeat="actividad in actividades">
                     <div class="@{{estados[actividad.dac_estado].state}}">
                       <div>&nbsp;</div>
                     </div>
@@ -52,7 +54,7 @@
             <br>
             <div class="well">
               <div class="row">
-                <div class="col-sm-4 detail" ng-repeat="actividad in proyecto.desarrollos">
+                <div class="col-sm-4 detail" ng-repeat="actividad in actividades">
                   <div class="row">
                     <div class="col-sm-3">
                       <span class="label @{{estados[actividad.dac_estado].label}}">@{{actividad.dac_act_id}} <i class="glyphicon @{{estados[actividad.dac_estado].icon}}"></i></span>

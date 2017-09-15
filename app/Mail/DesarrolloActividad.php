@@ -29,7 +29,8 @@ class DesarrolloActividad extends Mailable
      */
     public function build()
     {
-        $style = ['body-line' => 'margin: 0 20px 12px; font-size: 13px; line-height: 21px; color: #4f4f4f; font-family: sans-serif;'];
+        $style = ['body-line' => 'margin: 0 20px 12px; font-size: 13px; line-height: 21px; color: #4f4f4f; font-family: sans-serif;',
+                  'body-header' => 'margin: 0 20px 12px; font-size: 15px; line-height: 24px; color: #4f4f4f; font-family: sans-serif;'];
         $titulo = 'Desarrollo de Actividad';
         $actividad = $this->actividad;
 

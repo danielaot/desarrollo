@@ -39,6 +39,8 @@ class DesarrolloActividadesController extends Controller
     {
         $fecha = Carbon::now();
 
+        $proyecto = Proyecto::find($proy);
+
         $desarrollo = Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $act])
                                 ->update(['dac_fecha_cumplimiento' => $fecha, 'dac_usuario' => Auth::user()->login, 'dac_estado' => 'Completado']);
 
@@ -50,6 +52,7 @@ class DesarrolloActividadesController extends Controller
           Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $actividad->pre_act_id])
                     ->update(['dac_fecha_inicio' => $fecha, 'dac_estado' => 'En Proceso']);
 
+          $actividad['proyecto'] = $proyecto['proy_nombre'];
           $usuarios = $actividad['actividades']['areas']['responsables']->pluck('usuarios.dir_txt_email');
           Mail::to($usuarios)->send(new DesarrolloActividad($actividad));
         }

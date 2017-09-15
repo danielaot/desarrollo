@@ -25,14 +25,18 @@ class PricatController extends Controller
         $titulo = 'Generar';
 
         $solicitadas = SolPricat::with('clientes.terceros')
-                                ->where('sop_estado', 'solicitado')
+                                ->where('sop_estado', 'solicitada')
                                 ->get();
 
         $generadas = SolPricat::with('clientes.terceros')
-                                ->where('sop_estado', 'creado')
+                                ->where('sop_estado', 'creada')
                                 ->get();
 
-        $response = compact('ruta', 'titulo', 'solicitadas', 'generadas');
+        $logyca = SolPricat::with('clientes.terceros')
+                           ->where('sop_estado', 'logyca')
+                           ->get();
+
+        $response = compact('ruta', 'titulo', 'solicitadas', 'generadas', 'logyca');
 
         return view('layouts.pricat.solicitud.indexGenerar', $response);
     }

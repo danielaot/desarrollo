@@ -13,11 +13,6 @@ use App\Models\Pricat\TActividad as Actividad;
 
 class ProcesosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Procesos';
@@ -26,11 +21,6 @@ class ProcesosController extends Controller
         return view('layouts.pricat.catalogos.indexProcesos', compact('ruta', 'titulo'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function getInfo()
     {
         $procesos = Proceso::with('actividades.areas')->get();
@@ -43,12 +33,6 @@ class ProcesosController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validationRules = [
@@ -67,12 +51,6 @@ class ProcesosController extends Controller
         return response()->json($proceso);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function storeActividad(Request $request)
     {
         $validationRules = [
@@ -96,13 +74,6 @@ class ProcesosController extends Controller
         return response()->json($actividad);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $validationRules = [
@@ -115,15 +86,15 @@ class ProcesosController extends Controller
         if ($validator->fails()) {
           return response()->json($validator->errors());
         }
+
+        $proceso = Proceso::find($id);
+        $proceso->pro_nombre = $request->pro_nombre;
+        $proceso->pro_descripcion = $request->pro_descripcion;
+        $proceso->save();
+
+        return response()->json($proceso);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function updateActividad(Request $request, $id)
     {
         $validationRules = [
@@ -138,27 +109,29 @@ class ProcesosController extends Controller
         if ($validator->fails()) {
           return response()->json($validator->errors());
         }
+
+        $actividad = Actividad::find($id);
+        $actividad->act_titulo = $request->act_titulo;
+        $actividad->act_descripcion = $request->act_descripcion;
+        $actividad->act_ar_id = $request->act_ar_id;
+        $actividad->act_plantilla = $request->act_plantilla;
+        $actividad->save();
+
+        $actividad->predecesoras()->delete();
+
+        if($request->pre_act_pre_id != '')
+          $actividad->predecesoras()->create(['pre_act_id' => $actividad->id, 'pre_act_pre_id' => $request->pre_act_pre_id]);
+
+        return response()->json($actividad);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        return Proceso::where('id', $id)->delete();
+        Proceso::where('id', $id)->delete();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroyActividad($id)
     {
-        return Actividad::where('id', $id)->delete();
+        Actividad::where('id', $id)->delete();
     }
 }

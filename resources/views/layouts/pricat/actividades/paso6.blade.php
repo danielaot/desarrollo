@@ -274,7 +274,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Tendidos x Caja:</label>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control" ng-model="patron.numtendidos" maxlength="3" min="0" required/>
+                  <input type="number" class="form-control" ng-model="patron.numtendidos" maxlength="3" min="0"/>
                 </div>
               </div>
             </div>
@@ -282,7 +282,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Cajas x Tendido:</label>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control" ng-model="patron.cajten" min="0" required/>
+                  <input type="number" class="form-control" ng-model="patron.cajten" min="0"/>
                 </div>
               </div>
             </div>
@@ -290,7 +290,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Tendidos x Estiba:</label>
                 <div class="col-sm-3">
-                  <input type="number" class="form-control" ng-model="patron.tenest" min="0" required/>
+                  <input type="number" class="form-control" ng-model="patron.tenest" min="0"/>
                 </div>
               </div>
             </div>

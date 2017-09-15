@@ -1,6 +1,5 @@
 app.controller('paso2Ctrl', ['$scope', '$window', '$http', '$mdDialog', function($scope, $window, $http, $mdDialog){
   $scope.url = 'paso2';
-  $scope.progress = false;
 
   $scope.saveProducto = function(){
     $scope.progress = true;

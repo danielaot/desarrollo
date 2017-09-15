@@ -88,7 +88,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('paso9', 'Pricat\Paso9Controller');
 
-    Route::resource('paso10', 'Pricat\Paso10Controller');
+    Route::get('paso10', function () {
+        return redirect(url('pricat/generar'));
+    })->name('paso10.index');
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');

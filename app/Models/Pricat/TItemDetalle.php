@@ -178,4 +178,14 @@ class TItemDetalle extends Model
   	{
   		  return $this->hasOne('App\Models\Pricat\TCondManipulacion', 'id', 'ide_condman');
   	}
+
+    public function posicionarancelaria()
+  	{
+  		  return $this->hasOne('App\Models\BESA\AppwebPosarancelaria', 'id_pos_arancelaria', 'ide_posarancelaria');
+  	}
+
+    public function grupoimpositivo()
+  	{
+  		  return $this->hasOne('App\Models\BESA\AppwebGrupoimpo', 'cod_grupoimpo', 'ide_grupoimpositivo');
+  	}
 }

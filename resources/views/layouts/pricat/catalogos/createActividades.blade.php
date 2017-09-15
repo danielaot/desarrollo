@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-4 form-group">
               <label class="control-label">Actividad Predecesora :</label>
-              <select class="form-control" ng-model="actividad.pre_act_pre_id" ng-options="option.act_titulo for option in (actividades | filter:  { act_proc_id : actividad.act_proc_id } ) track by option.id"></select>
+              <select class="form-control" ng-model="actividad.pre_act_pre_id" ng-options="option.act_titulo for option in (actividades | filter:  { act_proc_id : actividad.act_proc_id } ) track by option.id"><option value=""></option></select>
             </div>
             <div class="col-sm-4 form-group">
               <label class="control-label">Plantilla :</label>

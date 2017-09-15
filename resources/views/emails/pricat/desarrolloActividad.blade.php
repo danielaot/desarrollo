@@ -1,6 +1,9 @@
 @extends('emails.notificaciones')
 
 @section('content')
+  <p style="{{ $style['body-header'] }}">
+    <strong>{{ $actividad['proyecto'] }}</strong>
+  </p>
   <p style="{{ $style['body-line'] }}">
     <strong>Actividad ejecutada</strong><br>
     <strong>Nombre : </strong> {{ $actividad['actividadespre']['act_titulo'] }} <br>

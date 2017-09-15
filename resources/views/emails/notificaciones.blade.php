@@ -28,6 +28,8 @@
       'email-body-line' => 'margin: 0 20px 12px; font-size: 13px; line-height: 21px; color: #4f4f4f; font-family: sans-serif;',
       'text-center' => 'text-align: center;',
       'body-href' => 'text-decoration: underline; color:#075aad',
+      'body-header' => 'margin: 0 20px 12px; font-size: 15px; line-height: 24px; color: #4f4f4f; font-family: sans-serif;',
+      'body-line' => 'margin: 0 20px 12px; font-size: 13px; line-height: 21px; color: #4f4f4f; font-family: sans-serif;',
       'button' => 'display: inline-block; width: 200px; min-height: 45px; background-color: #3869D4; border-radius: 3px; color: #ffffff; font-size: 15px; line-height: 45px; text-align: center; text-decoration: none; -webkit-text-size-adjust: none;',
 
       /* Footer ------------------------------ */

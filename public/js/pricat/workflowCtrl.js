@@ -31,5 +31,6 @@ app.controller('workflowCtrl', ['$scope', '$http', '$filter', function($scope, $
 
   $scope.setProyecto = function(idproyecto){
     $scope.proyecto = angular.copy($filter('filter')($scope.proyectos, {id : idproyecto})[0]);
+    $scope.actividades = $filter('orderBy')($scope.proyecto.desarrollos, 'dac_act_id');
   }
 }]);

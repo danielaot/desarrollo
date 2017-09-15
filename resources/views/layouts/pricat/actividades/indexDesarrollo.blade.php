@@ -28,7 +28,7 @@
                         {{$desarrollo[0]->actividades->act_descripcion}}
                       </div>
                       <div class="col-sm-2 text-right">
-                        <a href="{{route($desarrollo[0]->actividades->act_plantilla.'.index', ['proy' => $desarrollo[0]->dac_proy_id, 'act' => $desarrollo[0]->actividades->id])}}">
+                        <a href="{{route($desarrollo[0]->actividades->act_plantilla.'.index', ['proy' => $desarrollo[0]->dac_proy_id, 'act' => $desarrollo[0]->actividades->id])}}" ng-click="progress = 1">
                           <button class="btn btn-primary btn-sm">
                             <i class="glyphicon glyphicon-pencil"></i> Realizar
                           </button>
@@ -60,6 +60,9 @@
             </div>
           </div>
         @endforeach
+      </div>
+      <div ng-if="progress" class="progress">
+        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
       </div>
     </div>
   </div>
