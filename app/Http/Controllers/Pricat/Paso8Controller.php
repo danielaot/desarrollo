@@ -27,15 +27,30 @@ class Paso8Controller extends Controller
                     ->where('ite_proy', $idproyecto)
                     ->get()->first();
 
-        $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
-                                ->get()->first();
+        $componente = ItemDetalle::where('ide_item', $item->id)
+                                  ->get()->first();
 
-        $registro = NotiSanitaria::whereHas('graneles', function($query) use($lista){
-                                                  $query->where('rsg_ref_granel', trim($lista->Cod_Item_Componente));
-                                            })
-                                 ->get()->first();
+        if ($item->ite_tproducto == '1301') {
 
-        $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'registro', 'lista');
+            $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
+            ->get()->first();
+
+            $registro = NotiSanitaria::whereHas('graneles', function($query) use($lista){
+              $query->where('rsg_ref_granel', trim($lista->Cod_Item_Componente));
+            })
+            ->get()->first();
+        }else {
+
+            $lista = ListaMateriales::where(['Cod_Item' => $componente->ide_comp1.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
+            ->get()->first();
+
+            $registro = NotiSanitaria::whereHas('graneles', function($query) use($lista){
+              $query->where('rsg_ref_granel', trim($lista->Cod_Item_Componente));
+            })
+            ->get()->first();
+        }
+
+        $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'registro', 'componente', 'lista');
 
         return view('layouts.pricat.actividades.paso8', $response);
     }

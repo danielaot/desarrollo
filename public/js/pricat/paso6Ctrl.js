@@ -1,4 +1,4 @@
-app.controller('paso6Ctrl', ['$scope', '$http', '$mdDialog', function($scope, $http, $mdDialog){
+app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', function($scope, $http, $window, $mdDialog){
   $scope.getUrl = 'paso6info';
   $scope.url = 'paso6update';
 
