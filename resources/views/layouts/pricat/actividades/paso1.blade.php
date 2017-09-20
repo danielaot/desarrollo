@@ -194,21 +194,21 @@
               <select class="form-control" ng-model="producto.tipomarca" ng-options="opt.descripcionItemCriterioMayor for opt in tipomarca track by opt.idItemCriterioMayor" required></select>
             </div>
             <label class="col-sm-2 control-label">Presentación<span class="required">*</span> :</label>
-            <div class="col-sm-4">
-              <md-autocomplete md-search-text="presentacionSearchText"
-                               md-items="presentacion in presentacionSearch(presentacionSearchText)"
-                               md-item-text="presentacion.descripcionItemCriterioMayor"
-                               md-selected-item="producto.presentacion"
-                               md-min-length="0"
-                               required>
-                <md-item-template>
-                  <span md-highlight-text="presentacionSearchText" md-highlight-flags="^i">@{{presentacion.descripcionItemCriterioMayor}}</span>
-                </md-item-template>
-                <md-not-found>
-                  No se encontraron resultados para "@{{presentacionSearchText}}".
-                </md-not-found>
-              </md-autocomplete>
-            </div>
+                <div class="col-sm-4">
+                  <md-autocomplete md-search-text="presentacionSearchText"
+                                   md-items="presentacion in presentacionSearch(presentacionSearchText)"
+                                   md-item-text="presentacion.descripcionItemCriterioMayor"
+                                   md-selected-item="producto.presentacion"
+                                   md-min-length="0"
+                                   required>
+                    <md-item-template>
+                      <span md-highlight-text="presentacionSearchText" md-highlight-flags="^i">@{{presentacion.descripcionItemCriterioMayor}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                      No se encontraron resultados para "@{{presentacionSearchText}}".
+                    </md-not-found>
+                  </md-autocomplete>
+                </div>
           </div>
           <div class="row form-group">
             <label class="col-sm-2 control-label">Variedad<span class="required">*</span> :</label>
@@ -332,14 +332,13 @@
             </div>
           </div>
           <div class="row form-group" ng-if="producto.tipo != 'Regular'">
-            <label class="col-sm-2 control-label">Ref 2<span class="required">*</span> :</label>
+            <label class="col-sm-2 control-label">Ref 2 :</label>
             <div class="col-sm-4">
               <md-autocomplete md-search-text="item2SearchText"
                                md-items="item2 in itemSearch(item2SearchText)"
                                md-item-text="[item2.ite_txt_referencia,item2.ite_txt_descripcion].join(' - ')"
                                md-selected-item="producto.comp2"
-                               md-min-length="0"
-                               required>
+                               md-min-length="0">
                 <md-item-template>
                   <span md-highlight-text="item2SearchText" md-highlight-flags="^i">@{{[item2.ite_txt_referencia,item2.ite_txt_descripcion].join(' - ')}}</span>
                 </md-item-template>

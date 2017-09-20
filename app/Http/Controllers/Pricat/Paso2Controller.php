@@ -25,7 +25,7 @@ class Paso2Controller extends Controller
         $idproyecto = $request->proy;
         $idactividad = $request->act;
 
-        $item = Item::with('detalles.origen','detalles.tipomarcas','detalles.tipooferta','detalles.menuprom',
+        $item =Item::with('detalles.origen','detalles.tipomarcas','detalles.tipooferta','detalles.menuprom',
                            'detalles.tipoprom','detalles.presentacion','detalles.variedad','detalles.categoria',
                            'detalles.linea','detalles.sublinea','detalles.submercadeo','detalles.submercadeo2',
                            'detalles.submarca','detalles.regalias','detalles.segmento','detalles.clasificacion',
@@ -33,8 +33,13 @@ class Paso2Controller extends Controller
                     ->where('ite_proy', $request->proy)
                     ->get()->first();
 
+        $componente = ItemCriteriosCompletos::where('referencia', $item->ite_referencia)
+                                            ->get()->first();
+
         $tipo = $item['tipo']['descripcionItemCriterioMayor'];
         $categoria = $item['detalles']['categoria']['descripcionItemCriterioMayor'];
+        $comp = $componente->descripcion;
+        //return ($comp)
 
         return view('layouts.pricat.actividades.paso2', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'tipo', 'categoria', 'item'));
     }

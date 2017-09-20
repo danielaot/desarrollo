@@ -3,6 +3,7 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$window', '$mdDialog
   $scope.url = 'paso7';
 
   $http.get($scope.getUrl).then(function(response){
+    $scope.progress = true;
     var info = response.data;
     $scope.vocabas = angular.copy(info.vocabas);
     $scope.marcas = angular.copy(info.marcas);
@@ -19,6 +20,7 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$window', '$mdDialog
       var variedad = $filter('filter')($scope.vocabas, {id : value})[0];
       $scope.producto.variedad.push(variedad);
     });
+    $scope.progress = false;
   });
 
   $scope.vocabasSearch = function(query){
@@ -93,6 +95,8 @@ app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$window', '$mdDialog
   }
 
   $scope.saveProducto = function(){
+    $scope.progress = true;
+
     if($scope.producto.descorta.length > 18 || $scope.producto.deslogyca.length > 40){
       $mdDialog.show(
         $mdDialog.alert()

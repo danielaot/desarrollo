@@ -75,7 +75,7 @@
           @if($tipo != 'Regular')
             <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp1')}">
               <label class="col-sm-3 control-label">Ref Componente Principal:</label>
-              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp1']}}</p>
+              <p class="col-sm-6 control-label">{{$item['detalles']['ide_comp1']}} -  </p>
             </div>
             <div class="row" ng-class="{'has-error' : (errores | contains: 'ide_comp2')}">
               <label class="col-sm-3 control-label">Ref Componente 2:</label>

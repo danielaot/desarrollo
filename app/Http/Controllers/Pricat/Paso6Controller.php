@@ -55,8 +55,8 @@ class Paso6Controller extends Controller
 
     public function getInfo()
     {
-        $cmanipulacion = CManipulacion::all();
-        $tempaque = TEmpaque::all();
+        $cmanipulacion = CManipulacion::orderBy('tcman_nombre')->get();
+        $tempaque = TEmpaque::orderBy('temp_nombre')->get();
         $tembalaje = TEmbalaje::all();
 
         $response = compact('cmanipulacion', 'tempaque', 'tembalaje');
