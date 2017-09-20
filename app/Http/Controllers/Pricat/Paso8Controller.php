@@ -75,6 +75,7 @@ class Paso8Controller extends Controller
         DesarrolloCtrl::update($request->proy, $request->act);
 
         $url = url('pricat/desarrolloactividades');
-        return response($request->all(), 200);
+        $response = array('request'=>$request->all(), 'url'=>$url);
+        return response($response, 200);
     }
 }

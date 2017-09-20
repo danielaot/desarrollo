@@ -6,8 +6,9 @@ app.controller('paso8Ctrl', ['$scope', '$http', '$filter', '$window', function($
 
     $http.put($scope.url+'/'+$scope.producto.item.id, $scope.producto).then(function(response){
       $scope.progress = false;
+      console.log(response.data.url);
       if(response.data.errores == undefined)
-        $window.location = response.data;
+        $window.location = response.data.url;
       else
         console.log(response.data.errores);
     }, function(){});
