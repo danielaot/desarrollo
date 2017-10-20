@@ -13,9 +13,11 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
         var pick = $filter('pick')($scope.criterios, 'cri_plan == '+value.idCriterioPlan);
         if(pick.length == 0)
           $scope.planes.push(angular.copy(value));
-      });
-      $scope.progress = false;
+      });      
       angular.element('.close').trigger('click');
+      $scope.progress = false;
+    }, function(error){
+      $scope.getInfo();
     });
   }
 
@@ -32,14 +34,17 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
   }
 
   $scope.saveCriterio = function(){
-    if($scope.criterio.id == undefined){
-      $scope.criterio.cri_plan = $scope.criterio.plan.idCriterioPlan;
-      $http.post($scope.url, $scope.criterio).then(function(response){
-        $scope.getInfo();
-      }, function(){});
-    }
-   
+    $scope.progress = true;
+    $scope.criterio.cri_plan = $scope.criterio.planes.idCriterioPlan;
+    $http.post($scope.url, $scope.criterio).then(function(response){
+      $scope.getInfo();
+    }, function(error){
+      console.log(error);
+      alert(error);
+      $scope.getInfo();
+    });   
   }
+
   $scope.editCriterio = function(objeto){
     var criterio = angular.copy(objeto);
 
@@ -59,4 +64,5 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
       $scope.criterio.cri_regular = true;
     }
   }
+
 }]);
