@@ -32,9 +32,31 @@ app.controller('criteriosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
   }
 
   $scope.saveCriterio = function(){
-    $scope.criterio.cri_plan = $scope.criterio.plan.idCriterioPlan;
-    $http.post($scope.url, $scope.criterio).then(function(response){
-      $scope.getInfo();
-    }, function(){});
+    if($scope.criterio.id == undefined){
+      $scope.criterio.cri_plan = $scope.criterio.plan.idCriterioPlan;
+      $http.post($scope.url, $scope.criterio).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    }
+   
+  }
+  $scope.editCriterio = function(objeto){
+    var criterio = angular.copy(objeto);
+
+    $scope.criterio = criterio;
+
+    $scope.titulo = criterio.planes.nombreCriterioPlan;
+
+    if(criterio.cri_oferta == 1){
+      $scope.criterio.cri_oferta = true;
+    }
+
+    if(criterio.cri_estuche == 1){
+      $scope.criterio.cri_estuche = true;
+    }
+    
+    if(criterio.cri_regular == 1){
+      $scope.criterio.cri_regular = true;
+    }
   }
 }]);
