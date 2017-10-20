@@ -11,6 +11,9 @@ app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
       $scope.clientes = angular.copy(info.clientes);
       angular.element('.close').trigger('click');
       $scope.progress = false;
+    }, function(error){
+      console.log(error);
+      $scope.getInfo();
     });
   }
 
@@ -40,15 +43,52 @@ app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
   }
 
   $scope.saveCliente = function(){
+    $scope.progress = true;
     if($scope.cliente.id != undefined){
+      console.log($scope.cliente);
       $http.put($scope.url+'/'+$scope.cliente.id, $scope.cliente).then(function(response){
+        data = response.data;
+        console.log(data);
         $scope.getInfo();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
     else{
       $http.post($scope.url, $scope.cliente).then(function(response){
         $scope.getInfo();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
   }
+
+  $scope.editCliente = function(cliente){
+    $scope.cliente = angular.copy(cliente);
+    if ($scope.cliente.cli_codificacion == 1) {
+      $scope.cliente.codificacion = true;
+    }
+    if ($scope.cliente.cli_eliminacion == 1) {
+      $scope.cliente.eliminacion = true;
+    }
+    if ($scope.cliente.cli_modificacion == 1) {
+      $scope.cliente.modificacion = true;
+    }
+    $scope.cliente.gln = parseInt($scope.cliente.cli_gln);
+  }
+
+  $scope.inactivarCliente = function(cliente){
+    $scope.progress = true;
+     $http.delete($scope.url+'/'+cliente.id, cliente).then(function(response){
+        data = response.data;
+        console.log(data);
+        $scope.getInfo();
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
+  }
+
 }]);

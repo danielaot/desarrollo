@@ -21,10 +21,12 @@ class ClientesController extends Controller
 
     public function getInfo()
     {
-        $terceros = Tercero::all();
-        $clientes = Cliente::with('terceros')->get();
-
-        $response = compact('terceros','clientes');
+        
+        $clientes = Cliente::withTrashed()->with('terceros', 'kam')->get();
+        $agrupadoClientes = $clientes->groupBy('cli_nit');
+        $agrupadoClientes = $agrupadoClientes->keys()->all();
+        $terceros = Tercero::whereNotIn('idTercero', $agrupadoClientes)->get();
+        $response = compact('terceros','clientes', 'agrupadoClientes');
 
         return response()->json($response);
     }
@@ -53,5 +55,48 @@ class ClientesController extends Controller
         $cliente->save();
 
         return response()->json($cliente);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validationRules = [
+            'cli_nit' => 'required',
+            'kam' => 'required',
+            'gln' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $validationRules);
+
+        if ($validator->fails()){
+          return response()->json(['errors' => $validator->errors()]);
+        }
+
+        $cliente = Cliente::find($id);
+        $cliente->cli_nit = $request->cli_nit;
+        $cliente->cli_codificacion = $request->codificacion ? true : false;
+        $cliente->cli_modificacion = $request->modificacion ? true : false;
+        $cliente->cli_eliminacion = $request->eliminacion ? true : false;
+        $cliente->cli_kam = $request->kam['idTercero'];
+        $cliente->cli_gln = $request->gln;
+        $cliente->save();
+
+        return response()->json($request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $cliente = Cliente::withTrashed()->find($id);
+        if ($cliente->trashed()) {
+            $cliente->restore();
+        }else{
+            $cliente->delete();
+        }
+        return response()->json($cliente->trashed());
     }
 }
