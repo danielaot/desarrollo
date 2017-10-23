@@ -27,6 +27,7 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
   }
 
   $scope.saveProyecto = function(){
+    $scope.progress = true;
     $scope.proyecto.proy_proc_id = $scope.proyecto.proy_proc_id.id;
     if($scope.proyecto.id != undefined){
       $http.put($scope.url+'/'+$scope.proyecto.id, $scope.proyecto).then(function(response){
@@ -40,8 +41,8 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
     }
   }
 
-  $scope.editProyecto = function(idproyecto){
-    $scope.proyecto = $filter('filter')($scope.proyectos, {id : idproyecto})[0];
+  $scope.editProyecto = function(proyecto){
+    $scope.proyecto = angular.copy(proyecto);
     $scope.proyecto.proy_proc_id = $scope.proyecto.procesos;
     $scope.proyectoForm.$setPristine();
   }
