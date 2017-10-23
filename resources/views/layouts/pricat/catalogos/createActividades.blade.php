@@ -32,6 +32,11 @@
               <label class="control-label">Plantilla :</label>
               <input type="text" class="form-control" ng-model="actividad.act_plantilla" required/>
             </div>
+            <div class="col-sm-12 checkbox">
+              <label> 
+                <input type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="actividad.act_confirmarerp"/>¿Si modifica el paso debe actualizarse en el ERP?
+              </label>             
+            </div>
           </div>
         </div>
         <div class="modal-footer">
