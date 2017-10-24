@@ -18,4 +18,5 @@
     </div>
 
   </body>
+  @stack('script_after')
 </html>
