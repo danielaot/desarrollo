@@ -115,6 +115,7 @@ class ProcesosController extends Controller
         $actividad->act_descripcion = $request->act_descripcion;
         $actividad->act_ar_id = $request->act_ar_id;
         $actividad->act_plantilla = $request->act_plantilla;
+        $actividad->act_confirmarerp = $request->act_confirmarerp;
         $actividad->save();
 
         $actividad->predecesoras()->delete();

@@ -16,8 +16,10 @@
             <input class="form-control" type="text" ng-model="proyecto.proy_nombre" required/>
           </div>
           <div class="form-group">
-            <label class="control-label">Proceso :</label>
-            <select class="form-control" ng-model="proyecto.proy_proc_id" ng-options="option.pro_nombre for option in procesos track by option.id" required></select>
+            <label class="control-label" ng-if="proyecto.id == undefined">Proceso :</label>
+            <select class="form-control" ng-if="proyecto.id == undefined" ng-model="proyecto.proy_proc_id" ng-options="option.pro_nombre for option in procesos track by option.id" required>
+              <option value="">Seleccione...</option>
+            </select>
           </div>
         </div>
         <div class="modal-footer">

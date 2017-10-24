@@ -13,7 +13,9 @@
         <div class="modal-body">
           <div class="form-group">
             <label class="control-label">Nit ó Razon Social del Cliente<span class="required">*</span> :</label>
-            <md-autocomplete md-search-text="terceroSearchText"
+            <p  ng-if="cliente.id != undefined">@{{cliente.terceros.razonSocialTercero}}</p>
+            <md-autocomplete ng-if="cliente.id == undefined"
+                             md-search-text="terceroSearchText"
                              md-items="tercero in clientesSearch(terceroSearchText)"
                              md-item-text="[tercero.idTercero,tercero.razonSocialTercero].join(' - ')"
                              md-selected-item="cliente.tercero"
@@ -60,10 +62,6 @@
             <label class="control-label">GLN<span class="required">*</span> :</label>
             <input type="number" class="form-control" ng-model="cliente.gln" required/>
           </div>
-          <!--div class="form-group">
-            <label class="control-label">Campos Pricat<span class="required">*</span> :</label>
-
-          </div-->
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" type="submit">Guardar</button>

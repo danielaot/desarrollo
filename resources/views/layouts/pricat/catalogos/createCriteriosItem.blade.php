@@ -12,12 +12,17 @@
         </div>
         <div class="modal-body">
           <div class="form-group">
-            <label class="control-label">Nombre :</label>
-            <select class="form-control" ng-model="criterio.plan" ng-options="option.nombreCriterioPlan for option in planes track by option.idCriterioPlan" required></select>
+            <label class="control-label">Nombre:</label>
+            <p ng-if="criterio.id != undefined">&nbsp;@{{titulo}}</p>
+            <select ng-if="criterio.id == undefined" class="form-control" ng-model="criterio.planes" ng-options="option.nombreCriterioPlan for option in planes track by option.idCriterioPlan" required></select>
           </div>
           <div class="form-group">
             <label class="control-label">Columna del UnoE :</label>
-            <input type="text" class="form-control" ng-model="criterio.cri_col_unoe" required/>
+            <input type="text" class="form-control" maxlength="255" ng-model="criterio.cri_col_unoe" required/>
+          </div>
+           <div class="form-group">
+            <label class="control-label">Columna Item :</label>
+            <input type="text" class="form-control" maxlength="255" ng-model="criterio.cri_col_item" required/>
           </div>
           <div class="form-group">
             <label class="control-label">Seleccione para que tipo de producto aplica el criterio :</label><br>
@@ -33,7 +38,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" type="submit">Guardar</button>
+          <button class="btn btn-primary"  ng-if="criterio.id == undefined" type="submit">Guardar</button>
+          <button class="btn btn-primary"  ng-if="criterio.id != undefined" type="submit">Editar</button>
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
         </div>
       </div>

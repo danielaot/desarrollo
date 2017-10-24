@@ -23,7 +23,7 @@
               <td>@{{proyecto.procesos.pro_nombre}}</td>
               <td>@{{proyecto.proy_estado}}</td>
               <td class="text-right">
-                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editProyecto(proyecto.id)">
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal1" ng-click="editProyecto(proyecto)">
                   <i class="glyphicon glyphicon-edit"></i>
                 </button>
               </td>

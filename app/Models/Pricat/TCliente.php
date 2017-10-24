@@ -3,9 +3,12 @@
 namespace App\Models\Pricat;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TCliente extends Model
 {
+    use SoftDeletes;
+
     protected $connection = 'pricat';
 
     protected $table = 't_clientes';
@@ -18,6 +21,8 @@ class TCliente extends Model
         'cli_kam',
         'cli_gln'
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function segmentos()
   	{
@@ -33,4 +38,9 @@ class TCliente extends Model
   	{
   		  return $this->hasOne('App\Models\Genericas\Tercero', 'nitTercero', 'cli_nit');
   	}
+
+    public function kam()
+    {
+        return $this->hasOne('App\Models\Genericas\Tercero', 'nitTercero', 'cli_kam');
+    }
 }

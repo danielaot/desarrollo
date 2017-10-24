@@ -2,6 +2,7 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
   $scope.getUrl = "procesosinfo";
   $scope.url = "procesos";
   $scope.urlActividades = "actividades";
+  $scope.progress = true;
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -11,6 +12,7 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
       $scope.areas = angular.copy(info.areas);
       $scope.actividades = angular.copy(info.actividades);
       angular.element('.close').trigger('click');
+      $scope.progress = false;
     });
   }
 
@@ -22,15 +24,22 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
   }
 
   $scope.saveProceso = function(){
+    $scope.progress = true;
     if($scope.proceso.id != undefined){
       $http.put($scope.url+'/'+$scope.proceso.id, $scope.proceso).then(function(response){
         $scope.getInfo();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
     else{
       $http.post($scope.url, $scope.proceso).then(function(response){
         $scope.getInfo();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
   }
 
@@ -61,20 +70,27 @@ app.controller('procesosCtrl', ['$scope', '$http', '$filter', '$mdDialog', funct
   }
 
   $scope.saveActividad = function(){
+    $scope.progress = true;
     $scope.actividad.act_ar_id = $scope.actividad.act_ar_id.id;
     $scope.actividad.pre_act_pre_id = $scope.actividad.pre_act_pre_id != undefined ? $scope.actividad.pre_act_pre_id.id : '';
-
+    console.log($scope.actividad);
     if($scope.actividad.id != undefined){
       $http.put($scope.urlActividades+'/'+$scope.actividad.id, $scope.actividad).then(function(response){
         $scope.getInfo();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
     else{
       $http.post($scope.urlActividades, $scope.actividad).then(function(response){
         $scope.getInfo();
         $scope.actividad = {};
         $scope.actividadForm.$setPristine();
-      }, function(){});
+      }, function(error){
+        console.log(error);
+        $scope.getInfo();
+      });
     }
   }
 
