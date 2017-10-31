@@ -130,6 +130,30 @@ return [
             'strict' => true,
             'engine' => 'InnoDB',
         ],
+
+        'intsce' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_WMS_HOST', '172.100.103.70'),
+            'database' => env('DB_WMS_DATABASE', 'INTSCE'),
+            'username' => env('DB_SQL_WMS_USERNAME', 'interface'),
+            'password' => env('DB_SQL_WMS_PASSWORD', 'interface1'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+        
+        'scprd' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_WMS_HOST', '172.100.103.70'),
+            'database' => env('DB_SCPRD_DATABASE', 'SCPRD'),
+            'username' => env('DB_SQL_WMS_USERNAME', 'interface'),
+            'password' => env('DB_SQL_WMS_PASSWORD', 'interface1'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+
+
     ],
 
     /*

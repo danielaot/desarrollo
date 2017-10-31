@@ -29,4 +29,12 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::get('autocomplete', ['uses' => 'GenericasController@autocomplete', 'as' => 'autocomplete']);
+
+
+  Route::group(['prefix' => 'tcc'], function () {
+    Route::resource('tccws', 'tccws\tccwsController');
+    Route::get('agrupaPedidosGetInfo', 'tccws\tccwsController@agrupaPedidosGetInfo');
+  });
+
+
 });
