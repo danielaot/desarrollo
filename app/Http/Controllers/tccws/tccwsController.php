@@ -30,9 +30,10 @@ class tccwsController extends Controller
     public function agrupaPedidosGetInfo()
     {
         // F47 se consulta distinto el cliente
-        $fecha = Carbon::now()->subDays(3);
+        $fecha = Carbon::now()->subDays(1);
         $pedidos = UPL_ORDERS::select('A01', 'A09', 'A08', 'A22', 'A29', 'A07')
         ->with('infoFactura')
+        ->take(1000)
         ->where('KEY5', '<>', 'MASTER')
         ->where('F01', '>', $fecha)
         ->get();
@@ -49,8 +50,6 @@ class tccwsController extends Controller
         }
 
         $pedidosConcliente = collect($pedidosConcliente)->groupBy('f_nit_tercero');
-            
-        // $pedidos = $pedidos->groupBy("{ info_factura : f_nit_tercero }");
         $response = compact('pedidosConcliente', 'pedidosSinCliente');
         return response()->json($response);
     }
