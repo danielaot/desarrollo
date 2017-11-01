@@ -49,6 +49,9 @@ class tccwsController extends Controller
             }
         }
 
+
+        
+
         $pedidosConcliente = collect($pedidosConcliente)->groupBy('f_nit_tercero');
         $response = compact('pedidosConcliente', 'pedidosSinCliente');
         return response()->json($response);
