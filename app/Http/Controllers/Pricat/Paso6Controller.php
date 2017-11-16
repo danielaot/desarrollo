@@ -124,7 +124,7 @@ class Paso6Controller extends Controller
         $deslarga = str_replace($itemdet->ide_contenido.$itemdet->ide_umcont, '', $itemdet->ide_deslarga);
 
         $ieanppal = ItemEan::where(['iea_item' => $producto['item'], 'iea_principal' => 1])
-                           ->get()->first();
+                            ->get()->first();
 
         $ieanppal->iea_cantemb = $producto['cantemb'];
         $ieanppal->iea_temb = $producto['tembalaje'];
@@ -153,5 +153,108 @@ class Paso6Controller extends Controller
 
         $url = url('pricat/desarrolloactividades');
         return response($url, 200);
+    }
+
+    public function edit(Request $request, $proy){
+
+      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $titulo = 'Editar Información de Medidas';
+      $idproyecto = $proy;
+      $idactividad = $request->act;
+
+      $item = Item::with('detalles','eanes')
+                  ->where('ite_proy', $idproyecto)
+                  ->get()->first();
+
+      $descorta = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_descorta);
+      $deslarga = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_deslarga);
+
+      $pesoneto = 0;
+
+      if($item->ite_tproducto == '1301'){
+        $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
+                                ->get()->first();
+
+        $formula = FormulaMaestra::where('frm_txt_codigounoe', trim($lista->Cod_Item_Componente))
+                                 ->get()->first();
+
+        $densidad = $formula->frm_txt_densidad;
+
+        $pesoneto = $item->detalles['ide_contenido'] * $densidad/1000;
+      }
+
+      $itemdet = ItemDetalle::where('ide_item', $item['id'])
+                            ->get()->first();
+
+      $itemean = ItemEan::where('iea_item', $item['id'])
+                              ->get()->first();
+
+      $itempat = ItemPatron::where('ipa_item', $item['id'])
+                              ->get()->first();
+
+      $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'descorta', 'deslarga', 'pesoneto', 'cmanipulacion', 'tempaque', 'tembalaje', 'itemdet', 'itemean', 'itempat');
+
+      return view('layouts.pricat.actividades.paso6edit', $response);
+    }
+
+    public function editMedidas(Request $request){
+      $validationRules = [
+        'producto.proy' => 'required|numeric',
+        'producto.act' => 'required|numeric',
+        'producto.item' => 'required|numeric',
+        'producto' => 'required',
+        'empaque' => 'required',
+        'patron' => 'required'
+      ];
+
+      $validator = Validator::make($request->all(), $validationRules);
+
+      if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()]);
+      }
+
+      $producto = $request->producto;
+      $empaque = $request->empaque;
+      $patron = $request->patron;
+
+      $item = Item::with('detalles','eanes')
+                    ->where('ite_proy', $producto['proy'])
+                    ->get()->first();
+
+      $descorta = str_replace($item['detalles']['ide_contenido'].$item['detalles']['ide_umcont'], '', $item['detalles']['ide_descorta']);
+      $deslarga = str_replace($item['detalles']['ide_contenido'].$item['detalles']['ide_umcont'], '', $item['detalles']['ide_deslarga']);
+
+      $ide_volumen = $producto['alto']*$producto['ancho']*$producto['profundo'];
+      $ide_tara = $producto['pesobruto']-$producto['pesoneto'];
+
+      ItemDetalle::where('ide_item', $producto['item'])
+                  ->update(['ide_alto' => $producto['alto'], 'ide_ancho' => $producto['ancho'], 'ide_profundo' =>$producto['profundo'],
+                          'ide_volumen' => $ide_volumen, 'ide_pesobruto' => $producto['pesobruto'], 'ide_pesoneto' => $producto['pesoneto'],
+                          'ide_tara' => $ide_tara, 'ide_temp' => $producto['tempaque']['id'], 'ide_condman' => $producto['manipulacion']['id']]);
+
+      $iea_descorta = $descorta.$producto['cantemb'].'art';
+      $iea_deslarga = $deslarga.$producto['cantemb'].'art';
+      $iea_volumen = $empaque['alto']*$empaque['ancho']*$empaque['profundo'];
+      $iea_pesoneto = $producto['pesoneto']*$producto['cantemb'];
+      $iea_tara = $empaque['pesobruto']-($producto['pesoneto']*$producto['cantemb']);
+
+      ItemEan::where(['iea_item' => $producto['item'], 'iea_principal' => 1])
+              ->update(['iea_cantemb' => $producto['cantemb'], 'iea_temb' => $producto['tembalaje']['id'], 'iea_descorta' => $iea_descorta,
+                        'iea_deslarga' => $iea_deslarga, 'iea_alto' => $empaque['alto'], 'iea_ancho' => $empaque['ancho'], 'iea_profundo' => $empaque['profundo'],
+                        'iea_volumen' => $iea_volumen, 'iea_pesobruto' => $empaque['pesobruto'], 'iea_pesoneto' => $iea_pesoneto, 'iea_tara' => $iea_tara]);
+
+      $ipa_undten = $producto['cantemb']*$patron['cajten'];
+      $ipa_undest = $producto['cantemb']*$patron['cajten']*$patron['tenest'];
+      $ipa_caest = $patron['cajten']*$patron['tenest'];
+
+      ItemPatron::where('ipa_item', $producto['item'])
+                ->update(['ipa_numtendidos' => $patron['numtendidos'], 'ipa_cajten' => $patron['cajten'], 'ipa_tenest' => $patron['tenest'],
+                 'ipa_undten' => $ipa_undten, 'ipa_undest' => $ipa_undest, 'ipa_caest' => $ipa_caest]);
+
+      DesarrolloCtrl::update($producto['proy'], $producto['act']);
+
+      $url = url('pricat/desarrolloactividades');
+
+      return response($url, 200);
     }
 }

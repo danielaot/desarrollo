@@ -27,7 +27,7 @@ class Paso7Controller extends Controller
 
         $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item');
 
-        return view('layouts.pricat.actividades.paso7', $response);
+        return view('layouts.pricat.actividades.paso7edit', $response);
     }
 
     public function getInfo(Request $request)
@@ -64,11 +64,31 @@ class Paso7Controller extends Controller
         $itemdet->ide_descorta = $request->descorta;
         $itemdet->ide_deslarga = $request->deslogyca;
         $itemdet->ide_descompleta = $request->desbesa;
+        $itemdet->ide_uso = $request['uso']['id'];
+        $itemdet->ide_marca = $request['marca']['mar_nombre'];
+        $itemdet->ide_variedad = $request->varserie;
+        $itemdet->ide_contenido = $request->contenido;
+        $itemdet->ide_umcont = $request->contum;
         $itemdet->save();
-
         DesarrolloCtrl::update($request->proy, $request->act);
 
         $url = url('pricat/desarrolloactividades');
         return response($url, 200);
+    }
+
+    public function edit(Request $request, $proy){
+
+      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $titulo = 'Confirmación de descripciones';
+      $idproyecto = $proy;
+      $idactividad = $request->act;
+
+      $item = Item::with('detalles.uso','eanes')
+                  ->where('ite_proy', $idproyecto)
+                  ->get()->first();
+
+      $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item');
+
+      return view('layouts.pricat.actividades.paso7edit', $response);
     }
 }

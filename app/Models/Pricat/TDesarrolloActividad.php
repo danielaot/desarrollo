@@ -16,7 +16,8 @@ class TDesarrolloActividad extends Model
         'dac_fecha_inicio',
         'dac_fecha_cumplimiento',
         'dac_usuario',
-        'dac_estado'
+        'dac_estado',
+        'dac_rechazo'
     ];
 
     public function actividades()

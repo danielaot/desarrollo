@@ -61,28 +61,45 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('workflow', 'Pricat\DesarrolloActividadesController@workflow');
     Route::get('workflowinfo', 'Pricat\DesarrolloActividadesController@getInfo');
 
+    Route::get('desarrolloactividadesGetInfo', 'Pricat\DesarrolloActividadesController@desarrolloactividadesGetInfo');
+    Route::post('desarrolloactividades', 'Pricat\DesarrolloActividadesController@store');
+    Route::get('editactividades', 'Pricat\DesarrolloActividadesController@edit');
+
+    Route::get('rechazoactividades', 'Pricat\RechazoActividadesController@index');
+    Route::get('rechazoactividadesGetInfo', 'Pricat\RechazoActividadesController@getInfo');
+    Route::post('rechazoactividades', 'Pricat\RechazoActividadesController@updateEstado');
+
     Route::resource('notificacionsanitaria', 'Pricat\NotificacionSanitariaController');
     Route::post('notificacionsanitariaupdate', 'Pricat\NotificacionSanitariaController@update');
     Route::get('notificacionsanitariainfo', 'Pricat\NotificacionSanitariaController@getInfo');
 
-    Route::resource('paso1', 'Pricat\Paso1Controller', ['only' => ['index', 'store']]);
+    Route::resource('paso1', 'Pricat\Paso1Controller');
     Route::get('paso1info', 'Pricat\Paso1Controller@getInfo');
+    Route::get('paso1/{proy}/{act}',  'Pricat\Paso1Controller@edit');
+    Route::post('paso1', 'Pricat\Paso1Controller@editProducto');
 
     Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
 
     Route::get('paso3', ['uses' => 'Pricat\Paso3Controller@index', 'as' => 'paso3.index']);
 
-    Route::resource('paso4', 'Pricat\Paso4Controller', ['only' => ['index', 'update']]);
+    Route::resource('paso4', 'Pricat\Paso4Controller');
+    Route::get('paso4/{proy}/{act}',  'Pricat\Paso4Controller@edit');
+    Route::put('paso4/{proy}/{act}',  'Pricat\Paso4Controller@editPosicion');
 
-    Route::resource('paso5', 'Pricat\Paso5Controller', ['only' => ['index', 'update']]);
+    Route::resource('paso5', 'Pricat\Paso5Controller');
+    Route::get('paso5/{proy}/{act}',  'Pricat\Paso5Controller@edit');
+    Route::put('paso5/{proy}/{act}',  'Pricat\Paso5Controller@editGrupo');
 
     Route::resource('paso6', 'Pricat\Paso6Controller');
     Route::post('paso6update', 'Pricat\Paso6Controller@update');
     Route::get('paso6info', 'Pricat\Paso6Controller@getInfo');
     Route::post('uploaditems', 'Pricat\Paso6Controller@upload');
+    Route::get('paso6/{proy}/{act}',  'Pricat\Paso6Controller@edit');
+    Route::post('paso6update', 'Pricat\Paso6Controller@editMedidas');
 
     Route::resource('paso7', 'Pricat\Paso7Controller');
     Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');
+    Route::post('paso7', 'Pricat\Paso7Controller@update');
 
     Route::resource('paso8', 'Pricat\Paso8Controller');
 

@@ -1,13 +1,18 @@
 app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', function($scope, $http, $window, $mdDialog){
-  $scope.getUrl = 'paso6info';
-  $scope.url = 'paso6update';
+  $scope.getUrl = '../../paso6info';
+  $scope.url = '../../paso6update';
 
-  $http.get($scope.getUrl).then(function(response){
-    var info = response.data;
-    $scope.tempaque = angular.copy(info.tempaque);
-    $scope.tembalaje = angular.copy(info.tembalaje);
-    $scope.cmanipulacion = angular.copy(info.cmanipulacion);
-  });
+  $scope.getInfo =  function(){
+    $http.get($scope.getUrl).then(function(response){
+      var info = response.data;
+      console.log(info);
+      $scope.tempaque = angular.copy(info.tempaque);
+      $scope.tembalaje = angular.copy(info.tembalaje);
+      $scope.cmanipulacion = angular.copy(info.cmanipulacion);
+    });
+  }
+
+  $scope.getInfo();
 
   /*var previewNode = document.getElementById("template");
   previewNode.id = "";
@@ -87,4 +92,18 @@ app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', functio
       );
     }
   }
+
+  $scope.editProducto = function(){
+
+      var object = {};
+      object.producto = $scope.producto;
+      object.empaque =  $scope.empaque;
+      object.patron = $scope.patron;
+      object.image = $scope.imagen;
+
+      $http.post($scope.url, object).then(function(response){
+        $scope.getInfo();
+        $window.location = response.data;
+  });
+}
 }]);

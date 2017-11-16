@@ -188,4 +188,14 @@ class TItemDetalle extends Model
   	{
   		  return $this->hasOne('App\Models\BESA\AppwebGrupoimpo', 'cod_grupoimpo', 'ide_grupoimpositivo');
   	}
+
+    public function clase()
+    {
+      return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_clase');
+    }
+
+    public function itemean()
+    {
+      return $this->hasOne('App\Models\Pricat\TItemEan', 'iea_item', 'ide_item');
+    }
 }

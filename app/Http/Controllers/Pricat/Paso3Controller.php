@@ -21,8 +21,10 @@ class Paso3Controller extends Controller
                                    ->get()->first();
 
         if(count($listamat) > 0)
-          DesarrolloCtrl::update($request->proy, $request->act);
+         DesarrolloCtrl::update($request->proy, $request->act);
 
-        return redirect('pricat/desarrolloactividades');
+         return redirect('pricat/desarrolloactividades');
+        // DesarrolloCtrl::update($request->proy, $request->act);
+        // return (DesarrolloCtrl::update($request->proy, $request->act));
     }
 }

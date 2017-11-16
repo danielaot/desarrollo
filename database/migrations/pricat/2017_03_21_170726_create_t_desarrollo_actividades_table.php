@@ -26,6 +26,7 @@ class CreateTDesarrolloActividadesTable extends Migration
             $table->date('dac_fecha_inicio')->nullable();
             $table->date('dac_fecha_cumplimiento')->nullable();
             $table->string('dac_usuario', 20)->nullable();
+            $table->string('dac_rechazo', 20)->nullable();
             $table->enum('dac_estado', ['En Proceso','Pendiente','Completado'])->default('Pendiente');
             $table->timestamps();
         });

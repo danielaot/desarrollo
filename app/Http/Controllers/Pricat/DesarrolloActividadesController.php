@@ -14,6 +14,10 @@ use App\Models\Aplicativos\User;
 use App\Models\Pricat\TDesarrolloActividad as Desarrollo;
 use App\Models\Pricat\TPredecesora as ActPre;
 use App\Models\Pricat\TProyecto as Proyecto;
+use App\Models\Pricat\TActividad as Actividad;
+use App\Models\Pricat\TRechazos as Rechazo;
+
+
 
 class DesarrolloActividadesController extends Controller
 {
@@ -22,17 +26,55 @@ class DesarrolloActividadesController extends Controller
         $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
         $titulo = 'Desarrollo de Actividades';
 
-        $desarrollos = Desarrollo::with('proyectos', 'actividades')
-                                 ->where('dac_estado', "En Proceso")
-                                 ->whereHas('actividades.areas.responsables', function ($query) {
-                                            $query->where('res_usuario', Auth::user()->idTerceroUsuario);
-                                        })
-                                 ->get()
-                                 ->groupBy('dac_proy_id');
-
-        $response = compact('ruta', 'titulo','desarrollos');
+        $response = compact('ruta', 'titulo');
 
         return view('layouts.pricat.actividades.indexDesarrollo', $response);
+    }
+
+    public function desarrolloactividadesGetInfo(){
+
+      $desarrollos = Desarrollo::with('proyectos', 'actividades.predecesoras')
+                                ->where('dac_estado', "En Proceso")
+                                ->whereHas('actividades.areas.responsables', function ($query) {
+                                            $query->where('res_usuario', Auth::user()->idTerceroUsuario);
+                                          })
+                               ->get()
+                               ->groupBy('dac_proy_id');
+
+      foreach ($desarrollos as $key => $value) {
+        $collection = collect($value);
+        $value = $collection->map(function($item, $key2){
+          $act = $item->dac_act_id;
+          $proy = $item->dac_proy_id;
+          if ($item['dac_rechazo'] == null) {
+            $url = route($item['actividades']['act_plantilla'] . ".index", ['proy' => $proy, 'act' => $act ]);
+           }else{
+             $url = route($item['actividades']['act_plantilla'] . ".edit", ['proy' => $proy, 'act' => $act ]);
+           }
+           $item->url = $url;
+        });
+      }
+
+      $actividades = Actividad::with('predecesoras')
+                              ->get();
+
+      $response = compact('desarrollos', 'actividades');
+      return response()->json($response);
+
+    }
+
+    public function store(Request $request){
+
+      $rechazos = new Rechazo;
+      foreach ($request->selected as $key => $value) {
+        $idActividad = $value['id'];
+      }
+      $rechazos->rec_id_proy = $request->proyecto;
+      $rechazos->rec_id_act = $idActividad;
+      $rechazos->rec_observacion = $request->observacion;
+      $rechazos->save();
+
+      return response()->json($rechazos->save());
     }
 
     public static function update($proy, $act)
@@ -54,9 +96,8 @@ class DesarrolloActividadesController extends Controller
 
           $actividad['proyecto'] = $proyecto['proy_nombre'];
           $usuarios = $actividad['actividades']['areas']['responsables']->pluck('usuarios.dir_txt_email');
-          Mail::to($usuarios)->send(new DesarrolloActividad($actividad));
+          //Mail::to($usuarios)->send(new DesarrolloActividad($actividad));
         }
-
         return $desarrollo;
     }
 

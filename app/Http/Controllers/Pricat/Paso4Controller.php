@@ -52,4 +52,50 @@ class Paso4Controller extends Controller
 
       return redirect('pricat/desarrolloactividades');
     }
+
+    public function edit(Request $request, $proy){
+
+      $act = $request->act;
+      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+
+      $titulo = 'Editar Asignación de Posición Arancelaria';
+
+      $item = Item::with('detalles.categoria','detalles.linea','tipo')
+                  ->where('ite_proy', $proy)
+                  ->get()->first();
+      $idItem = $item['id'];
+
+      $itemDet = ItemDetalle::where('ide_item', $idItem)
+                 ->get();
+
+      $idPosAran = $itemDet[0]['ide_posarancelaria'];
+
+      $posarancelaria = Posarancelaria::all();
+      $posaran = Posarancelaria::where('id_pos_arancelaria', $idPosAran)
+                                       ->get();
+
+      return view('layouts.pricat.actividades.paso4edit', compact('ruta', 'titulo', 'proy' ,'act' ,'item','itemDet', 'posarancelaria', 'posaran'));
+    }
+
+    public function editPosicion(Request $request, $id)
+    {
+      $validationRules = [
+        'arancelaria' => 'required'
+      ];
+
+      $validator = Validator::make($request->all(), $validationRules);
+
+      if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()]);
+      }
+
+      ItemDetalle::where('ide_item', $id)
+                 ->update(['ide_posarancelaria' => $request->arancelaria]);
+
+      DesarrolloCtrl::update($request->proy, $request->act);
+
+      return redirect('pricat/desarrolloactividades');
+
+      return ("ENTRADA EXITOSA");
+    }
 }

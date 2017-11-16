@@ -1,35 +1,72 @@
 app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog', function($scope, $window, $http, $filter, $mdDialog){
-  $scope.getUrl = 'paso1info';
-  $scope.url = 'paso1';
+  $scope.getUrl = '../../paso1info';
+  $scope.url = '../../paso1';
   //$scope.pattern = '[a-zA-Z0-9\s]+';
+  $scope.itemdet;
   $scope.progress = true;
 
-  $http.get($scope.getUrl).then(function(response){
-    var info = response.data;
-    $scope.vocabas = angular.copy(info.vocabas);
-    $scope.catlogyca = $filter('orderBy')(angular.copy(info.catlogyca), 'tcl_descripcion');
-    $scope.marcas = angular.copy(info.marcas);
-    $scope.origen = angular.copy(info.origen);
-    $scope.clase = angular.copy(info.clase);
-    $scope.tipomarca = angular.copy(info.tipomarca);
-    $scope.tipooferta = angular.copy(info.tipooferta);
-    $scope.menupromociones = angular.copy(info.menupromociones);
-    $scope.tipopromocion = angular.copy(info.tipopromocion);
-    $scope.presentacion = angular.copy(info.presentacion);
-    $scope.variedad = angular.copy(info.variedad);
-    $scope.categoria = angular.copy(info.categoria);
-    $scope.linea = angular.copy(info.linea);
-    $scope.sublinea = angular.copy(info.sublinea);
-    $scope.sublinmercadeo = angular.copy(info.sublinmercadeo);
-    $scope.sublinmercadeo2 = angular.copy(info.sublinmercadeo2);
-    $scope.submarca = angular.copy(info.submarca);
-    $scope.regalias = angular.copy(info.regalias);
-    $scope.segmento = angular.copy(info.segmento);
-    $scope.acondicionamiento = angular.copy(info.acondicionamiento);
-    $scope.nomtemporada = angular.copy(info.nomtemporada);
-    $scope.items = angular.copy(info.items);
-    $scope.progress = false;
-  });
+  $scope.getInfo = function (){
+    $http.get($scope.getUrl).then(function(response){
+      var info = response.data;
+      $scope.vocabas = angular.copy(info.vocabas);
+      $scope.catlogyca = $filter('orderBy')(angular.copy(info.catlogyca), 'tcl_descripcion');
+      $scope.marcas = angular.copy(info.marcas);
+      $scope.origen = angular.copy(info.origen);
+      $scope.clase = angular.copy(info.clase);
+      $scope.tipomarca = angular.copy(info.tipomarca);
+      $scope.tipooferta = angular.copy(info.tipooferta);
+      $scope.menupromociones = angular.copy(info.menupromociones);
+      $scope.tipopromocion = angular.copy(info.tipopromocion);
+      $scope.presentacion = angular.copy(info.presentacion);
+      $scope.variedad = angular.copy(info.variedad);
+      $scope.categoria = angular.copy(info.categoria);
+      $scope.linea = angular.copy(info.linea);
+      $scope.sublinea = angular.copy(info.sublinea);
+      $scope.sublinmercadeo = angular.copy(info.sublinmercadeo);
+      $scope.sublinmercadeo2 = angular.copy(info.sublinmercadeo2);
+      $scope.submarca = angular.copy(info.submarca);
+      $scope.regalias = angular.copy(info.regalias);
+      $scope.segmento = angular.copy(info.segmento);
+      $scope.acondicionamiento = angular.copy(info.acondicionamiento);
+      $scope.nomtemporada = angular.copy(info.nomtemporada);
+      $scope.items = angular.copy(info.items);
+      // inicio edit
+      $scope.producto.uso = angular.copy($scope.itemdet[0].uso);
+      $scope.producto.marca = $filter('filter')($scope.marcas, {mar_nombre : $scope.itemdet[0].ide_marca})[0];
+      //angular.copy($scope.itemdet[0].ide_marca);
+      $scope.producto.variedad = [];
+      angular.forEach(angular.copy($scope.itemdet[0].ide_variedad), function(value, key) {
+        var variedad = $filter('filter')($scope.vocabas, {id : value})[0];
+        $scope.producto.variedad.push(variedad);
+      });
+      $scope.producto.contenido = parseInt(angular.copy($scope.itemdet[0].ide_contenido), 10);
+      $scope.producto.contum = angular.copy($scope.itemdet[0].ide_umcont);
+      $scope.producto.deslogyca = angular.copy($scope.itemdet[0].ide_deslarga);
+      $scope.producto.desbesa = angular.copy($scope.itemdet[0].ide_descompleta);
+      $scope.producto.descorta = angular.copy($scope.itemdet[0].ide_descorta);
+      $scope.producto.catlogyca = angular.copy($scope.itemdet[0].logcategorias);
+      $scope.producto.embalaje = angular.copy($scope.itemdet[0].itemean.iea_cantemb);
+      $scope.producto.origen = angular.copy($scope.itemdet[0].origen);
+      $scope.producto.tipomarca = angular.copy($scope.itemdet[0].tipomarcas);
+      $scope.producto.variedadbesa = angular.copy($scope.itemdet[0].variedad);
+      $scope.producto.linea = angular.copy($scope.itemdet[0].linea);
+      $scope.producto.sublinmercadeo = angular.copy($scope.itemdet[0].submercadeo);
+      $scope.producto.submarca = angular.copy($scope.itemdet[0].submarca);
+      $scope.producto.clase = angular.copy($scope.itemdet[0].clase);
+      $scope.producto.presentacion = angular.copy($scope.itemdet[0].presentacion);
+      $scope.producto.sublinea = angular.copy($scope.itemdet[0].sublinea);
+      $scope.producto.sublinmercadeo2 = angular.copy($scope.itemdet[0].submercadeo2);
+      $scope.producto.regalias = angular.copy($scope.itemdet[0].regalias);
+      var fecha = new Date($scope.itemdet[0].items.ite_dat_captura);
+      fecha = fecha.getTime() + fecha.getTimezoneOffset()*60*1000;
+      $scope.itemdet[0].items.ite_dat_captura = new Date(fecha);
+      $scope.captura = $scope.itemdet[0].items.ite_dat_captura;
+      //fin edit
+      $scope.progress = false;
+    });
+  }
+
+$scope.getInfo();
 
   $scope.hoy = new Date();
   $scope.producto = {
@@ -227,11 +264,35 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     else{
       $scope.progress = true;
       $scope.producto.captura = new Date($scope.captura).toDateString();
-
       $http.post($scope.url, $scope.producto).then(function(response){
         $scope.progress = false;
         $window.location = response.data;
       }, function(){});
     }
   }
+
+  $scope.editProducto = function(ev){
+    if($scope.producto.descorta.length > 18 || $scope.producto.deslogyca.length > 40){
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('.interno')))
+          .clickOutsideToClose(true)
+          .title('')
+          .textContent('Revisar las descripciones antes de continuar')
+          .ariaLabel('Descripciones')
+          .ok('Aceptar')
+          .targetEvent(ev)
+      );
+    }
+    else{
+    //  $scope.progress = true;
+      $scope.producto.captura = new Date($scope.captura).toDateString();
+      console.log($scope.producto);
+      $http.post($scope.url, $scope.producto).then(function(response){
+        $scope.progress = false;
+        //$window.location = response.data;
+      }, function(){});
+    }
+  }
+
 }]);

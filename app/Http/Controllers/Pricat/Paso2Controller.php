@@ -115,6 +115,7 @@ class Paso2Controller extends Controller
           DesarrolloCtrl::update($request->proy, $request->act);
 
           $url = url('pricat/desarrolloactividades');
+
           return response($url, 200);
         }
     }
