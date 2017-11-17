@@ -4,8 +4,9 @@ namespace App\Http\Controllers\tccws;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\wms\UPL_ORDERS;
+use App\Models\SCPRD\VInformacionEmpaqueFacturaDoctos as FactuClientes;
 use Carbon\Carbon;
+use App\Models\Genericas\Tercero;
 
 class tccwsController extends Controller
 {
@@ -29,32 +30,26 @@ class tccwsController extends Controller
      */
     public function agrupaPedidosGetInfo()
     {
-        // F47 se consulta distinto el cliente
-        $fecha = Carbon::now()->subDays(1);
-        $pedidos = UPL_ORDERS::select('A01', 'A09', 'A08', 'A22', 'A29', 'A07')
-        ->with('infoFactura')
-        ->take(1000)
-        ->where('KEY5', '<>', 'MASTER')
-        ->where('F01', '>', $fecha)
-        ->get();
+        $facturas = FactuClientes::select('fecha_remesa' ,'num_factura', 'tipo_docto', 'num_consecutivo', 'nom_tercero', 'num_sucursal', 'desc_sucursal', 'nit_tercero')->whereNull('fecha_remesa')->where('date_creacion', '>', '11-08-2017')->orderBy('num_factura')->get();
+        $agrupoCliente = $facturas->groupBy('nit_tercero');
+        $soloCliente = $agrupoCliente->keys()->all();
+        $terceros = Tercero::whereIn('idTercero', $soloCliente)->get();
 
-        $pedidosConcliente = [];
-        $pedidosSinCliente = [];
+        $sucursales = [];
+        foreach ($agrupoCliente as $key => $value) {
+            $agrupoSucursal = collect($value)->groupBy('num_sucursal');
+            foreach ($agrupoSucursal as $key => $value) {
+                $sucu['codigo'] = $key;
+                $sucu['nombre'] = $value[0]['desc_sucursal'];
+                $sucu['nit_tercero'] = $value[0]['nit_tercero'];
+                array_push($sucursales, $sucu);
 
-        foreach ($pedidos as $key => $value) {
-            if($value['infoFactura'] == null){
-                array_push($pedidosSinCliente, $value);
-            }elseif($value['infoFactura'] != null){
-                array_push($pedidosConcliente, $value['infoFactura']);
             }
         }
 
-
-        
-
-        $pedidosConcliente = collect($pedidosConcliente)->groupBy('f_nit_tercero');
-        $response = compact('pedidosConcliente', 'pedidosSinCliente');
+        $response = compact('agrupoCliente', 'terceros', 'soloCliente', 'sucursales');
         return response()->json($response);
+
     }
 
 
