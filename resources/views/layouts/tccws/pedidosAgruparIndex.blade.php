@@ -30,7 +30,7 @@
 				<select ng-model="cliente" class="form-control" ng-options="ter.razonSocialTercero for ter in terceros track by ter.idTercero">
 					<option value="">Seleccione...</option>
 				</select>
-			</div>	
+			</div>
 		</div>
 		<div ng-if="cliente != undefined" class="col-sm-12">
 			<div class="form-group">
@@ -41,14 +41,14 @@
 		                   data-md-container-class="selectdemoSelectHeader"
 		                   multiple>
 		          <md-optgroup label="sucu.codigo">
-		            <md-option ng-value="sucu.codigo" ng-repeat="sucu in  getSucursales() |
+		            <md-option ng-value="sucu.codigo" ng-model="sucursalesArray" ng-change="onChangeSucursales(sucu)" ng-repeat="sucu in  getSucursales() |
 		              filter:searchTerm">@{{sucu.nombre}}</md-option>
 		          </md-optgroup>
 		        </md-select>
 		      </md-input-container>
 
 			</div>
-			
+
 		</div>
 		<div class="col-sm-12">
 		 	<div class="form-group">
@@ -56,9 +56,9 @@
 		 	</div>
 		</div>
 	</div>
-	
+
 	@{{agrupoCliente[cliente.idTercero]}}
-<!-- 
+<!--
 	<md-toolbar md-scroll-shrink>
 	    <div class="md-toolbar-tools">Pendientes envio TCC</div>
 	  </md-toolbar>

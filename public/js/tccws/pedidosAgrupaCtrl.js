@@ -2,13 +2,17 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 	$scope.urlGetInfo = "agrupaPedidosGetInfo";
 	$scope.progress = true;
 	$scope.sucursal = {};
+	$scope.sucursalesArray = {};
 
 	$scope.getInfo = function(){
 		$http.get($scope.urlGetInfo).then(function(response){
-			data = response.data;		
-			$scope.agrupoCliente = angular.copy(data.agrupoCliente);	
+			data = response.data;
+			$scope.agrupoCliente = angular.copy(data.agrupoCliente);
 			$scope.terceros = angular.copy(data.terceros);
 			$scope.sucursales = angular.copy(data.sucursales);
+			console.log($scope.agrupoCliente);
+			console.log($scope.terceros);
+			console.log($scope.sucursales);
 		}, function(errorResponse){
 			console.log(errorResponse);
 			$scope.getInfo();
@@ -29,6 +33,11 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 		}else{
 			return $filter('filter')($scope.sucursales, {nit_tercero : $scope.cliente.idTercero});
 		}
+	}
+
+	$scope.onChangeSucursales = function(sucursal){
+		console.log(sucursal);
+
 	}
 
 	$scope.retornaListaFiltrada = function(){
