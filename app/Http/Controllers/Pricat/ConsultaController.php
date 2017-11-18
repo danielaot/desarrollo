@@ -26,10 +26,10 @@ class ConsultaController extends Controller
     public function getInfo()
     {
         $proyectos = Proyecto::with('procesos')->get();
-        
-        $referencias =
 
-        $response = compact('proyectos', 'procesos');
+        $referencias = Item::all();
+
+        $response = compact('proyectos', 'referencias');
 
         return response()->json($response);
     }
