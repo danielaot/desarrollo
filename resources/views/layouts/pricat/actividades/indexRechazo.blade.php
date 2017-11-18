@@ -22,7 +22,7 @@
                   <li class="list-group-item">
                     <div class="row">
                       <div class="col-sm-4">
-                        @{{dato.infoCompleta.actividades.act_titulo}}
+                        Actividad
                       </div>
                       <div class="col-sm-4">
                         @{{dato.infoCompleta.actividades.areas.ar_nombre}}

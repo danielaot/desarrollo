@@ -250,7 +250,7 @@ class Paso1Controller extends Controller
     public function edit(Request $request, $proy){
 
       $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
-      $titulo = 'Solicitud Creación Item';
+      $titulo = 'Editar Item';
       $idproyecto = $proy;
       $idactividad = $request->act;
 
@@ -260,17 +260,16 @@ class Paso1Controller extends Controller
       $idItem = $item[0]['id'];
       $ref = $item[0]['ite_referencia'];
 
-      $itemdet = ItemDetalle::where('ide_item', $idItem)
-                            ->with('uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
+
+      $itemdet = ItemDetalle::with('uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
                                    'submercadeo', 'sublinea', 'submarca', 'clase', 'presentacion',
                                    'submercadeo2', 'regalias', 'itemean', 'items')
-                            ->get();
+                                   ->where('ide_item', $idItem)->get();
 
-      return view('layouts.pricat.actividades.paso1edit', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'ref', 'itemdet', 'item'));
+      return view('layouts.pricat.actividades.paso1edit', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'ref', 'itemdet'));
     }
 
     public function editProducto (Request $request){
-
        $validationRules = [
          'proy' => 'required',
          'tipo' => 'required',
@@ -328,59 +327,43 @@ class Paso1Controller extends Controller
 
        $idItem = Item::where('ite_proy', $request->proy)->get();
 
-       $detalle->ide_item = $idItem[0]['id'];
-       $detalle->ide_uso = $request->uso['id'];
-       $detalle->ide_marca = $request->marca['mar_nombre'];
-       $detalle->ide_variedad = $request->varserie;
-       $detalle->ide_contenido = $request->contenido;
-       $detalle->ide_umcont = $request->contum;
-       $detalle->ide_descorta = $request->descorta;
-       $detalle->ide_deslarga = $request->deslogyca;
-       $detalle->ide_descompleta = $request->desbesa;
-       $detalle->ide_catlogyca = $request->catlogyca['id'];
-       $detalle->ide_nomfab = $request->fabricante;
-       $detalle->ide_origen = $request->origen['idItemCriterioMayor'];
-       $detalle->ide_clase = $request->clase['idItemCriterioMayor'];
-       $detalle->ide_tmarca = $request->tipomarca['idItemCriterioMayor'];
-       $detalle->ide_presentacion = $request->presentacion['idItemCriterioMayor'];
-       $detalle->ide_varbesa = $request->variedadbesa['idItemCriterioMayor'];
-       $detalle->ide_categoria = $request->categoria['cat_id'];
-       $detalle->ide_linea = $request->linea['descripcionItemCriterioMayor'];
-       $detalle->ide_sublinea = $request->sublinea['idItemCriterioMayor'];
-       $detalle->ide_sublineamer = $request->sublinmercadeo['idItemCriterioMayor'];
-       $detalle->ide_sublineamer2 = $request->sublinmercadeo2['idItemCriterioMayor'];
-       $detalle->ide_submarca = $request->submarca['idItemCriterioMayor'];
-       $detalle->ide_regalias = $request->regalias['idItemCriterioMayor'];
-       $detalle->ide_toferta = $request->tipooferta ? $request->tipooferta['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_meprom = $request->menupromo ? $request->menupromo['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_tiprom = $request->tipopromo ? $request->tipopromo['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_comp1 = $request->comp1 ? $request->comp1['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp2 = $request->comp2 ? $request->comp2['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp3 = $request->comp3 ? $request->comp3['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp4 = $request->comp4 ? $request->comp4['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp5 = $request->comp5 ? $request->comp5['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp6 = $request->comp6 ? $request->comp6['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp7 = $request->comp7 ? $request->comp7['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_comp8 = $request->comp8 ? $request->comp8['ite_txt_referencia'] : 'No Catalogado';
-       $detalle->ide_segmento = $request->segmento ? $request->segmento['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_clasificacion = $request->clasificacion ? $request->clasificacion['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_acondicionamiento = $request->acondicionamiento ? $request->acondicionamiento['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_nomtemporada = $request->nomtemporada ? $request->nomtemporada['idItemCriterioMayor'] : 'noap';
-       $detalle->ide_anotemporada = $request->anotemporada ? $request->anotemporada : 'No Catalogado';
-       $detalle->save();
+       $ide_toferta = $request->tipooferta ? $request->tipooferta['idItemCriterioMayor'] : 'noap';
+       $ide_meprom = $request->menupromo ? $request->menupromo['idItemCriterioMayor'] : 'noap';
+       $ide_tiprom = $request->tipopromo ? $request->tipopromo['idItemCriterioMayor'] : 'noap';
+       $ide_comp1 = $request->comp1 ? $request->comp1['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp2 = $request->comp2 ? $request->comp2['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp3 = $request->comp3 ? $request->comp3['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp4 = $request->comp4 ? $request->comp4['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp5 = $request->comp5 ? $request->comp5['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp6 = $request->comp6 ? $request->comp6['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp7 = $request->comp7 ? $request->comp7['ite_txt_referencia'] : 'No Catalogado';
+       $ide_comp8 = $request->comp8 ? $request->comp8['ite_txt_referencia'] : 'No Catalogado';
+       $ide_segmento = $request->segmento ? $request->segmento['idItemCriterioMayor'] : 'noap';
+       $ide_clasificacion = $request->clasificacion ? $request->clasificacion['idItemCriterioMayor'] : 'noap';
+       $ide_acondicionamiento = $request->acondicionamiento ? $request->acondicionamiento['idItemCriterioMayor'] : 'noap';
+       $ide_nomtemporada = $request->nomtemporada ? $request->nomtemporada['idItemCriterioMayor'] : 'noap';
+       $ide_anotemporada = $request->anotemporada ? $request->anotemporada : 'No Catalogado';
+       $varserie = $request->varserie;
 
+       $detalle = ItemDetalle::where('ide_item', $idItem[0]['id'])
+                             ->update(['ide_uso' => $request->uso['id'], 'ide_marca' => $request->marca['mar_nombre'], 'ide_variedad' => serialize($request->varserie),
+                                      'ide_contenido' => $request->contenido,'ide_umcont' => $request->contum, 'ide_descorta' => $request->descorta, 'ide_deslarga' => $request->deslogyca,
+                                      'ide_descompleta' => $request->desbesa,'ide_catlogyca' => $request->catlogyca['id'], 'ide_nomfab' => $request->fabricante, 'ide_origen' => $request->origen['idItemCriterioMayor'],
+                                      'ide_clase' => $request->clase['idItemCriterioMayor'], 'ide_tmarca' => $request->tipomarca['idItemCriterioMayor'], 'ide_presentacion' => $request->presentacion['idItemCriterioMayor'],
+                                      'ide_varbesa' => $request->variedadbesa['idItemCriterioMayor'], 'ide_categoria' => $request->categoria['cat_id'], 'ide_linea' => $request->linea['lineas'][0]['idItemCriterioMayor'],
+                                      'ide_sublinea' => $request->sublinea['idItemCriterioMayor'], 'ide_sublineamer' => $request->sublinmercadeo['idItemCriterioMayor'], 'ide_sublineamer2' => $request->sublinmercadeo2['idItemCriterioMayor'],
+                                      'ide_submarca' => $request->submarca['idItemCriterioMayor'], 'ide_regalias' => $request->regalias['idItemCriterioMayor'], 'ide_toferta' => $ide_toferta, 'ide_meprom' => $ide_meprom, 'ide_tiprom' => $ide_tiprom,
+                                      'ide_comp1' => $ide_comp1, 'ide_comp2' => $ide_comp2, 'ide_comp3' => $ide_comp3, 'ide_comp4' => $ide_comp4, 'ide_comp5' => $ide_comp5, 'ide_comp6' => $ide_comp6, 'ide_comp7' => $ide_comp7, 'ide_comp8' => $ide_comp8,
+                                      'ide_segmento' => $ide_segmento, 'ide_clasificacion' => $ide_clasificacion, 'ide_acondicionamiento' => $ide_acondicionamiento, 'ide_nomtemporada' => $ide_nomtemporada, 'ide_anotemporada' => $ide_anotemporada]);
 
-
-       $item_ean = new IEan;
-       $item_ean->iea_item = $item->id;
-       $item_ean->iea_cantemb = $request->embalaje;
-       $item_ean->save();
+      $item_ean = IEan::where('iea_item', $idItem[0]['id'])
+                      ->update(['iea_cantemb' => $request->embalaje]);
 
        $update = DesarrolloCtrl::update($request->proy, $request->act);
 
        $url = url('pricat/desarrolloactividades');
 
-       // $response = compact('update', 'url');
+       $response = compact('update', 'url');
 
        return response($url, 200);
     }

@@ -7,6 +7,7 @@
     @else
       <div ng-controller="paso1Ctrl" ng-cloak>
     @endif
+  <div ng-controller="paso1Ctrl" ng-cloak>
     <form name="paso1Form" ng-submit="paso1Form.$valid && editProducto($event)" class="form-horizontal" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Descripción Interna Logyca</div>

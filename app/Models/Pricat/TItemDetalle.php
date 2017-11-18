@@ -126,7 +126,7 @@ class TItemDetalle extends Model
 
     public function linea()
   	{
-  		  return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_linea')->where('idItemCriterioPlanItemCriterioMayor','300');
+        return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_linea')->where('idItemCriterioPlanItemCriterioMayor','300');
   	}
 
     public function sublinea()

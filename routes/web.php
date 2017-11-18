@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('paso1', 'Pricat\Paso1Controller');
     Route::get('paso1info', 'Pricat\Paso1Controller@getInfo');
     Route::get('paso1/{proy}/{act}',  'Pricat\Paso1Controller@edit');
-    Route::post('paso1', 'Pricat\Paso1Controller@editProducto');
+    Route::post('paso1edit', 'Pricat\Paso1Controller@editProducto');
 
     Route::resource('paso2', 'Pricat\Paso2Controller', ['only' => ['index', 'update']]);
 
@@ -108,6 +108,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('paso10', function () {
         return redirect(url('pricat/generar'));
     })->name('paso10.index');
+
+    Route::resource('consulta', 'Pricat\ConsultaController');
+    Route::get('consultainfo', 'Pricat\ConsultaController@getInfo');
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');

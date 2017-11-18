@@ -12,7 +12,7 @@ app.controller('rechazoactividadCtrl', ['$scope', '$http', '$filter','$window', 
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       $scope.datos = angular.copy(info.datos);
-      //console.log($scope.datos);
+      console.log($scope.datos);
       $scope.actividades = angular.copy(info.actividades);
 
       actividadesMostrar = [];
