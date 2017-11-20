@@ -4,39 +4,59 @@
   @include('includes.titulo')
 
   <div ng-controller="consultaCtrl" ng-cloak>
-    <div class="panel-default">
-      <hr>
-      <div class="row">
-        <label class="col-sm-1 control-label">Referencia:</label>
-        <div class="col-sm-6">
-          <md-chips ng-model="consultaref" md-autocomplete-snap
-             md-transform-chip="transformChip($chip)"
-             md-on-add="onAddReferencia($chip)"
-             md-on-remove="onRemoveReferencia($chip)"
-             md-require-match="autocompleteDemoRequireMatch">
-             <md-autocomplete
-                 md-selected-item="selectedItem"
-                 md-search-text="colaboradorText"
-                 md-items="item in onSearchQueryChange(colaboradorText) | map: filtrarVendedorZona | remove: undefined"
-                 md-item-text="(solicitud.tipopersona1.tpe_id == 1) ? ['Z'+item.scz_zon_id, item.scl_nombre].join(' - ') : [item.scl_cli_id, item.scl_nombre].join(' - ')"
-                 md-min-length="1"
-                 md-no-cache="true"
-                 placeholder="Buscar una referencia">
-               <span md-highlight-text="searchText">@{{(solicitud.tipopersona1.tpe_id == 1) ? ['Z'+item.scz_zon_id, item.scl_nombre].join(' - ') : [item.scl_cli_id, item.scl_nombre].join(' - ')}}</span>
-             </md-autocomplete>
-            <md-chip-template>
-             <span>
-               @{{(solicitud.tipopersona1.tpe_id == 1) ? ['Z'+$chip.scz_zon_id, $chip.scl_nombre].join(' - ') : [$chip.scl_cli_id, $chip.scl_nombre].join(' - ') }}
-             </span>
-           </md-chip-template>
-         </md-chips>
+    <form name="consultaForm" ng-submit="consultaForm.$valid && consultaReferencia($event)" class="form-horizontal" novalidate>
+      <div class="panel-default">
+        <hr>
+        <div class="row">
+          <label class="col-sm-1 control-label">Referencia:</label>
+          <div class="col-sm-6">
+            <md-chips ng-model="consultaref" md-autocomplete-snap
+               md-transform-chip="transformChip($chip)"
+               md-on-add="onAddReferencia($chip)"
+               md-on-remove="onRemoveReferencia($chip)"
+               md-require-match="autocompleteDemoRequireMatch">
+               <md-autocomplete md-search-text="referenciasSearchText"
+                               md-items="referencia in referenciasSearch(referenciasSearchText)"
+                               md-item-text="referencia.ite_referencia"
+                               md-no-cache="true"
+                               md-min-length="0">
+                  <md-item-template>
+                    <span md-highlight-text="referenciasSearchText">@{{referencia.ite_referencia}}</span>
+                  </md-item-template>
+                </md-autocomplete>
+              <md-chip-template>
+                <span>@{{$chip.ite_referencia}}</span>
+             </md-chip-template>
+           </md-chips>
+          </div>
+          <button type="submit" class="btn btn-primary">Consultar</button>
         </div>
-        <button type="submit" class="btn btn-primary">Consultar</button>
+        <hr>
+        <div class="form-group">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Referencia</th>
+                <th>Registro Sanitario</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody ng-if="ref !== undefined">
+              <tr ng-repeat ="referencia in ref">
+                <td>@{{referencia.ite_referencia}}</td>
+                <td>@{{referencia.detalles.notificacionsanitaria.nosa_notificacion}}</td>
+                <td>
+                  <button type="button" class="btn btn-info btn-sm glyphicon glyphicon-eye-open" ng-click="showTabDialog($event)"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 @endsection
 
-@push('script_angularjs')
+@push('script_data_table')
   <script src="{{url('/js/pricat/consultaCtrl.js')}}" type="text/javascript" language="javascript"></script>
 @endpush

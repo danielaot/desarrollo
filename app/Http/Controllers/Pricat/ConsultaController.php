@@ -11,7 +11,7 @@ use App\Models\Pricat\TProyecto as Proyecto;
 use App\Models\Pricat\TProceso as Proceso;
 use App\Models\Pricat\TDesarrolloActividad as Desarrollo;
 use App\Models\Pricat\TItem as Item;
-use App\Models\Pricat\TItemDetalle as TItemDetalle;
+use App\Models\Pricat\TItemDetalle as ItemDetalle;
 
 class ConsultaController extends Controller
 {
@@ -27,10 +27,16 @@ class ConsultaController extends Controller
     {
         $proyectos = Proyecto::with('procesos')->get();
 
-        $referencias = Item::all();
+        $referencias = Item::with('detalles.notificacionsanitaria')->get();
 
         $response = compact('proyectos', 'referencias');
 
         return response()->json($response);
+    }
+
+    public function consulta(Request $request){
+
+      return response()->json($request);
+
     }
 }

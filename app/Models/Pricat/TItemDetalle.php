@@ -198,4 +198,9 @@ class TItemDetalle extends Model
     {
       return $this->hasOne('App\Models\Pricat\TItemEan', 'iea_item', 'ide_item');
     }
+
+    public function notificacionsanitaria()
+    {
+      return $this->hasOne('App\Models\Pricat\TNotificacionSanitaria', 'id', 'ide_regsan');
+    }
 }

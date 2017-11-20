@@ -111,6 +111,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('consulta', 'Pricat\ConsultaController');
     Route::get('consultainfo', 'Pricat\ConsultaController@getInfo');
+    Route::post('consulta', 'Pricat\ConsultaController@consulta');
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');
