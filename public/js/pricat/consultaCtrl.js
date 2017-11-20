@@ -26,4 +26,12 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
     }
   }
 
+  $scope.onAddReferencia = function(){
+
+  }
+
+  $scope.onRemoveReferencia = function(){
+
+  }
+
 }]);
