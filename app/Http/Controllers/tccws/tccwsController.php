@@ -4,7 +4,8 @@ namespace App\Http\Controllers\tccws;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\SCPRD\VInformacionEmpaqueFacturaDoctos as FactuClientes;
+use App\Models\BESA\VInformacionEmpaqueFacturaDoctos as FactuClientes;
+use App\Models\SCPRD\VInformacionEmpaqueFactura as InfoCargoFactura;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 
@@ -71,7 +72,19 @@ class tccwsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $data = $request->all();
+      $facturasParaRemesas = [];
+      foreach ($data['sucursales'] as $key => $sucursal) {
+        if($sucursal['hasOneOrMoreSelected'] == true){
+          foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
+            array_push($facturasParaRemesas, $factura['num_factura']);
+          }
+        }
+      }
+
+      $dataFacturas = InfoCargoFactura::whereIn('num_factura', $facturasParaRemesas)->get();
+
+      return response()->json($dataFacturas);
     }
 
     /**

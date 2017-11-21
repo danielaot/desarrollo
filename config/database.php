@@ -141,7 +141,7 @@ return [
             'prefix' => '',
         ],
 
-        
+
         'scprd' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_SQL_WMS_HOST', '172.100.103.70'),
@@ -154,6 +154,24 @@ return [
 
 
 
+
+
+
+
+
+        'conectoressiesa' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'bd_conectores_siesa',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+        ],
     ],
 
     /*

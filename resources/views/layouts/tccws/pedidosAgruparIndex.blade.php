@@ -3,6 +3,14 @@
 @section('content')
 @include('includes.titulo')
 <style>
+
+	.btn-success{
+		margin-top: 20px;
+	}
+	.elementOfList{
+		  height: 8vh !important;
+	}
+
 	.md-subheader .md-subheader-inner {
 		background-color: #eceeef;
 		color:#337ab7;
@@ -21,43 +29,115 @@
 		min-height: 3px;
 	}
 </style>
-<div class="container">
+<div class="container-fluid">
 	<div ng-controller="pedidosAgrupaCtrl as ctrl"  layout="column" flex layout-fill ng-cloak>
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="form-group">
-				<label>Seleccionar cliente:</label>
-				<select ng-model="cliente" class="form-control" ng-options="ter.razonSocialTercero for ter in terceros track by ter.idTercero">
-					<option value="">Seleccione...</option>
-				</select>
-			</div>
-		</div>
-		<div ng-if="cliente != undefined" class="col-sm-12">
-			<div class="form-group">
-				 <md-input-container>
-		        <label>Seleccionar sucursal:</label>
-		        <md-select ng-model="sucursal"
-		                   md-on-close="clearSearchTerm()"
-		                   data-md-container-class="selectdemoSelectHeader"
-		                   multiple>
-		          <md-optgroup label="sucu.codigo">
-		            <md-option ng-value="sucu.codigo" ng-model="sucursalesArray" ng-change="onChangeSucursales(sucu)" ng-repeat="sucu in  getSucursales() |
-		              filter:searchTerm">@{{sucu.nombre}}</md-option>
-		          </md-optgroup>
-		        </md-select>
-		      </md-input-container>
+		<form id="frmRemesa" name="frmRemesa" ng-submit="frmRemesa.$valid && enviarRemesa()" >
 
-			</div>
+				<div class="panel panel-default">
+					<div class="panel-body">
 
-		</div>
-		<div class="col-sm-12">
-		 	<div class="form-group">
-				<button ng-if="cliente != undefined" class="btn btn-primary pull-right" ng-click="traerElementos()"><i class="glyphicon glyphicon-search"></i></button>
-		 	</div>
-		</div>
-	</div>
+							<div class="row">
 
-	@{{agrupoCliente[cliente.idTercero]}}
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label>Seleccionar cliente:</label>
+										<select ng-model="cliente" class="form-control" ng-options="ter.razonSocialTercero for ter in terceros track by ter.idTercero">
+											<option value="">Seleccione...</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+
+								<div ng-if="cliente != undefined" class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
+
+									<div class="form-group">
+
+
+										<label>Seleccionar sucursal:</label>
+										<md-select ng-model="cliente.sucursales"
+										ng-change= "onChangeSucursales()"
+										placeholder="Seleccione una o mas sucursales"
+										multiple>
+										<md-optgroup label="Sucursales">
+											<md-option ng-value="sucu" ng-repeat="sucu in  getSucursales() |
+											filter:searchTerm">@{{sucu.nombre}}</md-option>
+										</md-optgroup>
+									</md-select>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
+
+								<div class="panel-group" ng-if="cliente.sucursales != undefined && cliente.sucursales.length > 0">
+									<div class="panel panel-default" ng-repeat="(key, sucursal) in cliente.sucursales ">
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" href="#collapse@{{key}}"> @{{sucursal.nombre}} </a>
+												<div class="pull-right">
+													<md-checkbox ng-change="setSelectAllFacts(sucursal)" ng-model="sucursal.isSelectAll" aria-label="SelectAll"><strong>(@{{("0"+sucursal.cantSeleccionadas).slice(-2)}} / @{{("0"+sucursal.facturas.length).slice(-2)}})</strong></md-checkbox>
+												</div>
+											</h4>
+
+
+
+										</div>
+										<div id="collapse@{{key}}" class="panel-collapse collapse">
+											<div class="panel-body">
+
+												<div class="panel-group" ng-if="sucursal.facturas != undefined && sucursal.facturas.length > 0">
+
+													<div class="panel panel-default elementOfList" ng-repeat="factura in sucursal.facturas">
+														<div class="panel-body">
+															<md-checkbox ng-model="factura.isSelect" ng-change="setSelectedFactura(factura,sucursal)" aria-label="SelectOne">@{{factura.num_factura}}</md-checkbox>
+														</div>
+													</div>
+
+												</div>
+
+												<div class="panel panel-default" ng-if="sucursal.facturas == undefined || sucursal.facturas.length == 0">
+													<div class="panel-body">
+														<center><h4>No hay facturas para esta sucursal</h4></center>
+													</div>
+												</div>
+
+											</div>
+											<!-- <div class="panel-footer">Panel Footer</div> -->
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+
+
+						</div>
+
+						<div class="row" ng-if="cliente.sucursales != undefined && cliente.sucursales.length > 0">
+
+							<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
+
+								<div class="form-group">
+									<div class="pull-right">
+										<button type="submit" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+
+		</form>
+	<!-- @{{agrupoCliente[cliente.idTercero]}} -->
 <!--
 	<md-toolbar md-scroll-shrink>
 	    <div class="md-toolbar-tools">Pendientes envio TCC</div>
@@ -79,10 +159,13 @@
 	    </section>
 
 	  </md-content> -->
+		<div ng-if="progress" class="progress">
+			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+		</div>
 
 	</div>
-@endsection
 </div>
+@endsection
 
 
 @push('script_angularjs')

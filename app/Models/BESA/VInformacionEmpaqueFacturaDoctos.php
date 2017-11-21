@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\SCPRD;
+namespace App\Models\BESA;
 
 use Illuminate\Database\Eloquent\Model;
 
 class VInformacionEmpaqueFacturaDoctos extends Model
 {
-    protected $connection = 'intsce';
+    protected $connection = 'besa';
 
-    protected $table = 'SCPRD.wmwhse1.v_InformacionEmpaqueFactura_doctos';
+    protected $table = 'v_InformacionEmpaqueFactura_Firme';
 
     public $incrementing = false;
 

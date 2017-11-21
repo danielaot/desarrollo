@@ -4,23 +4,18 @@ namespace App\Models\SCPRD;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VInformacionEmpaqueFacturaDoctos extends Model
+class VInformacionEmpaqueFactura extends Model
 {
     protected $connection = 'intsce';
 
-    protected $table = 'SCPRD.wmwhse1.v_InformacionEmpaqueFactura_doctos';
+    protected $table = 'SCPRD.wmwhse1.v_InformacionEmpaqueFactura';
 
     public $incrementing = false;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'tipo_pedido',
-        'num_pedidoOV',
-        'num_pedido',
-        'num_ola',
-        'num_ordenCompra',
-        'num_ordenWms',
+        'fecha_remesa',
         'num_factura',
         'tipo_docto',
         'num_consecutivo',
@@ -38,5 +33,7 @@ class VInformacionEmpaqueFacturaDoctos extends Model
         'notas',
         'date_creacion',
         'nit_tercero',
+        'tipo_empaque',
+        'num_empaque'
     ];
 }
