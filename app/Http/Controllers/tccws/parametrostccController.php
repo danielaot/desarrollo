@@ -5,6 +5,7 @@ namespace App\Http\Controllers\tccws;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use App\Models\tccws\TParametros;
 
 class parametrostccController extends Controller
 {
@@ -87,7 +88,9 @@ class parametrostccController extends Controller
         //
     }
 
-    public function getInfo(){
-        
+    public function parametrostccGetInfo(){
+        $parametros = TParametros::all();
+        $response = compact('parametros');
+        return response()->json($response);
     }
 }
