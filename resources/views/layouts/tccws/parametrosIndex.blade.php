@@ -1,14 +1,46 @@
 @extends('app')
 
 @section('content')
-@include('includes.titulo')
+	@include('includes.titulo')
 
-<div>
-	<h4>HOLAAAAA</h4>
-</div>
+	<div ng-controller="parametrosCtrl">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<button type="button" class="btn btn-success btn-sm">
+          		<i class="glyphicon glyphicon-plus"></i> Crear
+          		<md-tooltip>Agregar
+        		</button><br>
+        		<table datatable="ng" class="row-border hover">
+        		<thead>
+        		<tr>
+					<th>Nombre</th>
+					<th>Valor</th>
+					<th></th>
+				</tr>
+        		</thead>
+        		<tbody>
+        		<tr>
+        			<td class="text-center">Prueba</td>
+        			<td class="text-center">Dato</td>
+        			<td class="text-right">
+        				<button type="button" class="btn btn-warning btn-sm">
+                  		<i class="glyphicon glyphicon-edit"></i>
+                  		<md-tooltip>Editar
+                		</button>
+                		<button type="button" class="btn btn-danger btn-sm">
+                  		<i class="glyphicon glyphicon-trash"></i>
+                  		<md-tooltip>Eliminar
+                		</button>
+        			</td>
+        		</tr>
+        		</tbody>
+        		</table>
+			</div>
+		</div>
+	</div>
 @endsection
 
 
-<!--@push('script_angularjs')
-<script src="{{url('/js/tccws/pedidosAgrupaCtrl.js')}}" type="text/javascript" language="javascript"></script>
-@endpush-->
+@push('script_angularjs')
+<script src="{{url('/js/tccws/parametrostcc.js')}}" type="text/javascript" language="javascript"></script>
+@endpush
