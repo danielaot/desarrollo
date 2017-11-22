@@ -10,7 +10,7 @@ class parametrostccController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *1
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -85,5 +85,9 @@ class parametrostccController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getInfo(){
+        
     }
 }
