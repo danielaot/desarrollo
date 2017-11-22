@@ -91,9 +91,10 @@ class tccwsController extends Controller
         $facturasFilter = collect($dataFacturas)->filter(function($fact) use($factura){
           return $fact['num_factura'] == $factura['num_factura'];
         })->all();
-        //echo "---->";print_r($facturasFilter);exit;
+
         $factura['unidadesEmpaque'] = $facturasFilter;
         return $factura;
+
       });
 
       return response()->json($arrayFactsGroup);
