@@ -73,18 +73,30 @@ class tccwsController extends Controller
     public function store(Request $request)
     {
       $data = $request->all();
+
       $facturasParaRemesas = [];
       foreach ($data['sucursales'] as $key => $sucursal) {
         if($sucursal['hasOneOrMoreSelected'] == true){
           foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
-            array_push($facturasParaRemesas, $factura['num_factura']);
+            array_push($facturasParaRemesas, $factura);
           }
         }
       }
 
-      $dataFacturas = InfoCargoFactura::whereIn('num_factura', $facturasParaRemesas)->get();
+      $IdsfacturasParaRemesas = collect($facturasParaRemesas)->pluck('num_factura')->all();
+      $dataFacturas = InfoCargoFactura::whereIn('num_factura', $IdsfacturasParaRemesas)->groupBy('tipo_empaque')->get();
 
-      return response()->json($dataFacturas);
+      $arrayFactsGroup = collect($facturasParaRemesas)->map(function($factura) use($dataFacturas){
+
+        $facturasFilter = collect($dataFacturas)->filter(function($fact) use($factura){
+          return $fact['num_factura'] == $factura['num_factura'];
+        })->all();
+        //echo "---->";print_r($facturasFilter);exit;
+        $factura['unidadesEmpaque'] = $facturasFilter;
+        return $factura;
+      });
+
+      return response()->json($arrayFactsGroup);
     }
 
     /**
