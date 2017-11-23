@@ -152,13 +152,6 @@ return [
             'prefix' => '',
         ],
 
-
-
-
-
-
-
-
         'conectoressiesa' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
@@ -168,6 +161,21 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+        ],
+
+
+        'conectortccws' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'bd_tccws',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => 'InnoDB',
