@@ -1,6 +1,7 @@
 app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', function ($scope, $http, $filter, $element) {
 	$scope.urlGetInfo = "agrupaPedidosGetInfo";
 	$scope.urlResource = "tccws";
+	$scope.urlPlano = "obtenerPlano";
 	$scope.progress = true;
 	$scope.sucursal = {};
 	$scope.sucursalesArray = {};
@@ -88,7 +89,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 			}
 
 			sucursal.cantSeleccionadas = filterSelected.length;
-			console.log(sucursal.facturas);
+			console.log(factura);
 
 	}
 
@@ -141,7 +142,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 						return sucursal;
 					})
 
-					$http.post($scope.urlResource, $scope.cliente).then(function(response){
+					$http.post($scope.urlPlano, $scope.cliente).then(function(response){
 						console.log(response.data);
 					});
 

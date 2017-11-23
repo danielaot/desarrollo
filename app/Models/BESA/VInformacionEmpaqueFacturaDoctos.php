@@ -8,7 +8,7 @@ class VInformacionEmpaqueFacturaDoctos extends Model
 {
     protected $connection = 'besa';
 
-    protected $table = 'v_InformacionEmpaqueFactura_Firme';
+    protected $table = 'v_InformacionEmpaqueFactura_doctos';
 
     public $incrementing = false;
 

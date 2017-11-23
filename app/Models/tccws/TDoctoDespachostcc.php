@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\tccws;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class tccwsTDoctoDespachostcc
+ * Class TDoctoDespachostcc
  */
 class TDoctoDespachostcc extends Model
 {

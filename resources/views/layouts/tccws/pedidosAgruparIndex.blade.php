@@ -81,7 +81,7 @@
 											<h4 class="panel-title">
 												<a data-toggle="collapse" href="#collapse@{{key}}"> @{{sucursal.nombre}} </a>
 												<div class="pull-right">
-													<md-checkbox ng-change="setSelectAllFacts(sucursal)" ng-model="sucursal.isSelectAll" aria-label="SelectAll"><strong>(@{{("0"+sucursal.cantSeleccionadas).slice(-2)}} / @{{("0"+sucursal.facturas.length).slice(-2)}})</strong></md-checkbox>
+													<md-checkbox ng-change="setSelectAllFacts(sucursal)" ng-model="sucursal.isSelectAll" aria-label="SelectAll"><strong>(@{{("0"+sucursal.cantSeleccionadas).slice(-2)}} / @{{sucursal.facturas.length}})</strong></md-checkbox>
 												</div>
 											</h4>
 

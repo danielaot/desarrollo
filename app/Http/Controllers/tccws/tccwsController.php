@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\BESA\VInformacionEmpaqueFacturaDoctos as FactuClientes;
 use App\Models\SCPRD\VInformacionEmpaqueFactura as InfoCargoFactura;
+use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
+use DB;
+ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
 {
@@ -31,7 +34,14 @@ class tccwsController extends Controller
      */
     public function agrupaPedidosGetInfo()
     {
-        $facturas = FactuClientes::select('fecha_remesa' ,'num_factura', 'tipo_docto', 'num_consecutivo', 'nom_tercero', 'num_sucursal', 'desc_sucursal', 'nit_tercero')->whereNull('fecha_remesa')->where('date_creacion', '>', '11-08-2017')->orderBy('num_factura')->get();
+        $facturas = FactuClientes::select('fecha_remesa' ,
+        'num_factura', 'tipo_docto', 'num_consecutivo',
+        'nom_tercero', 'num_sucursal', 'desc_sucursal',
+        'nit_tercero', 'date_creacion')
+        ->whereNull('fecha_remesa')
+        ->where('date_creacion', '>', '11-08-2017')
+        ->distinct()->orderBy('num_factura')->get();
+
         $agrupoCliente = $facturas->groupBy('nit_tercero');
         $soloCliente = $agrupoCliente->keys()->all();
         $terceros = Tercero::whereIn('idTercero', $soloCliente)->get();
@@ -72,32 +82,81 @@ class tccwsController extends Controller
      */
     public function store(Request $request)
     {
+
+    }
+
+
+    public function getPlano(Request $request){
+
       $data = $request->all();
+      $data['unidades'] = [];
+      $data['documentosReferencia'] = [];
+      $data['estructura'] = EstructuraDocto::all();
+      $data['fechadespacho'] = Carbon::today()->toDateString();
+      $data['generarDocumentos'] = true;
 
       $facturasParaRemesas = [];
+
+      $data['sucursales'] = collect($data['sucursales'])->filter(function($sucuMap){
+        return $sucuMap['hasOneOrMoreSelected'] == true;
+      })->values();
+
       foreach ($data['sucursales'] as $key => $sucursal) {
-        if($sucursal['hasOneOrMoreSelected'] == true){
           foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
             array_push($facturasParaRemesas, $factura);
+          }
+      }
+
+      $IdsfacturasParaRemesas = collect($facturasParaRemesas)->pluck('num_factura')->all();
+      $dataFacturas = InfoCargoFactura::select('tipo_empaque',
+      'num_factura', DB::raw('SUM(num_empaque) as total_empaque'))
+      ->whereIn('num_factura', $IdsfacturasParaRemesas)
+      ->groupBy('num_factura', 'tipo_empaque')
+      ->orderBy('num_factura','tipo_empaque')
+      ->get();
+
+
+      $arrayFactsGroup = collect($facturasParaRemesas)->map(function($factura) use($dataFacturas){
+        $facturasFilter = collect($dataFacturas)->filter(function($fact) use($factura){
+          return $fact['num_factura'] == $factura['num_factura'];
+        })->values();
+        $factura['unidadesEmpaque'] = $facturasFilter;
+        return $factura;
+      });
+
+      $data['facturasSucursales'] = collect($arrayFactsGroup)->groupBy('num_sucursal');
+      $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
+      foreach ($data['sucursales'] as $key => $sucursal) {
+        foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
+
+          array_push($data['documentosReferencia'], array(
+            'tipodocumento' => $factura['tipo_docto'],
+            'numerodocumento' => $factura['num_consecutivo'],
+            'fechadocumento' => Carbon::parse($factura['date_creacion'])->toDateString(),
+          ));
+
+          foreach ($factura['unidadesEmpaque'] as $key => $unidad) {
+            if($unidad['tipo_empaque'] == 'CAJAS'){
+              $sumaCajas += $unidad['total_empaque'];
+            }elseif($unidad['tipo_empaque'] == 'PALETAS'){
+              $sumaPaletas += $unidad['total_empaque'];
+            }elseif($unidad['tipo_empaque'] == 'LIOS') {
+              $sumaLios += $unidad['total_empaque'];
+            }elseif($unidad['tipo_empaque'] == 'PESO'){
+              $sumaPeso += $unidad['total_empaque'];
+            }
           }
         }
       }
 
-      $IdsfacturasParaRemesas = collect($facturasParaRemesas)->pluck('num_factura')->all();
-      $dataFacturas = InfoCargoFactura::whereIn('num_factura', $IdsfacturasParaRemesas)->groupBy('tipo_empaque')->get();
+      array_push($data['unidades'],array("unidad" => "CAJAS", "cantidad" => $sumaCajas));
+      array_push($data['unidades'],array("unidad" => "PALETAS", "cantidad" => $sumaPaletas));
+      array_push($data['unidades'],array("unidad" => "LIOS", "cantidad" => $sumaLios));
+      array_push($data['unidades'],array("unidad" => "PESO", "cantidad" => $sumaPeso));
 
-      $arrayFactsGroup = collect($facturasParaRemesas)->map(function($factura) use($dataFacturas){
 
-        $facturasFilter = collect($dataFacturas)->filter(function($fact) use($factura){
-          return $fact['num_factura'] == $factura['num_factura'];
-        })->all();
+      return response()->json($data);
 
-        $factura['unidadesEmpaque'] = $facturasFilter;
-        return $factura;
-
-      });
-
-      return response()->json($arrayFactsGroup);
     }
 
     /**
