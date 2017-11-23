@@ -5,7 +5,7 @@ namespace App\Http\Controllers\tccws;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use App\Models\tccws\TParametros;
+use App\Models\tccws\TParametros as Parametro;
 
 class parametrostccController extends Controller
 {
@@ -21,7 +21,14 @@ class parametrostccController extends Controller
         $response = compact('ruta', 'titulo');
         return view('layouts.tccws.parametrosIndex', $response);
     }
-    
+        
+    public function getInfo()
+    {
+        $parametros = Parametro::all();
+        $response = compact('parametros');
+        return response()->json($response);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -40,7 +47,12 @@ class parametrostccController extends Controller
      */
     public function store(Request $request)
     {
-      
+        $data = $request->all();
+        $data['par_campoVariable'] = $data['par_campoTcc'];
+        $data['par_grupo'] = "b";
+        $creacion = Parametro::create($data);
+        return response()->json($creacion);
+
     }
 
     /**
@@ -74,7 +86,12 @@ class parametrostccController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $parametro = Parametro::find($id);
+        $data = $request->all();
+        $parametro->par_valor = $data['par_valor'];
+        $parametro->save();
+
+        return response()->json($id);
     }
 
     /**
@@ -85,12 +102,9 @@ class parametrostccController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $parametro = Parametro::find($id);
+        $parametro->delete();
+        return response()->json($parametro->trashed());
     }
 
-    public function parametrostccGetInfo(){
-        $parametros = TParametros::all();
-        $response = compact('parametros');
-        return response()->json($response);
-    }
 }

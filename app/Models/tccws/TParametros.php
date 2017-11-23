@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\tccws;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,7 +25,6 @@ class TParametros extends Model
         'par_grupo'
     ];
 
-    protected $guarded = [];
     protected $dates = ['deleted_at'];
 
 
