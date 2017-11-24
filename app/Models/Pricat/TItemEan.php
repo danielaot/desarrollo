@@ -31,4 +31,9 @@ class TItemEan extends Model
   	{
   		  return $this->belongsTo('App\Models\Pricat\TItem', 'iea_item');
   	}
+
+    public function tembalaje()
+    {
+        return $this->hasOne('App\Models\Pricat\TTipoEmbalaje', 'id', 'iea_temb');
+    }
 }

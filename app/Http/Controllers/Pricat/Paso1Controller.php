@@ -18,6 +18,7 @@ use App\Models\Pricat\TMarca as Marca;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TItemDetalle as ItemDetalle;
 use App\Models\Pricat\TItemEan as IEan;
+ini_set('memory_limit', '-1');
 
 class Paso1Controller extends Controller
 {
@@ -115,10 +116,13 @@ class Paso1Controller extends Controller
             case '953':
                 $nomtemporada = $criterios;
               break;
+            case '120':
+                $estadoref = $criterios;
+              break;
           }
         }
 
-        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'items', 'item', 'itemdet');
+        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'estadoref', 'items', 'item', 'itemdet');
 
         return response()->json($response);
     }
@@ -149,7 +153,8 @@ class Paso1Controller extends Controller
           'sublinmercadeo' => 'required',
           'sublinmercadeo2' => 'required',
           'submarca' => 'required',
-          'embalaje' => 'required'
+          'embalaje' => 'required',
+          'estadoref' => 'required'
         ];
 
         $validator = Validator::make($request->all(), $validationRules);
@@ -193,6 +198,7 @@ class Paso1Controller extends Controller
 
         $detalle = new ItemDetalle;
         $detalle->ide_item = $item->id;
+        $detalle->ide_estadoref = $request->estadoref['idItemCriterioMayor'];
         $detalle->ide_uso = $request->uso['id'];
         $detalle->ide_marca = $request->marca['mar_nombre'];
         $detalle->ide_variedad = $request->varserie;
@@ -231,6 +237,7 @@ class Paso1Controller extends Controller
         $detalle->ide_acondicionamiento = $request->acondicionamiento ? $request->acondicionamiento['idItemCriterioMayor'] : 'noap';
         $detalle->ide_nomtemporada = $request->nomtemporada ? $request->nomtemporada['idItemCriterioMayor'] : 'noap';
         $detalle->ide_anotemporada = $request->anotemporada ? $request->anotemporada : 'No Catalogado';
+        //return response()->json($request->all());
         $detalle->save();
 
         $item_ean = new IEan;
@@ -261,7 +268,7 @@ class Paso1Controller extends Controller
       $ref = $item[0]['ite_referencia'];
 
 
-      $itemdet = ItemDetalle::with('uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
+      $itemdet = ItemDetalle::with('estadoref','uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
                                    'submercadeo', 'sublinea', 'submarca', 'clase', 'presentacion',
                                    'submercadeo2', 'regalias', 'itemean', 'items')
                                    ->where('ide_item', $idItem)->get();

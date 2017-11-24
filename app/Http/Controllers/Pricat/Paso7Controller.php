@@ -27,7 +27,7 @@ class Paso7Controller extends Controller
 
         $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item');
 
-        return view('layouts.pricat.actividades.paso7edit', $response);
+        return view('layouts.pricat.actividades.paso7', $response);
     }
 
     public function getInfo(Request $request)

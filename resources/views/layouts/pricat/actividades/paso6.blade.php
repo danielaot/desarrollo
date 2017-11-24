@@ -2,7 +2,7 @@
 
 @section('content')
   @include('includes.titulo')
-  <div id="medidas" ng-controller="paso6Ctrl" ng-cloak>
+  <div id="medidas" ng-controller="paso6Ctrl" ng-init="getInfo()" ng-cloak>
     <form name="paso6Form" ng-submit="saveProducto()" class="form-horizontal" enctype="multipart/form-data" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Información del Producto</div>
@@ -157,6 +157,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Peso Neto:</label>
                 <div class="col-sm-6 input-group">
+                  <input ng-if="pesoneto == ''"  type="number" class="form-control" ng-model="producto.pesoneto" min="0" required/>
                   <input type="number" class="form-control" ng-model="producto.pesoneto" ng-init="producto.pesoneto = {{$pesoneto}}" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>

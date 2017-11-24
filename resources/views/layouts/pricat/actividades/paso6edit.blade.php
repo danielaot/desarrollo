@@ -2,7 +2,11 @@
 
 @section('content')
   @include('includes.titulo')
-  <div id="medidas" ng-controller="paso6Ctrl" ng-cloak>
+  @if(isset($editando))
+  <div id="medidas" ng-controller="paso6Ctrl" ng-cloak ng-init="editar='{{$editando}}';getInfo();">
+    @else
+        <div id="medidas" ng-controller="paso6Ctrl" ng-cloak>
+    @endif
     <form name="paso6Form" ng-submit="editProducto()" class="form-horizontal" enctype="multipart/form-data" novalidate>
       <div class="panel panel-primary">
         <div class="panel-heading">Información del Producto</div>
@@ -28,7 +32,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Tipo de Embalaje:</label>
                 <div class="col-sm-5">
-                  <select class="form-control" ng-model="producto.tembalaje" ng-options="opt.temb_nombre for opt in tembalaje track by opt.temb_calificador" required>PRUEBA</select>
+                  <select class="form-control" ng-value="{{$itemdet['ide_temp']}}" ng-model="producto.tembalaje" ng-options="opt.temb_nombre for opt in tembalaje track by opt.temb_calificador" required></select>
                 </div>
               </div>
             </div>
@@ -36,7 +40,7 @@
               <div class="row">
                 <label class="col-sm-6 control-label">Tipo de Empaque:</label>
                 <div class="col-sm-5">
-                  <select class="form-control" ng-model="producto.tempaque" ng-options="opt.temp_nombre for opt in tempaque track by opt.temp_calificador" required></select>
+                  <select class="form-control" ng-value="{{$itemdet['tipoempaque']['temp_calificador']}}" name ="{{$itemdet['tipoempaque']['temp_nombre']}}" ng-model="producto.tempaque" ng-options="opt.temp_nombre for opt in tempaque track by opt.temp_calificador" required></select>
                 </div>
               </div>
             </div>

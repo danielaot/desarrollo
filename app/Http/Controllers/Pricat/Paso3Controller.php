@@ -20,11 +20,16 @@ class Paso3Controller extends Controller
         $listamat = ListaMateriales::where('Cod_Item', $item->ite_referencia)
                                    ->get()->first();
 
-        if(count($listamat) > 0)
-         DesarrolloCtrl::update($request->proy, $request->act);
+        if(count($listamat) > 0){
+          DesarrolloCtrl::update($request->proy, $request->act);
+        }else {
+          $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+          $titulo = 'Desarrollo de Actividades';
+          $error = 'Error en este modulo';
+          return view('layouts.pricat.actividades.indexDesarrollo', compact('error', 'ruta', 'titulo'));
+        }
+        return redirect('pricat/desarrolloactividades');
 
-         return redirect('pricat/desarrolloactividades');
-        // DesarrolloCtrl::update($request->proy, $request->act);
-        // return (DesarrolloCtrl::update($request->proy, $request->act));
+
     }
 }

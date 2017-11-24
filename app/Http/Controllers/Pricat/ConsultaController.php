@@ -27,7 +27,14 @@ class ConsultaController extends Controller
     {
         $proyectos = Proyecto::with('procesos')->get();
 
-        $referencias = Item::with('detalles.notificacionsanitaria')->get();
+        $referencias = Item::with('detalles.notificacionsanitaria', 'tipo', 'detalles.uso',
+                                  'detalles.logcategorias', 'detalles.origen', 'detalles.tipomarcas',
+                                  'detalles.variedad', 'detalles.linea', 'detalles.submercadeo',
+                                  'detalles.submarca', 'detalles.clase', 'detalles.presentacion',
+                                  'detalles.categoria', 'detalles.sublinea', 'detalles.submercadeo2',
+                                  'detalles.tipomarcas', 'detalles.posicionarancelaria', 'detalles.grupoimpositivo',
+                                  'eanppal.tembalaje', 'detalles.tipoempaque', 'detalles.condmanipulacion', 'patrones')
+                                  ->get();
 
         $response = compact('proyectos', 'referencias');
 

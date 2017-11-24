@@ -1,7 +1,13 @@
 app.controller('paso7Ctrl', ['$scope', '$http', '$filter', '$window', '$mdDialog', function($scope, $http, $filter, $window, $mdDialog){
-  $scope.getUrl = '../../paso7info';
-  $scope.url = '../../paso7';
-  $scope.producto = {'deslogyca' : '', 'desbesa' : '', 'descorta': ''};
+  if ($scope.producto == undefined) {
+    $scope.getUrl = 'paso7info';
+    $scope.url = 'paso7';
+    $scope.producto = {'deslogyca' : '', 'desbesa' : '', 'descorta': ''};
+  }else {
+    $scope.getUrl = '../../paso7info';
+    $scope.url = '../../paso7';
+    $scope.producto = {'deslogyca' : '', 'desbesa' : '', 'descorta': ''};
+  }
 
   $http.get($scope.getUrl).then(function(response){
     $scope.progress = true;

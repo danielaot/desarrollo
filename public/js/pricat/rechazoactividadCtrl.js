@@ -12,7 +12,6 @@ app.controller('rechazoactividadCtrl', ['$scope', '$http', '$filter','$window', 
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       $scope.datos = angular.copy(info.datos);
-      console.log($scope.datos);
       $scope.actividades = angular.copy(info.actividades);
 
       actividadesMostrar = [];
@@ -28,6 +27,7 @@ app.controller('rechazoactividadCtrl', ['$scope', '$http', '$filter','$window', 
           parar = false;
         }
       });
+      actividadesMostrar.push($scope.dat.infoCompleta.actividades);
       $scope.actividad = actividadesMostrar;
 
       console.log(actividadesMostrar);
@@ -39,10 +39,10 @@ app.controller('rechazoactividadCtrl', ['$scope', '$http', '$filter','$window', 
   $scope.aceptarPaso =  function(dato){
     $scope.dato = dato;
     $http.post($scope.url, $scope.dato).then(function(response){
-      console.log($scope.dato);
       var data = response.data;
-      console.log(data);
       //$window.location = data;
     });
   }
+
+
 }]);

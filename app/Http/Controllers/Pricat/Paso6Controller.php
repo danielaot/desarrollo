@@ -35,17 +35,18 @@ class Paso6Controller extends Controller
         $deslarga = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_deslarga);
 
         $pesoneto = 0;
-
         if($item->ite_tproducto == '1301'){
+
           $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
-                                  ->get()->first();
+                                    ->get()->first();
+          if (count($lista) > 0) {
+            $formula = FormulaMaestra::where('frm_txt_codigounoe', trim($lista->Cod_Item_Componente))
+            ->get()->first();
 
-          $formula = FormulaMaestra::where('frm_txt_codigounoe', trim($lista->Cod_Item_Componente))
-                                   ->get()->first();
+            $densidad = $formula->frm_txt_densidad;
 
-          $densidad = $formula->frm_txt_densidad;
-
-          $pesoneto = $item->detalles['ide_contenido'] * $densidad/1000;
+            $pesoneto = $item->detalles['ide_contenido'] * $densidad/1000;
+          }
         }
 
         $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'descorta', 'deslarga', 'pesoneto');
@@ -183,7 +184,7 @@ class Paso6Controller extends Controller
         $pesoneto = $item->detalles['ide_contenido'] * $densidad/1000;
       }
 
-      $itemdet = ItemDetalle::where('ide_item', $item['id'])
+      $itemdet = ItemDetalle::with('tipoempaque')->where('ide_item', $item['id'])
                             ->get()->first();
 
       $itemean = ItemEan::where('iea_item', $item['id'])
@@ -192,7 +193,8 @@ class Paso6Controller extends Controller
       $itempat = ItemPatron::where('ipa_item', $item['id'])
                               ->get()->first();
 
-      $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'descorta', 'deslarga', 'pesoneto', 'cmanipulacion', 'tempaque', 'tembalaje', 'itemdet', 'itemean', 'itempat');
+      $editando = "Editar";
+      $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'descorta', 'deslarga', 'pesoneto', 'cmanipulacion', 'tempaque', 'tembalaje', 'itemdet', 'itemean', 'itempat', 'editando');
 
       return view('layouts.pricat.actividades.paso6edit', $response);
     }

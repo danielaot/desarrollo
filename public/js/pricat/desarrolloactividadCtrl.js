@@ -1,4 +1,4 @@
-app.controller('desarrolloactividadCtrl', ['$scope', '$http', '$filter',  function($scope, $http, $filter){
+app.controller('desarrolloactividadCtrl', ['$scope', '$http', '$filter', '$mdDialog' , function($scope, $http, $filter, $mdDialog){
   $scope.getUrl = "desarrolloactividadesGetInfo";
   $scope.url = "desarrolloactividades";
   $scope.progress = true;
@@ -8,6 +8,17 @@ app.controller('desarrolloactividadCtrl', ['$scope', '$http', '$filter',  functi
   $scope.objetoEnvio = {};
 
   $scope.getInfo = function(){
+    if ($scope.error != undefined) {
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element(document.querySelector('body')))
+          .clickOutsideToClose(true)
+          .title('')
+          .textContent('La referencia no tiene lista de materiales')
+          .ariaLabel('Errores')
+          .ok('Aceptar')
+      );
+    }
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       $scope.desarrollos = angular.copy(info.desarrollos);
@@ -18,7 +29,6 @@ app.controller('desarrolloactividadCtrl', ['$scope', '$http', '$filter',  functi
       $scope.getInfo();
     })
   }
-  $scope.getInfo();
 
   $scope.regresar = function(objActividad){
 
@@ -59,7 +69,8 @@ app.controller('desarrolloactividadCtrl', ['$scope', '$http', '$filter',  functi
     $scope.objetoEnvio.proyecto = $scope.proyecto.proyectos.id;
      $http.post($scope.url, $scope.objetoEnvio).then(function(response){
        var data = response.data;
-       $scope.regresarForm.$setPristine();
+       angular.element('.close').trigger('click');
      });
   }
+
 }]);

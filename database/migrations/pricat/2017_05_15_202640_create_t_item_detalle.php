@@ -60,6 +60,7 @@ class CreateTItemDetalle extends Migration
       			$table->string('ide_acondicionamiento')->default('noap');
       			$table->string('ide_nomtemporada')->default('noap');
       			$table->string('ide_anotemporada')->default('noap');
+            $table->string('ide_estadoref');
       			$table->string('ide_posarancelaria')->nullable();
       			$table->string('ide_grupoimpositivo')->nullable();
             $table->float('ide_alto', 11, 3);

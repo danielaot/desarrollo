@@ -2,7 +2,11 @@
 
 @section('content')
   @include('includes.titulo')
-  <div class="panel panel-default" ng-controller="desarrolloactividadCtrl" ng-cloak>
+  @if(isset($error))
+  <div class="panel panel-default" ng-controller="desarrolloactividadCtrl" ng-cloak ng-init="error = '{{$error}}';getInfo();">
+    @else
+    <div class="panel panel-default" ng-controller="desarrolloactividadCtrl" ng-cloak ng-init="getInfo();">
+    @endif
     <div class="panel-body">
       <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           <!-- Foreach -->

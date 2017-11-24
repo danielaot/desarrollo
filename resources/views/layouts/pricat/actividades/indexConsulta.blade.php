@@ -46,7 +46,7 @@
                 <td>@{{referencia.ite_referencia}}</td>
                 <td>@{{referencia.detalles.notificacionsanitaria.nosa_notificacion}}</td>
                 <td>
-                  <button type="button" class="btn btn-info btn-sm glyphicon glyphicon-eye-open" ng-click="showTabDialog($event)"></button>
+                  <button type="button" class="btn btn-info btn-sm glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modal1" ng-click="setReferencia(referencia)"></button>
                 </td>
               </tr>
             </tbody>
@@ -54,6 +54,10 @@
         </div>
       </div>
     </form>
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+    </div>
+      @include('layouts.pricat.actividades.detalleReferencia')
   </div>
 @endsection
 

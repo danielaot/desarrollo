@@ -86,11 +86,11 @@ class RechazoActividadesController extends Controller
       $proyecto = Proyecto::find($proy);
 
       $desarrollo = Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $act])
-                              ->update(['dac_fecha_cumplimiento' => $fecha, 'dac_usuario' => Auth::user()->login, 'dac_rechazo' => 'Rechazado', 'dac_estado' => 'En Proceso']);
+                              ->update(['dac_fecha_cumplimiento' => $fecha, 'dac_usuario' => Auth::user()->login, 'dac_estado' => 'En Proceso',  'dac_rechazo' => 'Rechazado']);
 
       $actividaddesp = ActPre::with('actividades.areas.responsables.usuarios','actividadespre.areas.responsables.usuarios')
-                               ->where('pre_act_pre_id', $act)
-                               ->get();
+                              ->where('pre_act_pre_id', $act)
+                              ->get();
 
       foreach($actividaddesp as $actividad){
         Desarrollo::where(['dac_proy_id' => $proy, 'dac_act_id' => $actividad->pre_act_id])
@@ -98,8 +98,12 @@ class RechazoActividadesController extends Controller
 
         $actividad['proyecto'] = $proyecto['proy_nombre'];
         $usuarios = $actividad['actividades']['areas']['responsables']->pluck('usuarios.dir_txt_email');
-        }
+        //Mail::to($usuarios)->send(new DesarrolloActividad($actividad));
       }
+      return $desarrollo;
+
+      }
+
 
     //
     // public function workflow()

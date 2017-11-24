@@ -49,7 +49,7 @@ class Paso8Controller extends Controller
             })
             ->get()->first();
         }
-
+        
         $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'registro', 'componente', 'lista');
 
         return view('layouts.pricat.actividades.paso8', $response);

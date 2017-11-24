@@ -4,7 +4,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     $scope.url = 'paso1';
   }else {
     $scope.getUrl = '../../paso1info';
-    $scope.url = '../../paso1';
+    // $scope.url = '../../paso1';
     $scope.urledit = '../../paso1edit';
   }
   //$scope.pattern = '[a-zA-Z0-9\s]+';
@@ -36,9 +36,11 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
       $scope.acondicionamiento = angular.copy(info.acondicionamiento);
       $scope.nomtemporada = angular.copy(info.nomtemporada);
       $scope.items = angular.copy(info.items);
+      $scope.estadoref = angular.copy(info.estadoref);
 
       // inicio edit
       if ($scope.itemdet !== undefined) {
+        $scope.producto.estadoref = angular.copy($scope.itemdet[0].estadoref);
         $scope.producto.uso = angular.copy($scope.itemdet[0].uso);
         $scope.producto.marca = $filter('filter')($scope.marcas, {mar_nombre : $scope.itemdet[0].ide_marca})[0];
         $scope.producto.variedad = [];
@@ -294,11 +296,11 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
       );
     }
     else{
-    //  $scope.progress = true;
+      $scope.progress = true;
       $scope.producto.captura = new Date($scope.captura).toDateString();
       $http.post($scope.urledit, $scope.producto).then(function(response){
         $scope.progress = false;
-      //  $window.location = response.data;
+        $window.location = response.data;
       }, function(){});
     }
   }

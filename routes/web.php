@@ -95,7 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('paso6info', 'Pricat\Paso6Controller@getInfo');
     Route::post('uploaditems', 'Pricat\Paso6Controller@upload');
     Route::get('paso6/{proy}/{act}',  'Pricat\Paso6Controller@edit');
-    Route::post('paso6update', 'Pricat\Paso6Controller@editMedidas');
+    Route::post('paso6edit', 'Pricat\Paso6Controller@editMedidas');
 
     Route::resource('paso7', 'Pricat\Paso7Controller');
     Route::get('paso7info', 'Pricat\Paso7Controller@getInfo');

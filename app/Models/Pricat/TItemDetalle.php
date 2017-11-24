@@ -56,7 +56,8 @@ class TItemDetalle extends Model
         'ide_tara',
         'ide_condman',
         'ide_regsan',
-        'ide_imagen'
+        'ide_imagen',
+        'ide_estadoref'
     ];
 
     public function setIdeVariedadAttribute($value)
@@ -202,5 +203,15 @@ class TItemDetalle extends Model
     public function notificacionsanitaria()
     {
       return $this->hasOne('App\Models\Pricat\TNotificacionSanitaria', 'id', 'ide_regsan');
+    }
+
+    public function tipoempaque()
+    {
+      return $this->hasOne('App\Models\Pricat\TTipoEmpaque', 'id', 'ide_temp');
+    }
+
+    public function estadoref()
+    {
+        return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_estadoref')->where('idItemCriterioPlanItemCriterioMayor','120');
     }
 }

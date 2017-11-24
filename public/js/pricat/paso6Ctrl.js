@@ -1,8 +1,17 @@
 app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', function($scope, $http, $window, $mdDialog){
-  $scope.getUrl = '../../paso6info';
-  $scope.url = '../../paso6update';
+
+
+ $scope.getUrl = './paso6info';
+ $scope.url = './paso6update';
+
 
   $scope.getInfo =  function(){
+
+    if ($scope.editar != undefined) {
+      $scope.getUrl = '../../paso6info';
+      $scope.urlEdit = '../../paso6edit';
+    }
+
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       console.log(info);
@@ -11,8 +20,6 @@ app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', functio
       $scope.cmanipulacion = angular.copy(info.cmanipulacion);
     });
   }
-
-  $scope.getInfo();
 
   /*var previewNode = document.getElementById("template");
   previewNode.id = "";
@@ -101,7 +108,7 @@ app.controller('paso6Ctrl', ['$scope', '$http' , '$window', '$mdDialog', functio
       object.patron = $scope.patron;
       object.image = $scope.imagen;
 
-      $http.post($scope.url, object).then(function(response){
+      $http.post($scope.urlEdit, object).then(function(response){
         $scope.getInfo();
         $window.location = response.data;
   });
