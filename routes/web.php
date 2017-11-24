@@ -39,6 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('parametros', 'tccws\parametrostccController');
     Route::get('parametrosinfo', 'tccws\parametrostccController@getInfo');
+
+    Route::resource('clientes', 'tccws\cliboomerangController');
+    Route::get('clientesinfo', 'tccws\cliboomerangController@getInfo');
   });
 
 
