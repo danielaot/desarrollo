@@ -2,6 +2,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 	$scope.urlGetInfo = "agrupaPedidosGetInfo";
 	$scope.urlResource = "tccws";
 	$scope.urlPlano = "obtenerPlano";
+	$scope.urlUnidades = "unidadesLogisticas";
 	$scope.progress = true;
 	$scope.sucursal = {};
 	$scope.sucursalesArray = {};
@@ -130,20 +131,33 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
        $scope.searchTerm = '';
     };
 
+		$scope.getUnidadesLogisticas = function(){
+
+			$scope.cliente.sucursales.map(function(sucursal){
+				if (sucursal.hasOneOrMoreSelected == true) {
+					var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
+					sucursal.facturasAEnviar = filterSelectRemesas;
+				}else{
+					sucursal.facturasAEnviar = [];
+				}
+				return sucursal;
+			})
+
+			console.log($scope.cliente);
+
+			$http.post($scope.urlUnidades, $scope.cliente).then(function(response){
+				$scope.cliente.arregloFinal = response.data;
+				console.log($scope.cliente);
+			});
+
+		}
+
 		$scope.enviarRemesa = function(){
 
-					$scope.cliente.sucursales.map(function(sucursal){
-						if (sucursal.hasOneOrMoreSelected == true) {
-							var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
-							sucursal.facturasAEnviar = filterSelectRemesas;
-						}else{
-							sucursal.facturasAEnviar = [];
-						}
-						return sucursal;
-					})
+
 
 					$http.post($scope.urlPlano, $scope.cliente).then(function(response){
-						console.log(response.data);
+						console.log(response.data.txt);
 					});
 
 		}

@@ -40,6 +40,7 @@ class tccwsController extends Controller
         'nit_tercero', 'date_creacion')
         ->whereNull('fecha_remesa')
         ->where('date_creacion', '>', '11-08-2017')
+        ->whereNotIn('tipo_docto', ['F30', 'F28', 'F31', 'F48'])
         ->distinct()->orderBy('num_factura')->get();
 
         $agrupoCliente = $facturas->groupBy('nit_tercero');
@@ -85,23 +86,20 @@ class tccwsController extends Controller
 
     }
 
-
-    public function getPlano(Request $request){
+    public function getUnidadesLogisticas(Request $request){
 
       $data = $request->all();
-      $data['unidades'] = [];
-      $data['documentosReferencia'] = [];
-      $data['estructura'] = EstructuraDocto::all();
-      $data['fechadespacho'] = Carbon::today()->toDateString();
-      $data['generarDocumentos'] = true;
-
       $facturasParaRemesas = [];
+      $data['documentosReferencia'] = [];
+      $data['unidades'] = [];
+      $data['sucursalesFiltradas'] = [];
+      $sucursales = collect($data['sucursales']);
 
-      $data['sucursales'] = collect($data['sucursales'])->filter(function($sucuMap){
+      $data['sucursalesFiltradas'] = $sucursales->filter(function($sucuMap){
         return $sucuMap['hasOneOrMoreSelected'] == true;
       })->values();
 
-      foreach ($data['sucursales'] as $key => $sucursal) {
+      foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
           foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
             array_push($facturasParaRemesas, $factura);
           }
@@ -126,7 +124,7 @@ class tccwsController extends Controller
 
       $data['facturasSucursales'] = collect($arrayFactsGroup)->groupBy('num_sucursal');
       $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
-      foreach ($data['sucursales'] as $key => $sucursal) {
+      foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
         foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
 
           array_push($data['documentosReferencia'], array(
@@ -154,8 +152,113 @@ class tccwsController extends Controller
       array_push($data['unidades'],array("unidad" => "LIOS", "cantidad" => $sumaLios));
       array_push($data['unidades'],array("unidad" => "PESO", "cantidad" => $sumaPeso));
 
+      return response()->json($data);
+
+    }
+
+
+    public function getPlano(Request $request){
+
+
+      $data = [
+        'clave' => '',
+        'codigolote' => '',
+        'fechahoralote' => '',
+        'numeroremesa' => '',
+        'numeroDepacho' => '',
+        'unidadnegocio' => '',
+        'fechadespacho' => Carbon::today()->toDateString(),
+        'cuentaremitente' => '',
+        'sederemitente' => '',
+        'primernombreremitente' => '',
+        'segundonombreremitente' => '',
+        'primerapellidoremitente'=> $request->apellido1Tercero,
+        'segundoapellidoremitente'=> $request->apellido2Tercero,
+        'razonsocialremitente'=> $request->razonSocialTercero,
+        'naturalezaremitente' => '',
+        'tipoidentificacionremitente' => '',
+        'identificacionremitente' => $request->idTercero,
+        'telefonoremitente' => '',
+        'direccionremitente'=> '',
+        'ciudadorigen' => '',
+        'tipoidentificaciondestinatario' => '',
+        'identificaciondestinatario' => '',
+        'sededestinatario' => '',
+        'primernombredestinatario' => '',
+        'segundonombredestinatario' => '',
+        'primerapellidodestinatario' => '',
+        'segundoapellidodestinatario' => '',
+        'razonsocialdestinatario' => '',
+        'naturalezadestinatario' => '',
+        'direcciondestinatario' => '',
+        'telefonodestinatario' => '',
+        'ciudaddestinatario' => '',
+        'barriodestinatario' => '',
+        'totalpeso' => '',
+        'totalpesovolumen' => '',
+        'formapago' => '',
+        'observaciones' => '',
+        'llevabodega' => '',
+        'recogebodega' => '',
+        'centrocostos' => '',
+        'totalvalorproducto' => '',
+        'estructura' => EstructuraDocto::all(),
+        'sucursales' => $request->sucursales,
+        'facturasSucursales' => [],
+        'unidades' => [],
+        'documentosReferencia' => [],
+        'numeroReferenciaCliente' => '',
+        'generarDocumentos' => true,
+        'txt' => ''
+      ];
+
+      //$data = $this->replaceData($data);
 
       return response()->json($data);
+
+    }
+
+    public function replaceData($data){
+
+      $documento = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:cli="http://clientes.tcc.com.co/">'.chr(13) . chr(10);
+      $documento .= ' <soap:Header/>'.chr(13) . chr(10);
+      $documento .= '  <soap:Body>'.chr(13) . chr(10);
+      $documento .= '   <cli:GrabarDespacho4>'.chr(13) . chr(10);
+      $documento .= '     <cli:objDespacho>'.chr(13) . chr(10);
+
+      $grupos = collect($data['estructura'])->unique('ddt_grupo')->values();
+      $grupos = collect($grupos)->pluck('ddt_grupo');
+
+      foreach ($grupos as $key => $grupo) {
+
+          $listado = collect($data['estructura'])->where('ddt_grupo',$grupo)->sortBy('ddt_orden');
+          foreach($listado as $seg){
+              $segmento = $seg->dpe_segmento;
+              $campo = $seg->dpe_campo;
+              $lista = explode('&',$segmento);
+              for($i = 0;$i<count($lista);$i++){
+                  if($campo != '' && $lista[$i] == 'var'){
+                      $lista[$i] = $$campo;
+                  }elseif($campo === '' && $lista[$i] === 'var'){
+                      $lista[$i] = $campo;
+                  }
+              }
+              $segmento = implode('',$lista);
+          }
+
+          if($grupo == 'b'){
+
+
+          }
+
+      }
+
+      foreach ($listadoObjetoDespacho as $key => $campo) {
+        $documento .= '      <'.$campo['ddt_nombre'].'>'.'</'.$campo['ddt_nombre'].'>'.chr(13) . chr(10);
+      }
+
+      $data['txt'] = $documento;
+      return $data;
 
     }
 

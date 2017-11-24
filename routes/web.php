@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('tccws', 'tccws\tccwsController');
     Route::get('agrupaPedidosGetInfo', 'tccws\tccwsController@agrupaPedidosGetInfo');
     Route::post('obtenerPlano', 'tccws\tccwsController@getPlano');
+    Route::post('unidadesLogisticas', 'tccws\tccwsController@getUnidadesLogisticas');
 
     Route::resource('parametros', 'tccws\parametrostccController');
     Route::get('parametrosinfo', 'tccws\parametrostccController@getInfo');

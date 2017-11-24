@@ -125,7 +125,7 @@
 
 								<div class="form-group">
 									<div class="pull-right">
-										<button type="submit" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
+										<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
 									</div>
 								</div>
 
