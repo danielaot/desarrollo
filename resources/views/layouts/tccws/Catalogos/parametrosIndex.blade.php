@@ -1,4 +1,4 @@
-@extends('app')
+@extends('app') 
 
 @section('content')
 	@include('includes.titulo')
@@ -13,16 +13,15 @@
         <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
         <tr>
-					<th>Nombre</th>
-					<th>Valor</th>
+					<th class="text-center">Nombre</th>
+					<th class="text-center">Valor</th>
 					<th></th>
 				</tr>
         </thead>
       	<tbody>
-      	<tr ng-repeat="parametro in parametros">
-          <!---->
-      		<td class="text-center">@{{parametro.par_campoTcc}}</td>
-      		<td class="text-center">@{{parametro.par_valor}}</td>
+      	<tr ng-repeat="parametro in parametros"> 
+      		<td class="text-left">@{{parametro.par_campoTcc}}</td>
+      		<td class="text-left">@{{parametro.par_valor}}</td>
     			<td class="text-right">
         		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editarParametro(parametro)">
               <i class="glyphicon glyphicon-edit"></i>
@@ -38,7 +37,7 @@
     		</table>
 			</div>
 		</div>
-    @include('layouts.tccws.parametrosCreate')
+    @include('layouts.tccws.Catalogos.parametrosCreate')
 	</div>
 @endsection
 
