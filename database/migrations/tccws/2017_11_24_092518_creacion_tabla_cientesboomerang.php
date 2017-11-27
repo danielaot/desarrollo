@@ -28,6 +28,6 @@ class CreacionTablaCientesboomerang extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('t_cliboomerang');
+        
     }
 }

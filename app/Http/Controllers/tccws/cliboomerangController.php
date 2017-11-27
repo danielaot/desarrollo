@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\tccws\TClientesBoomerang as Cliente;
+use App\Models\Genericas\Tercero;
 
 class cliboomerangController extends Controller
 {
@@ -24,7 +25,15 @@ class cliboomerangController extends Controller
         
     public function getInfo()
     {
-        
+        $cli = Tercero::where('indxClienteTercero', '=', '1')->with('boomerang')->get();
+        $clientesAgregados = Cliente::with('tercero')->get();
+
+        $clientes = collect($cli)->filter(function($cliente, $key){
+        	return is_null($cliente->boomerang);
+        })->flatten(1);
+
+        $response = compact('clientes', 'clientesAgregados');
+        return response()->json($response);
     }
 
     /**
@@ -45,7 +54,15 @@ class cliboomerangController extends Controller
      */
     public function store(Request $request)
     {
+    	$data = $request->all();
+    	$idsTerceros = collect($data)->pluck('idTercero')->all();
+    	foreach ($idsTerceros as $idTercero => $value) {
+    		$creacion = new Cliente;
+    		$creacion->clb_idTercero = $value;
+    		$creacion->save();
+    	}
 
+    	return response()->json($creacion);
     }
 
     /**
@@ -90,7 +107,9 @@ class cliboomerangController extends Controller
      */
     public function destroy($id)
     {
-        
+      	$clientea = Cliente::find($id);
+        $clientea->delete();
+        return response()->json($clientea->trashed());  
     }
 
 }

@@ -14,9 +14,9 @@ app.controller('parametrosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DT
 	}
 
 	$scope.dtOptions = DTOptionsBuilder.newOptions();
-  	$scope.dtColumnDefs = [
+  $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(2).notSortable()
-  	];
+  ];
 
   $scope.getInfo();
 

@@ -7,18 +7,32 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="panel-group">
+          <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
+              
+              <md-chips ng-model="clientesSelected" md-autocomplete-snap
+              md-transform-chip="transformChip($chip)"
+              md-require-match="autocompleteDemoRequireMatch">
+                <md-autocomplete
+                md-selected-item="selectedTercero"
+                md-search-text="searchText"
+                md-items="tercero in buscarTercero(searchText) | orderBy:'razonSocialTercero'"
+                md-item-text="tercero.razonSocialTercero"
+                placeholder="Buscar clientes">
+                  <span md-highlight-text="searchText">@{{tercero.razonSocialTercero}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                  <span>
+                    <strong>@{{$chip.razonSocialTercero}} (@{{$chip.idTercero}})</strong>
+                  </span>
+                </md-chip-template>
+              </md-chips>
+              <button type="button" class="btn btn-primary btn-sm" style="margin-top: 18px" ng-click="agregarCliente()">
+              <i class="glyphicon glyphicon-floppy-disk"></i> Guardar
+              </button>
 
-          
-
-
-
-
-
-
-
-        <button type="button" class="btn btn-success btn-sm">
-          <i class="glyphicon glyphicon-plus"></i> Agregar
-        </button><br>
+            </div>
+          </div>
         </div>
         <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
@@ -29,16 +43,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="parametro in parametros"> 
-          <td class="text-left">Dato</td>
-          <td class="text-left">Prueba</td>
+        <tr ng-repeat="clientea in clientesAgregados"> 
+          <td class="text-left">@{{clientea.tercero.razonSocialTercero}}</td>
+          <td class="text-left">@{{clientea.clb_idTercero}}</td>
           <td class="text-right">
-            <button type="button" class="btn btn-warning btn-sm">
-              <i class="glyphicon glyphicon-edit"></i>
-              <md-tooltip>Editar
-            </button>
-            <button type="button" class="btn btn-danger btn-sm" >
-              <i class="glyphicon glyphicon-trash"></i>
+            <button type="button" class="btn btn-danger btn-sm" ng-click="eliminar(clientea)">
+              <i class="glyphicon glyphicon-remove"></i>
               <md-tooltip>Eliminar
             </button>
           </td>
@@ -46,6 +56,9 @@
         </tbody>
         </table>
       </div>
+    </div>
+    <div ng-if="progress" class="progress">
+      <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
     </div>
   </div>
 @endsection
