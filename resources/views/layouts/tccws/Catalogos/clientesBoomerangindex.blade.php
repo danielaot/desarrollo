@@ -27,7 +27,7 @@
                   </span>
                 </md-chip-template>
               </md-chips>
-              <button type="button" class="btn btn-primary btn-sm" style="margin-top: 18px" ng-click="agregarCliente()">
+              <button type="button" class="btn btn-primary btn-sm" ng-disabled="clientesSelected.length == 0" style="margin-top: 18px" ng-click="agregarCliente()">
               <i class="glyphicon glyphicon-floppy-disk"></i> Guardar
               </button>
 
