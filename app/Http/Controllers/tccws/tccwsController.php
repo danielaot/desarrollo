@@ -10,6 +10,7 @@ use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
+use nusoap_client;
 ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
@@ -215,6 +216,8 @@ class tccwsController extends Controller
 
     public function getPlano(Request $request){
 
+      $message = '';
+
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
 
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
@@ -275,9 +278,16 @@ class tccwsController extends Controller
         ];
 
         $data = $this->replaceData($data);
+
+        $nusoap_client = new nusoap_client(env('WSTCC'), true);
+        $err = $nusoap_client->getError();
+
+        $response = $nusoap_client->call('GrabarDespacho4', $data['txt'], '', '', false, true);
+        $message .= $response['printTipoError'];
       }
 
-      return response()->json($data);
+      $res = compact('message','data');
+      return response()->json($res);
 
     }
 
