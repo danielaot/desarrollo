@@ -14,9 +14,9 @@ app.controller('parametrosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DT
 	}
 
 	$scope.dtOptions = DTOptionsBuilder.newOptions();
-  	$scope.dtColumnDefs = [
+  $scope.dtColumnDefs = [
     DTColumnDefBuilder.newColumnDef(2).notSortable()
-  	];
+  ];
 
   $scope.getInfo();
 
@@ -50,10 +50,20 @@ app.controller('parametrosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DT
     }
 
   $scope.eliminarParametro = function(parametro){
-    $scope.progress = true;
+
+    var confirm = $mdDialog.confirm()
+    .title('¡ALERTA!')
+    .textContent('¿Realmente desea eliminar el registro?')
+    .ariaLabel('Lucky day')
+    .targetEvent()
+    .ok('Si')
+    .cancel('No, gracias');
+    $mdDialog.show(confirm).then(function() {
       $http.delete($scope.url + '/' + parametro.id).then(function(response){
         $scope.getInfo();
+        $scope.progress = true;
       });
+    });
   }
 
 }]);

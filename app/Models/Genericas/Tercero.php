@@ -34,4 +34,8 @@ class Tercero extends Model
         'fechaNacimientoTercero',
         'indxEstadoTercero'
     ];
+
+    public function boomerang(){
+        return $this->hasOne('App\Models\tccws\TClientesBoomerang', 'clb_idTercero', 'idTercero');
+    }
 }
