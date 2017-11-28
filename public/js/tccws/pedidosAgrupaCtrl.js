@@ -8,6 +8,13 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 	$scope.sucursalesArray = {};
 	$scope.sucursalSelected = {};
 	$scope.puedeEnviar = false;
+	$scope.cantidadCajas = 0;
+	$scope.cantidadLios = 0;
+	$scope.cantidadPaletas = 0;
+	$scope.kilosRealesLios = 0;
+	$scope.kilosRealesEstibas = 0;
+	$scope.kilosBaseLios = 30;
+	$scope.sumaTotalKilos = 0;
 
 	$scope.getInfo = function(){
 		$http.get($scope.urlGetInfo).then(function(response){
@@ -133,6 +140,17 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 
 		$scope.getUnidadesLogisticas = function(){
 
+			$scope.cantidadCajas = 0;
+			$scope.cantidadLios = 0;
+			$scope.cantidadPaletas = 0;
+			$scope.kilosRealesLios = 0;
+			$scope.kilosRealesEstibas = 0;
+			$scope.sumaTotalKilos = 0;
+
+			if($scope.cliente.arregloFinal != undefined){
+				$scope.cliente.arregloFinal = {};
+			}
+
 			$scope.cliente.sucursales.map(function(sucursal){
 				if (sucursal.hasOneOrMoreSelected == true) {
 					var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
@@ -144,21 +162,46 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 			})
 
 			console.log($scope.cliente);
+			$scope.progress = true;
 
 			$http.post($scope.urlUnidades, $scope.cliente).then(function(response){
-				$scope.cliente.arregloFinal = response.data;
+				$scope.progress = false;
+				$scope.cliente.arregloFinal = angular.copy(response.data);
+
 				console.log($scope.cliente);
+
+				$scope.cliente.arregloFinal.sucursalesFiltradas.forEach(function(sucursal){
+
+					sucursal.kilosRealesEstibas = 0;
+					sucursal.kilosRealesLios = 0;
+					sucursal.sumaTotalKilos = 0;
+
+					sucursal.objetoCajas = $filter('filter')(sucursal.unidades, {tipounidad: 'CAJAS'})[0];
+					sucursal.objetoLios = $filter('filter')(sucursal.unidades, {tipounidad: 'LIOS'})[0];
+					sucursal.objetoPaletas = $filter('filter')(sucursal.unidades, {tipounidad: 'PALETAS'})[0];
+
+					$scope.sumatoriaKilos(sucursal);
+				})
+
 			});
 
 		}
 
 		$scope.enviarRemesa = function(){
+			console.log( $scope.cliente);
+			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
+				console.log(response.data);
+			});
+		}
 
+		$scope.sumatoriaKilos = function(sucursal){
 
+			sucursal.kilosRealesLios = sucursal.objetoLios.cantidadunidades * $scope.kilosBaseLios;
+			sucursal.sumaTotalKilos = sucursal.kilosRealesLios + sucursal.kilosRealesEstibas;
 
-					$http.post($scope.urlPlano, $scope.cliente).then(function(response){
-						console.log(response.data.txt);
-					});
+			sucursal.objetoLios.kilosreales = sucursal.kilosRealesLios;
+			sucursal.objetoCajas.kilosreales = 0;
+			sucursal.objetoPaletas.kilosreales = sucursal.kilosRealesEstibas;
 
 		}
 

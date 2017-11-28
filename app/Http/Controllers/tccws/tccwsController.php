@@ -34,7 +34,8 @@ class tccwsController extends Controller
      */
     public function agrupaPedidosGetInfo()
     {
-        $facturas = FactuClientes::select('fecha_remesa' ,
+        $facturas = FactuClientes::select('fecha_remesa' , 'num_ciudad',
+        'txt_direccion', 'txt_telefono', 'desc_ciudad', 'desc_departamento',
         'num_factura', 'tipo_docto', 'num_consecutivo',
         'nom_tercero', 'num_sucursal', 'desc_sucursal',
         'nit_tercero', 'date_creacion')
@@ -90,8 +91,6 @@ class tccwsController extends Controller
 
       $data = $request->all();
       $facturasParaRemesas = [];
-      $data['documentosReferencia'] = [];
-      $data['unidades'] = [];
       $data['sucursalesFiltradas'] = [];
       $sucursales = collect($data['sucursales']);
 
@@ -123,34 +122,91 @@ class tccwsController extends Controller
       });
 
       $data['facturasSucursales'] = collect($arrayFactsGroup)->groupBy('num_sucursal');
-      $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
-      foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
+      $data['sucursalesFiltradas'] = $data['sucursalesFiltradas']->map(function($sucursal) use($data){
+
+        $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
+        $sucursal['documentosReferencia'] = [];
+        $sucursal['unidades'] = [];
+        $sucursal['direcciondestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_direccion'];
+        $sucursal['telefonodestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_telefono'];
+        $sucursal['ciudaddestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['desc_ciudad'];
+        $sucursal['sededestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['desc_sucursal'];
+
+
+
         foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
 
-          array_push($data['documentosReferencia'], array(
-            'tipodocumento' => $factura['tipo_docto'],
-            'numerodocumento' => $factura['num_consecutivo'],
-            'fechadocumento' => Carbon::parse($factura['date_creacion'])->toDateString(),
-          ));
+            array_push($sucursal['documentosReferencia'], array(
+              'tipodocumento' => trim($factura['tipo_docto']),
+              'numerodocumento' => $factura['num_consecutivo'],
+              'fechadocumento' => Carbon::parse($factura['date_creacion'])->toDateString(),
+            ));
 
-          foreach ($factura['unidadesEmpaque'] as $key => $unidad) {
-            if($unidad['tipo_empaque'] == 'CAJAS'){
-              $sumaCajas += $unidad['total_empaque'];
-            }elseif($unidad['tipo_empaque'] == 'PALETAS'){
-              $sumaPaletas += $unidad['total_empaque'];
-            }elseif($unidad['tipo_empaque'] == 'LIOS') {
-              $sumaLios += $unidad['total_empaque'];
-            }elseif($unidad['tipo_empaque'] == 'PESO'){
-              $sumaPeso += $unidad['total_empaque'];
+            foreach ($factura['unidadesEmpaque'] as $key => $unidad) {
+              if($unidad['tipo_empaque'] == 'CAJAS'){
+                $sumaCajas += $unidad['total_empaque'];
+              }elseif($unidad['tipo_empaque'] == 'PALETAS'){
+                $sumaPaletas += $unidad['total_empaque'];
+              }elseif($unidad['tipo_empaque'] == 'LIOS') {
+                $sumaLios += $unidad['total_empaque'];
+              }
             }
-          }
-        }
-      }
 
-      array_push($data['unidades'],array("unidad" => "CAJAS", "cantidad" => $sumaCajas));
-      array_push($data['unidades'],array("unidad" => "PALETAS", "cantidad" => $sumaPaletas));
-      array_push($data['unidades'],array("unidad" => "LIOS", "cantidad" => $sumaLios));
-      array_push($data['unidades'],array("unidad" => "PESO", "cantidad" => $sumaPeso));
+        }
+
+        array_push($sucursal['unidades'],array(
+          "tipounidad" => "CAJAS",
+          "claseempaque" => '',
+          "tipoempaque" => '',
+          "dicecontener" => '',
+          "cantidadunidades" => $sumaCajas,
+          "kilosreales" => '',
+          "largo" => '',
+          "alto" => '',
+          "ancho" => '',
+          "pesovolumen" => '',
+          "valormercancia" => '',
+          "codigobarras" => '',
+          "numerobolsa" => '',
+          "referencias" => '',
+          "unidadesinternas" => ''
+        ));
+        array_push($sucursal['unidades'],array(
+          "tipounidad" => "PALETAS",
+          "claseempaque" => '',
+          "tipoempaque" => '',
+          "dicecontener" => '',
+          "cantidadunidades" => $sumaPaletas,
+          "kilosreales" => '',
+          "largo" => '',
+          "alto" => '',
+          "ancho" => '',
+          "pesovolumen" => '',
+          "valormercancia" => '',
+          "codigobarras" => '',
+          "numerobolsa" => '',
+          "referencias" => '',
+          "unidadesinternas" => ''
+        ));
+        array_push($sucursal['unidades'],array(
+          "tipounidad" => "LIOS",
+          "claseempaque" => '',
+          "tipoempaque" => '',
+          "dicecontener" => '',
+          "cantidadunidades" => $sumaLios,
+          "kilosreales" => '',
+          "largo" => '',
+          "alto" => '',
+          "ancho" => '',
+          "pesovolumen" => '',
+          "valormercancia" => '',
+          "codigobarras" => '',
+          "numerobolsa" => '',
+          "referencias" => '',
+          "unidadesinternas" => ''
+        ));
+        return $sucursal;
+      });
 
       return response()->json($data);
 
@@ -159,60 +215,66 @@ class tccwsController extends Controller
 
     public function getPlano(Request $request){
 
+      foreach ($request->sucursalesFiltradas as $key => $sucursal) {
 
-      $data = [
-        'clave' => '',
-        'codigolote' => '',
-        'fechahoralote' => '',
-        'numeroremesa' => '',
-        'numeroDepacho' => '',
-        'unidadnegocio' => '',
-        'fechadespacho' => Carbon::today()->toDateString(),
-        'cuentaremitente' => '',
-        'sederemitente' => '',
-        'primernombreremitente' => '',
-        'segundonombreremitente' => '',
-        'primerapellidoremitente'=> $request->apellido1Tercero,
-        'segundoapellidoremitente'=> $request->apellido2Tercero,
-        'razonsocialremitente'=> $request->razonSocialTercero,
-        'naturalezaremitente' => '',
-        'tipoidentificacionremitente' => '',
-        'identificacionremitente' => $request->idTercero,
-        'telefonoremitente' => '',
-        'direccionremitente'=> '',
-        'ciudadorigen' => '',
-        'tipoidentificaciondestinatario' => '',
-        'identificaciondestinatario' => '',
-        'sededestinatario' => '',
-        'primernombredestinatario' => '',
-        'segundonombredestinatario' => '',
-        'primerapellidodestinatario' => '',
-        'segundoapellidodestinatario' => '',
-        'razonsocialdestinatario' => '',
-        'naturalezadestinatario' => '',
-        'direcciondestinatario' => '',
-        'telefonodestinatario' => '',
-        'ciudaddestinatario' => '',
-        'barriodestinatario' => '',
-        'totalpeso' => '',
-        'totalpesovolumen' => '',
-        'formapago' => '',
-        'observaciones' => '',
-        'llevabodega' => '',
-        'recogebodega' => '',
-        'centrocostos' => '',
-        'totalvalorproducto' => '',
-        'estructura' => EstructuraDocto::all(),
-        'sucursales' => $request->sucursales,
-        'facturasSucursales' => [],
-        'unidades' => [],
-        'documentosReferencia' => [],
-        'numeroReferenciaCliente' => '',
-        'generarDocumentos' => true,
-        'txt' => ''
-      ];
+        $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
+          return $unidad['cantidadunidades'] > 0;
+        })->values();
 
-      //$data = $this->replaceData($data);
+        $data = [
+          'clave' => 'BOGLINIO',
+          'codigolote' => '',
+          'fechahoralote' => '',
+          'numeroremesa' => '',
+          'numeroDepacho' => '',
+          'unidadnegocio' => '',
+          'fechadespacho' => Carbon::today()->toDateString(),
+          'cuentaremitente' => '',
+          'sederemitente' => '',
+          'primernombreremitente' => '',
+          'segundonombreremitente' => '',
+          'primerapellidoremitente'=> '',
+          'segundoapellidoremitente'=> '',
+          'razonsocialremitente'=> '',
+          'naturalezaremitente' => '',
+          'tipoidentificacionremitente' => '',
+          'identificacionremitente' => '',
+          'telefonoremitente' => '',
+          'direccionremitente'=> '',
+          'ciudadorigen' => '',
+          'tipoidentificaciondestinatario' => '',
+          'identificaciondestinatario' => $request->idTercero,
+          'sededestinatario' => $sucursal['sededestinatario'],
+          'primernombredestinatario' => '',
+          'segundonombredestinatario' => '',
+          'primerapellidodestinatario' => $request->apellido1Tercero,
+          'segundoapellidodestinatario' => $request->apellido2Tercero,
+          'razonsocialdestinatario' => $request->razonSocialTercero,
+          'naturalezadestinatario' => '',
+          'direcciondestinatario' => $sucursal['direcciondestinatario'],
+          'telefonodestinatario' =>  $sucursal['telefonodestinatario'],
+          'ciudaddestinatario' => $sucursal['ciudaddestinatario'],
+          'barriodestinatario' => '',
+          'totalpeso' => '',
+          'totalpesovolumen' => '',
+          'formapago' => '',
+          'observaciones' => '',
+          'llevabodega' => '',
+          'recogebodega' => '',
+          'centrocostos' => '',
+          'totalvalorproducto' => '',
+          'estructura' => EstructuraDocto::all(),
+          'sucursales' => $request->sucursalesFiltradas,
+          'facturasSucursales' => [],
+          'unidades' => $sucursal['unidades'],
+          'documentosReferencia' => $sucursal['documentosReferencia'],
+          'numeroReferenciaCliente' => '',
+          'generarDocumentos' => true,
+          'txt' => ''
+        ];
+
+        $data = $this->replaceData($data);
+      }
 
       return response()->json($data);
 
@@ -220,46 +282,110 @@ class tccwsController extends Controller
 
     public function replaceData($data){
 
+      extract($data);
+
       $documento = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:cli="http://clientes.tcc.com.co/">'.chr(13) . chr(10);
       $documento .= ' <soap:Header/>'.chr(13) . chr(10);
       $documento .= '  <soap:Body>'.chr(13) . chr(10);
       $documento .= '   <cli:GrabarDespacho4>'.chr(13) . chr(10);
       $documento .= '     <cli:objDespacho>'.chr(13) . chr(10);
 
-      $grupos = collect($data['estructura'])->unique('ddt_grupo')->values();
+      $grupos = collect($estructura)->unique('ddt_grupo')->values();
       $grupos = collect($grupos)->pluck('ddt_grupo');
 
       foreach ($grupos as $key => $grupo) {
-
-          $listado = collect($data['estructura'])->where('ddt_grupo',$grupo)->sortBy('ddt_orden');
-          foreach($listado as $seg){
-              $segmento = $seg->dpe_segmento;
-              $campo = $seg->dpe_campo;
-              $lista = explode('&',$segmento);
-              for($i = 0;$i<count($lista);$i++){
-                  if($campo != '' && $lista[$i] == 'var'){
-                      $lista[$i] = $$campo;
-                  }elseif($campo === '' && $lista[$i] === 'var'){
-                      $lista[$i] = $campo;
-                  }
-              }
-              $segmento = implode('',$lista);
-          }
-
-          if($grupo == 'b'){
-
-
-          }
-
+          $listado = collect($estructura)->where('ddt_grupo',$grupo)->sortBy('ddt_orden');
+          $documento .= $this->replaceMvts($grupo,$listado,$data);
       }
 
-      foreach ($listadoObjetoDespacho as $key => $campo) {
-        $documento .= '      <'.$campo['ddt_nombre'].'>'.'</'.$campo['ddt_nombre'].'>'.chr(13) . chr(10);
-      }
+      $documento .= '     </cli:objDespacho>'.chr(13) . chr(10);
+      $documento .= '     <cli:remesa>0</cli:remesa>'.chr(13) . chr(10);
+      $documento .= '     <cli:respuesta>0</cli:respuesta>'.chr(13) . chr(10);
+      $documento .= '     <cli:mensaje>0</cli:mensaje>'.chr(13) . chr(10);
+      $documento .= '   </cli:GrabarDespacho4>'.chr(13) . chr(10);
+      $documento .= '  </soap:Body>'.chr(13) . chr(10);
+      $documento .= '</soap:Envelope>';
+
 
       $data['txt'] = $documento;
       return $data;
 
+    }
+
+
+    public function replaceMvts($grupo,$listado,$data){
+
+      extract($data);
+      $documento = '';
+
+      if($grupo == 'a'){
+
+        foreach($listado as $seg){
+            $segmento = $seg->ddt_segmento;
+            $campo = $seg->ddt_campo;
+            $metaEtiqueta = $seg->ddt_nombre;
+            $lista = explode('&',$segmento);
+            for($i = 0;$i<count($lista);$i++){
+                if($campo != '' && $lista[$i] == 'var'){
+                    $lista[$i] = $$campo;
+                }elseif($campo === '' && $lista[$i] === 'var'){
+                    $lista[$i] = $campo;
+                }
+            }
+            $segmento = implode('',$lista);
+            $documento .= '      <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+          }
+          return $documento;
+
+      }elseif($grupo == 'b'){
+
+        foreach ($unidades as $key => $unidad) {
+          extract($unidad);
+          $documento .= '      <unidad>'.chr(13) . chr(10);
+          foreach($listado as $seg){
+            $segmento = $seg->ddt_segmento;
+            $campo = $seg->ddt_campo;
+            $metaEtiqueta = $seg->ddt_nombre;
+            $lista = explode('&',$segmento);
+            for($i = 0;$i<count($lista);$i++){
+              if($campo != '' && $lista[$i] == 'var'){
+                $lista[$i] = $$campo;
+              }elseif($campo === '' && $lista[$i] === 'var'){
+                $lista[$i] = $campo;
+              }
+            }
+            $segmento = implode('',$lista);
+            $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+          }
+          $documento .= '      </unidad>'.chr(13) . chr(10);
+        }
+        return $documento;
+
+      }elseif($grupo == 'c'){
+
+        foreach ($documentosReferencia as $key => $documentoRef) {
+          extract($documentoRef);
+          $documento .= '      <documentosReferencia>'.chr(13) . chr(10);
+          foreach($listado as $seg){
+            $segmento = $seg->ddt_segmento;
+            $campo = $seg->ddt_campo;
+            $metaEtiqueta = $seg->ddt_nombre;
+            $lista = explode('&',$segmento);
+            for($i = 0;$i<count($lista);$i++){
+              if($campo != '' && $lista[$i] == 'var'){
+                $lista[$i] = $$campo;
+              }elseif($campo === '' && $lista[$i] === 'var'){
+                $lista[$i] = $campo;
+              }
+            }
+            $segmento = implode('',$lista);
+            $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+          }
+          $documento .= '      </documentosReferencia>'.chr(13) . chr(10);
+        }
+        return $documento;
+
+      }
     }
 
     /**

@@ -4,6 +4,11 @@
 @include('includes.titulo')
 <style>
 
+	.scroll-panel-obsvr{
+		max-height: 55vh;
+		height: 55vh;
+		overflow-y: scroll;
+	}
 	.btn-success{
 		margin-top: 20px;
 	}
@@ -31,7 +36,7 @@
 </style>
 <div class="container-fluid">
 	<div ng-controller="pedidosAgrupaCtrl as ctrl"  layout="column" flex layout-fill ng-cloak>
-		<form id="frmRemesa" name="frmRemesa" ng-submit="frmRemesa.$valid && enviarRemesa()" >
+
 
 				<div class="panel panel-default">
 					<div class="panel-body">
@@ -125,7 +130,7 @@
 
 								<div class="form-group">
 									<div class="pull-right">
-										<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
+										<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
 									</div>
 								</div>
 
@@ -136,7 +141,6 @@
 					</div>
 				</div>
 
-		</form>
 	<!-- @{{agrupoCliente[cliente.idTercero]}} -->
 <!--
 	<md-toolbar md-scroll-shrink>
@@ -159,6 +163,7 @@
 	    </section>
 
 	  </md-content> -->
+	  @include('layouts.tccws.Modales.unidadesLogisticas');
 		<div ng-if="progress" class="progress">
 			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 		</div>
