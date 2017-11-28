@@ -176,9 +176,9 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 					sucursal.kilosRealesLios = 0;
 					sucursal.sumaTotalKilos = 0;
 
-					sucursal.objetoCajas = $filter('filter')(sucursal.unidades, {tipounidad: 'CAJAS'})[0];
-					sucursal.objetoLios = $filter('filter')(sucursal.unidades, {tipounidad: 'LIOS'})[0];
-					sucursal.objetoPaletas = $filter('filter')(sucursal.unidades, {tipounidad: 'PALETAS'})[0];
+					sucursal.objetoCajas = $filter('filter')(sucursal.unidades, {claseempaque: 'CLEM_CAJA'})[0];
+					sucursal.objetoLios = $filter('filter')(sucursal.unidades, {claseempaque: 'CLEM_LIO'})[0];
+					sucursal.objetoPaletas = $filter('filter')(sucursal.unidades, {claseempaque: 'CLEM_PALET'})[0];
 
 					$scope.sumatoriaKilos(sucursal);
 				})
