@@ -19,6 +19,14 @@
               <label class="control-label">Valor del parametro:*</label>
               <input class="form-control" required ng-model="parametro.par_valor"/>
             </div>
+            <div class="form-group">
+              <label class="control-label">Seleccione el grupo al que pertenece:</label>
+                  <md-radio-group required ng-model="parametro.par_grupo">
+                    <md-radio-button value="a">Encabezado</md-radio-button>
+                    <md-radio-button value="b">Unidades Logisticas</md-radio-button>
+                    <md-radio-button value="c">Documentos Referencias</md-radio-button>
+                  </md-radio-group>
+            </div>
         <div class="modal-footer">
           <button class="btn btn-primary" ng-if="isEdit == false" type="submit">Guardar</button>
           <button class="btn btn-primary" ng-if="isEdit == true" type="submit">Actualizar</button>

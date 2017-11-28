@@ -49,7 +49,6 @@ class parametrostccController extends Controller
     {
         $data = $request->all();
         $data['par_campoVariable'] = $data['par_campoTcc'];
-        $data['par_grupo'] = "b";
         $creacion = Parametro::create($data);
         return response()->json($creacion);
 
