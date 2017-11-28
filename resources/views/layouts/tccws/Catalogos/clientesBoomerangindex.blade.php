@@ -8,8 +8,7 @@
       <div class="panel-body">
         <div class="panel-group">
           <div class="row">
-            <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
-              
+            <div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">             
               <md-chips ng-model="clientesSelected" md-autocomplete-snap
               md-transform-chip="transformChip($chip)"
               md-require-match="autocompleteDemoRequireMatch">
@@ -26,12 +25,11 @@
                   <span>
                     <strong>@{{$chip.razonSocialTercero}} (@{{$chip.idTercero}})</strong>
                   </span>
-                </md-chip-template>
               </md-chips>
-              <button type="button" class="btn btn-primary btn-sm" ng-disabled="clientesSelected.length == 0" style="margin-top: 18px" ng-click="agregarCliente()">
-              <i class="glyphicon glyphicon-floppy-disk"></i> Guardar
+              </md-chip-template>
+              <button type="button" class="btn btn-success btn-sm" ng-disabled="clientesSelected.length == 0" style="margin-top: 15px" ng-click="agregarCliente()">
+              <i class="glyphicon glyphicon-plus"></i> Guardar
               </button>
-
             </div>
           </div>
         </div>

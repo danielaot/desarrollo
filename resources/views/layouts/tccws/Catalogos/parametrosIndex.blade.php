@@ -3,7 +3,7 @@
 @section('content')
 	@include('includes.titulo')
 
-	<div ng-controller="parametrosCtrl" ng-cloak>
+	<div ng-controller="parametrosCtrl" ng-cloak class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<button type="button" class="btn btn-success btn-sm" ng-click="resetForm()" data-toggle="modal" data-target="#modal">
@@ -29,7 +29,7 @@
               <i class="glyphicon glyphicon-edit"></i>
             	<md-tooltip>Editar
           	</button>
-         		<button type="button" class="btn btn-danger btn-sm" ng-disabled="isDelete = true" ng-click="eliminarParametro(parametro)">
+         		<button type="button" class="btn btn-danger btn-sm" ng-click="eliminarParametro(parametro)">
           		<i class="glyphicon glyphicon-trash"></i>
           		<md-tooltip>Eliminar
         		</button>
