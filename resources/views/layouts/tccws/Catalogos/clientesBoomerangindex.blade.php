@@ -3,7 +3,7 @@
 @section('content')
   @include('includes.titulo')
 
-  <div ng-controller="clientesBoomerangCtrl" ng-cloak>
+  <div ng-controller="clientesBoomerangCtrl" ng-cloak class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="panel-group">
@@ -17,6 +17,7 @@
                 md-selected-item="selectedTercero"
                 md-search-text="searchText"
                 md-items="tercero in buscarTercero(searchText) | orderBy:'razonSocialTercero'"
+                md-no-cache="true"
                 md-item-text="tercero.razonSocialTercero"
                 placeholder="Buscar clientes">
                   <span md-highlight-text="searchText">@{{tercero.razonSocialTercero}}</span>

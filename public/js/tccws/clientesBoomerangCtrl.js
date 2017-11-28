@@ -8,8 +8,12 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
   $scope.isDelete = true;
 
   $scope.getInfo = function(){
+
+    $scope.clientes = [];
+
     $http.get($scope.getUrl).then(function(response){
       var data = response.data;
+      console.log('entre---------');
       $scope.clientes = angular.copy(data.clientes);
       $scope.clientesAgregados = angular.copy(data.clientesAgregados);
       console.log($scope.clientes);
@@ -20,6 +24,7 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
   $scope.getInfo();
 
   function transformChip(chip) {
+
     if (angular.isObject(chip)) {
       return chip;
     }
@@ -27,11 +32,12 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
   }
 
   $scope.buscarTercero = function(searchText){
-      var filterClientes = $filter('filter')($scope.clientes, {idTercero: searchText});
-      if (filterClientes.length == 0) {
-        var filterClientes = $filter('filter')($scope.clientes, {razonSocialTercero: searchText});
-      }
-      return filterClientes;
+    var filterClientes = $filter('filter')($scope.clientes, {idTercero: searchText});
+    if (filterClientes.length == 0) {
+      filterClientes = $filter('filter')($scope.clientes, {razonSocialTercero: searchText});
+    }
+    return filterClientes;
+    $scope.getInfo();
   }
 
   $scope.agregarCliente = function(){

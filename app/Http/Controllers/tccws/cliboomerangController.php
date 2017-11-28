@@ -25,9 +25,9 @@ class cliboomerangController extends Controller
         
     public function getInfo()
     {
-        $cli = Tercero::where('indxClienteTercero', '=', '1')->with('boomerang')->get();
+        $cli = Tercero::where('indxClienteTercero', '=', '1')->where('indxEstadoTercero', '=', '1')->with('boomerang')->get();
+        
         $clientesAgregados = Cliente::with('tercero')->get();
-
         $clientes = collect($cli)->filter(function($cliente, $key){
         	return is_null($cliente->boomerang);
         })->flatten(1);
