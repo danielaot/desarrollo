@@ -95,17 +95,19 @@ class tccwsController extends Controller
       $data['sucursalesFiltradas'] = [];
       $sucursales = collect($data['sucursales']);
 
+      //Se filtran las sucursales por las que tiene una o mas facturas seleccionadas
       $data['sucursalesFiltradas'] = $sucursales->filter(function($sucuMap){
         return $sucuMap['hasOneOrMoreSelected'] == true;
       })->values();
-
+      //Por cada sucursal con referencias seleccionadas se hace un recorrido de sus facturas para adjuntarlas todas en un unico array
       foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
           foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
             array_push($facturasParaRemesas, $factura);
           }
       }
-
+      //Del array de todas las facturas solo tomamos los id´s para posterior realizar un whereIn en la vista
       $IdsfacturasParaRemesas = collect($facturasParaRemesas)->pluck('num_factura')->all();
+      //Se realiza la consulta a la vista con los codigos de las facturas
       $dataFacturas = InfoCargoFactura::select('tipo_empaque',
       'num_factura', DB::raw('SUM(num_empaque) as total_empaque'))
       ->whereIn('num_factura', $IdsfacturasParaRemesas)
@@ -113,36 +115,42 @@ class tccwsController extends Controller
       ->orderBy('num_factura','tipo_empaque')
       ->get();
 
-
+      //Se hace un map para todas las facturas para asi agregarle a cada una su información de unidades logisticas
       $arrayFactsGroup = collect($facturasParaRemesas)->map(function($factura) use($dataFacturas){
+        //Se obtiene la informacion logistica de cada factura haciendo un filter a la informacion obtenida de la vista
         $facturasFilter = collect($dataFacturas)->filter(function($fact) use($factura){
           return $fact['num_factura'] == $factura['num_factura'];
         })->values();
+        //Se asigna la informacion logistica para la factura que esta en el momento iterando
         $factura['unidadesEmpaque'] = $facturasFilter;
+        //retorno la factura con la nueva informacion
         return $factura;
       });
 
+      //Agrupo todas las facturas por sucursal
       $data['facturasSucursales'] = collect($arrayFactsGroup)->groupBy('num_sucursal');
+      //De todas las sucursales con facturas pendientes se hace un recorrido por cada una para realizar una serie de operaciones
       $data['sucursalesFiltradas'] = $data['sucursalesFiltradas']->map(function($sucursal) use($data){
 
         $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
         $sucursal['documentosReferencia'] = [];
         $sucursal['unidades'] = [];
+        //Se obtiene la informacion de la sucursal desde las facturas agrupadas por sucursal
         $sucursal['direcciondestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_direccion'];
         $sucursal['telefonodestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_telefono'];
         $sucursal['ciudaddestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['desc_ciudad'];
         $sucursal['sededestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['desc_sucursal'];
 
 
-
+        //Se hace un recorrido por cada factura de una sucursal
         foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
-
+          //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
               'tipodocumento' => trim($factura['tipo_docto']),
               'numerodocumento' => $factura['num_consecutivo'],
               'fechadocumento' => Carbon::parse($factura['date_creacion'])->toDateString(),
             ));
-
+            //Se hace una totalizacion general de las unidades logisticas del pedido
             foreach ($factura['unidadesEmpaque'] as $key => $unidad) {
               if($unidad['tipo_empaque'] == 'CAJAS'){
                 $sumaCajas += $unidad['total_empaque'];
@@ -154,7 +162,7 @@ class tccwsController extends Controller
             }
 
         }
-
+        //Se anexa a un arreglo de sucursal las unidades logisticas totalizadas
         array_push($sucursal['unidades'],array(
           "tipounidad" => "TIPO_UND_PAQ",
           "claseempaque" => 'CLEM_CAJA',
@@ -217,9 +225,9 @@ class tccwsController extends Controller
     public function getPlano(Request $request){
 
       $message = '';
-
+      //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
-
+        //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
           return $unidad['cantidadunidades'] > 0;
         })->values();
@@ -277,24 +285,14 @@ class tccwsController extends Controller
           'fuente' => '',
           'txt' => ''
         ];
-
+        //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
-
-        $nusoap_client = new nusoap_client(env('WSTCC'), 'wsdl');
+        //Se inicializa el cliente de nusoap
+        $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/preservicios/wsdespachos.asmx?wsdl', 'wsdl');
         $nusoap_client->soap_defencoding = 'UTF-8';
         $nusoap_client->version = SOAP_1_2;
         $err = $nusoap_client->getError();
-
-        return response()->json($data['txt']);
-        $param = array(
-          'data' => $data['txt']
-        );
-
-        $headers = array(
-          "Content-Type" => 'application/soap+xml',
-          'charset' => 'UTF-8'
-        );
-//return response()->json($headers);
+        //Se intenta mandar el servicio pero nos responde con un error
         $response = $nusoap_client->call('GrabarDespacho4', array("literal" => $data['txt']), '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
         return response()->json($response);
 
@@ -350,7 +348,7 @@ class tccwsController extends Controller
 
       extract($data);
       $documento = '';
-
+      //objDespacho del xml
       if($grupo == 'a'){
 
         foreach($listado as $seg){
@@ -371,7 +369,7 @@ class tccwsController extends Controller
           return $documento;
 
       }elseif($grupo == 'b'){
-
+        //Unidades del documento
         foreach ($unidades as $key => $unidad) {
           extract($unidad);
           $documento .= '      <unidad>'.chr(13) . chr(10);
@@ -395,7 +393,7 @@ class tccwsController extends Controller
         return $documento;
 
       }elseif($grupo == 'c'){
-
+        //documentosReferencia del documento
         foreach ($documentosReferencia as $key => $documentoRef) {
           extract($documentoRef);
           $documento .= '      <documentosReferencia>'.chr(13) . chr(10);
