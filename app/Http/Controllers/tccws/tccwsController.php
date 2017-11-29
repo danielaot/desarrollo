@@ -225,14 +225,14 @@ class tccwsController extends Controller
         })->values();
 
         $data = [
-          'clave' => 'BOGLINIO',
+          'clave' => 'calbelleza',
           'codigolote' => '',
           'fechahoralote' => '',
           'numeroremesa' => '',
           'numeroDepacho' => '',
           'unidadnegocio' => '1',
           'fechadespacho' => Carbon::today()->toDateString(),
-          'cuentaremitente' => '1118100',
+          'cuentaremitente' => '1125800',
           'sederemitente' => '',
           'primernombreremitente' => 'EJEMPLO BELLEZA EXPRESS',
           'segundonombreremitente' => '',
@@ -274,18 +274,29 @@ class tccwsController extends Controller
           'numeroReferenciaCliente' => '',
           'generarDocumentos' => 'true',
           'unidadesinternas' => '',
+          'fuente' => '',
           'txt' => ''
         ];
 
         $data = $this->replaceData($data);
 
-        $nusoap_client = new nusoap_client(env('WSUNOEE'), true);
-        return response()->json($nusoap_client);
+        $nusoap_client = new nusoap_client(env('WSTCC'), 'wsdl');
+        $nusoap_client->soap_defencoding = 'UTF-8';
+        $nusoap_client->version = SOAP_1_2;
         $err = $nusoap_client->getError();
 
-        //return response()->json($nusoap_client);
-        $response = $nusoap_client->call('GrabarDespacho4', $data['txt'], '', '', false, true);
+        return response()->json($data['txt']);
+        $param = array(
+          'data' => $data['txt']
+        );
 
+        $headers = array(
+          "Content-Type" => 'application/soap+xml',
+          'charset' => 'UTF-8'
+        );
+//return response()->json($headers);
+        $response = $nusoap_client->call('GrabarDespacho4', array("literal" => $data['txt']), '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
+        return response()->json($response);
 
         $message .= $response['printTipoError'];
       }
@@ -316,6 +327,12 @@ class tccwsController extends Controller
       $documento .= '      <fuente>'.'</fuente>'.chr(13) . chr(10);
       $documento .= '     </cli:objDespacho>'.chr(13) . chr(10);
       $documento .= '     <cli:remesa>0</cli:remesa>'.chr(13) . chr(10);
+      $documento .= '     <cli:URLRelacionEnvio></cli:URLRelacionEnvio>'.chr(13) . chr(10);
+      $documento .= '     <cli:URLRotulos></cli:URLRotulos>'.chr(13) . chr(10);
+      $documento .= '     <cli:URLRemesa></cli:URLRemesa>'.chr(13) . chr(10);
+      $documento .= '     <cli:IMGRelacionEnvio></cli:IMGRelacionEnvio>'.chr(13) . chr(10);
+      $documento .= '     <cli:IMGRotulos></cli:IMGRotulos>'.chr(13) . chr(10);
+      $documento .= '     <cli:IMGRemesa></cli:IMGRemesa>'.chr(13) . chr(10);
       $documento .= '     <cli:respuesta>0</cli:respuesta>'.chr(13) . chr(10);
       $documento .= '     <cli:mensaje>0</cli:mensaje>'.chr(13) . chr(10);
       $documento .= '   </cli:GrabarDespacho4>'.chr(13) . chr(10);
