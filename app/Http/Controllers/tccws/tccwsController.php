@@ -279,10 +279,14 @@ class tccwsController extends Controller
 
         $data = $this->replaceData($data);
 
-        $nusoap_client = new nusoap_client(env('WSTCC'), true);
+        $nusoap_client = new nusoap_client(env('WSUNOEE'), true);
+        return response()->json($nusoap_client);
         $err = $nusoap_client->getError();
 
+        //return response()->json($nusoap_client);
         $response = $nusoap_client->call('GrabarDespacho4', $data['txt'], '', '', false, true);
+
+
         $message .= $response['printTipoError'];
       }
 
