@@ -88,6 +88,7 @@ class parametrostccController extends Controller
         $parametro = Parametro::find($id);
         $data = $request->all();
         $parametro->par_valor = $data['par_valor'];
+        $parametro->par_grupo = $data['par_grupo'];
         $parametro->save();
 
         return response()->json($id);

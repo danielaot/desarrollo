@@ -28,16 +28,13 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 		console.log();
 	}
 
-	$scope.getInfo();
-
-
 	$scope.getSucursales = function(){
 		if ($scope.cliente == undefined) {
 			return [];
 		}else{
 			return $filter('filter')($scope.sucursales, {nit_tercero : $scope.cliente.idTercero});
 		}
-	}
+	}	
 
 	$scope.setSelectAllFacts = function(sucursal){
 		$scope.sucursalSelected = sucursal;
@@ -48,10 +45,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 			})
 			sucursal.hasOneOrMoreSelected = $scope.sucursalSelected.isSelectAll;
 		}
-
 		var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
 		sucursal.cantSeleccionadas = filterSelected.length;
-
 		var cantSeleccionadas = 0;
 
 		$scope.cliente.sucursales.forEach(function(sucu){
@@ -65,38 +60,31 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 		}else{
 				$scope.puedeEnviar = false;
 		}
-
 	}
 
 	$scope.setSelectedFactura = function(factura,sucursal){
+		var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
 
-
-			var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
-
-			if(filterSelected.length == sucursal.facturas.length){
-				sucursal.isSelectAll = true;
-				sucursal.hasOneOrMoreSelected = true;
-				$scope.puedeEnviar = true;
-			}else if((filterSelected.length > 0) && (filterSelected.length < sucursal.facturas.length)){
+		if(filterSelected.length == sucursal.facturas.length){
+			sucursal.isSelectAll = true;
+			sucursal.hasOneOrMoreSelected = true;
+			$scope.puedeEnviar = true;
+		}else if((filterSelected.length > 0) && (filterSelected.length < sucursal.facturas.length)){
 				sucursal.isSelectAll = false;
 				sucursal.hasOneOrMoreSelected = true;
 				$scope.puedeEnviar = true;
 			}else if(filterSelected.length == 0){
-				sucursal.hasOneOrMoreSelected = false;
-				sucursal.isSelectAll = false;
-				$scope.puedeEnviar = false;
-			}
-
-			sucursal.cantSeleccionadas = filterSelected.length;
-			console.log(sucursal.facturas);
-
+					sucursal.hasOneOrMoreSelected = false;
+					sucursal.isSelectAll = false;
+					$scope.puedeEnviar = false;
+				}
+		sucursal.cantSeleccionadas = filterSelected.length;
+		console.log(sucursal.facturas);
 	}
 
 	$scope.onChangeSucursales = function(){
-
 		if($scope.cliente.sucursales != undefined){
 			if($scope.cliente.sucursales.length > 0){
-
 				var sucursal = $scope.cliente.sucursales[$scope.cliente.sucursales.length - 1];
 				sucursal.isSelectAll = false;
 				sucursal.hasOneOrMoreSelected = false;
@@ -111,14 +99,10 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 							return factura;
 						})
 					}
-
 					sucursal.facturas = filterFacturas;
-
 				}
-
 			}
 		}
-
 	}
 
 	$scope.retornaListaFiltrada = function(){
@@ -129,22 +113,19 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
        $scope.searchTerm = '';
     };
 
-		$scope.enviarRemesa = function(){
-
-					$scope.cliente.sucursales.map(function(sucursal){
-						if (sucursal.hasOneOrMoreSelected == true) {
-							var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
-							sucursal.facturasAEnviar = filterSelectRemesas;
-						}else{
-							sucursal.facturasAEnviar = [];
-						}
-						return sucursal;
-					})
-
-					$http.post($scope.urlResource, $scope.cliente).then(function(response){
-						console.log(response.data);
-					});
-
-		}
+	$scope.enviarRemesa = function(){
+		$scope.cliente.sucursales.map(function(sucursal){
+			if (sucursal.hasOneOrMoreSelected == true) {
+				var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
+				sucursal.facturasAEnviar = filterSelectRemesas;
+			}else{
+					sucursal.facturasAEnviar = [];
+				}
+				return sucursal;
+		})
+		$http.post($scope.urlResource, $scope.cliente).then(function(response){
+			console.log(response.data);
+		});
+	}
 
 }]);
