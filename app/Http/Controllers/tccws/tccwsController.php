@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
 use nusoap_client;
+use SoapClient;
+use stdClass;
 ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
@@ -287,16 +289,42 @@ class tccwsController extends Controller
         ];
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
+        $data = collect($data)->except('estructura','sucursales','facturasSucursales');
         //Se inicializa el cliente de nusoap
-        $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/preservicios/wsdespachos.asmx?wsdl', 'wsdl');
+        $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
         $nusoap_client->soap_defencoding = 'UTF-8';
+        $nusoap_client->decode_utf8 = false;
         $nusoap_client->version = SOAP_1_2;
         $err = $nusoap_client->getError();
-        //Se intenta mandar el servicio pero nos responde con un error
-        $response = $nusoap_client->call('GrabarDespacho4', array("literal" => $data['txt']), '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
-        return response()->json($response);
 
-        $message .= $response['printTipoError'];
+        return response()->json($nusoap_client);
+        $nusoap_client->namespaces = array(
+             'soap' => "http://www.w3.org/2003/05/soap-envelope",
+             'cli' => "http://clientes.tcc.com.co/",
+        );
+
+        //Se intenta mandar el servicio pero nos responde con un error
+        $params = array(
+          'objDespacho' => utf8_encode($data),
+          'remesa' => 0,
+          'URLRelacionEnvio' => '',
+          'URLRotulos' => '',
+          'URLRemesa' => '',
+          'IMGRelacionEnvio' => '',
+          'IMGRotulos' => '',
+          'IMGRemesa' => '',
+          'respuesta' => 0,
+          'mensaje' => 0
+        );
+        //return response()->json(utf8_encode($data['txt']));
+        $dataOperation = $nusoap_client->getOperationData('GrabarDespacho4');
+        //return response()->json($dataOperation);
+        //$response = $nusoap_client->call('GrabarDespacho4', $params, '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
+        $response = $nusoap_client->send($data['txt'],'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
+
+        return response()->json($nusoap_client);
+
+        $message .= $response['mensaje'];
       }
 
       $res = compact('message','data');
@@ -307,13 +335,12 @@ class tccwsController extends Controller
     public function replaceData($data){
 
       extract($data);
-
-      $documento = '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:cli="http://clientes.tcc.com.co/">'.chr(13) . chr(10);
+      $documento =  '<?xml version="1.0" encoding="utf-8"?>'.chr(13) . chr(10);
+      $documento .= '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:cli="http://clientes.tcc.com.co/">'.chr(13) . chr(10);
       $documento .= ' <soap:Header/>'.chr(13) . chr(10);
       $documento .= '  <soap:Body>'.chr(13) . chr(10);
       $documento .= '   <cli:GrabarDespacho4>'.chr(13) . chr(10);
       $documento .= '     <cli:objDespacho>'.chr(13) . chr(10);
-
       $grupos = collect($estructura)->unique('ddt_grupo')->values();
       $grupos = collect($grupos)->pluck('ddt_grupo');
 
