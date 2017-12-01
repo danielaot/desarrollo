@@ -266,7 +266,7 @@ class tccwsController extends Controller
           'naturalezadestinatario' => '',
           'direcciondestinatario' => $sucursal['direcciondestinatario'],
           'telefonodestinatario' =>  $sucursal['telefonodestinatario'],
-          'ciudaddestinatario' => '11001000',//$sucursal['ciudaddestinatario']
+          'ciudaddestinatario' => '05002000',//$sucursal['ciudaddestinatario']
           'barriodestinatario' => '',
           'totalpeso' => '',
           'totalpesovolumen' => '',
@@ -297,11 +297,25 @@ class tccwsController extends Controller
         $nusoap_client->version = SOAP_1_2;
         $err = $nusoap_client->getError();
 
-        return response()->json($nusoap_client);
+        //return response()->json($nusoap_client);
         $nusoap_client->namespaces = array(
              'soap' => "http://www.w3.org/2003/05/soap-envelope",
              'cli' => "http://clientes.tcc.com.co/",
         );
+        $nusoap_client->requestHeaders = array(
+             'Content-Type' => "application/soap+xml;charset=UTF-8",
+        );
+        $nusoap_client->responseHeader = "Content-Type:application/soap+xml;charset=UTF-8";
+        $nusoap_client->response = "Content-Type:application/soap+xml;charset=UTF-8";
+        $nusoap_client->responseData = "Content-Type:application/soap+xml;charset=UTF-8";
+        $nusoap_client->responseHeaders = array(
+             'Content-Type' => "application/soap+xml;charset=UTF-8",
+        );
+
+        $headers = array(
+             'Content-Type' => "application/soap+xml;charset=UTF-8",
+        );
+        //return response()->json($nusoap_client);
 
         //Se intenta mandar el servicio pero nos responde con un error
         $params = array(
@@ -322,7 +336,7 @@ class tccwsController extends Controller
         //$response = $nusoap_client->call('GrabarDespacho4', $params, '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
         $response = $nusoap_client->send($data['txt'],'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
 
-        return response()->json($nusoap_client);
+        return response()->json($nusoap_client->getDebugAsXMLComment());
 
         $message .= $response['mensaje'];
       }
