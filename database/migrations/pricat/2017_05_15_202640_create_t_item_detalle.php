@@ -27,6 +27,7 @@ class CreateTItemDetalle extends Migration
       			$table->string('ide_descorta');
       			$table->string('ide_deslarga');
       			$table->string('ide_descompleta');
+            $table->string('ide_desinvima');
       			$table->unsignedInteger('ide_catlogyca');
             $table->foreign('ide_catlogyca')->references('id')
                   ->on('t_categorias_logyca')

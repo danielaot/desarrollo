@@ -122,7 +122,7 @@ class Paso1Controller extends Controller
           }
         }
 
-        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'estadoref', 'items', 'item', 'itemdet');
+        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'estadoref', 'items', 'itemdet');
 
         return response()->json($response);
     }
@@ -249,6 +249,8 @@ class Paso1Controller extends Controller
 
         $url = url('pricat/desarrolloactividades');
 
+        return response($url, 200);
+
         // $response = compact('update', 'url');
 
         return response($url, 200);
@@ -269,8 +271,10 @@ class Paso1Controller extends Controller
 
 
       $itemdet = ItemDetalle::with('estadoref','uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
-                                   'submercadeo', 'sublinea', 'submarca', 'clase', 'presentacion',
-                                   'submercadeo2', 'regalias', 'itemean', 'items')
+                                   'submercadeo', 'sublinea', 'submarca', 'clase', 'presentacion', 'menuprom',
+                                   'submercadeo2', 'regalias', 'itemean', 'items', 'tipoprom', 'tipooferta',
+                                   'items.tipo', 'comp1', 'comp2', 'comp3', 'comp4', 'comp5', 'comp6', 'comp7', 'comp8',
+                                   'nomtemporada')
                                    ->where('ide_item', $idItem)->get();
 
       return view('layouts.pricat.actividades.paso1edit', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'ref', 'itemdet'));
@@ -333,7 +337,6 @@ class Paso1Controller extends Controller
                    ->update(['ite_referencia' => $ref, 'ite_tproducto' => $tipo['idItemCriterioMayor'], 'ite_eanext' => $request->ean, 'ite_dat_captura' => $ite_dat_captura]);
 
        $idItem = Item::where('ite_proy', $request->proy)->get();
-
        $ide_toferta = $request->tipooferta ? $request->tipooferta['idItemCriterioMayor'] : 'noap';
        $ide_meprom = $request->menupromo ? $request->menupromo['idItemCriterioMayor'] : 'noap';
        $ide_tiprom = $request->tipopromo ? $request->tipopromo['idItemCriterioMayor'] : 'noap';

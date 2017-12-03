@@ -8,6 +8,9 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
     $http.get($scope.getUrl).then(function(response){
       var info = response.data;
       $scope.proyectos = angular.copy(info.proyectos);
+      $scope.proyectosterm = angular.copy(info.proyectosterm);
+      $scope.proyectosproc = angular.copy(info.proyectosproc);
+      $scope.proyectosxcert = angular.copy(info.proyectosxcert);
       $scope.procesos = angular.copy(info.procesos);
       angular.element('.close').trigger('click');
       $scope.progress = false;
@@ -16,7 +19,7 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
 
   $scope.dtOptions = DTOptionsBuilder.newOptions();
   $scope.dtColumnDefs = [
-    DTColumnDefBuilder.newColumnDef(3).notSortable()
+    DTColumnDefBuilder.newColumnDef(2).notSortable()
   ];
 
   $scope.getInfo();

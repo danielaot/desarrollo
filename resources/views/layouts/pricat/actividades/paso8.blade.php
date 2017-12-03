@@ -58,6 +58,17 @@
           </div>
           <br><br>
           <div class="row">
+            <div class="col-sm-8">
+              <div class="row">
+                <label class="col-sm-3">Descripción INVIMA :</label>
+                <div class="col-sm-9">
+                  <input type="text" ng-model="producto.descripcion" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <div class="row">
             <div class="text-center">
               <input type="hidden" ng-model="producto.proy" ng-init="producto.proy = {{$idproyecto}}"/>
               <input type="hidden" ng-model="producto.act" ng-init="producto.act = {{$idactividad}}"/>

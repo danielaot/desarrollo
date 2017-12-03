@@ -14,7 +14,7 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
       var info = response.data;
       $scope.proyectos = angular.copy(info.proyectos);
       $scope.referencias = angular.copy(info.referencias);
-      console.log($scope.referencias);
+      $scope.linea = angular.copy(info.linea);
       angular.element('.close').trigger('click');
       $scope.progress = false;
     });
@@ -49,11 +49,25 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
   $scope.consultaReferencia = function(){
     $http.post($scope.url, $scope.consultaref).then(function(response){
       $scope.ref = $scope.consultaref;
+      $scope.lista = response.data.lista;
+      console.log($scope.lista);
     }, function(){});
+  }
+
+  $scope.generarExcel = function(){
+    $http.get($scope.getUrl).then(function(response){
+      var info = response.data;
+      $scope.proyectos = angular.copy(info.proyectos);
+      $scope.referencias = angular.copy(info.referencias);
+      $scope.linea = angular.copy(info.linea);
+      angular.element('.close').trigger('click');
+      $scope.progress = false;
+    });
   }
 
   $scope.setReferencia = function(referencia){
   $scope.referencia = referencia;
+  console.log($scope.referencia);
   //Inicio Paso 1
   $scope.producto.origen = angular.copy($scope.referencia.detalles.origen.descripcionItemCriterioMayor);
   $scope.producto.tipomarca = angular.copy($scope.referencia.detalles.ide_tmarca);
@@ -66,10 +80,21 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
   $scope.producto.categoria = angular.copy($scope.referencia.detalles.categoria.descripcionItemCriterioMayor);
   $scope.producto.sublinea = angular.copy($scope.referencia.detalles.sublinea.descripcionItemCriterioMayor);
   $scope.producto.submercadeo2 = angular.copy($scope.referencia.detalles.submercadeo2.descripcionItemCriterioMayor);
-  $scope.producto.regalias = angular.copy($scope.referencia.detalles.ide_regalias);
-  $scope.producto.tipooferta = angular.copy($scope.referencia.detalles.ide_tiprom);
-  $scope.producto.menupromo = angular.copy($scope.referencia.detalles.ide_meprom);
-  $scope.producto.tipo = angular.copy($scope.referencia.ite_tproducto);
+  $scope.producto.regalias = angular.copy($scope.referencia.detalles.regalias.descripcionItemCriterioMayor);
+  $scope.producto.tipooferta = angular.copy($scope.referencia.detalles.tipooferta.descripcionItemCriterioMayor);
+  $scope.producto.menupromo = angular.copy($scope.referencia.detalles.menuprom.descripcionItemCriterioMayor);
+  $scope.producto.comp2 = angular.copy($scope.referencia.detalles.ide_comp2);
+  $scope.producto.comp4 = angular.copy($scope.referencia.detalles.ide_comp4);
+  $scope.producto.comp6 = angular.copy($scope.referencia.detalles.ide_comp6);
+  $scope.producto.comp8 = angular.copy($scope.referencia.detalles.ide_comp8);
+  $scope.producto.anotemporada = angular.copy($scope.referencia.detalles.ide_anotemporada);
+  $scope.producto.segmento = angular.copy($scope.referencia.detalles.segmento);
+  $scope.producto.tpromocion = angular.copy($scope.referencia.detalles.tipoprom.descripcionItemCriterioMayor);
+  $scope.producto.comp1 = angular.copy($scope.referencia.detalles.ide_comp1);
+  $scope.producto.comp3 = angular.copy($scope.referencia.detalles.ide_comp3);
+  $scope.producto.comp5 = angular.copy($scope.referencia.detalles.ide_comp5);
+  $scope.producto.comp7 = angular.copy($scope.referencia.detalles.ide_comp7);
+  $scope.producto.nomtemporada = angular.copy($scope.referencia.detalles.nomtemporada.descripcionItemCriterioMayor);
   var fecha = new Date($scope.referencia.ite_dat_captura);
   fecha = fecha.getTime() + fecha.getTimezoneOffset()*60*1000;
   $scope.referencia.ite_dat_captura = new Date(fecha);
@@ -100,6 +125,11 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
   $scope.patron.undest = angular.copy($scope.referencia.patrones.ipa_undest);
   $scope.patron.caest = angular.copy($scope.referencia.patrones.ipa_caest);
   //Fin Paso 6
+
+  //Inicio Paso 8
+  $scope.producto.ide_desinvima = angular.copy($scope.referencia.detalles.ide_desinvima);
+  console.log($scope.descripcion.ide_desinvima);
+  //Fin Paso 8
 
   }
 

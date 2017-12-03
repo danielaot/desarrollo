@@ -30,6 +30,7 @@
            </md-chips>
           </div>
           <button type="submit" class="btn btn-primary">Consultar</button>
+          <button type="button" class="btn btn-success" ng-click="generarExcel()">Generar Excel</button>
         </div>
         <hr>
         <div class="form-group">
@@ -37,13 +38,15 @@
             <thead>
               <tr>
                 <th>Referencia</th>
+                <th>Línea</th>
                 <th>Registro Sanitario</th>
                 <th></th>
               </tr>
             </thead>
             <tbody ng-if="ref !== undefined">
               <tr ng-repeat ="referencia in ref">
-                <td>@{{referencia.ite_referencia}}</td>
+                <td>@{{referencia.ite_referencia}} - @{{referencia.detalles.ide_descompleta}}</td>
+                <td>@{{referencia.detalles.linea.descripcionItemCriterioMayor}}</td>
                 <td>@{{referencia.detalles.notificacionsanitaria.nosa_notificacion}}</td>
                 <td>
                   <button type="button" class="btn btn-info btn-sm glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modal1" ng-click="setReferencia(referencia)"></button>

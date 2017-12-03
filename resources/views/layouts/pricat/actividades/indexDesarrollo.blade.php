@@ -32,7 +32,7 @@
                         @{{desarrollo[0].actividades.act_descripcion}}
                       </div>
                       <div class="col-sm-2 text-right">
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" ng-click="regresar(desarrollo[0])" data-target="#modal1">
+                        <button ng-if="desarrollo[0].dac_act_id !== 1" type="button" class="btn btn-danger btn-sm" data-toggle="modal" ng-click="regresar(desarrollo[0])" data-target="#modal1">
                           <i class="fa fa-arrow-circle-left"></i> Regresar
                         </button>
                         <a href="@{{desarrollo[0].url}}">

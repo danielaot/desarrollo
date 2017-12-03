@@ -23,7 +23,7 @@
           <div class="row">
             <div class="col-sm-5 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Tipo de Producto:</label>
+                <label class="col-sm-5 control-label">Tipo de Producto :</label>
                 <div class="col-sm-4">
                   <select class="form-control" ng-model="producto.tipo" ng-change="validateTipo()">
                     <option value="Regular">Regular</option>
@@ -35,7 +35,7 @@
             </div>
             <div class="col-sm-5 form-group">
               <div class="row">
-                <label class="col-sm-5 control-label">Estado Referencia:</label>
+                <label class="col-sm-5 control-label">Estado Referencia :</label>
                 <div class="col-sm-4">
                   <select class="form-control" ng-model="producto.estadoref" ng-options="opt.descripcionItemCriterioMayor for opt in estadoref track by opt.idItemCriterioMayor"></select>
                 </div>

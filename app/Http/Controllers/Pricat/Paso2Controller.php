@@ -39,7 +39,6 @@ class Paso2Controller extends Controller
         $tipo = $item['tipo']['descripcionItemCriterioMayor'];
         $categoria = $item['detalles']['categoria']['descripcionItemCriterioMayor'];
         $comp = $componente->descripcion;
-        //return ($comp)
 
         return view('layouts.pricat.actividades.paso2', compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'tipo', 'categoria', 'item'));
     }

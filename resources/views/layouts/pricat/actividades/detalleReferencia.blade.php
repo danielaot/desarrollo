@@ -85,7 +85,7 @@
                           <div class="col-sm-12">
                             <input type="text" class="form-control" ng-model="producto.tipooferta" disabled>
                           </div>
-                          <label class="col-sm-12 control-label">Menu de Promociones<span class="required">*</span>:</label>
+                          <label class="col-sm-12 control-label">Menu de Promociones :</label>
                           <div class="col-sm-12">
                             <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
                           </div>
@@ -93,21 +93,21 @@
                       <div ng-if="producto.tipo != '1301'">
                         <label class="col-sm-12 control-label">Ref 2 :</label>
                         <div class="col-sm-12">
-                          <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
+                          <input type="text" class="form-control" ng-model="producto.comp2" disabled>
                         </div>
                           <label class="col-sm-12 control-label">Ref 4 :</label>
                           <div class="col-sm-12">
-                            <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
+                            <input type="text" class="form-control" ng-model="producto.comp4" disabled>
                           </div>
                       </div>
                       <div ng-if="producto.tipo != '1301'">
                         <label class="col-sm-12 control-label">Ref 6 :</label>
                         <div class="col-sm-12">
-                          <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
+                          <input type="text" class="form-control" ng-model="producto.comp6" disabled>
                         </div>
                         <label class="col-sm-12 control-label">Ref 8 :</label>
                         <div class="col-sm-12">
-                        <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
+                        <input type="text" class="form-control" ng-model="producto.comp8" disabled>
                         </div>
                       </div>
                       <div ng-if="producto.tipo == '1306'">
@@ -117,20 +117,20 @@
                         </div>
                       </div>
                       <div ng-if="producto.categoria.cat_txt_descrip == 'Accesorios'">
-                        <label class="col-sm-12 control-label">Segmento<span class="required">*</span> :</label>
+                        <label class="col-sm-12 control-label">Segmento :</label>
                         <div class="col-sm-12">
-                          <input type="text" class="form-control" ng-model="producto.menupromo" disabled>
+                          <input type="text" class="form-control" ng-model="producto.segmento" disabled>
                         </div>
                       </div>
                     </div>
                     <!-- fin izquierda -->
                     <!-- inicio derecha -->
                     <div class="col-md-6">
-                      <label class="col-sm-12 control-label">Clase<span class="required">*</span> :</label>
+                      <label class="col-sm-12 control-label">Clase :</label>
                       <div class="col-sm-12">
                         <input type="text" class="form-control" ng-model="producto.clase" disabled>
                       </div>
-                      <label class="col-sm-12 control-label">Presentación:</label>
+                      <label class="col-sm-12 control-label">Presentación :</label>
                       <div class="col-sm-12">
                         <input type="text" class="form-control" ng-model="producto.presentacion" disabled>
                     </div>
@@ -138,53 +138,53 @@
                     <div class="col-sm-12">
                       <input type="text" class="form-control" ng-model="producto.categoria" disabled>
                     </div>
-                    <label class="col-sm-12 control-label">Sublinea<span class="required">*</span> :</label>
+                    <label class="col-sm-12 control-label">Sublinea :</label>
                     <div class="col-sm-12">
                       <input type="text" class="form-control" ng-model="producto.sublinea" disabled>
                     </div>
-                    <label class="col-sm-12 control-label">Sublinea Mercadeo2<span class="required">*</span>:</label>
+                    <label class="col-sm-12 control-label">Sublinea Mercadeo2 :</label>
                     <div class="col-sm-12">
                       <input type="text" class="form-control" ng-model="producto.submercadeo2" disabled>
                     </div>
-                    <label class="col-sm-12 control-label">Regalias<span class="required">*</span> :</label>
+                    <label class="col-sm-12 control-label">Regalias :</label>
                     <div class="col-sm-12">
                       <input type="text" class="form-control" ng-model="producto.regalias" disabled>
                     </div>
                     <div ng-if="producto.tipo != '1301'">
-                      <label class="col-sm-12 control-label">Tipo Promoción<span class="required">*</span> :</label>
+                      <label class="col-sm-12 control-label">Tipo Promoción :</label>
                       <div class="col-sm-12">
                         <input type="text" class="form-control" ng-model="producto.tpromocion" disabled>
                       </div>
-                      <label class="col-sm-12 control-label">Ref 1<span class="required">*</span> :</label>
+                      <label class="col-sm-12 control-label">Ref 1 :</label>
                       <div class="col-sm-12">
-                        <input type="text" class="form-control" ng-model="producto.ref1" disabled>
+                        <input type="text" class="form-control" ng-model="producto.comp1" disabled>
                       </div>
                     </div>
                     <div ng-if="producto.tipo != '1301'">
                       <label class="col-sm-12 control-label">Ref 3 :</label>
                       <div class="col-sm-12">
-                        <input type="text" class="form-control" ng-model="producto.ref3" disabled>
+                        <input type="text" class="form-control" ng-model="producto.comp3" disabled>
                       </div>
 
                       <label class="col-sm-12 control-label">Ref 5 :</label>
                       <div class="col-sm-12">
-                        <input type="text" class="form-control" ng-model="producto.ref5" disabled>
+                        <input type="text" class="form-control" ng-model="producto.comp5" disabled>
                       </div>
                     </div>
                     <div ng-if="producto.tipo != '1301'">
                       <label class="col-sm-12 control-label">Ref 7 :</label>
                       <div class="col-sm-12">
-                        <input type="text" class="form-control" ng-model="producto.ref7" disabled>
+                        <input type="text" class="form-control" ng-model="producto.comp7" disabled>
                       </div>
                     </div>
                     <div ng-if="producto.tipo == '1306'">
-                      <label class="col-sm-12 control-label">Nombre Temporada<span class="required">*</span> :</label>
+                      <label class="col-sm-12 control-label">Nombre Temporada :</label>
                       <div class="col-sm-12">
                         <input type="text" class="form-control" ng-model="producto.nomtemporada" disabled>
                       </div>
                     </div>
                     <div ng-if="producto.categoria.cat_txt_descrip == 'Accesorios'">
-                      <label class="col-sm-12 control-label">Acondicionamiento<span class="required">*</span> :</label>
+                      <label class="col-sm-12 control-label">Acondicionamiento :</label>
                       <div class="col-sm-12">
                         <select class="form-control" ng-model="producto.acondicionamiento" ng-options="opt.descripcionItemCriterioMayor for opt in acondicionamiento track by opt.idItemCriterioMayor" required></select>
                       </div>
@@ -628,11 +628,85 @@
             </md-content>
         </md-tab>
           <!-- fin paso 6 -->
-          <!-- inicio paso 6 -->
-          <md-tab label="Registro Sanitario">
+          <!-- inicio paso 8 -->
+          <md-tab label="Registro Sanitario" ng-if="referencia.ite_tproducto  == '1301'">
+            <md-content class="md-padding">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <label class="col-sm-3">Referencia :</label>
+                      <p class="col-sm-7">@{{referencia.ite_referencia}} - @{{referencia.detalles.ide_descompleta}}</p>
+                    </div>
+                  </div>
+                </div>
+                <br><br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label class="col-sm-4">Categoria :</label>
+                      <p class="col-sm-7">@{{referencia.detalles.ide_categoria}} - @{{referencia.detalles.categoria.descripcionItemCriterioMayor}}</p>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <label class="col-sm-4">Línea :</label>
+                      <p class="col-sm-7">@{{referencia.detalles.ide_linea}} - @{{referencia.detalles.linea.descripcionItemCriterioMayor}}</p>
+                    </div>
+                  </div>
+                </div>
+                <br><br>
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <label class="col-sm-4">Granel asociado en el ERP :</label>
+                      <p class="col-sm-7">@{{lista.Cod_Item_Componente}} - @{{lista.Nom_Item_Componente}}</p>
+                    </div>
+                  </div>
+                </div>
+                <br><br>
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <label class="col-sm-3">Notificación Sanitaria :</label>
+                      <p class="col-sm-3">
+                        @{{referencia.detalles.notificacionsanitaria.nosa_notificacion}}
+                      </p>
+                      <div class="col-sm-2">
+                        <a href="../../storage/app@{{referencia.detalles.notificacionsanitaria.nosa_documento}}" target="_blank">
+                          <button type="button" class="btn btn-info btn-sm">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                          </button>
+                        </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br><br>
+              <div class="row">
+                <label class="col-sm-2">Descripción INVIMA:</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" ng-model="producto.ide_desinvima" disabled>
+                </div>
+              </div>
+            </md-content>
+          </md-tab>
+        <!-- fin paso 8 -->
+        <!-- Inicio foto medidas -->
+        <md-tab label="Foto Medidas">
+            <md-content class="md-padding">
+              <div align="center">
+                <img src="../../storage/app@{{referencia.detalles.ide_imagen}}">
+              </div>
+            </md-content>
+        </md-tab>
+        <!-- fin foto medidas -->
+        <!-- Inicio foto producto terminado -->
+        <md-tab label="Foto Producto Terminado">
             <md-content class="md-padding">
             </md-content>
         </md-tab>
+        <!-- fin foto producto terminado -->
     </md-tabs>
 
   </div>

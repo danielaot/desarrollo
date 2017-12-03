@@ -20,6 +20,7 @@ class TItemDetalle extends Model
         'ide_descorta',
         'ide_desclarga',
         'ide_descompleta',
+        'ide_desinvima',
         'ide_catlogyca',
         'ide_nomfab',
         'ide_origen',
@@ -33,6 +34,10 @@ class TItemDetalle extends Model
         'ide_comp2',
         'ide_comp3',
         'ide_comp4',
+        'ide_comp5',
+        'ide_comp6',
+        'ide_comp7',
+        'ide_comp8',
         'ide_categoria',
         'ide_linea',
         'ide_sublinea',
@@ -213,5 +218,45 @@ class TItemDetalle extends Model
     public function estadoref()
     {
         return $this->hasOne('App\Models\Genericas\Itemcriteriomayor', 'idItemCriterioMayor', 'ide_estadoref')->where('idItemCriterioPlanItemCriterioMayor','120');
+    }
+
+    public function comp1()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp1');
+    }
+
+    public function comp2()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp2');
+    }
+
+    public function comp3()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp3');
+    }
+
+    public function comp4()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp4');
+    }
+
+    public function comp5()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp5');
+    }
+
+    public function comp6()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp6');
+    }
+
+    public function comp7()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp7');
+    }
+
+    public function comp8()
+    {
+        return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp8');
     }
 }

@@ -39,6 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('responsables', 'Pricat\ResponsablesController', ['except' => ['create', 'show', 'edit']]);
     Route::get('responsablesinfo', 'Pricat\ResponsablesController@getInfo');
 
+    Route::resource('notiactividad', 'Pricat\NotiActividadController', ['except' => ['create', 'show', 'edit']]);
+    Route::get('notiactividadinfo', 'Pricat\NotiActividadController@getInfo');
+
     Route::resource('procesos', 'Pricat\ProcesosController', ['except' => ['create', 'show', 'edit']]);
     Route::get('procesosinfo', 'Pricat\ProcesosController@getInfo');
     Route::post('actividades', 'Pricat\ProcesosController@storeActividad');
@@ -102,6 +105,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('paso7', 'Pricat\Paso7Controller@update');
 
     Route::resource('paso8', 'Pricat\Paso8Controller');
+    //Route::get('paso8/{proy}/{act}',  'Pricat\Paso8Controller@edit');
+    //Route::put('paso8',  'Pricat\Paso8Controller@update');
 
     Route::resource('paso9', 'Pricat\Paso9Controller');
 
@@ -112,6 +117,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('consulta', 'Pricat\ConsultaController');
     Route::get('consultainfo', 'Pricat\ConsultaController@getInfo');
     Route::post('consulta', 'Pricat\ConsultaController@consulta');
+
+    Route::resource('fotos', 'Pricat\FotosController');
+    Route::get('fotosinfo', 'Pricat\FotosController@getInfo');
+    Route::post('fotos', 'Pricat\FotosController@store');
+
 
     Route::resource('createsubempaque', 'Pricat\SubempaqueController', ['only' => ['index', 'store']]);
     Route::get('createsubempaqueinfo', 'Pricat\SubempaqueController@getInfo');

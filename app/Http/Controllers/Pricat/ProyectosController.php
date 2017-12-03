@@ -33,10 +33,17 @@ class ProyectosController extends Controller
      */
     public function getInfo()
     {
-        $proyectos = Proyecto::with('procesos')->get();
+        $proyectosterm = Proyecto::with('procesos')
+                                       ->where('proy_estado', 'Terminado')->get();
+        $proyectosproc = Proyecto::with('procesos')
+                                      ->where('proy_estado', 'En Proceso')->get();
+
+        $proyectosxcert = Proyecto::with('procesos')
+                                    ->where('proy_estado', 'Por Certificar')->get();
+
         $procesos = Proceso::all();
 
-        $response = compact('proyectos', 'procesos');
+        $response = compact('proyectosterm', 'procesos', 'proyectosproc', 'proyectosxcert');
 
         return response()->json($response);
     }

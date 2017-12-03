@@ -62,42 +62,7 @@
               </div>
             </div>
             <div class="col-sm-6 form-group">
-              <input id="imagen" type="file" class="file"/>
-              <!--div class="input-group">
-                <input type="file" class="form-control"/>
-                <div class="input-group-btn">
-                  <span class="btn btn-success btn-sm">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>Cargar Imágen</span>
-                  </span>
-                </div>
-              </div-->
-              <!--div class="row">
-                <div class="col-sm-3">
-                  <span id="dropzone" class="btn btn-success btn-sm">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>Cargar Imágen</span>
-                  </span>
-                </div>
-                <div class="col-sm-6">
-                  <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone style="display: none;"></div>
-                  <div class="table table-striped" class="files" id="previews">
-                    <div id="template" class="file-row">
-                      <div>
-                        <span class="preview" style="margin: 5px 15px; border: 1px solid; display: inline-block;">
-                          <img data-dz-thumbnail />
-                        </span>
-                        <button data-dz-remove class="btn btn-danger delete">
-                          <i class="glyphicon glyphicon-trash"></i>
-                        </button>
-                      </div>
-                      <div>
-                        <strong class="error text-danger" data-dz-errormessage></strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div-->
+              <input file-model="imagen" type="file" class="form-control" accept=".png, .jpg, .jpeg"/>
             </div>
           </div>
         </div>
@@ -157,7 +122,7 @@
               <div class="row">
                 <label class="col-sm-5 control-label">Peso Neto:</label>
                 <div class="col-sm-6 input-group">
-                  <input ng-if="pesoneto == ''"  type="number" class="form-control" ng-model="producto.pesoneto" min="0" required/>
+                  <input ng-if="pesoneto == ''" type="number" class="form-control" ng-model="producto.pesoneto" min="0" required/>
                   <input type="number" class="form-control" ng-model="producto.pesoneto" ng-init="producto.pesoneto = {{$pesoneto}}" min="0" required/>
                   <div class="input-group-addon">Kg</div>
                 </div>

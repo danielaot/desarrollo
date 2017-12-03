@@ -38,4 +38,9 @@ class TActividad extends Model
   	{
   		  return $this->hasMany('App\Models\Pricat\TDesarrolloActividad', 'dac_act_id');
   	}
+
+    public function notiactividad()
+    {
+      		return $this->hasMany('App\Models\Pricat\TNotiActividad','not_actividad', 'id');
+    }
 }

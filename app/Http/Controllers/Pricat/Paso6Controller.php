@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Pricat\DesarrolloActividadesController as DesarrolloCtrl;
 use Validator;
 use DB;
+use Uuid;
 
 use App\Models\Pricat\TCondManipulacion as CManipulacion;
 use App\Models\Pricat\TTipoEmpaque as TEmpaque;
@@ -30,24 +31,25 @@ class Paso6Controller extends Controller
         $item = Item::with('detalles','eanes')
                     ->where('ite_proy', $idproyecto)
                     ->get()->first();
-
+        //return response()->json($item);
         $descorta = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_descorta);
         $deslarga = str_replace($item->detalles->ide_contenido.$item->detalles->ide_umcont, '', $item->detalles->ide_deslarga);
 
         $pesoneto = 0;
+
         if($item->ite_tproducto == '1301'){
 
           $lista = ListaMateriales::where(['Cod_Item' => $item->ite_referencia.'P', 'Tipo_Item_Componente' => 'INVPROCEG', 'metodo' => '0001'])
                                     ->get()->first();
+
           if (count($lista) > 0) {
             $formula = FormulaMaestra::where('frm_txt_codigounoe', trim($lista->Cod_Item_Componente))
-            ->get()->first();
-
+                                      ->get()->first();
             $densidad = $formula->frm_txt_densidad;
 
             $pesoneto = $item->detalles['ide_contenido'] * $densidad/1000;
+            }
           }
-        }
 
         $response = compact('ruta', 'titulo', 'idproyecto', 'idactividad', 'item', 'descorta', 'deslarga', 'pesoneto');
 
@@ -99,13 +101,12 @@ class Paso6Controller extends Controller
         $empaque = $request->empaque;
         $patron = $request->patron;
 
-        /*if ($request->hasFile('imagen')){
+        if ($request->hasFile('imagen')){
           $filePath = '/public/pricat/items/';
           $file = $request->file('imagen');
-          $fileName = $producto['ref'].'-'.Uuid::uuid4().'.'.$file->getClientOriginalExtension();
+          $fileName = Uuid::uuid4().'.'.$file->getClientOriginalExtension();
           $file->storePubliclyAs($filePath, $fileName);
-          return response()->json($fileName);
-        }*/
+        }
 
         $itemdet = ItemDetalle::where('ide_item', $producto['item'])
                               ->get()->first();
@@ -119,6 +120,7 @@ class Paso6Controller extends Controller
         $itemdet->ide_tara = $producto['pesobruto']-$producto['pesoneto'];
         $itemdet->ide_temp = $producto['tempaque'];
         $itemdet->ide_condman = $producto['manipulacion'];
+        $itemdet->ide_imagen = $filePath.$fileName;
         $itemdet->save();
 
         $descorta = str_replace($itemdet->ide_contenido.$itemdet->ide_umcont, '', $itemdet->ide_descorta);
@@ -200,6 +202,7 @@ class Paso6Controller extends Controller
     }
 
     public function editMedidas(Request $request){
+
       $validationRules = [
         'producto.proy' => 'required|numeric',
         'producto.act' => 'required|numeric',
@@ -229,10 +232,20 @@ class Paso6Controller extends Controller
       $ide_volumen = $producto['alto']*$producto['ancho']*$producto['profundo'];
       $ide_tara = $producto['pesobruto']-$producto['pesoneto'];
 
+      if ($request->hasFile('imagen')){
+        $filePath = '/public/pricat/items/';
+        $file = $request->file('imagen');
+        $fileName = Uuid::uuid4().'.'.$file->getClientOriginalExtension();
+        $file->storePubliclyAs($filePath, $fileName);
+      }
+
+      $ide_imagen = $filePath.$fileName;
+
       ItemDetalle::where('ide_item', $producto['item'])
                   ->update(['ide_alto' => $producto['alto'], 'ide_ancho' => $producto['ancho'], 'ide_profundo' =>$producto['profundo'],
                           'ide_volumen' => $ide_volumen, 'ide_pesobruto' => $producto['pesobruto'], 'ide_pesoneto' => $producto['pesoneto'],
-                          'ide_tara' => $ide_tara, 'ide_temp' => $producto['tempaque']['id'], 'ide_condman' => $producto['manipulacion']['id']]);
+                          'ide_tara' => $ide_tara, 'ide_temp' => $producto['tempaque']['id'], 'ide_condman' => $producto['manipulacion']['id'],
+                          'ide_imagen' => $ide_imagen]);
 
       $iea_descorta = $descorta.$producto['cantemb'].'art';
       $iea_deslarga = $deslarga.$producto['cantemb'].'art';

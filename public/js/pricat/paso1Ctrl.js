@@ -40,6 +40,19 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
 
       // inicio edit
       if ($scope.itemdet !== undefined) {
+          switch ($scope.itemdet[0].items.ite_tproducto) {
+            case '1301':
+                $scope.tipop = 'Regular';
+              break;
+            case '1302':
+                $scope.tipop = 'Oft.';
+              break;
+            case '1306':
+                $scope.tipop = 'Etch.';
+              break;
+          }
+
+        $scope.producto.tipo = $scope.tipop;
         $scope.producto.estadoref = angular.copy($scope.itemdet[0].estadoref);
         $scope.producto.uso = angular.copy($scope.itemdet[0].uso);
         $scope.producto.marca = $filter('filter')($scope.marcas, {mar_nombre : $scope.itemdet[0].ide_marca})[0];
@@ -67,6 +80,19 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
         $scope.producto.sublinea = angular.copy($scope.itemdet[0].sublinea);
         $scope.producto.sublinmercadeo2 = angular.copy($scope.itemdet[0].submercadeo2);
         $scope.producto.regalias = angular.copy($scope.itemdet[0].regalias);
+        $scope.producto.tipopromo = angular.copy($scope.itemdet[0].tipoprom);
+        $scope.producto.tipooferta = angular.copy($scope.itemdet[0].tipooferta);
+        $scope.producto.menupromo = angular.copy($scope.itemdet[0].menuprom);
+        $scope.producto.comp1 = angular.copy($scope.itemdet[0].comp1);
+        $scope.producto.comp2 = angular.copy($scope.itemdet[0].comp2);
+        $scope.producto.comp3 = angular.copy($scope.itemdet[0].comp3);
+        $scope.producto.comp4 = angular.copy($scope.itemdet[0].comp4);
+        $scope.producto.comp5 = angular.copy($scope.itemdet[0].comp5);
+        $scope.producto.comp6 = angular.copy($scope.itemdet[0].comp6);
+        $scope.producto.comp7 = angular.copy($scope.itemdet[0].comp7);
+        $scope.producto.comp8 = angular.copy($scope.itemdet[0].comp8);
+        $scope.producto.nomtemporada = angular.copy($scope.itemdet[0].nomtemporada);
+        $scope.producto.anotemporada = angular.copy($scope.itemdet[0].ide_anotemporada);
         var fecha = new Date($scope.itemdet[0].items.ite_dat_captura);
         fecha = fecha.getTime() + fecha.getTimezoneOffset()*60*1000;
         $scope.itemdet[0].items.ite_dat_captura = new Date(fecha);
@@ -83,7 +109,6 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
   $scope.producto = {
                       'categoria' : '',
                       'variedad' : [],
-                      'tipo' : 'Regular',
                       'fabricante' : 'Belleza Express SA'
                     };
 
@@ -109,7 +134,12 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
 
   $scope.categoriaSearch = function(query){
     if(query){
-      return $filter('filter')($scope.catlogyca, {tcl_descripcion : query});
+    //  return $filter('filter')($scope.catlogyca, {tcl_descripcion : query});
+      var filtro = $filter('filter')($scope.catlogyca, {tcl_descripcion : query});
+      if (filtro.length == 0) {
+          filtro = $filter('filter')($scope.catlogyca, {tcl_codigo : query});
+      }
+      return filtro;
     }
     else{
       return $scope.catlogyca;

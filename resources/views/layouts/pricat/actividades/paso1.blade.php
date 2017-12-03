@@ -18,9 +18,10 @@
           <div class="row">
             <div class="col-sm-5 form-group">
               <div class="row">
-                <label class="col-sm-6 control-label">Tipo de Producto:</label>
+                <label class="col-sm-6 control-label">Tipo de Producto<span class="required">*</span> :</label>
                 <div class="col-sm-5">
                   <select class="form-control" ng-model="producto.tipo" ng-change="validateTipo()">
+                    <option value="" selected="selected">Seleccione..</option>
                     <option value="Regular">Regular</option>
                     <option value="Etch.">Estuche</option>
                     <option value="Oft.">Oferta</option>
@@ -30,7 +31,7 @@
             </div>
             <div class="col-sm-5 form-group">
               <div class="row">
-                <label class="col-sm-6 control-label">Estado Referencia:</label>
+                <label class="col-sm-6 control-label">Estado Referencia<span class="required">*</span> :</label>
                 <div class="col-sm-5">
                   <select class="form-control" ng-model="producto.estadoref" ng-options="opt.descripcionItemCriterioMayor for opt in estadoref track by opt.idItemCriterioMayor"></select>
                 </div>
@@ -115,7 +116,7 @@
                 </div>
                 <div class="col-sm-3">
                   <select class="form-control" ng-model="producto.contum" ng-change="createDescripciones()" required>
-                    <option value="art" ng-if="producto.tipo != 'Regular'">art</option>
+                    <option value="art">art</option>
                     <option value="gr">gr</option>
                     <option value="ml">ml</option>
                     <option value="und">und</option>
