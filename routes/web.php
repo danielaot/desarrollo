@@ -50,6 +50,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('proyectos', 'Pricat\ProyectosController', ['except' => ['create', 'show', 'edit']]);
     Route::get('proyectosinfo', 'Pricat\ProyectosController@getInfo');
+    Route::put('proyectos/pausar/{id}', 'Pricat\ProyectosController@pausar');
+    Route::put('proyectos/cancelar/{id}', 'Pricat\ProyectosController@cancelar');
+    Route::put('proyectos/activar/{id}', 'Pricat\ProyectosController@activar');
 
     Route::resource('marcas', 'Pricat\MarcasController');
     Route::get('marcasinfo', 'Pricat\MarcasController@getInfo');
@@ -117,6 +120,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('consulta', 'Pricat\ConsultaController');
     Route::get('consultainfo', 'Pricat\ConsultaController@getInfo');
     Route::post('consulta', 'Pricat\ConsultaController@consulta');
+    Route::post('consultaexcel', 'Pricat\ConsultaController@generarExcel');
 
     Route::resource('fotos', 'Pricat\FotosController');
     Route::get('fotosinfo', 'Pricat\FotosController@getInfo');

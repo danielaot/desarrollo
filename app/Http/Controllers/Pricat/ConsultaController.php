@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use Carbon\Carbon;
+use Excel;
 
 use App\Models\Pricat\TProyecto as Proyecto;
 use App\Models\Pricat\TProceso as Proceso;
@@ -38,7 +39,10 @@ class ConsultaController extends Controller
                                   'detalles.regalias', 'detalles.tipooferta', 'detalles.tipoprom',
                                   'detalles.menuprom','detalles.segmento', 'detalles.nomtemporada',
                                   'detalles.tipomarcas', 'detalles.posicionarancelaria', 'detalles.grupoimpositivo',
-                                  'eanppal.tembalaje', 'detalles.tipoempaque', 'detalles.condmanipulacion', 'patrones')
+                                  'eanppal.tembalaje', 'detalles.tipoempaque', 'detalles.condmanipulacion', 'patrones',
+                                  'detalles.estadoref', 'detalles.presentacion', 'detalles.comp1', 'detalles.comp2',
+                                  'detalles.comp3', 'detalles.comp4', 'detalles.comp5', 'detalles.comp6',
+                                  'detalles.comp7', 'detalles.comp8', 'detalles.tempaques')
                                   ->get();
 
         $response = compact('proyectos', 'referencias');
@@ -46,21 +50,33 @@ class ConsultaController extends Controller
         return response()->json($response);
     }
 
-    public function generarExcel(){
-      $referencias = Item::with('detalles.notificacionsanitaria', 'tipo', 'detalles.uso',
-                                'detalles.logcategorias', 'detalles.origen', 'detalles.tipomarcas',
-                                'detalles.variedad', 'detalles.linea', 'detalles.submercadeo',
-                                'detalles.submarca', 'detalles.clase', 'detalles.presentacion',
-                                'detalles.categoria', 'detalles.sublinea', 'detalles.submercadeo2',
-                                'detalles.regalias', 'detalles.tipooferta', 'detalles.tipoprom',
-                                'detalles.menuprom','detalles.segmento', 'detalles.nomtemporada',
-                                'detalles.tipomarcas', 'detalles.posicionarancelaria', 'detalles.grupoimpositivo',
-                                'eanppal.tembalaje', 'detalles.tipoempaque', 'detalles.condmanipulacion', 'patrones')
-                                ->get();
+    public function generarExcel(Request $request){
 
-      $response = compact('proyectos', 'referencias');
+      $infocomp = $request->all();
 
-      return response()->json($response);
+    return Excel::create('Pricat', function($excel) use ($infocomp){
+        $excel->sheet('Hoja 1', function($sheet) use($infocomp){
+          $sheet->row(1,[
+            'No. ITEM','Categoría LogycaSync', 'EAN 13', 'EAN 14', 'Referencia', 'Descripción Interna', 'Descripción LogycaSync (CABASnet)',
+            'Descripción Completa', 'Marca', 'ORIGEN', 'ESTADO', 'TIPO DE MARCA', 'TIPO', 'TIPO OFERTA', 'MENU DE PROMOCION', 'TIPO PROMOCION',
+            'PRESENTACION', 'VARIEDAD', 'REF COMPONENTE PPAL', 'DESC.COMP PPAL', 'REF COMPONENTE  2', 'DESC.COMP 2', 'REF COMPONENTE  3', 'DESC.COMP 3',
+            'REF COMPONENTE  4', 'DESC.COMP 4', 'REF HOMOLOGO', 'DESC.REF HOMOLOGO', 'CATEGORIA', 'LINEA PPAL', 'SUBLINEA', 'SUBLINEA MERCADEO', 'SUBLINEA MERCADEO 2',
+            'TAMAÑO/CONTENIDO', 'UND DE MEDIDA', 'REGALIAS', 'SEGMENTO (ACC)', 'Embalaje', 'Fabricante', 'Precio Bruto (Lista)', 'Precio Neto (PVP)', 'GRUPO IMPOSITIVO',
+            '% IVA', 'Posición Arancelaria', 'Alto', 'UM', 'Ancho', 'UM', 'Profundidad', 'UM', 'Peso Neto', 'UM', 'Peso Bruto', 'UM', 'Volumen', 'UM', 'TARA (Peso del Empaque)',
+            'UM', 'Tipo de Empaque', 'Alto', 'UM', 'Ancho', 'UM', 'Profundidad', 'UM', 'Peso Neto', 'UM', 'Peso Bruto', 'UM', 'Volumen', 'UM', 'TARA (Peso del Empaque)',
+            'UM', 'Código Corrugado', 'Cantidad contenida en el envase', 'UM', 'No Cajas por Estiba', 'No Unidades por estiba', 'No Cajas por tendido', 'No tendidos por estiba',
+            'NOTIFICACION SANITARIA'
+          ]);
+          $sheet->row(2, [
+            '1', '2'
+          ]);
+          // foreach ($infocomp as $index => $inf) {
+          //   $sheet->row($index+2, [
+          //     '1', '2'
+          //   ]);
+          // }
+        });
+      })->export('xlsx');
     }
 
     public function consulta(Request $request){
@@ -98,8 +114,10 @@ class ConsultaController extends Controller
           ->get()->first();
       }
 
+
       $response = compact('lista');
 
       return response()->json($response);
+
     }
 }

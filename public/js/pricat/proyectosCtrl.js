@@ -11,6 +11,8 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
       $scope.proyectosterm = angular.copy(info.proyectosterm);
       $scope.proyectosproc = angular.copy(info.proyectosproc);
       $scope.proyectosxcert = angular.copy(info.proyectosxcert);
+      $scope.proyectospau = angular.copy(info.proyectospau);
+      $scope.proyectoscan = angular.copy(info.proyectoscan);
       $scope.procesos = angular.copy(info.procesos);
       angular.element('.close').trigger('click');
       $scope.progress = false;
@@ -50,19 +52,52 @@ app.controller('proyectosCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTO
     $scope.proyectoForm.$setPristine();
   }
 
-  /*$scope.deleteProyecto = function(ev, idproyecto){
+  $scope.pausarProyecto = function(idproyecto){
+    console.log(idproyecto);
     var confirm = $mdDialog.confirm()
           .title('')
-          .textContent('Desea eliminar el proyecto?')
+          .textContent('Desea pausar el proyecto?')
           .ariaLabel('proyecto')
-          .targetEvent(ev)
-          .ok('Eliminar')
+          .ok('Pausar')
           .cancel('Cancelar');
 
     $mdDialog.show(confirm).then(function(){
-      $http.delete($scope.url+'/'+idproyecto).then(function(response){
+      $http.put($scope.url+'/pausar/'+idproyecto.id).then(function(response){
+        console.log(response);
         $scope.getInfo();
       }, function(){});
     },function(){});
-  }*/
+  }
+
+  $scope.cancelarProyecto = function(idproyecto){
+    console.log(idproyecto);
+    var confirm = $mdDialog.confirm()
+          .title('')
+          .textContent('Desea cancelar el proyecto?')
+          .ariaLabel('proyecto')
+          .ok('Cancelar')
+          .cancel('Cerrar');
+
+    $mdDialog.show(confirm).then(function(){
+      $http.put($scope.url+'/cancelar/'+idproyecto.id).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    },function(){});
+  }
+
+  $scope.activarProyecto = function(idproyecto){
+    var confirm = $mdDialog.confirm()
+          .title('')
+          .textContent('Desea activar el proyecto?')
+          .ariaLabel('proyecto')
+          .ok('Activar')
+          .cancel('Cancelar');
+
+    $mdDialog.show(confirm).then(function(){
+      $http.put($scope.url+'/activar/'+idproyecto.id).then(function(response){
+        $scope.getInfo();
+      }, function(){});
+    },function(){});
+  }
+
 }]);

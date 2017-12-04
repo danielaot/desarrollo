@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" style="width:80%;" role="document">
     <div class="modal-content panel-primary">
       <div class="modal-header panel-heading">

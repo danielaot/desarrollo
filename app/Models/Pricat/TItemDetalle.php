@@ -259,4 +259,9 @@ class TItemDetalle extends Model
     {
         return $this->hasOne('App\Models\Genericas\TItemCriterio', 'ite_txt_referencia', 'ide_comp8');
     }
+
+    public function tempaques()
+    {
+        return $this->hasOne('App\Models\Pricat\TTipoEmpaque', 'id', 'ide_temp');
+    }
 }

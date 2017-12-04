@@ -1,6 +1,23 @@
-app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
+app.factory('Excel',function($window){
+        var uri='data:application/vnd.ms-excel;base64,',
+            template='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+            base64=function(s){return $window.btoa(unescape(encodeURIComponent(s)));},
+            format=function(s,c){return s.replace(/{(\w+)}/g,function(m,p){return c[p];})};
+        return {
+            tableToExcel:function(tableId,worksheetName){
+                var table=$(tableId),
+                    ctx={worksheet:worksheetName,table:table.html()},
+                    href=uri+base64(format(template,ctx));
+                return href;
+            }
+        };
+    })
+
+.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$window', 'Excel', '$timeout', function($scope, $http, $filter, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder, $window, Excel, $timeout){
   $scope.getUrl = "consultainfo";
   $scope.url = "consulta";
+  $scope.urlExcel = "consultaexcel";
+  $scope.urlDescarga = "";
   $scope.autocompleteDemoRequireMatch = true;
   $scope.consultaref = [];
   $scope.producto = {};
@@ -50,19 +67,14 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
     $http.post($scope.url, $scope.consultaref).then(function(response){
       $scope.ref = $scope.consultaref;
       $scope.lista = response.data.lista;
-      console.log($scope.lista);
     }, function(){});
   }
 
-  $scope.generarExcel = function(){
-    $http.get($scope.getUrl).then(function(response){
-      var info = response.data;
-      $scope.proyectos = angular.copy(info.proyectos);
-      $scope.referencias = angular.copy(info.referencias);
-      $scope.linea = angular.copy(info.linea);
-      angular.element('.close').trigger('click');
-      $scope.progress = false;
-    });
+  $scope.generarExcel = function(tableId){
+    var exportHref = Excel.tableToExcel(tableId,'WireWorkbenchDataExport');
+    $timeout(function(){
+      location.href=exportHref;
+    },100); // trigger download
   }
 
   $scope.setReferencia = function(referencia){
@@ -131,6 +143,19 @@ app.controller('consultaCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
   console.log($scope.descripcion.ide_desinvima);
   //Fin Paso 8
 
+  }
+
+  $scope.regresar = function(objActividad){
+console.log(objActividad);
+      var actividadesMostrar = [];
+      angular.forEach($scope.actividades, function(actividad){
+        if(actividad.id != objActividad.dac_act_id){
+          actividadesMostrar.push(actividad);
+        }else{
+          $scope.grupoCheckboxPredecesores =  angular.copy(actividadesMostrar);
+        }
+      });
+      $scope.proyecto = objActividad;
   }
 
 
