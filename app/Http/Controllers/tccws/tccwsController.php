@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BESA\VInformacionEmpaqueFacturaDoctos as FactuClientes;
 use App\Models\SCPRD\VInformacionEmpaqueFactura as InfoCargoFactura;
 use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
+use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
@@ -97,6 +98,12 @@ class tccwsController extends Controller
       $data['sucursalesFiltradas'] = [];
       $sucursales = collect($data['sucursales']);
 
+      $existeCliente = ClientesBoomerang::where('clb_idTercero', $data['idTercero'])->get();
+
+      if(count($existeCliente) > 0){
+        $data['tieneBoomerang'] = true;
+      }
+
       //Se filtran las sucursales por las que tiene una o mas facturas seleccionadas
       $data['sucursalesFiltradas'] = $sucursales->filter(function($sucuMap){
         return $sucuMap['hasOneOrMoreSelected'] == true;
@@ -137,6 +144,12 @@ class tccwsController extends Controller
         $sumaCajas = 0;$sumaPaletas = 0;$sumaLios = 0;$sumaPeso = 0;
         $sucursal['documentosReferencia'] = [];
         $sucursal['unidades'] = [];
+        $sucursal['unidadBoomerang'] = [];
+        $sucursal['tieneBoomerang'] = false;
+
+        if(isset($data['tieneBoomerang']) && $data['tieneBoomerang'] == true){
+          $sucursal['tieneBoomerang'] = true;
+        }
         //Se obtiene la informacion de la sucursal desde las facturas agrupadas por sucursal
         $sucursal['direcciondestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_direccion'];
         $sucursal['telefonodestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_telefono'];
@@ -216,6 +229,30 @@ class tccwsController extends Controller
           "referencias" => '',
           "unidadesinternas" => ''
         ));
+
+        if($sucursal['tieneBoomerang'] == true){
+
+              $sucursal['unidadBoomerang'] = array(
+                "tipounidad" => "TIPO_UND_DOCB",
+                "claseempaque" => 'CLEM_CAJA',
+                "tipoempaque" => '',
+                "dicecontener" => '',
+                "cantidadunidades" => 1,
+                "kilosreales" => 0,
+                "largo" => 0,
+                "alto" => 0,
+                "ancho" => 0,
+                "pesovolumen" => 0,
+                "valormercancia" => 0,
+                "codigobarras" => '',
+                "numerobolsa" => '',
+                "referencias" => '',
+                "unidadesinternas" => ''
+              );
+
+        }
+
+
         return $sucursal;
       });
 
@@ -230,6 +267,7 @@ class tccwsController extends Controller
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
+
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
           return $unidad['cantidadunidades'] > 0;
         })->values();
@@ -285,26 +323,19 @@ class tccwsController extends Controller
           'generarDocumentos' => 'false',
           'unidadesinternas' => '',
           'fuente' => '',
-          'txt' => ''
+          'txt' => '',
+          'unidadBoomerang' => $sucursal['unidadBoomerang']
         ];
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
-        //Se inicializa el cliente de nusoap
-        $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
-        $nusoap_client->soap_defencoding = 'UTF-8';
-        $nusoap_client->decode_utf8 = false;
-        $nusoap_client->version = SOAP_1_1;
-        $nusoap_client->operation = "GrabarDespacho4";
-        $err = $nusoap_client->getError();
 
-        //Se envia el archivo plano en formato xml al servicio de tcc
-        $nusoap_client->send($data['txt'],'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
+        $xmlResponseBody = $this->consumirServicioTcc($data['txt']);
 
-        $xmlResponse = $nusoap_client->responseData;
-        $xmlResponse = json_decode(json_encode(simplexml_load_string($this->limpiarXML($xmlResponse))),true);
-        $xmlResponseBody = $xmlResponse['Body']['GrabarDespacho4Response'];
+        if($sucursal['tieneBoomerang'] == true && $xmlResponseBody['respuesta'] == 0){
+          $data = $this->replaceData($data,true);
+          $xmlResponseBody['boomerangResponse'] = $this->consumirServicioTcc($data['txt']);
+        }
 
-      //  return response()->json();
         array_push($message,$xmlResponseBody);
       }
 
@@ -313,7 +344,7 @@ class tccwsController extends Controller
 
     }
 
-    public function replaceData($data){
+    public function replaceData($data,$isBoomerang = false){
 
       extract($data);
       $documento =  '<?xml version="1.0" encoding="utf-8"?>'.chr(13) . chr(10);
@@ -322,12 +353,12 @@ class tccwsController extends Controller
       $documento .= '  <soap:Body>'.chr(13) . chr(10);
       $documento .= '   <cli:GrabarDespacho4>'.chr(13) . chr(10);
       $documento .= '     <cli:objDespacho>'.chr(13) . chr(10);
+
       $grupos = collect($estructura)->unique('ddt_grupo')->values();
       $grupos = collect($grupos)->pluck('ddt_grupo');
-
       foreach ($grupos as $key => $grupo) {
           $listado = collect($estructura)->where('ddt_grupo',$grupo)->sortBy('ddt_orden');
-          $documento .= $this->replaceMvts($grupo,$listado,$data);
+          $documento .= $this->replaceMvts($grupo,$listado,$data,$isBoomerang);
       }
 
       $documento .= '      <fuente>'.'</fuente>'.chr(13) . chr(10);
@@ -352,10 +383,11 @@ class tccwsController extends Controller
     }
 
 
-    public function replaceMvts($grupo,$listado,$data){
+    public function replaceMvts($grupo,$listado,$data,$isBoomerang = false){
 
       extract($data);
       $documento = '';
+      $metaDocto = '';
       //objDespacho del xml
       if($grupo == 'a'){
 
@@ -378,8 +410,32 @@ class tccwsController extends Controller
 
       }elseif($grupo == 'b'){
         //Unidades del documento
-        foreach ($unidades as $key => $unidad) {
-          extract($unidad);
+        if($isBoomerang == false){
+
+            foreach ($unidades as $key => $unidad) {
+              extract($unidad);
+              $documento .= '      <unidad>'.chr(13) . chr(10);
+              foreach($listado as $seg){
+                $segmento = $seg->ddt_segmento;
+                $campo = $seg->ddt_campo;
+                $metaEtiqueta = $seg->ddt_nombre;
+                $lista = explode('&',$segmento);
+                for($i = 0;$i<count($lista);$i++){
+                  if($campo != '' && $lista[$i] == 'var'){
+                    $lista[$i] = $$campo;
+                  }elseif($campo === '' && $lista[$i] === 'var'){
+                    $lista[$i] = $campo;
+                  }
+                }
+                $segmento = implode('',$lista);
+                $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+              }
+              $documento .= '      </unidad>'.chr(13) . chr(10);
+            }
+
+        }else{
+
+          extract($unidadBoomerang);
           $documento .= '      <unidad>'.chr(13) . chr(10);
           foreach($listado as $seg){
             $segmento = $seg->ddt_segmento;
@@ -397,6 +453,7 @@ class tccwsController extends Controller
             $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
           }
           $documento .= '      </unidad>'.chr(13) . chr(10);
+
         }
         return $documento;
 
@@ -404,7 +461,14 @@ class tccwsController extends Controller
         //documentosReferencia del documento
         foreach ($documentosReferencia as $key => $documentoRef) {
           extract($documentoRef);
-          $documento .= '      <documentosReferencia>'.chr(13) . chr(10);
+
+          if($isBoomerang == false){
+            $metaDocto = "documentosReferencia";
+          }else{
+            $metaDocto = "documentoreferencia";
+          }
+
+          $documento .= '      <'.$metaDocto.'>'.chr(13) . chr(10);
           foreach($listado as $seg){
             $segmento = $seg->ddt_segmento;
             $campo = $seg->ddt_campo;
@@ -420,7 +484,7 @@ class tccwsController extends Controller
             $segmento = implode('',$lista);
             $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
           }
-          $documento .= '      </documentosReferencia>'.chr(13) . chr(10);
+          $documento .= '      </'.$metaDocto.'>'.chr(13) . chr(10);
         }
         return $documento;
 
@@ -437,6 +501,27 @@ class tccwsController extends Controller
       }
 
       return $xml;
+    }
+
+    public function consumirServicioTcc($xml){
+
+      //Se inicializa el cliente de nusoap
+      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
+      $nusoap_client->soap_defencoding = 'UTF-8';
+      $nusoap_client->decode_utf8 = false;
+      $nusoap_client->version = SOAP_1_1;
+      $nusoap_client->operation = "GrabarDespacho4";
+      $err = $nusoap_client->getError();
+
+      //Se envia el archivo plano en formato xml al servicio de tcc
+      $nusoap_client->send($xml,'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
+
+      $xmlResponse = $nusoap_client->responseData;
+      $xmlResponse = json_decode(json_encode(simplexml_load_string($this->limpiarXML($xmlResponse))),true);
+      $xmlResponseBody = $xmlResponse['Body']['GrabarDespacho4Response'];
+
+      return $xmlResponseBody;
+
     }
 
     /**
