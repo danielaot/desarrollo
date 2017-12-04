@@ -226,7 +226,7 @@ class tccwsController extends Controller
 
     public function getPlano(Request $request){
 
-      $message = '';
+      $message = [];
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
@@ -282,63 +282,30 @@ class tccwsController extends Controller
           'unidades' => $sucursal['unidades'],
           'documentosReferencia' => $sucursal['documentosReferencia'],
           'numeroReferenciaCliente' => '',
-          'generarDocumentos' => 'true',
+          'generarDocumentos' => 'false',
           'unidadesinternas' => '',
           'fuente' => '',
           'txt' => ''
         ];
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
-        $data = collect($data)->except('estructura','sucursales','facturasSucursales');
         //Se inicializa el cliente de nusoap
         $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
         $nusoap_client->soap_defencoding = 'UTF-8';
         $nusoap_client->decode_utf8 = false;
-        $nusoap_client->version = SOAP_1_2;
+        $nusoap_client->version = SOAP_1_1;
+        $nusoap_client->operation = "GrabarDespacho4";
         $err = $nusoap_client->getError();
 
-        //return response()->json($nusoap_client);
-        $nusoap_client->namespaces = array(
-             'soap' => "http://www.w3.org/2003/05/soap-envelope",
-             'cli' => "http://clientes.tcc.com.co/",
-        );
-        $nusoap_client->requestHeaders = array(
-             'Content-Type' => "application/soap+xml;charset=UTF-8",
-        );
-        $nusoap_client->responseHeader = "Content-Type:application/soap+xml;charset=UTF-8";
-        $nusoap_client->response = "Content-Type:application/soap+xml;charset=UTF-8";
-        $nusoap_client->responseData = "Content-Type:application/soap+xml;charset=UTF-8";
-        $nusoap_client->responseHeaders = array(
-             'Content-Type' => "application/soap+xml;charset=UTF-8",
-        );
+        //Se envia el archivo plano en formato xml al servicio de tcc
+        $nusoap_client->send($data['txt'],'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
 
-        $headers = array(
-             'Content-Type' => "application/soap+xml;charset=UTF-8",
-        );
-        //return response()->json($nusoap_client);
+        $xmlResponse = $nusoap_client->responseData;
+        $xmlResponse = json_decode(json_encode(simplexml_load_string($this->limpiarXML($xmlResponse))),true);
+        $xmlResponseBody = $xmlResponse['Body']['GrabarDespacho4Response'];
 
-        //Se intenta mandar el servicio pero nos responde con un error
-        $params = array(
-          'objDespacho' => utf8_encode($data),
-          'remesa' => 0,
-          'URLRelacionEnvio' => '',
-          'URLRotulos' => '',
-          'URLRemesa' => '',
-          'IMGRelacionEnvio' => '',
-          'IMGRotulos' => '',
-          'IMGRemesa' => '',
-          'respuesta' => 0,
-          'mensaje' => 0
-        );
-        //return response()->json(utf8_encode($data['txt']));
-        $dataOperation = $nusoap_client->getOperationData('GrabarDespacho4');
-        //return response()->json($dataOperation);
-        //$response = $nusoap_client->call('GrabarDespacho4', $params, '', 'http://clientes.tcc.com.co/GrabarDespacho4',false, null,'document','literal');
-        $response = $nusoap_client->send($data['txt'],'http://clientes.tcc.com.co/GrabarDespacho4',300,300);
-
-        return response()->json($nusoap_client->getDebugAsXMLComment());
-
-        $message .= $response['mensaje'];
+      //  return response()->json();
+        array_push($message,$xmlResponseBody);
       }
 
       $res = compact('message','data');
@@ -458,6 +425,18 @@ class tccwsController extends Controller
         return $documento;
 
       }
+    }
+
+    public function limpiarXML($xml){
+
+      $toRemove = ['env', 'cli', 'soap', 'wsse', 'xsi', 'xsd', 'wsa', 'wsu'];
+
+      foreach( $toRemove as $remove ) {
+          $xml = str_replace('<' . $remove . ':', '<', $xml);
+          $xml = str_replace('</' . $remove . ':', '</', $xml);
+      }
+
+      return $xml;
     }
 
     /**
