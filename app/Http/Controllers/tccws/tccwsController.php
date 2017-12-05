@@ -8,12 +8,12 @@ use App\Models\BESA\VInformacionEmpaqueFacturaDoctos as FactuClientes;
 use App\Models\SCPRD\VInformacionEmpaqueFactura as InfoCargoFactura;
 use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
 use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
+use App\Models\tccws\TRemesa;
+use App\Models\tccws\TFactsxremesa;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
 use nusoap_client;
-use SoapClient;
-use stdClass;
 ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
@@ -264,7 +264,9 @@ class tccwsController extends Controller
     public function getPlano(Request $request){
 
       $message = [];
+      //return response()->json($request->all());
       //Se organiza el plano por cada sucursal
+      //return response()->json($request->sucursalesFiltradas);
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
 
@@ -328,12 +330,73 @@ class tccwsController extends Controller
         ];
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
+        $data['tieneBoomerang'] = false;
+        //return response()->json($data);
 
-        $xmlResponseBody = $this->consumirServicioTcc($data['txt']);
+        $responseRemesa = $this->consumirServicioTcc($data['txt']);
+        $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
+        $xmlResponseBody['nombreSucursal'] = $sucursal['nombre'];
 
-        if($sucursal['tieneBoomerang'] == true && $xmlResponseBody['respuesta'] == 0){
-          $data = $this->replaceData($data,true);
-          $xmlResponseBody['boomerangResponse'] = $this->consumirServicioTcc($data['txt']);
+
+        if($xmlResponseBody['respuesta'] == 0){
+
+          $remesaTabla = new TRemesa;
+          $remesaTabla->rms_remesa = $xmlResponseBody['remesa'];
+          $remesaTabla->rms_cajas = 0;
+          $remesaTabla->rms_lios =  0;
+          $remesaTabla->rms_pesolios = 0;
+          $remesaTabla->rms_palets = 0;
+          $remesaTabla->rms_pesopalets = 0;
+          $remesaTabla->rms_remesapadre = null;
+          $remesaTabla->rms_isBoomerang = false;
+
+          foreach ($data['unidades'] as $key => $unidad) {
+
+            if($unidad['claseempaque'] == "CLEM_CAJA"){
+              $remesaTabla->rms_cajas = $unidad['cantidadunidades'];
+            }else if($unidad['claseempaque'] == "CLEM_LIO"){
+              $remesaTabla->rms_lios = $unidad['cantidadunidades'];
+              $remesaTabla->rms_pesolios = $unidad['kilosreales'];
+            }else if($unidad['claseempaque'] == "CLEM_PALET"){
+              $remesaTabla->rms_palets = $unidad['cantidadunidades'];
+              $remesaTabla->rms_pesopalets = $unidad['kilosreales'];
+            }
+
+          }
+          $remesaTabla->rms_pesototal = $sucursal["sumaTotalKilos"];
+          $remesaTabla->save();
+
+          if($sucursal['tieneBoomerang'] == true){
+            $data['tieneBoomerang'] = true;
+            $data = $this->replaceData($data,true);
+            $responseBoomerang = $this->consumirServicioTcc($data['txt']);
+            $xmlResponseBody['boomerangResponse'] = array("mensaje" => $responseBoomerang['mensaje'], "respuesta" => $responseBoomerang['respuesta'], "remesa" => $responseBoomerang['remesa']);
+
+            if($xmlResponseBody['boomerangResponse']['respuesta'] == 0){
+              $remesaBoomerang = new TRemesa;
+              $remesaBoomerang->rms_remesa = $xmlResponseBody['boomerangResponse']['remesa'];
+              $remesaBoomerang->rms_cajas = $sucursal['unidadBoomerang']['cantidadunidades'];
+              $remesaBoomerang->rms_lios =  0;
+              $remesaBoomerang->rms_pesolios = 0;
+              $remesaBoomerang->rms_palets = 0;
+              $remesaBoomerang->rms_pesopalets = 0;
+              $remesaBoomerang->rms_remesapadre = $remesaTabla->id;
+              $remesaBoomerang->rms_isBoomerang = true;
+              $remesaBoomerang->rms_pesototal = 0;
+              $remesaBoomerang->save();
+            }
+
+            foreach ($sucursal['documentosReferencia'] as $key => $documento) {
+              $facturaRemesa = new TFactsxremesa;
+              $facturaRemesa->fxr_remesa = $remesaTabla->id;
+              $facturaRemesa->fxr_tipodocto = $documento['tipodocumento'];
+              $facturaRemesa->fxr_numerodocto = $documento['numerodocumento'];
+              $facturaRemesa->fxr_fechadocto = Carbon::parse($documento['fechadocumento'])->toDateString();
+              $facturaRemesa->save();
+            }
+
+          }
+
         }
 
         array_push($message,$xmlResponseBody);

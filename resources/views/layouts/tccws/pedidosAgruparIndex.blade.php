@@ -163,7 +163,7 @@
 	    </section>
 
 	  </md-content> -->
-	  @include('layouts.tccws.Modales.unidadesLogisticas');
+	  @include('layouts.tccws.Modales.unidadesLogisticas')
 		<div ng-if="progress" class="progress">
 			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
 		</div>

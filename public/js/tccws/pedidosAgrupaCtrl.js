@@ -1,4 +1,4 @@
-app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', function ($scope, $http, $filter, $element) {
+app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '$mdDialog', function ($scope, $http, $filter, $element, $mdDialog) {
 	$scope.urlGetInfo = "agrupaPedidosGetInfo";
 	$scope.urlResource = "tccws";
 	$scope.urlPlano = "obtenerPlano";
@@ -188,10 +188,105 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', f
 		}
 
 		$scope.enviarRemesa = function(){
+			$scope.progress = true;
 			console.log( $scope.cliente);
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
+
+				$scope.progress = false;
+				var encabezado = "";
+				var filterSuccessTodas = $filter('filter')(response.data.message, {respuesta : "0"});
+				var filterErrorLogin = $filter('filter')(response.data.message, {respuesta : "1"});
+				var filterErrorTodas = $filter('filter')(response.data.message, {respuesta : "-1"});
+
+
+				if(filterErrorLogin.length == 0){
+
+					if(filterSuccessTodas.length > 0 && filterErrorTodas.length == 0){
+
+						if(response.data.data.tieneBoomerang == true){
+
+							encabezado = $scope.mensajeRemesaBoomerang(encabezado,filterSuccessTodas);
+
+						}else{
+							encabezado += "<br/><h5>Las facturas de las siguientes sucursales se han enviado correctamente a TCC para su despacho</h5><br/>";
+							filterSuccessTodas.forEach(function(respuestaTcc){
+								encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+							})
+						}
+
+					}else if(filterSuccessTodas.length == 0 && filterErrorTodas.length > 0){
+
+						encabezado += "<br/><h5><strong>Error:</strong> Se ha presentado un error al intentar enviar las facturas de las siguientes sucursales a TCC para su despacho</h5><br/>";
+						filterErrorTodas.forEach(function(respuestaTcc){
+							encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+						})
+
+					}else if(filterSuccessTodas.length > 0 && filterErrorTodas.length > 0){
+
+							if(response.data.data.tieneBoomerang == true){
+
+								encabezado = $scope.mensajeRemesaBoomerang(encabezado,filterSuccessTodas);
+
+							}else{
+								encabezado += "<br/><h5>Las facturas de las siguientes sucursales se han enviado correctamente a TCC para su despacho</h5><br/>";
+								filterSuccessTodas.forEach(function(respuestaTcc){
+									encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+								})
+							}
+
+							encabezado += "<br/><h5><strong>Error:</strong> Se ha presentado un error al intentar enviar las facturas de las siguientes sucursales a TCC para su despacho</h5><br/>";
+							filterErrorTodas.forEach(function(respuestaTcc){
+								encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+							})
+
+					}
+
+			}else{
+
+				encabezado += "<br/><h5><strong>Error:</strong> El servicio de TCC ha respondido con error de acceso, por favor revise sus credenciales.</h5><br/>";
+				filterErrorLogin.forEach(function(respuestaTcc){
+					console.log(respuestaTcc);
+					encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+				})
+
+			}
+
+				angular.element('.close').trigger('click');
+
+				$mdDialog.show($mdDialog.alert({
+					title: 'Información Despacho de Remesas',
+					htmlContent: encabezado,
+					ok: 'Cerrar'
+				}));
+
 				console.log(response.data);
 			});
+		}
+
+
+		$scope.mensajeRemesaBoomerang = function(encabezado,filterSuccessTodas){
+
+			encabezado += "<br/><h5>Las sucursales seleccionadas para estas remesas son de un cliente con Boomerang</h5>\n";
+
+			var filterErrorBoogmerang = $filter('filter')(filterSuccessTodas, {boomerangResponse : {respuesta : "-1"}});
+
+			if(filterErrorBoogmerang.length > 0){
+
+				encabezado +="<h5><strong>Error:</strong> las siguientes sucursales han presentado errores en el envio de boogmeran para este despacho</h5><br/>";
+				filterErrorBoogmerang.forEach(function(respuestaTcc){
+					encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error de Boomerang:</strong> "+ respuestaTcc.boomerangResponse.mensaje +"</pre>";
+				})
+
+			}else{
+
+				encabezado += "<h5>Las facturas de las siguientes sucursales se han enviado correctamente a TCC para su despacho</h5><br/>";
+				filterSuccessTodas.forEach(function(respuestaTcc){
+					encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Remesa:</strong> "+respuestaTcc.mensaje+"<br/><strong>Remesa Boomerang:</strong> "+respuestaTcc.boomerangResponse.remesa+"<br/><strong>Mensaje Boomerang:</strong> "+ respuestaTcc.boomerangResponse.mensaje +"</pre>";
+				})
+
+			}
+
+			return encabezado;
 		}
 
 		$scope.sumatoriaKilos = function(sucursal){
