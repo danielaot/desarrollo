@@ -366,6 +366,15 @@ class tccwsController extends Controller
           $remesaTabla->rms_pesototal = $sucursal["sumaTotalKilos"];
           $remesaTabla->save();
 
+          foreach ($sucursal['documentosReferencia'] as $key => $documento) {
+            $facturaRemesa = new TFactsxremesa;
+            $facturaRemesa->fxr_remesa = $remesaTabla->id;
+            $facturaRemesa->fxr_tipodocto = $documento['tipodocumento'];
+            $facturaRemesa->fxr_numerodocto = $documento['numerodocumento'];
+            $facturaRemesa->fxr_fechadocto = Carbon::parse($documento['fechadocumento'])->toDateString();
+            $facturaRemesa->save();
+          }
+
           if($sucursal['tieneBoomerang'] == true){
             $data['tieneBoomerang'] = true;
             $data = $this->replaceData($data,true);
@@ -388,7 +397,7 @@ class tccwsController extends Controller
 
             foreach ($sucursal['documentosReferencia'] as $key => $documento) {
               $facturaRemesa = new TFactsxremesa;
-              $facturaRemesa->fxr_remesa = $remesaTabla->id;
+              $facturaRemesa->fxr_remesa = $remesaBoomerang->id;
               $facturaRemesa->fxr_tipodocto = $documento['tipodocumento'];
               $facturaRemesa->fxr_numerodocto = $documento['numerodocumento'];
               $facturaRemesa->fxr_fechadocto = Carbon::parse($documento['fechadocumento'])->toDateString();
