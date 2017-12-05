@@ -13,7 +13,6 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
 
     $http.get($scope.getUrl).then(function(response){
       var data = response.data;
-      console.log('entre---------');
       $scope.clientes = angular.copy(data.clientes);
       $scope.clientesAgregados = angular.copy(data.clientesAgregados);
       console.log($scope.clientes);

@@ -40,6 +40,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('clientes', 'tccws\cliboomerangController');
     Route::get('clientesinfo', 'tccws\cliboomerangController@getInfo');
+
+    //Prueba Cartera -- Jose
+    Route::resource('cartera', 'tccws\prucarteraController');
+    Route::get('carterainfo', 'tccws\prucarteraController@getInfo');
+
+    Route::get('reporte', 'tccws\prucarteraController@generarReporte')->name('reporte');
   });
 
 
