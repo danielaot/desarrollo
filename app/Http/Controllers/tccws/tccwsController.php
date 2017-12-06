@@ -265,12 +265,9 @@ class tccwsController extends Controller
     public function getPlano(Request $request){
 
       $message = [];
-      //return response()->json($request->all());
       //Se organiza el plano por cada sucursal
-      //return response()->json($request->sucursalesFiltradas);
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
-
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
           return $unidad['cantidadunidades'] > 0;
         })->values();
@@ -295,7 +292,7 @@ class tccwsController extends Controller
           'identificacionremitente' => '800118334',
           'telefonoremitente' => '5552255',
           'direccionremitente'=> 'Calle 36 No 134 - 201 Km 6 Via Cali Jamundi',
-          'ciudadorigen' => '11001000',
+          'ciudadorigen' => '76001000',
           'tipoidentificaciondestinatario' => '',
           'identificaciondestinatario' => $request->idTercero,
           'sededestinatario' => '',
