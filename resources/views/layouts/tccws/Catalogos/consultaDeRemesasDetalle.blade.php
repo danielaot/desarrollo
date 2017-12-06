@@ -119,7 +119,29 @@
             </md-tab>
             <md-tab label="Documentos Referentes">
               <md-content class="md-padding">
-                <p>Integer turpis erat, porttitor vitae mi faucibus, laoreet interdum tellus. Curabitur posuere molestie dictum. Morbi eget congue risus, quis rhoncus quam. Suspendisse vitae hendrerit erat, at posuere mi. Cras eu fermentum nunc. Sed id ante eu orci commodo volutpat non ac est. Praesent ligula diam, congue eu enim scelerisque, finibus commodo lectus.</p>
+                <md-content class="md-padding">
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
+                      <div class="form-group">
+                        <div class="row">
+                          <table class="table table-striped table-bordered">
+                            <tr>
+                              <th>Numero de Remesa</th>
+                              <th>Tipo de Documento</th>
+                              <th>Numero de Documento</th>
+                            </tr>
+                            <tr ng-repeat="factura in consulta.consulta.facturas">
+                              <td>@{{consulta.consulta.rms_remesa}}</td>
+                              <td>@{{factura.fxr_tipodocto}}</td>
+                              <td>@{{factura.fxr_numerodocto}}</td>
+                            </tr>
+                          </table>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </md-content>
               </md-content>
             </md-tab>
           </md-tabs>
