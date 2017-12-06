@@ -37,6 +37,9 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 		console.log();
 	}
 
+	$scope.getInfo();
+
+
 	$scope.getSucursales = function(){
 		if ($scope.cliente == undefined) {
 			return [];
@@ -54,8 +57,10 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			})
 			sucursal.hasOneOrMoreSelected = $scope.sucursalSelected.isSelectAll;
 		}
+
 		var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
 		sucursal.cantSeleccionadas = filterSelected.length;
+
 		var cantSeleccionadas = 0;
 
 		$scope.cliente.sucursales.forEach(function(sucu){
@@ -69,16 +74,19 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 		}else{
 				$scope.puedeEnviar = false;
 		}
+
 	}
 
 	$scope.setSelectedFactura = function(factura,sucursal){
-		var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
 
-		if(filterSelected.length == sucursal.facturas.length){
-			sucursal.isSelectAll = true;
-			sucursal.hasOneOrMoreSelected = true;
-			$scope.puedeEnviar = true;
-		}else if((filterSelected.length > 0) && (filterSelected.length < sucursal.facturas.length)){
+
+			var filterSelected = $filter('filter')(sucursal.facturas, {isSelect : true});
+
+			if(filterSelected.length == sucursal.facturas.length){
+				sucursal.isSelectAll = true;
+				sucursal.hasOneOrMoreSelected = true;
+				$scope.puedeEnviar = true;
+			}else if((filterSelected.length > 0) && (filterSelected.length < sucursal.facturas.length)){
 				sucursal.isSelectAll = false;
 				sucursal.hasOneOrMoreSelected = true;
 				$scope.puedeEnviar = true;
@@ -94,8 +102,10 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 	}
 
 	$scope.onChangeSucursales = function(){
+
 		if($scope.cliente.sucursales != undefined){
 			if($scope.cliente.sucursales.length > 0){
+
 				var sucursal = $scope.cliente.sucursales[$scope.cliente.sucursales.length - 1];
 				sucursal.isSelectAll = false;
 				sucursal.hasOneOrMoreSelected = false;
@@ -110,10 +120,14 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 							return factura;
 						})
 					}
+
 					sucursal.facturas = filterFacturas;
+
 				}
+
 			}
 		}
+
 	}
 
 	$scope.retornaListaFiltrada = function(){
@@ -177,7 +191,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$scope.progress = true;
 			console.log( $scope.cliente);
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
-				console.log(response.data);
+				console.log();
 				$scope.progress = false;
 				var encabezado = "";
 				var filterSuccessTodas = $filter('filter')(response.data.message, {respuesta : "0"});
