@@ -25,5 +25,8 @@ class TFactsxremesa extends Model
 
     protected $guarded = [];
 
+    public function consulta(){
+      return $this->hasOne('App\Models\tccws\TRemesa', 'id', 'fxr_remesa');
+    }
 
 }

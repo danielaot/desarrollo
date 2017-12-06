@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('clientes', 'tccws\cliboomerangController');
     Route::get('clientesinfo', 'tccws\cliboomerangController@getInfo');
+
+    Route::get('consultas', 'tccws\tccwsController@getConsultaRemesas');
+    Route::get('consultasinfo', 'tccws\tccwsController@consultaRemesasGetInfo');
   });
 
 

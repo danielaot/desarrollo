@@ -18,7 +18,7 @@ class CreacionTablaParametrosremesa extends Migration
             $table->string('par_campoTcc');
             $table->string('par_campoVariable');
             $table->string('par_valor');
-            $table->enum('par_grupo',['a','b','c','z']);
+            $table->enum('par_grupo',['a','b','c','z','otro']);
             $table->timestamps();
             $table->softDeletes();
         });

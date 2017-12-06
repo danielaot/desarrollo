@@ -25,6 +25,7 @@
                     <md-radio-button value="a">Encabezado</md-radio-button>
                     <md-radio-button value="b">Unidades Logisticas</md-radio-button>
                     <md-radio-button value="c">Documentos Referencias</md-radio-button>
+                    <md-radio-button value="otro">Otros</md-radio-button>
                   </md-radio-group>
             </div>
         <div class="modal-footer">
