@@ -5,10 +5,12 @@ namespace App\Http\Controllers\tccws;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use App\Models\tccws\TParametros as Parametro;
+use App\Models\tccws\TPruebaCartera as Cartera;
+use Excel;
 
-class parametrostccController extends Controller
+class prucarteraController extends Controller
 {
+    public $response;
     /**
      * Display a listing of the resource.
      *1
@@ -16,18 +18,32 @@ class parametrostccController extends Controller
      */
     public function index()
     {
-        $ruta = "SGA // PARAMETROS TCCWS";
-        $titulo = "Parametros TCCWS";
-        $response = compact('ruta', 'titulo');
-        return view('layouts.tccws.Catalogos.parametrosIndex', $response);
+        $ruta = "SGA // PRUEBA CARTERA";
+        $titulo = "Prueba Cartera";
+        $url = route('reporte');
+        $response = compact('ruta', 'titulo', 'url');
+        return view('layouts.tccws.pruebaCarteraIndex', $response);
     }
         
     public function getInfo()
     {
-        $parametros = Parametro::all();
-        $response = compact('parametros');
+        $pruebas = Cartera::orderBy('prc_numero')->get();
+        $response = compact('pruebas');
         return response()->json($response);
     }
+
+    public function generarReporte()
+    {
+        // return view('layouts.tccws.generarReporte');
+        $pruebas = Cartera::orderBy('prc_numero')->get();
+        $this->response = compact('pruebas');
+        Excel::create('reporte', function($excel) {
+            $excel->sheet('Hoja 1', function($sheet) {
+                $sheet->loadView('layouts.tccws.generarReporte', $this->response);
+            });
+        })->download('xlsx');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,11 +63,11 @@ class parametrostccController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['par_campoVariable'] = $data['par_campoTcc'];
-        $creacion = Parametro::create($data);
+    	$data = $request->all();
+        $data['prc_suma'] = ($data['prc_numero']*2);
+        $data['prc_formulas'] = ($data['prc_suma']*3);
+        $creacion = Cartera::create($data);
         return response()->json($creacion);
-
     }
 
     /**
@@ -85,13 +101,7 @@ class parametrostccController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $parametro = Parametro::find($id);
-        $data = $request->all();
-        $parametro->par_valor = $data['par_valor'];
-        $parametro->par_grupo = $data['par_grupo'];
-        $parametro->save();
-
-        return response()->json($id);
+        
     }
 
     /**
@@ -102,9 +112,10 @@ class parametrostccController extends Controller
      */
     public function destroy($id)
     {
-        $parametro = Parametro::find($id);
-        $parametro->delete();
-        return response()->json($parametro->trashed());
+        $prueba = Cartera::find($id);
+        $prueba->delete();
+        return response()->json($prueba->trashed());
+      	
     }
 
 }

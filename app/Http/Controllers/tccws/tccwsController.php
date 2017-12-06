@@ -10,6 +10,7 @@ use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
 use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
 use App\Models\tccws\TRemesa;
 use App\Models\tccws\TFactsxremesa;
+use App\Models\tccws\TParametros;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
@@ -331,8 +332,7 @@ class tccwsController extends Controller
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
         $data['tieneBoomerang'] = false;
-        //return response()->json($data['txt']);
-
+        //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
         $xmlResponseBody['nombreSucursal'] = $sucursal['nombre'];
@@ -345,6 +345,7 @@ class tccwsController extends Controller
           if($sucursal['tieneBoomerang'] == true){
             $data['tieneBoomerang'] = true;
             $data = $this->replaceData($data,true);
+            //Se envia el xml de un boomerang al servicio de tcc
             $responseBoomerang = $this->consumirServicioTcc($data['txt']);
             $xmlResponseBody['boomerangResponse'] = array("mensaje" => $responseBoomerang['mensaje'], "respuesta" => $responseBoomerang['respuesta'], "remesa" => $responseBoomerang['remesa']);
             $this->poblarTablasRemesas($sucursal,$xmlResponseBody['boomerangResponse'],true,$grabarEnTablas);
