@@ -191,7 +191,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$scope.progress = true;
 			console.log( $scope.cliente);
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
-
+				console.log(response.data);
 				$scope.progress = false;
 				var encabezado = "";
 				var filterSuccessTodas = $filter('filter')(response.data.message, {respuesta : "0"});
