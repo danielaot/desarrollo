@@ -265,6 +265,15 @@ class tccwsController extends Controller
     public function getPlano(Request $request){
 
       $message = [];
+      $parametrosDefault = [];
+      $parametrosDefaultConsulta = TParametros::where('par_grupo', 'a')->get();
+
+      foreach ($parametrosDefaultConsulta as $key => $parametro) {
+        $parametrosDefault[$parametro['par_campoVariable']] = $parametro['par_valor'];
+      }
+
+      extract($parametrosDefault);
+
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
@@ -273,26 +282,26 @@ class tccwsController extends Controller
         })->values();
 
         $data = [
-          'clave' => 'calbelleza',
+          'clave' => $clave,
           'codigolote' => '',
           'fechahoralote' => '',
           'numeroremesa' => '',
           'numeroDepacho' => '',
           'unidadnegocio' => '1',
           'fechadespacho' => Carbon::today()->toDateString(),
-          'cuentaremitente' => '1125800',
+          'cuentaremitente' => $cuentaremitente,
           'sederemitente' => '',
-          'primernombreremitente' => 'EJEMPLO BELLEZA EXPRESS',
+          'primernombreremitente' => $primernombreremitente,
           'segundonombreremitente' => '',
           'primerapellidoremitente'=> '',
           'segundoapellidoremitente'=> '',
-          'razonsocialremitente'=> 'EJEMPLO BELLEZA EXPRESS',
-          'naturalezaremitente' => 'J',
-          'tipoidentificacionremitente' => 'NIT',
-          'identificacionremitente' => '800118334',
-          'telefonoremitente' => '5552255',
-          'direccionremitente'=> 'Calle 36 No 134 - 201 Km 6 Via Cali Jamundi',
-          'ciudadorigen' => '76001000',
+          'razonsocialremitente'=> $razonsocialremitente,
+          'naturalezaremitente' => $naturalezaremitente,
+          'tipoidentificacionremitente' => $tipoidentificacionremitente,
+          'identificacionremitente' => $identificacionremitente,
+          'telefonoremitente' => $telefonoremitente,
+          'direccionremitente'=> $direccionremitente,
+          'ciudadorigen' => $ciudadorigen,
           'tipoidentificaciondestinatario' => '',
           'identificaciondestinatario' => $request->idTercero,
           'sededestinatario' => '',
@@ -320,7 +329,7 @@ class tccwsController extends Controller
           'unidades' => $sucursal['unidades'],
           'documentosReferencia' => $sucursal['documentosReferencia'],
           'numeroReferenciaCliente' => '',
-          'generarDocumentos' => 'false',
+          'generarDocumentos' => $generarDocumentos,
           'unidadesinternas' => '',
           'fuente' => '',
           'txt' => '',
@@ -589,14 +598,14 @@ class tccwsController extends Controller
       $ruta = "SGA // CONSULTAR REMESA";
       $titulo = "Consultar remesa";
       $response = compact('ruta', 'titulo');
-      return view('layouts.tccws.Catalogos.consultaDeRemesas', $response); 
+      return view('layouts.tccws.Catalogos.consultaDeRemesas', $response);
     }
 
     public function consultaRemesasGetInfo()
     {
       $consultafacturas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
-      $response = compact('consultafacturas'); 
-      return response()->json($response); 
+      $response = compact('consultafacturas');
+      return response()->json($response);
     }
 
     /**
