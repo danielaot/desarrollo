@@ -1,6 +1,6 @@
 <!--Modal-->
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" style="width: 60% !important;" role="document">
     <div class="modal-content panel-primary">
       <div class="modal-header panel-heading">
         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -23,7 +23,8 @@
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                           <label>Fecha de Remesa:</label>
-                          <input ng-disabled="true" class="form-control" ng-model="cambiaFecha(consulta.consulta.created_at)">
+                          <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.created_at | date: 'shortDate'}}">
+
                         </div>
                       </div>
                     </div>
@@ -33,7 +34,7 @@
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                           <label>Sucursal:</label>
-                          <input type="text" ng-disabled="true" class="form-control">
+                          <input ng-disabled="true" class="form-control" value="EXITO">
                         </div>
                       </div>
                     </div>
@@ -42,8 +43,8 @@
                     <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
-                          <label>Numero de Remesa:</label>
-                          <input ng-disabled="true" class="form-control" ng-model="consulta.consulta.rms_remesa">
+                          <label>Número de Remesa:</label>
+                          <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_remesa}}">
                         </div>
                       </div>
                     </div>
@@ -52,8 +53,8 @@
                     <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
-                          <label>Numero de Remesa Boomerang:</label>
-                          <input ng-disabled="true" class="form-control" ng-model="consulta.consulta.boomerang.rms_remesa">
+                          <label>Número de Remesa Boomerang:</label>
+                          <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.boomerang.rms_remesa}}">
                         </div>
                       </div>
                     </div>
@@ -81,7 +82,7 @@
                         <div class="row">
                           <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                             <label>Cajas:</label>
-                            <input type="number" ng-model="consulta.consulta.rms_cajas" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_cajas}}" ng-disabled="true" class="form-control">
                           </div>
                         </div>
                       </div>
@@ -90,11 +91,11 @@
                         <div class="row">
                           <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
                             <label>Lios:</label>
-                            <input type="number" ng-model="consulta.consulta.rms_lios" min="0" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_lios}}" min="0" ng-disabled="true" class="form-control">
                           </div>
                           <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
                             <label>Kilos Reales Lios:</label>
-                            <input type="number" ng-model="consulta.consulta.rms_pesolios" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_pesolios}}" ng-disabled="true" class="form-control">
                           </div>
                         </div>
                       </div>
@@ -102,11 +103,11 @@
                         <div class="row">
                           <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
                             <label>Estibas:</label>
-                            <input type="number" ng-model="consulta.consulta.rms_palets" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_palets}}" ng-disabled="true" class="form-control">
                           </div>
                           <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
                             <label>Kilos Reales Estibas:</label>
-                            <input type="number" ng-model="consulta.consulta.rms_cajas" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_cajas}}" ng-disabled="true" class="form-control">
                           </div>
                         </div>
                       </div>
@@ -126,9 +127,9 @@
                         <div class="row">
                           <table class="table table-striped table-bordered">
                             <tr>
-                              <th>Numero de Remesa</th>
+                              <th>Número de Remesa</th>
                               <th>Tipo de Documento</th>
-                              <th>Numero de Documento</th>
+                              <th>Número de Documento</th>
                             </tr>
                             <tr ng-repeat="factura in consulta.consulta.facturas">
                               <td>@{{consulta.consulta.rms_remesa}}</td>
@@ -136,7 +137,6 @@
                               <td>@{{factura.fxr_numerodocto}}</td>
                             </tr>
                           </table>
-
                         </div>
                       </div>
                     </div>
