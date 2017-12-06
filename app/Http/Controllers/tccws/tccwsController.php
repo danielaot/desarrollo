@@ -584,6 +584,21 @@ class tccwsController extends Controller
 
     }
 
+    public function getConsultaRemesas()
+    {
+      $ruta = "SGA // CONSULTAR REMESA";
+      $titulo = "Consultar remesa";
+      $response = compact('ruta', 'titulo');
+      return view('layouts.tccws.Catalogos.consultaDeRemesas', $response); 
+    }
+
+    public function consultaRemesasGetInfo()
+    {
+      $consultafacturas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
+      $response = compact('consultafacturas'); 
+      return response()->json($response); 
+    }
+
     /**
      * Display the specified resource.
      *

@@ -23,7 +23,7 @@
       	<tr ng-repeat="parametro in parametros"> 
       		<td class="text-left">@{{parametro.par_campoTcc}}</td>
       		<td class="text-left">@{{parametro.par_valor}}</td>
-          <td class="text-left">@{{parametro.par_grupo == 'a' ? 'Encabezado' : parametro.par_grupo == 'b' ? 'Unidades Logisticas' : parametro.par_grupo == 'c' ? 'Documentos Referencias': 'Sin Grupo' }}</td>
+          <td class="text-left">@{{parametro.par_grupo == 'a' ? 'Encabezado' : parametro.par_grupo == 'b' ? 'Unidades Logisticas' : parametro.par_grupo == 'c' ? 'Documentos Referencias': 'Otros' }}</td>
     			<td class="text-right">
         		<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editarParametro(parametro)">
               <i class="glyphicon glyphicon-edit"></i>

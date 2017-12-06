@@ -30,7 +30,7 @@ class TRemesa extends Model
     protected $guarded = [];
 
     public function boomerang(){
-      return $this->hasOne('App\Models\tccws\TRemesa', 'id', 'rms_remesapadre');
+      return $this->hasOne('App\Models\tccws\TRemesa', 'rms_remesapadre');
     }
 
     public function facturas(){
