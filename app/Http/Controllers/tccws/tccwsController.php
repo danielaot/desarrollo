@@ -273,7 +273,7 @@ class tccwsController extends Controller
       }
 
       extract($parametrosDefault);
-
+      //return response()->json($request->sucursalesFiltradas);
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
@@ -371,6 +371,8 @@ class tccwsController extends Controller
 
       $remesaTabla = new TRemesa;
       $remesaTabla->rms_remesa = $xmlResponseBody['remesa'];
+      $remesaTabla->rms_observacion = isset($sucursal['observacion']) ? $sucursal['observacion']: '';
+      $remesaTabla->rms_nom_sucursal = $sucursal['nombre'];
       $remesaTabla->rms_cajas = $isBoomerang == true ? $sucursal['unidadBoomerang']['cantidadunidades'] : 0;
       $remesaTabla->rms_lios =  0;
       $remesaTabla->rms_pesolios = 0;
@@ -406,6 +408,8 @@ class tccwsController extends Controller
         }
 
       }else{
+        $remesaTabla->rms_observacion = null;
+        $remesaTabla->rms_nom_sucursal = null;
         $remesaTabla->save();
       }
 

@@ -16,6 +16,8 @@ class CreacionTablaRemesastcc extends Migration
         Schema::connection('conectortccws')->create('t_remesas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('rms_remesa',100)->comment('Se asigna la remesa que retorna tcc en su servicio');
+            $table->string('rms_observacion')->comment('Se asigna la observacion de la remesa que se envia a tcc');
+            $table->string('rms_nom_sucursal')->comment('Se asigna el nombre de la sucursal que a la que se despacha');
             $table->integer('rms_cajas')->unsigned()->comment('Cantidad de cajas del despacho');
             $table->integer('rms_lios')->unsigned()->comment('Cantidad de lios del despacho');
             $table->double('rms_pesolios', 15, 8)->comment('peso total de lios del despacho');
@@ -33,6 +35,6 @@ class CreacionTablaRemesastcc extends Migration
      */
     public function down()
     {
-        
+
     }
 }
