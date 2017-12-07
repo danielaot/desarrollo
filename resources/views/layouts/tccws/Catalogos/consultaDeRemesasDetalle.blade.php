@@ -24,7 +24,6 @@
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                           <label>Fecha de Remesa:</label>
                           <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.created_at | date: 'shortDate'}}">
-
                         </div>
                       </div>
                     </div>
@@ -107,7 +106,7 @@
                           </div>
                           <div class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
                             <label>Kilos Reales Estibas:</label>
-                            <input value="@{{consulta.consulta.rms_cajas}}" ng-disabled="true" class="form-control">
+                            <input value="@{{consulta.consulta.rms_pesopalets}}" ng-disabled="true" class="form-control">
                           </div>
                         </div>
                       </div>
@@ -130,11 +129,13 @@
                               <th>Número de Remesa</th>
                               <th>Tipo de Documento</th>
                               <th>Número de Documento</th>
+                              <th>Fecha de la Factura</th>
                             </tr>
                             <tr ng-repeat="factura in consulta.consulta.facturas">
                               <td>@{{consulta.consulta.rms_remesa}}</td>
                               <td>@{{factura.fxr_tipodocto}}</td>
                               <td>@{{factura.fxr_numerodocto}}</td>
+                              <td>@{{cambiarFecha(factura.created_at)}}</td>
                             </tr>
                           </table>
                         </div>
