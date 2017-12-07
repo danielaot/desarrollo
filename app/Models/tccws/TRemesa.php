@@ -18,6 +18,8 @@ class TRemesa extends Model
     protected $fillable = [
         'rms_remesa',
         'rms_observacion',
+        'rms_terceroid',
+        'rms_sucu_cod',
         'rms_nom_sucursal',
         'rms_cajas',
         'rms_lios',

@@ -372,6 +372,8 @@ class tccwsController extends Controller
       $remesaTabla = new TRemesa;
       $remesaTabla->rms_remesa = $xmlResponseBody['remesa'];
       $remesaTabla->rms_observacion = isset($sucursal['observacion']) ? $sucursal['observacion']: '';
+      $remesaTabla->rms_terceroid = $sucursal['nit_tercero'];
+      $remesaTabla->rms_sucu_cod = $sucursal['codigo'];
       $remesaTabla->rms_nom_sucursal = $sucursal['nombre'];
       $remesaTabla->rms_cajas = $isBoomerang == true ? $sucursal['unidadBoomerang']['cantidadunidades'] : 0;
       $remesaTabla->rms_lios =  0;
@@ -409,12 +411,20 @@ class tccwsController extends Controller
 
       }else{
         $remesaTabla->rms_observacion = null;
+        $remesaTabla->rms_terceroid = null;
+        $remesaTabla->rms_sucu_cod = null;
         $remesaTabla->rms_nom_sucursal = null;
         $remesaTabla->save();
       }
 
+
+
       return $remesaTabla;
 
+    }
+
+    public function poblarTablasDigitacion($remesa){
+      $userLogged = 
     }
 
     public function replaceData($data,$isBoomerang = false){
