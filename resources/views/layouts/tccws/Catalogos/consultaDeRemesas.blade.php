@@ -8,13 +8,39 @@
     <br>
     <div class="panel-head">
       <div class="col-md-12">
-        <div class="col-md-4">
-          <label>Busqueda por factura/remesa</label>
-          <input class="form-control">
+        <div class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
+          <div class="col-md-12">
+            <label>Busqueda:</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                Facturas &nbsp;<input type="radio" ng-model="criterioBusqueda" value="facturas">
+              </span>
+              <span class="input-group-addon">
+                Remesas &nbsp;<input type="radio" ng-model="criterioBusqueda" value="remesas">
+              </span>
+              <input type="text" class="form-control" ng-model="searchText" ng-disabled="criterioBusqueda == NULL" required minlength="6">
+              <span class="input-group-btn">
+                <button class="btn btn-info" type="button" ng-click="getConsultaBusquedas(searchText, criterioBusqueda)">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4">
-          <label>Busqueda por fecha</label>
-          <input class="form-control">
+        <div class="col-md-6">
+          <label>Busqueda entre fechas:</label>
+          <div flex-gt-xs>
+            <md-datepicker ng-model="fechaInicial" md-placeholder="Fecha inicial"></md-datepicker>
+            <md-datepicker ng-model="fechaFinal" md-placeholder="Fecha Final"></md-datepicker>
+            <button class="btn btn-info" type="button" ng-click="getConsultaFechas(fechaInicial, fechaFinal)">
+              <i class="glyphicon glyphicon-search"></i>
+            </button>
+          </div>
+            
+
+
+
+
         </div>
       </div>
     </div>
@@ -24,7 +50,7 @@
         	<tr>
 					  <th class="text-center">Número de Remesa</th>
  					  <th class="text-center">Factura</th>
-					  <th class="text-center">Fecha</th>
+					  <th class="text-center">Fecha de Creación</th>
           	<th></th>
 					</tr>
        	</thead>

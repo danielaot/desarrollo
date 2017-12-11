@@ -33,7 +33,7 @@
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                           <label>Sucursal:</label>
-                          <input ng-disabled="true" class="form-control" value="EXITO">
+                          <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_nom_sucursal}}">
                         </div>
                       </div>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                       <label>Observaciones</label>
-                      <textarea ng-disabled="true" class="form-control" maxlength="150" rows="5"></textarea>
+                      <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_observacion}}"  maxlength="150" rows="5">
                     </div>
                   </div>
                   </div>
