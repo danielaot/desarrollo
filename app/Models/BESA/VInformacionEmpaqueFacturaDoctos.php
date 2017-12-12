@@ -15,12 +15,9 @@ class VInformacionEmpaqueFacturaDoctos extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tipo_pedido',
-        'num_pedidoOV',
-        'num_pedido',
-        'num_ola',
-        'num_ordenCompra',
-        'num_ordenWms',
+        'num_wms',
+        'num_oc',
+        'fecha_remesa',
         'num_factura',
         'tipo_docto',
         'num_consecutivo',

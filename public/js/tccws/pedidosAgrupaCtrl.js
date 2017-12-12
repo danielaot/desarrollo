@@ -101,6 +101,13 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 	}
 
+	$scope.onChangeClienteSelected = function(){
+		$scope.puedeEnviar = false;
+		if($scope.cliente.sucursales != undefined){
+			$scope.cliente.sucursales = [];
+		}
+	}
+
 	$scope.onChangeSucursales = function(){
 
 		if($scope.cliente.sucursales != undefined){

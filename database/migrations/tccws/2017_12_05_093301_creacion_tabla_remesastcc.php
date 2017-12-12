@@ -17,6 +17,9 @@ class CreacionTablaRemesastcc extends Migration
             $table->increments('id');
             $table->string('rms_remesa',100)->comment('Se asigna la remesa que retorna tcc en su servicio');
             $table->string('rms_observacion')->comment('Se asigna la observacion de la remesa que se envia a tcc');
+            $table->string('rms_terceroid')->comment('Codigo de tercero al que se le envia el despacho');
+            $table->string('rms_sucu_cod')->comment('Codigo de la sucursal del tercero al que se le envia el despacho');
+            $table->string('rms_ciud_sucursal')->comment('Ciudad de la sucursal');
             $table->string('rms_nom_sucursal')->comment('Se asigna el nombre de la sucursal que a la que se despacha');
             $table->integer('rms_cajas')->unsigned()->comment('Cantidad de cajas del despacho');
             $table->integer('rms_lios')->unsigned()->comment('Cantidad de lios del despacho');
