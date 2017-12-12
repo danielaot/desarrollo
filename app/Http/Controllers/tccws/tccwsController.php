@@ -723,11 +723,36 @@ class tccwsController extends Controller
 
     public function consultaRemesasGetInfo()
     {
-      $consultafacturas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
+      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(8))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
       $response = compact('consultafacturas');
       return response()->json($response);
     }
 
+    public function consultaBusquedasGetInfo(Request $request)
+    { 
+      $prueba = $request->all();
+      $prueba['busqueda'] = trim($prueba['busqueda']);
+      if ($prueba['radio'] == "facturas") {
+        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->where('fxr_numerodocto', $prueba['busqueda'])->get();
+      }else{
+        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->whereHas('consulta', function($query) use($prueba){
+            $query->where('rms_remesa', $prueba['busqueda']);
+        })->get();
+      }
+        $response = compact('consultaremesas', 'prueba');
+        return response()->json($response); 
+    }
+
+    public function consultaFechasGetInfo(Request $request)
+    {
+      $fech = $request->all();
+      $fech['inicial'] = Carbon::parse($fech['inicial'])->subHour(5);
+      $fech['final'] = Carbon::parse($fech['final'])->addHour(19);
+
+      $consultafechas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->whereBetween('created_at', [$fech['inicial'], $fech['final']])->get();
+      $response = compact('consultafechas', 'fech');
+      return response()->json($response);
+    }
     /**
      * Display the specified resource.
      *

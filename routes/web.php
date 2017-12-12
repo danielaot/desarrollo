@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('consultas', 'tccws\tccwsController@getConsultaRemesas');
     Route::get('consultasinfo', 'tccws\tccwsController@consultaRemesasGetInfo');
+    Route::post('consultasbusqueda', 'tccws\tccwsController@consultaBusquedasGetInfo');
+    Route::post('consultasfecha', 'tccws\tccwsController@consultaFechasGetInfo');
   });
 
 
