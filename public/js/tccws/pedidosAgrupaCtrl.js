@@ -16,6 +16,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 	$scope.kilosRealesEstibas = 0;
 	$scope.kilosBaseLios = 30;
 	$scope.sumaTotalKilos = 0;
+	$scope.isError = false;
 
 	$scope.getInfo = function(){
 		$http.get($scope.urlGetInfo).then(function(response){
@@ -239,10 +240,11 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 				var encabezado = "";
 				var filterSuccessTodas = $filter('filter')(response.data.message, {respuesta : "0"});
 				var filterErrorLogin = $filter('filter')(response.data.message, {respuesta : "1"});
+				var filterErrorCiudad = $filter('filter')(response.data.message, {respuesta : "ciu_error"});
 				var filterErrorTodas = $filter('filter')(response.data.message, {respuesta : "-1"});
 
 
-				if(filterErrorLogin.length == 0){
+				if(filterErrorLogin.length == 0 &&  filterErrorCiudad.length == 0){
 
 					if(filterSuccessTodas.length > 0 && filterErrorTodas.length == 0){
 
@@ -284,13 +286,22 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 					}
 
-			}else{
+			}else if(filterErrorLogin.length > 0 || filterErrorCiudad.length > 0){
 
-				encabezado += "<br/><h5><strong>Error:</strong> El servicio de TCC ha respondido con error de acceso, por favor revise sus credenciales.</h5><br/>";
-				filterErrorLogin.forEach(function(respuestaTcc){
-					console.log(respuestaTcc);
-					encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
-				})
+				$scope.isError = true;
+				if(filterErrorLogin.length > 0){
+					encabezado += "<br/><h5><strong>Error:</strong> El servicio de TCC ha respondido con error de acceso, por favor revise sus credenciales.</h5><br/>";
+					filterErrorLogin.forEach(function(respuestaTcc){
+						console.log(respuestaTcc);
+						encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+					})
+				}else if(filterErrorCiudad.length > 0){
+					encabezado += "<br/><h5><strong>Error:</strong> El servicio de TCC ha respondido con error de envio por inexistencia de la ciudad del destinatario.</h5><br/>";
+					filterErrorCiudad.forEach(function(respuestaTcc){
+						console.log(respuestaTcc);
+						encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
+					})
+				}
 
 			}
 
@@ -300,7 +311,16 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 					title: 'Información Despacho de Remesas',
 					htmlContent: encabezado,
 					ok: 'Cerrar'
-				}));
+				})).then(function(){
+					if($scope.isError == false){
+						$scope.progress = true;
+						$scope.cliente = undefined;
+						$scope.puedeEnviar = false;
+						$scope.getInfo();
+					}else{
+						$scope.isError = false;
+					}
+				});
 
 				console.log(response.data);
 			});

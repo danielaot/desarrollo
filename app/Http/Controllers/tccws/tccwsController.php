@@ -11,6 +11,7 @@ use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
 use App\Models\tccws\TRemesa;
 use App\Models\tccws\TFactsxremesa;
 use App\Models\tccws\TParametros;
+use App\Models\tccws\TCiudadestcc;
 use App\Models\wms\UPL_ORDERS;
 use App\Models\wms\UPL_ORDESP;
 use App\Models\DigitacionRemesas\TRemesa as DigiRemesa;
@@ -333,13 +334,21 @@ class tccwsController extends Controller
       }
 
       extract($parametrosDefault);
-      //return response()->json($request->sucursalesFiltradas);
+
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
           return $unidad['cantidadunidades'] > 0;
         })->values();
+
+        $codigoDaneTcc = TCiudadestcc::where('ctc_ciu_erp',$sucursal['ciudaddestinatario'])->get();
+
+        if(count($codigoDaneTcc) == 0){
+          $message = array("nombreSucursal"=> $sucursal['nombre'],"mensaje" => "Se ha presentado un error con la ciudad del destinatario, por favor comuniquese con el area de sistemas.", "respuesta" => "ciu_error", "remesa" => "0");
+          return response()->json(["message" => $message],202);
+        }
+
 
         $data = [
           'clave' => $clave,
@@ -373,7 +382,7 @@ class tccwsController extends Controller
           'naturalezadestinatario' => '',
           'direcciondestinatario' => $sucursal['direcciondestinatario'],
           'telefonodestinatario' =>  $sucursal['telefonodestinatario'],
-          'ciudaddestinatario' => '05002000',//$sucursal['ciudaddestinatario']
+          'ciudaddestinatario' => $codigoDaneTcc[0]['ctc_cod_dane'],//$sucursal['ciudaddestinatario']
           'barriodestinatario' => '',
           'totalpeso' => '',
           'totalpesovolumen' => '',
@@ -423,7 +432,7 @@ class tccwsController extends Controller
       }
 
       $res = compact('message','data');
-      return response()->json($res);
+      return response()->json($res,200);
 
     }
 
