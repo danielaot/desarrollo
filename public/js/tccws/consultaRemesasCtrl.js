@@ -44,7 +44,7 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
         console.log(response.data);
         var data = response.data;
         $scope.consultas = angular.copy(data.consultaremesas);
-        $scope.consultas.map(function(consulta){
+        $scope.consultas.map(function(consulta){ 
           var fecha_ini = new Date(consulta.consulta.created_at);
           fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
           consulta.consulta.created_at = new Date(fecha_ini);
