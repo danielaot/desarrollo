@@ -9,9 +9,6 @@
 		height: 55vh;
 		overflow-y: scroll;
 	}
-	.btn-success{
-		margin-top: 20px;
-	}
 	.elementOfList{
 		  height: 8vh !important;
 	}
@@ -25,6 +22,15 @@
 		background-color: #337ab7;
 	}
 
+	.modal-footer2 {
+	  border-top: 0px solid #e5e5e5;
+		padding: 0px;
+	}
+
+	.panel-default>.panel-heading2 {
+    background-color: transparent !important;
+	}
+
 	.md-list-item-text {
 		margin-top: 10px !important;
 	}
@@ -33,35 +39,57 @@
 		height: 40px;
 		min-height: 3px;
 	}
+	.content-pane {
+    padding: 15px;
+    height: 100vh;
+    min-height: 100vh;
+    overflow-y: auto;
+	}
 </style>
 <div class="container-fluid">
 	<div ng-controller="pedidosAgrupaCtrl as ctrl"  layout="column" flex layout-fill ng-cloak>
 
 
 				<div class="panel panel-default">
+					<div class="panel-heading panel-heading2">
+						<div class="modal-footer modal-footer2">
+								<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
+						</div>
+					</div>
+
+
+
 					<div class="panel-body">
 
 							<div class="row">
 
-								<div class="col-sm-12">
+								<div class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
 									<div class="form-group">
+
 										<label>Seleccionar cliente:</label>
-										<select ng-model="cliente" class="form-control" ng-options="ter.razonSocialTercero for ter in terceros track by ter.idTercero">
-											<option value="">Seleccione...</option>
-										</select>
+
+										<md-select
+										ng-model="cliente"
+										ng-change="onChangeClienteSelected()"
+										placeholder="Seleccione un cliente">
+										<md-optgroup label="Clientes">
+											<md-option ng-value="cliente" ng-repeat="cliente in terceros |
+											filter:searchTerm">@{{cliente.razonSocialTercero}}</md-option>
+										</md-optgroup>
+									</md-select>
+
 									</div>
 								</div>
-							</div>
 
-							<div class="row">
-
-								<div ng-if="cliente != undefined" class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
+								<div class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
 
 									<div class="form-group">
 
-
 										<label>Seleccionar sucursal:</label>
-										<md-select ng-model="cliente.sucursales"
+										<md-select
+										ng-model="cliente.sucursales"
+										ng-disabled = "cliente == undefined"
 										ng-change= "onChangeSucursales()"
 										placeholder="Seleccione una o mas sucursales"
 										multiple>
@@ -77,7 +105,7 @@
 
 						</div>
 
-						<div class="row">
+						<div class="row content-pane">
 							<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
 
 								<div class="panel-group" ng-if="cliente.sucursales != undefined && cliente.sucursales.length > 0">
@@ -113,7 +141,6 @@
 												</div>
 
 											</div>
-											<!-- <div class="panel-footer">Panel Footer</div> -->
 										</div>
 									</div>
 
@@ -124,45 +151,15 @@
 
 						</div>
 
-						<div class="row" ng-if="cliente.sucursales != undefined && cliente.sucursales.length > 0">
-
-							<div class="col-xs-12 col-md-12 col-lg-12 col-xl-12 col-sm-12">
-
-								<div class="form-group">
-									<div class="pull-right">
-										<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesas</button>
-									</div>
-								</div>
-
-							</div>
-
+					</div>
+					<div class="panel-footer">
+						<div class="modal-footer modal-footer2">
+								<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
 						</div>
-
 					</div>
 				</div>
 
-	<!-- @{{agrupoCliente[cliente.idTercero]}} -->
-<!--
-	<md-toolbar md-scroll-shrink>
-	    <div class="md-toolbar-tools">Pendientes envio TCC</div>
-	  </md-toolbar>
-
-	  <md-content style="height: 600px;" md-theme="altTheme">
-
-	    <section  ng-repeat="clien in retornaListaFiltrada()">
-	      <md-subheader class="md-primary"><strong>@{{clien.nom_tercero}}</strong></md-subheader>
-	      <md-list layout-padding>
-	        <md-list-item class="md-3-line" ng-repeat="fact in clien">
-	            <div class="md-list-item-text" style="margin-top: 10px;">
-	              <p>
-	              @{{fact.tipo_docto}} - @{{fact.num_consecutivo}}
-	              </p>
-	            </div>
-	        </md-list-item>
-	      </md-list>
-	    </section>
-
-	  </md-content> -->
 	  @include('layouts.tccws.Modales.unidadesLogisticas');
 		<div ng-if="progress" class="progress">
 			<md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>

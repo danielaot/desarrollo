@@ -20,6 +20,7 @@ class TRemesa extends Model
         'rms_observacion',
         'rms_terceroid',
         'rms_sucu_cod',
+        'rms_ciud_sucursal',
         'rms_nom_sucursal',
         'rms_cajas',
         'rms_lios',
@@ -32,6 +33,7 @@ class TRemesa extends Model
     ];
 
     protected $guarded = [];
+    protected $dates = ['created_at', 'updated_at'];
 
     public function boomerang(){
       return $this->hasOne('App\Models\tccws\TRemesa', 'rms_remesapadre');

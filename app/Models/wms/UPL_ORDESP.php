@@ -4,11 +4,11 @@ namespace App\Models\wms;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UPL_ORDERS extends Model
+class UPL_ORDESP extends Model
 {
     protected $connection = 'intsce';
 
-    protected $table = 'INTSCE.interface.UPL_ORDERS';
+    protected $table = 'INTSCE.interface.UPL_ORDESP';
 
     public $incrementing = false;
 
@@ -89,11 +89,4 @@ class UPL_ORDERS extends Model
         'MESSAGE'
     ];
 
-    public function empaques(){
-    	return $this->hasMany('App\Models\wms\BILL_CHARGEINSTRUCT', 'TRAN_KEY1', 'A22');
-    }
-
-    public function infoFactura(){
-    	return $this->hasOne('App\Models\BESA\Informacion_Factura', 'f_num_factura', 'A29');
-    }
 }

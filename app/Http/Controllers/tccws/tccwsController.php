@@ -11,10 +11,17 @@ use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
 use App\Models\tccws\TRemesa;
 use App\Models\tccws\TFactsxremesa;
 use App\Models\tccws\TParametros;
+use App\Models\wms\UPL_ORDERS;
+use App\Models\wms\UPL_ORDESP;
+use App\Models\DigitacionRemesas\TRemesa as DigiRemesa;
+use App\Models\DigitacionRemesas\TDetfacremesa as DetFactRemesa;
+use App\Models\DigitacionRemesas\TRelciudadestcc as RelacionCiudades;
+use App\Models\Genericas\TCliente;
 use Carbon\Carbon;
 use App\Models\Genericas\Tercero;
 use DB;
 use nusoap_client;
+use Illuminate\Support\Facades\Auth;
 ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
@@ -39,11 +46,11 @@ class tccwsController extends Controller
      */
     public function agrupaPedidosGetInfo()
     {
-        $facturas = FactuClientes::select('fecha_remesa' , 'num_ciudad',
+        $facturas = FactuClientes::select('fecha_remesa' ,'num_oc', 'num_ciudad',
         'txt_direccion', 'txt_telefono', 'desc_ciudad', 'desc_departamento',
         'num_factura', 'tipo_docto', 'num_consecutivo',
         'nom_tercero', 'num_sucursal', 'desc_sucursal',
-        'nit_tercero', 'date_creacion')
+        'nit_tercero', 'date_creacion','tipoPedido')
         ->whereNull('fecha_remesa')
         ->where('date_creacion', '>', '11-08-2017')
         ->whereNotIn('tipo_docto', ['F30', 'F28', 'F31', 'F48'])
@@ -160,10 +167,19 @@ class tccwsController extends Controller
 
         //Se hace un recorrido por cada factura de una sucursal
         foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
+
+          if(strlen($factura['tipo_docto']) < 3){
+            $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
+          }
+
+          $formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
           //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
+              'tipoPedido' => trim($factura['tipoPedido']),
+              'numeroOrdenCompra' => trim($factura['num_oc']),
               'tipodocumento' => trim($factura['tipo_docto']),
               'numerodocumento' => $factura['num_consecutivo'],
+              'formatoDocumento' => $formatoDocumento,
               'fechadocumento' => Carbon::parse($factura['date_creacion'])->toDateString(),
             ));
             //Se hace una totalizacion general de las unidades logisticas del pedido
@@ -374,6 +390,7 @@ class tccwsController extends Controller
       $remesaTabla->rms_observacion = isset($sucursal['observacion']) ? $sucursal['observacion']: '';
       $remesaTabla->rms_terceroid = $sucursal['nit_tercero'];
       $remesaTabla->rms_sucu_cod = $sucursal['codigo'];
+      $remesaTabla->rms_ciud_sucursal = $sucursal['ciudaddestinatario'];
       $remesaTabla->rms_nom_sucursal = $sucursal['nombre'];
       $remesaTabla->rms_cajas = $isBoomerang == true ? $sucursal['unidadBoomerang']['cantidadunidades'] : 0;
       $remesaTabla->rms_lios =  0;
@@ -409,22 +426,86 @@ class tccwsController extends Controller
           $facturaRemesa->save();
         }
 
+        $this->cleanUplOrders($sucursal['documentosReferencia'],false,$xmlResponseBody['remesa']);
+
       }else{
-        $remesaTabla->rms_observacion = null;
-        $remesaTabla->rms_terceroid = null;
-        $remesaTabla->rms_sucu_cod = null;
-        $remesaTabla->rms_nom_sucursal = null;
         $remesaTabla->save();
       }
 
-
-
+      $tablasDigitacionResponse = $this->poblarTablasDigitacion($remesaTabla,$sucursal);
       return $remesaTabla;
-
     }
 
-    public function poblarTablasDigitacion($remesa){
-      $userLogged = 
+    public function poblarTablasDigitacion($remesa,$sucursal){
+
+      $parametrosDefault = [];
+      $parametrosDefaultConsulta = TParametros::whereIn('par_grupo', ['otro','a'])->get();
+      foreach ($parametrosDefaultConsulta as $key => $parametro) {
+        $parametrosDefault[$parametro['par_campoVariable']] = $parametro['par_valor'];
+      }
+      extract($parametrosDefault);
+
+      $userLogged = Auth::user();
+      $ciudadDestinatario = RelacionCiudades::where('rel_txt_ciudad', $remesa->rms_ciud_sucursal)
+      ->with('ciudadtcc')->first();
+      $sucursalesDestinatario = TCliente::where('ter_id',$remesa->rms_terceroid)->with('sucursalestcc')->first();
+
+      $sucursalRemesaGenericas = collect($sucursalesDestinatario['sucursalestcc'])->filter(function($sucursal) use($remesa){
+        return trim($sucursal['suc_num_codigo']) == trim($remesa->rms_sucu_cod);
+      })->values();
+
+      $remesaDigi = new DigiRemesa;
+      $remesaDigi->ciu_id = $ciudadDestinatario['ciudadtcc']['ciu_id'];
+      $remesaDigi->ter_id_crea = $userLogged['idTerceroUsuario'];
+      $remesaDigi->tra_id = $codigoTransportador;
+      $remesaDigi->rem_dat_creacion = Carbon::parse($remesa['created_at'])->format('Ymd');
+      $remesaDigi->rem_num_codigo = $remesa->rms_remesa;
+      $remesaDigi->rem_num_tipodespacho = $remesa->rms_isBoomerang == false ? 1 : 2;
+      $remesaDigi->rem_num_cuentaremite = $cuentaremitente;
+      $remesaDigi->ter_id = $remesa->rms_terceroid;
+      $remesaDigi->suc_id = $sucursalRemesaGenericas[0]['suc_id'];
+      $remesaDigi->suc_txt_descripcion = $sucursalRemesaGenericas[0]['suc_txt_nombre'];
+      $remesaDigi->ter_txt_descripcion = $sucursal['facturas'][0]['nom_tercero'];
+      $remesaDigi->ter_txt_direccion = $sucursalRemesaGenericas[0]['suc_txt_direccion'];
+      $remesaDigi->ter_num_telefono = $sucursalRemesaGenericas[0]['suc_txt_telefono'];
+      $remesaDigi->ter_txt_ciudad = $sucursalRemesaGenericas[0]['suc_txt_ciudad'];
+      $remesaDigi->rem_num_tipodocumento = $tipoDocumento;
+      $remesaDigi->rem_ltxt_observaciones = $remesa['rms_observacion'];
+      $remesaDigi->rem_num_unidades = $remesa['rms_lios'] + $remesa['rms_palets'];
+      $remesaDigi->rem_num_estibas = $remesa['rms_palets'];
+      $remesaDigi->rem_num_lios = $remesa['rms_lios'];
+      $remesaDigi->rem_num_cajas = $remesa['rms_cajas'];
+      $remesaDigi->rem_num_kilos = $remesaNumKilos;
+      $remesaDigi->rem_num_totalkilos = $remesa['rms_pesototal'];
+      $remesaDigi->rem_dat_entrega = null;
+      $remesaDigi->rem_num_estado = $estadoRemesa;
+      $remesaDigi->rem_num_factura = null;
+      $remesaDigi->rem_num_flete = null;
+      $remesaDigi->rem_num_porflete = null;
+      $remesaDigi->rem_num_estadotrans = null;
+      $remesaDigi->rem_txt_estadotrans = null;
+      $remesaDigi->cau_id = null;
+      $remesaDigi->suc_num_codigoenvio = $sucursalRemesaGenericas[0]['suc_num_codigoenvio'];
+      $remesaDigi->suc_num_codigoenvio = $sucursalRemesaGenericas[0]['suc_num_codigoenvio'];
+      $remesaDigi->rem_date_fechahora = strtotime($remesa['created_at']);
+      $remesaDigi->rem_date_fechacorte = strtotime($remesa['created_at']);
+      $remesaDigi->save();
+
+      foreach ($sucursal['documentosReferencia'] as $key => $documento) {
+        $facturaRemesa = new DetFactRemesa;
+        $facturaRemesa->rem_id = $remesaDigi->rem_id;
+        $facturaRemesa->det_num_tipodocto = $documento['tipodocumento'];
+        $facturaRemesa->det_num_factura = $documento['numerodocumento'];
+        $facturaRemesa->det_dat_vencimiento1 = Carbon::parse($remesa['created_at'])->format('Ymd');
+        $facturaRemesa->det_dat_vencimiento2 = Carbon::parse($remesa['created_at'])->addDays(2)->format('Ymd');
+        $facturaRemesa->det_txt_valorfactura = 0;
+        $facturaRemesa->det_num_unidadesfactura = 0;
+        $facturaRemesa->det_num_itemsfactura = 0;
+        $facturaRemesa->can_id = $sucursalRemesaGenericas[0]['codcanal'];
+        $facturaRemesa->save();
+      }
+
+      return $remesaDigi;
     }
 
     public function replaceData($data,$isBoomerang = false){
@@ -604,6 +685,31 @@ class tccwsController extends Controller
       $xmlResponseBody = $xmlResponse['Body']['GrabarDespacho4Response'];
 
       return $xmlResponseBody;
+
+    }
+
+    public function cleanUplOrders($facturas,$isFound = false,$mensaje = ""){
+
+      $uplOrder = [];
+      // AGRUPO LAS FACTURAS POR EL TIPO DE PEDIDO
+      $tiposPedidos = collect($facturas)->groupBy('tipoPedido')->values();
+
+      foreach ($tiposPedidos as $key => $tipoPedido) {
+        // REALIZO UN PLUCK A CADA UNO DE LOS GRUPOS POR EL FORMATO DE DOCUMENTO
+        $codigosFacturas = $tipoPedido->pluck('formatoDocumento')->values()->all();
+        // REALIZO EL UPDATE SOBRE CADA FACTURA EN LA TABLA CORRESPONDIENTE SEGUN EL TIPO DE PEDIDO
+        if($tipoPedido[0]['tipoPedido'] == "N"){          
+          foreach ($codigosFacturas as $key => $value) {
+            $uplOrder = UPL_ORDERS::where('A29', $value)->update(['A19' => 'TCCWSN']);
+          }
+        }elseif($tipoPedido[0]['tipoPedido'] == "P"){
+          foreach ($codigosFacturas as $key => $value) {
+            $uplOrder = UPL_ORDESP::where('A29', $value)->update(['A19' => 'TCCWSP']);
+          }
+        }
+
+      }
+
 
     }
 
