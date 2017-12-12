@@ -53,7 +53,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading panel-heading2">
 						<div class="modal-footer modal-footer2">
-								<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="excluirFacturas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
 								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
 						</div>
 					</div>
@@ -154,7 +154,7 @@
 					</div>
 					<div class="panel-footer">
 						<div class="modal-footer modal-footer2">
-								<button type="button" ng-click="getUnidadesLogisticas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="excluirFacturas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
 								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
 						</div>
 					</div>

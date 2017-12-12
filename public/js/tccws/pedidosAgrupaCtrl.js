@@ -3,6 +3,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 	$scope.urlResource = "tccws";
 	$scope.urlPlano = "obtenerPlano";
 	$scope.urlUnidades = "unidadesLogisticas";
+	$scope.urlExcluir = "excluirDocumentos";
 	$scope.progress = true;
 	$scope.sucursal = {};
 	$scope.sucursalesArray = {};
@@ -135,6 +136,41 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			}
 		}
 
+	}
+
+	$scope.excluirFacturas = function(){
+
+			var confirm = $mdDialog.confirm()
+				.title('¿Realmente desea excluir estas facturas de la agrupacion de remesas?')
+				.textContent('Al excluir estas facturas ya no podrán ser visualizadas desde esta vista')
+				.ariaLabel('Lucky day')
+				.ok('Si, deseo hacerlo')
+				.cancel('No, Cancelar');
+
+			$mdDialog.show(confirm).then(function() {
+
+				$scope.cliente.sucursales.map(function(sucursal){
+					if (sucursal.hasOneOrMoreSelected == true) {
+						var filterSelectRemesas = $filter('filter')(sucursal.facturas, {isSelect : true});
+						sucursal.facturasAEnviar = filterSelectRemesas;
+					}else{
+						sucursal.facturasAEnviar = [];
+					}
+					return sucursal;
+				})
+
+				$scope.progress = true;
+
+				$http.post($scope.urlExcluir, $scope.cliente).then(function(response){
+					console.log(response.data);
+					$scope.cliente = undefined;
+					$scope.puedeEnviar = false;
+					$scope.getInfo();
+				})
+
+			}, function() {
+
+			});
 	}
 
 	$scope.retornaListaFiltrada = function(){

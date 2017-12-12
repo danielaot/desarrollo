@@ -99,6 +99,50 @@ class tccwsController extends Controller
 
     }
 
+    public function excluirDocumentos(Request $request){
+
+      $data = $request->all();
+      $facturasParaRemesas = [];
+      $data['sucursalesFiltradas'] = [];
+      $data['documentosExcluir']= [];
+      $sucursales = collect($data['sucursales']);
+
+      $data['sucursalesFiltradas'] = $sucursales->filter(function($sucuMap){
+        return $sucuMap['hasOneOrMoreSelected'] == true;
+      })->values();
+
+      foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
+          foreach ($sucursal['facturasAEnviar'] as $key => $factura) {
+            array_push($facturasParaRemesas, $factura);
+          }
+      }
+
+      $arrayFactsGroup = collect($facturasParaRemesas);
+      $data['facturasSucursales'] = collect($arrayFactsGroup)->groupBy('num_sucursal');
+
+      foreach ($data['sucursalesFiltradas'] as $key => $sucursal) {
+
+        foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
+
+          if(strlen($factura['tipo_docto']) < 3){
+            $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
+          }
+          $formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
+
+          array_push($data['documentosExcluir'], array(
+            'tipoPedido' => trim($factura['tipoPedido']),
+            'formatoDocumento' => $formatoDocumento
+          ));
+
+        }
+
+      }
+
+      $documentosExcluidosResponse = $this->cleanUplOrders($data['documentosExcluir'],false,"EXCLUIDATCCWS");
+      return response()->json($documentosExcluidosResponse);
+
+    }
+
     public function getUnidadesLogisticas(Request $request){
 
       $data = $request->all();
@@ -426,7 +470,7 @@ class tccwsController extends Controller
           $facturaRemesa->save();
         }
 
-        $this->cleanUplOrders($sucursal['documentosReferencia'],false,$xmlResponseBody['remesa']);
+        $responseMessage = $this->cleanUplOrders($sucursal['documentosReferencia'],false,$xmlResponseBody['remesa']);
 
       }else{
         $remesaTabla->save();
@@ -694,23 +738,29 @@ class tccwsController extends Controller
       // AGRUPO LAS FACTURAS POR EL TIPO DE PEDIDO
       $tiposPedidos = collect($facturas)->groupBy('tipoPedido')->values();
 
-      foreach ($tiposPedidos as $key => $tipoPedido) {
-        // REALIZO UN PLUCK A CADA UNO DE LOS GRUPOS POR EL FORMATO DE DOCUMENTO
-        $codigosFacturas = $tipoPedido->pluck('formatoDocumento')->values()->all();
-        // REALIZO EL UPDATE SOBRE CADA FACTURA EN LA TABLA CORRESPONDIENTE SEGUN EL TIPO DE PEDIDO
-        if($tipoPedido[0]['tipoPedido'] == "N"){          
-          foreach ($codigosFacturas as $key => $value) {
-            $uplOrder = UPL_ORDERS::where('A29', $value)->update(['A19' => 'TCCWSN']);
+      try{
+
+        foreach ($tiposPedidos as $key => $tipoPedido) {
+          // REALIZO UN PLUCK A CADA UNO DE LOS GRUPOS POR EL FORMATO DE DOCUMENTO
+          $codigosFacturas = $tipoPedido->pluck('formatoDocumento')->values()->all();
+          // REALIZO EL UPDATE SOBRE CADA FACTURA EN LA TABLA CORRESPONDIENTE SEGUN EL TIPO DE PEDIDO
+          if($tipoPedido[0]['tipoPedido'] == "N"){
+            foreach ($codigosFacturas as $key => $value) {
+              $uplOrder = UPL_ORDERS::where('A29', $value)->update(['A19' => $mensaje.'TPN']);
+            }
+          }elseif($tipoPedido[0]['tipoPedido'] == "P"){
+            foreach ($codigosFacturas as $key => $value) {
+              $uplOrder = UPL_ORDESP::where('A29', $value)->update(['A19' => $mensaje.'TPP']);
+            }
           }
-        }elseif($tipoPedido[0]['tipoPedido'] == "P"){
-          foreach ($codigosFacturas as $key => $value) {
-            $uplOrder = UPL_ORDESP::where('A29', $value)->update(['A19' => 'TCCWSP']);
-          }
+
         }
 
+      }catch(Exception $e){
+        return "Se ha presentado un error al intentar actualizar los campos de la base de datos ".$e;
       }
 
-
+      return "Se han excluido correctamente todos los documentos";
     }
 
     public function getConsultaRemesas()
@@ -723,13 +773,13 @@ class tccwsController extends Controller
 
     public function consultaRemesasGetInfo()
     {
-      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(8))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
+      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(3))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
       $response = compact('consultafacturas');
       return response()->json($response);
     }
 
     public function consultaBusquedasGetInfo(Request $request)
-    { 
+    {
       $prueba = $request->all();
       $prueba['busqueda'] = trim($prueba['busqueda']);
       if ($prueba['radio'] == "facturas") {
@@ -740,7 +790,7 @@ class tccwsController extends Controller
         })->get();
       }
         $response = compact('consultaremesas', 'prueba');
-        return response()->json($response); 
+        return response()->json($response);
     }
 
     public function consultaFechasGetInfo(Request $request)
