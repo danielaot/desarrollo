@@ -51,7 +51,7 @@ class tccwsController extends Controller
 
         $agrupoCliente = $facturas->groupBy('nit_tercero');
         $soloCliente = $agrupoCliente->keys()->all();
-        $terceros = Tercero::whereIn('idTercero', $soloCliente)->get();
+        $terceros = Tercero::whereIn('idTercero', $soloCliente)->orderBy('razonSocialTercero')->get();
 
         $sucursales = [];
         foreach ($agrupoCliente as $key => $value) {
@@ -607,7 +607,7 @@ class tccwsController extends Controller
 
     public function consultaRemesasGetInfo()
     {
-      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(8))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
+      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(3))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
       $response = compact('consultafacturas');
       return response()->json($response);
     }
