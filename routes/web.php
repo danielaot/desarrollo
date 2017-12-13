@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agrupaPedidosGetInfo', 'tccws\tccwsController@agrupaPedidosGetInfo');
     Route::post('obtenerPlano', 'tccws\tccwsController@getPlano');
     Route::post('unidadesLogisticas', 'tccws\tccwsController@getUnidadesLogisticas');
+    Route::post('excluirDocumentos', 'tccws\tccwsController@excluirDocumentos');
 
     Route::resource('parametros', 'tccws\parametrostccController');
     Route::get('parametrosinfo', 'tccws\parametrostccController@getInfo');
@@ -47,6 +48,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('consultasinfo', 'tccws\tccwsController@consultaRemesasGetInfo');
     Route::post('consultasbusqueda', 'tccws\tccwsController@consultaBusquedasGetInfo');
     Route::post('consultasfecha', 'tccws\tccwsController@consultaFechasGetInfo');
+
+    Route::resource('ciudades', 'tccws\ciudadesController');
+    Route::get('ciudadesinfo', 'tccws\ciudadesController@getInfo');
   });
 
 

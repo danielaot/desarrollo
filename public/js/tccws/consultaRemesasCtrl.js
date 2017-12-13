@@ -37,8 +37,8 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
         .ariaLabel('Alert Dialog Demo')
         .ok('Entendido!')
         .targetEvent()
-    );
-    $scope.progress = false;    
+      );
+      $scope.progress = false;    
     }else{
       $http.post($scope.getBusqueda, $scope.buscar).then(function(response){
         console.log(response.data);

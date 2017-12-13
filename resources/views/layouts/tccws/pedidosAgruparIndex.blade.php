@@ -42,6 +42,7 @@
 
 <div class="container-fluid">
 	<div ng-controller="pedidosAgrupaCtrl as ctrl"  layout="column" flex layout-fill ng-cloak>
+<<<<<<< HEAD
 		<div class="panel panel-default">
 			<div class="panel-heading panel-heading2">
 				<div class="modal-footer modal-footer2">
@@ -60,6 +61,15 @@
 									</md-option>
 								</md-optgroup>
 							</md-select>
+=======
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading panel-heading2">
+						<div class="modal-footer modal-footer2">
+								<button type="button" ng-click="excluirFacturas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
+>>>>>>> 7bc09394f8e4ad266d6c391ff6e1ddbfe6438b20
 						</div>
 					</div>
 					<div class="col-xs-6 col-md-6 col-lg-6 col-xl-6 col-sm-6">
@@ -108,6 +118,18 @@
 									</div>
 								</div>
 							</div>
+<<<<<<< HEAD
+=======
+
+
+						</div>
+
+					</div>
+					<div class="panel-footer">
+						<div class="modal-footer modal-footer2">
+								<button type="button" ng-click="excluirFacturas()" ng-disabled="!puedeEnviar" class="btn btn-danger">Excluir Facturas</button>
+								<button type="button" ng-click="getUnidadesLogisticas()" data-toggle="modal" data-target="#modal" ng-disabled="!puedeEnviar" name="button" class="btn btn-success">Generar Remesa(s)</button>
+>>>>>>> 7bc09394f8e4ad266d6c391ff6e1ddbfe6438b20
 						</div>
 					</div>
 				</div>
