@@ -325,12 +325,11 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 				if($scope.isError == true){
 
-					$mdDialog.show($mdDialog.alert({
+					$mdDialog.show($mdDialog.confirm({
 						title: 'Información Despacho de Remesas',
 						htmlContent: encabezado,
 						ok: 'Volver a Intentar',
-						cancel: 'Volver a Intentar',
-						clickOutsideToClose:true
+						cancel: 'Cerrar',
 					})).then(function(){
 							$scope.enviarRemesa();
 					}, function(){
