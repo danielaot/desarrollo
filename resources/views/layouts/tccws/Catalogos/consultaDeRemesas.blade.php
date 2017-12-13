@@ -18,10 +18,11 @@
               <span class="input-group-addon">
                 Remesas &nbsp;<input type="radio" ng-model="criterioBusqueda" value="remesas">
               </span>
-              <input type="text" class="form-control" ng-model="searchText" ng-disabled="criterioBusqueda == NULL" required minlength="6">
+              <input type="text" class="form-control" ng-model="searchText" ng-disabled="criterioBusqueda == NULL" minlength="6" placeholder="Busqueda...">
               <span class="input-group-btn">
                 <button class="btn btn-info" type="button" ng-click="getConsultaBusquedas(searchText, criterioBusqueda)">
                   <i class="glyphicon glyphicon-search"></i>
+                  <md-tooltip>Buscar
                 </button>
               </span>
             </div>
@@ -34,20 +35,19 @@
             <md-datepicker ng-model="fechaFinal" md-placeholder="Fecha Final"></md-datepicker>
             <button class="btn btn-info" type="button" ng-click="getConsultaFechas(fechaInicial, fechaFinal)">
               <i class="glyphicon glyphicon-search"></i>
+              <md-tooltip>Buscar
             </button>
           </div>
-            
-
-
-
-
         </div>
       </div>
     </div>
 		<div class="panel-body">
 			<table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
-        	<tr>
+        	<tr> 
+            <th class="text-center">Cliente</th>
+            <th class="text-center">Sucursal</th>
+            <th class="text-center">Ciudad de Destino</th>
 					  <th class="text-center">Número de Remesa</th>
  					  <th class="text-center">Factura</th>
 					  <th class="text-center">Fecha de Creación</th>
@@ -56,6 +56,9 @@
        	</thead>
       	<tbody>
       		<tr ng-repeat="(key, value) in consultas | groupBy : 'consulta.rms_remesa'"> 
+            <td>@{{value[0].consulta.nombre_cliente.razonSocialTercero}}</td>
+            <td>@{{value[0].consulta.rms_nom_sucursal}}</td>
+            <td>@{{value[0].consulta.rms_ciud_sucursal}}</td>
             <td>@{{ key }} @{{ imprimir(key) }}</td>
             <td>
               @{{ retornarCadena(value[0].consulta.facturas) }}
@@ -64,6 +67,7 @@
     		    <td class="text-right">
         		  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" ng-click="setFactura(value[0])">
                 <i class="glyphicon glyphicon-eye-open"></i>
+                <md-tooltip>Ver
          			</button>
             </td>
     			</tr>

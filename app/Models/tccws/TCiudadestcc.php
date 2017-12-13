@@ -36,5 +36,4 @@ class TCiudadestcc extends Model
 
     protected $guarded = [];
 
-
 }

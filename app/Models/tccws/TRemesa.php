@@ -43,5 +43,8 @@ class TRemesa extends Model
       return $this->hasMany('App\Models\tccws\TFactsxremesa', 'fxr_remesa', 'id');
     }
 
+    public function nombreCliente(){
+      return $this->hasOne('App\Models\Genericas\Tercero', 'idTercero', 'rms_terceroid');
+    }
 
 }
