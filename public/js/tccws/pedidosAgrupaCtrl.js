@@ -25,6 +25,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			data = response.data;
 			$scope.agrupoCliente = angular.copy(data.agrupoCliente);
 			$scope.terceros = angular.copy(data.terceros);
+			$scope.terceros = $filter('orderBy')($scope.terceros,'razonSocialTercero');
 			$scope.sucursales = angular.copy(data.sucursales);
 			console.log($scope.agrupoCliente);
 			console.log($scope.terceros);
@@ -48,9 +49,17 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 		if ($scope.cliente == undefined) {
 			return [];
 		}else{
-			return $filter('filter')($scope.sucursales, {nit_tercero : $scope.cliente.idTercero});
+			var filter = $filter('filter')($scope.sucursales, {nit_tercero : $scope.cliente.idTercero});
+			filter = $filter('orderBy')(filter,'nombre');
+			return filter;
 		}
 	}
+
+	$scope.removeSucursal = function (sucursal) {
+	var index = $scope.cliente.arregloFinal.sucursalesFiltradas.indexOf(sucursal);
+	$scope.cliente.arregloFinal.sucursalesFiltradas.splice(index, 1);
+	$scope.cantidadesNoValidas();
+	};
 
 	$scope.setSelectAllFacts = function(sucursal){
 		$scope.sucursalSelected = sucursal;
@@ -238,6 +247,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 		$scope.enviarRemesa = function(){
 			$scope.progress = true;
+			$scope.isError = false;
 			console.log( $scope.cliente);
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
 				console.log();
@@ -266,6 +276,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 					}else if(filterSuccessTodas.length == 0 && filterErrorTodas.length > 0){
 
+						$scope.isError = true;
 						encabezado += "<br/><h5><strong>Error:</strong> Se ha presentado un error al intentar enviar las facturas de las siguientes sucursales a TCC para su despacho</h5><br/>";
 						filterErrorTodas.forEach(function(respuestaTcc){
 							encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
@@ -312,20 +323,37 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 				angular.element('.close').trigger('click');
 
-				$mdDialog.show($mdDialog.alert({
-					title: 'Información Despacho de Remesas',
-					htmlContent: encabezado,
-					ok: 'Cerrar'
-				})).then(function(){
-					if($scope.isError == false){
-						$scope.progress = true;
-						$scope.cliente = undefined;
-						$scope.puedeEnviar = false;
-						$scope.getInfo();
-					}else{
-						$scope.isError = false;
-					}
-				});
+				if($scope.isError == true){
+
+					$mdDialog.show($mdDialog.alert({
+						title: 'Información Despacho de Remesas',
+						htmlContent: encabezado,
+						ok: 'Volver a Intentar',
+						cancel: 'Volver a Intentar',
+						clickOutsideToClose:true
+					})).then(function(){
+							$scope.enviarRemesa();
+					}, function(){
+							$scope.isError = false;
+					});
+
+
+				}else if($scope.isError == false){
+
+					$mdDialog.show($mdDialog.alert({
+						title: 'Información Despacho de Remesas',
+						htmlContent: encabezado,
+						ok: 'Cerrar',
+					})).then(function(){
+							$scope.progress = true;
+							$scope.cliente = undefined;
+							$scope.puedeEnviar = false;
+							$scope.getInfo();
+					});
+
+				}
+
+
 
 				console.log(response.data);
 			});

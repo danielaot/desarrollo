@@ -74,8 +74,7 @@
 										ng-change="onChangeClienteSelected()"
 										placeholder="Seleccione un cliente">
 										<md-optgroup label="Clientes">
-											<md-option ng-value="cliente" ng-repeat="cliente in terceros |
-											filter:searchTerm">@{{cliente.razonSocialTercero}}</md-option>
+											<md-option ng-value="cliente" ng-repeat="cliente in terceros">@{{cliente.razonSocialTercero}}</md-option>
 										</md-optgroup>
 									</md-select>
 

@@ -16,14 +16,17 @@
             <md-tabs md-dynamic-height md-border-bottom>
               <md-tab label="@{{sucursal.nombre}}" ng-repeat="sucursal in cliente.arregloFinal.sucursalesFiltradas">
                 <md-content class="md-padding">
-
                   <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="form-group">
                           <div class="row">
-                            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
+                            <div ng-class="cliente.arregloFinal.sucursalesFiltradas.length > 1 ? 'col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6' : 'col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12'">
                               <label>Cajas:</label>
                               <input type="number" ng-model="sucursal.objetoCajas.cantidadunidades" class="form-control" placeholder="Cantidad de Cajas">
+                            </div>
+                            <div ng-if="cliente.arregloFinal.sucursalesFiltradas.length > 1" class="col-lg-6 col-sm-6 col-xs-6 col-md-6 col-xl-6">
+                              <label style="display:block !important;color: transparent !important;">...</label>
+                              <button class="btn btn-danger pull-right" ng-click="removeSucursal(sucursal)" type="button"><i class="glyphicon glyphicon-remove"></i> Quitar Sucursal</button>
                             </div>
                           </div>
                         </div>
