@@ -17,6 +17,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 	$scope.kilosBaseLios = 30;
 	$scope.sumaTotalKilos = 0;
 	$scope.isError = false;
+	$scope.pesosNoValidos = false;
+
 
 	$scope.getInfo = function(){
 		$http.get($scope.urlGetInfo).then(function(response){
@@ -184,6 +186,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 		$scope.getUnidadesLogisticas = function(){
 
+			angular.element('#modal').css('display', 'none');
 			$scope.cantidadCajas = 0;
 			$scope.cantidadLios = 0;
 			$scope.cantidadPaletas = 0;
@@ -211,10 +214,10 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$http.post($scope.urlUnidades, $scope.cliente).then(function(response){
 				$scope.progress = false;
 				$scope.cliente.arregloFinal = angular.copy(response.data);
-
+				angular.element('#modal').css('display', 'block');
 				console.log($scope.cliente);
 
-				$scope.cliente.arregloFinal.sucursalesFiltradas.forEach(function(sucursal){
+				$scope.cliente.arregloFinal.sucursalesFiltradas = $scope.cliente.arregloFinal.sucursalesFiltradas.map(function(sucursal){
 
 					sucursal.kilosRealesEstibas = 0;
 					sucursal.kilosRealesLios = 0;
@@ -224,7 +227,9 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 					sucursal.objetoLios = $filter('filter')(sucursal.unidades, {claseempaque: 'CLEM_LIO'})[0];
 					sucursal.objetoPaletas = $filter('filter')(sucursal.unidades, {claseempaque: 'CLEM_PALET'})[0];
 
-					$scope.sumatoriaKilos(sucursal);
+					sucursal = $scope.sumatoriaKilos(sucursal);
+
+					return sucursal;
 				})
 
 			});
@@ -360,6 +365,30 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			sucursal.objetoLios.kilosreales = sucursal.kilosRealesLios;
 			sucursal.objetoCajas.kilosreales = 0;
 			sucursal.objetoPaletas.kilosreales = sucursal.kilosRealesEstibas;
+
+			$scope.cantidadesNoValidas();
+
+			return sucursal;
+
+		}
+
+		$scope.cantidadesNoValidas = function(){
+
+			var cantErroneos = 0;
+
+			$scope.cliente.arregloFinal.sucursalesFiltradas.forEach(function(sucu){
+				if(sucu.sumaTotalKilos == 0){
+					cantErroneos += 1;
+				}
+			});
+
+			if(cantErroneos > 0){
+					$scope.pesosNoValidos = true;
+					console.log("Error en total de kilos");
+			}else if(cantErroneos == 0){
+				$scope.pesosNoValidos = false;
+				console.log("Total de kilos correctos ");
+			}
 
 		}
 
