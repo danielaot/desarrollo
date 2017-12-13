@@ -72,7 +72,7 @@
 
       </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" type="submit">Enviar Remesa</button>
+          <button class="btn btn-primary" ng-disabled="pesosNoValidos" type="submit">Enviar Remesa</button>
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
         </div>
       </div>
