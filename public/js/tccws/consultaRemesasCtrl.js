@@ -22,6 +22,7 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
   }
 
   $scope.getConsultaBusquedas = function(busqueda, radio){
+    console.log(busqueda);
     $scope.progress = true;
     $scope.busquedas = [];
     $scope.buscar = new Object();
@@ -40,20 +41,24 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
       );
       $scope.progress = false;    
     }else{
-      $http.post($scope.getBusqueda, $scope.buscar).then(function(response){
-        console.log(response.data);
-        var data = response.data;
-        $scope.consultas = angular.copy(data.consultaremesas);
-        $scope.consultas.map(function(consulta){ 
-          var fecha_ini = new Date(consulta.consulta.created_at);
-          fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
-          consulta.consulta.created_at = new Date(fecha_ini);
+      if (busqueda == '') {
+        $scope.getConsultaRemesas();
+      }else{
+        $http.post($scope.getBusqueda, $scope.buscar).then(function(response){
+          console.log(response.data);
+          var data = response.data;
+          $scope.consultas = angular.copy(data.consultaremesas);
+          $scope.consultas.map(function(consulta){ 
+            var fecha_ini = new Date(consulta.consulta.created_at);
+            fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
+            consulta.consulta.created_at = new Date(fecha_ini);
 
-          return consulta;
+            return consulta;
+          });
+          console.log($scope.consultas);
+          $scope.progress = false;
         });
-        console.log($scope.consultas);
-        $scope.progress = false;
-      });
+      }
       $scope.busquedas = []
     }
   }
@@ -107,7 +112,6 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
       });
       $scope.busquedas = []
       }
-      
     }
   }
 

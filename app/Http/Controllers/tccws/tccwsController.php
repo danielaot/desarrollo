@@ -782,7 +782,7 @@ class tccwsController extends Controller
 
     public function consultaRemesasGetInfo()
     {
-      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(3))->with('consulta', 'consulta.facturas', 'consulta.boomerang')->get();
+      $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(3))->with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->get();
       $response = compact('consultafacturas');
       return response()->json($response);
     }
@@ -792,9 +792,9 @@ class tccwsController extends Controller
       $prueba = $request->all();
       $prueba['busqueda'] = trim($prueba['busqueda']);
       if ($prueba['radio'] == "facturas") {
-        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->where('fxr_numerodocto', $prueba['busqueda'])->get();
+        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->where('fxr_numerodocto', $prueba['busqueda'])->get();
       }else{
-        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->whereHas('consulta', function($query) use($prueba){
+        $consultaremesas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->whereHas('consulta', function($query) use($prueba){
             $query->where('rms_remesa', $prueba['busqueda']);
         })->get();
       }
@@ -808,7 +808,7 @@ class tccwsController extends Controller
       $fech['inicial'] = Carbon::parse($fech['inicial'])->subHour(5);
       $fech['final'] = Carbon::parse($fech['final'])->addHour(19);
 
-      $consultafechas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang')->whereBetween('created_at', [$fech['inicial'], $fech['final']])->get();
+      $consultafechas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->whereBetween('created_at', [$fech['inicial'], $fech['final']])->get();
       $response = compact('consultafechas', 'fech');
       return response()->json($response);
     }

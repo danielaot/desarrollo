@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('consultasbusqueda', 'tccws\tccwsController@consultaBusquedasGetInfo');
     Route::post('consultasfecha', 'tccws\tccwsController@consultaFechasGetInfo');
 
-    Route::resource('ciudades', 'tccws\ciudadesController');
+    Route::resource('ciudades', 'tccws\ciudadesController', ['except' => ['create', 'show', 'edit', 'destroy']]);
     Route::get('ciudadesinfo', 'tccws\ciudadesController@getInfo');
   });
 

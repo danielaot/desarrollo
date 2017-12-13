@@ -32,6 +32,16 @@
                     <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
+                          <label>Cliente:</label>
+                          <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.nombre_cliente.razonSocialTercero}}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                           <label>Sucursal:</label>
                           <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_nom_sucursal}}">
                         </div>
@@ -63,7 +73,7 @@
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                       <label>Observaciones</label>
-                      <input ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_observacion}}"  maxlength="150" rows="5">
+                      <textarea ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_observacion}}"  maxlength="150" rows="3"></textarea>
                     </div>
                   </div>
                   </div>
