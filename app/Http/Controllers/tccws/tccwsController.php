@@ -301,6 +301,7 @@ class tccwsController extends Controller
                 "dicecontener" => '',
                 "cantidadunidades" => 1,
                 "kilosreales" => 0,
+                "kilosrealestcc" => 0,
                 "largo" => 0,
                 "alto" => 0,
                 "ancho" => 0,
@@ -342,6 +343,18 @@ class tccwsController extends Controller
           return $unidad['cantidadunidades'] > 0;
         })->values();
 
+        $sucursal['unidades']= collect($sucursal['unidades'])->map(function($unidad){
+          if($unidad['claseempaque'] == "CLEM_CAJA"){
+              $unidad['kilosrealestcc'] = $unidad['kilosreales'];
+          }elseif($unidad['claseempaque'] == "CLEM_LIO"){
+              $unidad['kilosrealestcc'] = $unidad['kilosreales'] / $unidad['cantidadunidades'];
+          }elseif($unidad['claseempaque'] == "CLEM_PALET"){
+            $unidad['kilosrealestcc'] = $unidad['kilosreales'] / $unidad['cantidadunidades'];
+          }
+
+          return $unidad;
+        });
+
         $codigoDaneTcc = TCiudadestcc::where('ctc_ciu_erp',$sucursal['ciudaddestinatario'])->get();
 
         if(count($codigoDaneTcc) == 0){
@@ -349,6 +362,14 @@ class tccwsController extends Controller
           return response()->json(["message" => $message],202);
         }
 
+        $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
+        $documentosString = implode(", ",$documentosString);
+
+        if(isset($sucursal['observacion'])){
+          $sucursal['observacion'] .= "\nDocumentos de facturas enviadas para esta remesa: ".$documentosString.".";
+        }else{
+          $sucursal['observacion'] = "Documentos de facturas enviadas para esta remesa: ".$documentosString.".";
+        }
 
         $data = [
           'clave' => $clave,
@@ -387,7 +408,7 @@ class tccwsController extends Controller
           'totalpeso' => '',
           'totalpesovolumen' => '',
           'formapago' => '',
-          'observaciones' => isset($sucursal['observacion']) ? $sucursal['observacion']: '',
+          'observaciones' => $sucursal['observacion'],
           'llevabodega' => '',
           'recogebodega' => '',
           'centrocostos' => '',
@@ -399,14 +420,16 @@ class tccwsController extends Controller
           'documentosReferencia' => $sucursal['documentosReferencia'],
           'numeroReferenciaCliente' => '',
           'generarDocumentos' => $generarDocumentos,
-          'unidadesinternas' => '',
+          'unidadesinternas' => '0',
           'fuente' => '',
           'txt' => '',
           'unidadBoomerang' => $sucursal['unidadBoomerang']
         ];
+
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
         $data['tieneBoomerang'] = false;
+        //return response()->json($data['txt']);
         //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
@@ -448,8 +471,10 @@ class tccwsController extends Controller
       $remesaTabla->rms_cajas = $isBoomerang == true ? $sucursal['unidadBoomerang']['cantidadunidades'] : 0;
       $remesaTabla->rms_lios =  0;
       $remesaTabla->rms_pesolios = 0;
+      $remesaTabla->rms_pesoliostcc = 0;
       $remesaTabla->rms_palets = 0;
       $remesaTabla->rms_pesopalets = 0;
+      $remesaTabla->rms_pesopaletstcc = 0;
       $remesaTabla->rms_remesapadre = $remesaPadre != null ? $remesaPadre->id : null;
       $remesaTabla->rms_isBoomerang = $isBoomerang == true ? true : false;
       $remesaTabla->rms_pesototal = 0;
@@ -462,9 +487,11 @@ class tccwsController extends Controller
           }else if($unidad['claseempaque'] == "CLEM_LIO"){
             $remesaTabla->rms_lios = $unidad['cantidadunidades'];
             $remesaTabla->rms_pesolios = $unidad['kilosreales'];
+            $remesaTabla->rms_pesoliostcc = $unidad['kilosrealestcc'];
           }else if($unidad['claseempaque'] == "CLEM_PALET"){
             $remesaTabla->rms_palets = $unidad['cantidadunidades'];
             $remesaTabla->rms_pesopalets = $unidad['kilosreales'];
+            $remesaTabla->rms_pesopaletstcc = $unidad['kilosrealestcc'];
           }
         }
         $remesaTabla->rms_pesototal = $sucursal["sumaTotalKilos"];
@@ -627,31 +654,45 @@ class tccwsController extends Controller
 
       }elseif($grupo == 'b'){
         //Unidades del documento
+        $cantidadCajas = 0;
+        $yaEntro = 0;
+
         if($isBoomerang == false){
 
             foreach ($unidades as $key => $unidad) {
-              extract($unidad);
-              $documento .= '      <unidad>'.chr(13) . chr(10);
-              foreach($listado as $seg){
-                $segmento = $seg->ddt_segmento;
-                $campo = $seg->ddt_campo;
-                $metaEtiqueta = $seg->ddt_nombre;
-                $lista = explode('&',$segmento);
-                for($i = 0;$i<count($lista);$i++){
-                  if($campo != '' && $lista[$i] == 'var'){
-                    $lista[$i] = $$campo;
-                  }elseif($campo === '' && $lista[$i] === 'var'){
-                    $lista[$i] = $campo;
-                  }
-                }
-                $segmento = implode('',$lista);
-                $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+
+              if($yaEntro == 0 && $unidad['claseempaque'] == "CLEM_CAJA"){
+                  $cantidadCajas = $unidad['cantidadunidades'];
+                  $yaEntro += 1;
               }
-              $documento .= '      </unidad>'.chr(13) . chr(10);
+
+              if($unidad['claseempaque'] != "CLEM_CAJA"){
+
+                extract($unidad);
+
+
+                $documento .= '      <unidad>'.chr(13) . chr(10);
+                foreach($listado as $seg){
+                  $segmento = $seg->ddt_segmento;
+                  $campo = $seg->ddt_campo;
+                  $metaEtiqueta = $seg->ddt_nombre;
+                  $lista = explode('&',$segmento);
+                  for($i = 0;$i<count($lista);$i++){
+                    if($campo != '' && $lista[$i] == 'var'){
+                      $lista[$i] = $$campo;
+                    }elseif($campo === '' && $lista[$i] === 'var'){
+                      $lista[$i] = $campo;
+                    }
+                  }
+                  $segmento = implode('',$lista);
+                  $documento .= '       <'.$metaEtiqueta.'>'.$segmento.'</'.$metaEtiqueta.'>'.chr(13) . chr(10);
+                }
+                $documento .= '      </unidad>'.chr(13) . chr(10);
+                $cantidadCajas = 0;
+              }
             }
 
         }else{
-
           extract($unidadBoomerang);
           $documento .= '      <unidad>'.chr(13) . chr(10);
           foreach($listado as $seg){
@@ -679,11 +720,13 @@ class tccwsController extends Controller
         foreach ($documentosReferencia as $key => $documentoRef) {
           extract($documentoRef);
 
-          if($isBoomerang == false){
-            $metaDocto = "documentosReferencia";
-          }else{
-            $metaDocto = "documentoreferencia";
-          }
+          // if($isBoomerang == false){
+          //   $metaDocto = "documentosReferencia";
+          // }else{
+          //   $metaDocto = "documentoreferencia";
+          // }
+
+          $metaDocto = "documentoreferencia";
 
           $documento .= '      <'.$metaDocto.'>'.chr(13) . chr(10);
           foreach($listado as $seg){
@@ -723,7 +766,7 @@ class tccwsController extends Controller
     public function consumirServicioTcc($xml){
 
       //Se inicializa el cliente de nusoap
-      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
+      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/preservicios/wsdespachos.asmx?wsdl', true);
       $nusoap_client->soap_defencoding = 'UTF-8';
       $nusoap_client->decode_utf8 = false;
       //$nusoap_client->version = SOAP_1_1;

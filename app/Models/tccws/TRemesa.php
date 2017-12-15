@@ -25,8 +25,10 @@ class TRemesa extends Model
         'rms_cajas',
         'rms_lios',
         'rms_pesolios',
+        'rms_pesoliostcc',
         'rms_palets',
         'rms_pesopalets',
+        'rms_pesopaletstcc',
         'rms_pesototal',
         'rms_remesapadre',
         'rms_isBoomerang'
