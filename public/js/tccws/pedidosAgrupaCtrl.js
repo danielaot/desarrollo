@@ -27,19 +27,15 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$scope.terceros = angular.copy(data.terceros);
 			$scope.terceros = $filter('orderBy')($scope.terceros,'razonSocialTercero');
 			$scope.sucursales = angular.copy(data.sucursales);
-			console.log($scope.agrupoCliente);
-			console.log($scope.terceros);
-			console.log($scope.sucursales);
 			$scope.progress = false;
 		}, function(errorResponse){
-			console.log(errorResponse);
 			$scope.getInfo();
 		});
 	}
 
 	$scope.traerElementos = function(){
 		//aqui debo filtrar el arreglo que se pinta en la vista
-		console.log();
+
 	}
 
 	$scope.getInfo();
@@ -110,7 +106,6 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			}
 
 			sucursal.cantSeleccionadas = filterSelected.length;
-			console.log(factura);
 
 	}
 
@@ -174,7 +169,6 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 				$scope.progress = true;
 
 				$http.post($scope.urlExcluir, $scope.cliente).then(function(response){
-					console.log(response.data);
 					$scope.cliente = undefined;
 					$scope.puedeEnviar = false;
 					$scope.getInfo();
@@ -217,14 +211,14 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 				return sucursal;
 			})
 
-			console.log($scope.cliente);
+
 			$scope.progress = true;
 
 			$http.post($scope.urlUnidades, $scope.cliente).then(function(response){
 				$scope.progress = false;
 				$scope.cliente.arregloFinal = angular.copy(response.data);
 				angular.element('#modal').css('display', 'block');
-				console.log($scope.cliente);
+
 
 				$scope.cliente.arregloFinal.sucursalesFiltradas = $scope.cliente.arregloFinal.sucursalesFiltradas.map(function(sucursal){
 
@@ -248,10 +242,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 		$scope.enviarRemesa = function(){
 			$scope.progress = true;
 			$scope.isError = false;
-			console.log( $scope.cliente);
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
 
-				console.log(response.data);
 				$scope.progress = false;
 
 				var encabezado = "";
@@ -310,13 +302,11 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 				if(filterErrorLogin.length > 0){
 					encabezado += "<br/><h5><strong>Error! </strong> El servicio de TCC ha respondido con error de acceso, por favor revise sus credenciales.</h5><br/>";
 					filterErrorLogin.forEach(function(respuestaTcc){
-						console.log(respuestaTcc);
 						encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
 					})
 				}else if(filterErrorCiudad.length > 0){
 					encabezado += "<br/><h5><strong>Error! </strong> El servicio de TCC ha respondido con error de envio por inexistencia de la ciudad del destinatario.</h5><br/>";
 					filterErrorCiudad.forEach(function(respuestaTcc){
-						console.log(respuestaTcc);
 						encabezado += "<pre><strong>Sucursal:</strong> "+respuestaTcc.nombreSucursal +"<br/><strong>Remesa:</strong> "+respuestaTcc.remesa+"<br/><strong>Mensaje Error Remesa:</strong> "+respuestaTcc.mensaje+"</pre>";
 					})
 				}
@@ -354,9 +344,6 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 				}
 
-
-
-				console.log(response.data);
 			});
 		}
 
@@ -413,10 +400,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 
 			if(cantErroneos > 0){
 					$scope.pesosNoValidos = true;
-					console.log("Error en total de kilos");
 			}else if(cantErroneos == 0){
 				$scope.pesosNoValidos = false;
-				console.log("Total de kilos correctos ");
 			}
 
 		}
