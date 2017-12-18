@@ -29,6 +29,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script src="{{url('/lib/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/lib/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/lib/angularJs/angular-locale_es-co.js')}}"></script>
+<script src="{{url('/lib/angularJs/xlsxfull.min.js')}}"></script>
+<script src="{{url('/lib/angularJs/angular-js-xlsx.js')}}"></script>
+
 
 <!-- FullCalendarJs -->
 <script src="{{url('/lib/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
