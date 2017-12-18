@@ -61,7 +61,7 @@
                     <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                         <label>Observaciones</label>
-                        <textarea ng-model="sucursal.observacion" class="form-control" maxlength="255" rows="5"></textarea>
+                        <textarea ng-model="sucursal.observacion" class="form-control" maxlength="700" rows="5"></textarea>
                       </div>
                     </div>
 

@@ -429,7 +429,7 @@ class tccwsController extends Controller
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
         $data['tieneBoomerang'] = false;
-        //return response()->json($data['txt']);
+        return response()->json($data['txt']);
         //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
@@ -437,7 +437,7 @@ class tccwsController extends Controller
 
 
         if($xmlResponseBody['respuesta'] == 0){
-
+          $xmlResponseBody['respuesta'] = "success";
           $grabarEnTablas = $this->poblarTablasRemesas($sucursal,$xmlResponseBody,false);
 
           if($sucursal['tieneBoomerang'] == true){
@@ -449,6 +449,12 @@ class tccwsController extends Controller
             $this->poblarTablasRemesas($sucursal,$xmlResponseBody['boomerangResponse'],true,$grabarEnTablas);
           }
 
+        }else{
+          if($xmlResponseBody['respuesta'] < 0){
+            $xmlResponseBody['respuesta'] = "error_normal";
+          }elseif($xmlResponseBody['respuesta'] == 1){
+            $xmlResponseBody['respuesta'] = "error_acceso";
+          }
         }
 
         array_push($message,$xmlResponseBody);
