@@ -217,7 +217,7 @@ class tccwsController extends Controller
             $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
           }
 
-          $formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
+          $formatoDocumento = trim($factura['tipo_docto']).$factura['num_consecutivo'];
           //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
               'tipoPedido' => trim($factura['tipoPedido']),
@@ -429,7 +429,7 @@ class tccwsController extends Controller
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
         $data['tieneBoomerang'] = false;
-        return response()->json($data['txt']);
+        //return response()->json($data['txt']);
         //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
