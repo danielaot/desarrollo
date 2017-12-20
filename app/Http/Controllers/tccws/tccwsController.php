@@ -53,7 +53,7 @@ class tccwsController extends Controller
         'nom_tercero', 'num_sucursal', 'desc_sucursal',
         'nit_tercero', 'date_creacion','tipoPedido')
         ->whereNull('fecha_remesa')
-        ->where('date_creacion', '>', '11-08-2017')
+        ->where('date_creacion', '=', '19-12-2017')
         ->whereNotIn('tipo_docto', ['F30', 'F28', 'F31', 'F48'])
         ->distinct()->orderBy('num_factura')->get();
 
@@ -362,13 +362,11 @@ class tccwsController extends Controller
           return response()->json(["message" => $message],202);
         }
 
-        $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
-        $documentosString = implode(", ",$documentosString);
+        // $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
+        // $documentosString = implode(", ",$documentosString);
 
-        if(isset($sucursal['observacion'])){
-          $sucursal['observacion'] .= "\nDocumentos de facturas enviadas para esta remesa: ".$documentosString.".";
-        }else{
-          $sucursal['observacion'] = "Documentos de facturas enviadas para esta remesa: ".$documentosString.".";
+        if(!isset($sucursal['observacion'])){
+          $sucursal['observacion'] = "";
         }
 
         $data = [
