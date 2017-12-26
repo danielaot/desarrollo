@@ -217,7 +217,7 @@ class tccwsController extends Controller
             $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
           }
 
-          $formatoDocumento = trim($factura['tipo_docto']).$factura['num_consecutivo'];
+          $formatoDocumento = trim($factura['tipo_docto']).'-'.$factura['num_consecutivo'];
           //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
               'tipoPedido' => trim($factura['tipoPedido']),
@@ -316,6 +316,21 @@ class tccwsController extends Controller
         }
 
 
+        $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
+        $documentosString = implode(", ",$documentosString);
+
+        $cantidadCajas = collect($sucursal['unidades'])->where('claseempaque','CLEM_CAJA')->values(); 
+        $cantidadCajas = $cantidadCajas[0]['cantidadunidades'];
+
+        $cantidadLios = collect($sucursal['unidades'])->where('claseempaque','CLEM_LIO')->values(); 
+        $cantidadLios = $cantidadLios[0]['cantidadunidades'];
+
+        $cantidadPalets = collect($sucursal['unidades'])->where('claseempaque','CLEM_PALET')->values(); 
+        $cantidadPalets = $cantidadPalets[0]['cantidadunidades'];
+
+        $sucursal['observacion'] = $cantidadCajas . ' Cajas/'.$cantidadLios.' Lios/'.$cantidadPalets.' Estibas/'.'Facturas: '.$documentosString;
+
+
         return $sucursal;
       });
 
@@ -360,13 +375,6 @@ class tccwsController extends Controller
         if(count($codigoDaneTcc) == 0){
           $message = array("nombreSucursal"=> $sucursal['nombre'],"mensaje" => "Se ha presentado un error con la ciudad del destinatario, por favor comuniquese con el area de sistemas.", "respuesta" => "ciu_error", "remesa" => "0");
           return response()->json(["message" => $message],202);
-        }
-
-        // $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
-        // $documentosString = implode(", ",$documentosString);
-
-        if(!isset($sucursal['observacion'])){
-          $sucursal['observacion'] = "";
         }
 
         $data = [
@@ -427,7 +435,6 @@ class tccwsController extends Controller
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
         $data['tieneBoomerang'] = false;
-        //return response()->json($data['txt']);
         //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
@@ -435,8 +442,10 @@ class tccwsController extends Controller
 
 
         if($xmlResponseBody['respuesta'] == 0){
+
           $xmlResponseBody['respuesta'] = "success";
           $grabarEnTablas = $this->poblarTablasRemesas($sucursal,$xmlResponseBody,false);
+          //return response()->json($grabarEnTablas);
 
           if($sucursal['tieneBoomerang'] == true){
             $data['tieneBoomerang'] = true;
