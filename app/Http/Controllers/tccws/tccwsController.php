@@ -779,7 +779,7 @@ class tccwsController extends Controller
     public function consumirServicioTcc($xml){
 
       //Se inicializa el cliente de nusoap
-      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/preservicios/wsdespachos.asmx?wsdl', true);
+      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
       $nusoap_client->soap_defencoding = 'UTF-8';
       $nusoap_client->decode_utf8 = false;
       //$nusoap_client->version = SOAP_1_1;
