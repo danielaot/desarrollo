@@ -8,12 +8,13 @@ use Validator;
 
 use App\Models\Pricat\TCliente as Cliente;
 use App\Models\Genericas\Tercero;
+use App\Models\BESA\AppwebListaPrecio as ListaPrecio;
 
 class ClientesController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Clientes Pricat';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Clientes Pricat';
         $titulo = 'Administrar Clientes Pricat';
 
         return view('layouts.pricat.catalogos.indexClientes', compact('ruta', 'titulo'));
@@ -21,12 +22,15 @@ class ClientesController extends Controller
 
     public function getInfo()
     {
-        
-        $clientes = Cliente::withTrashed()->with('terceros', 'kam')->get();
+
+        $clientes = Cliente::withTrashed()->with('terceros', 'kam', 'listaprecio')->get();
         $agrupadoClientes = $clientes->groupBy('cli_nit');
         $agrupadoClientes = $agrupadoClientes->keys()->all();
+
         $terceros = Tercero::whereNotIn('idTercero', $agrupadoClientes)->get();
-        $response = compact('terceros','clientes', 'agrupadoClientes');
+
+        $listaprecio = ListaPrecio::where('f112_ind_estado', 1)->get();
+        $response = compact('terceros','clientes', 'agrupadoClientes', 'listaprecio');
 
         return response()->json($response);
     }
@@ -52,6 +56,7 @@ class ClientesController extends Controller
         $cliente->cli_eliminacion = $request->eliminacion ? true : false;
         $cliente->cli_kam = $request->kam['idTercero'];
         $cliente->cli_gln = $request->gln;
+        $cliente->cli_listaprecio = $request->lista['f112_id'];
         $cliente->save();
 
         return response()->json($cliente);
@@ -78,6 +83,7 @@ class ClientesController extends Controller
         $cliente->cli_eliminacion = $request->eliminacion ? true : false;
         $cliente->cli_kam = $request->kam['idTercero'];
         $cliente->cli_gln = $request->gln;
+        $cliente->cli_listaprecio = $request->lista['f112_id'];
         $cliente->save();
 
         return response()->json($request);

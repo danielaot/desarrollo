@@ -77,19 +77,25 @@
                 <table datatable="ng" class="row-border hover">
                   <thead>
                     <tr>
-                      <th></th>
+                      <th class="text-center">Proyecto</th>
                       <th class="text-center">Referencia</th>
+                      <th class="text-center">Descripción</th>
+                      <th class="text-center">Fecha</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="item in items">
-                      <td></td>
-                      <td></td>
+                      <td>@{{item.proyectos.proy_nombre}}</td>
+                      <td>@{{item.ite_referencia}}</td>
+                      <td>@{{item.detalles.ide_descompleta}}</td>
+                      <td>@{{item.proyectos.updated_at}}</td>
+                      <td  class="text-center"><input type="radio" ng-model="solicitudd.pricat" ng-value="@{{item.id}}"></td>
                     </tr>
                   </tbody>
                 </table>
                 <div class="row text-center" style="padding-top: 20px;">
-                  <button class="btn btn-primary" type="submit">Crear</button>
+                  <button class="btn btn-primary" type="button" ng-click="solicitar()">Crear</button>
                 </div>
               {!! Form::close() !!}
             </div>

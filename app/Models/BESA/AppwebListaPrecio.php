@@ -4,18 +4,18 @@ namespace App\Models\BESA;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LineasProducto extends Model
+class AppwebListaPrecio extends Model
 {
-    protected $connection = 'besa';
+    protected $connection = 'unoeereal';
 
-    protected $table = '200_LineasProducto';
+    protected $table = 't112_mc_listas_precios';
 
     public $incrementing = false;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'CodLinea',
-        'NomLinea'
+        'f112_id',
+        'f112_descripcion'
     ];
 }

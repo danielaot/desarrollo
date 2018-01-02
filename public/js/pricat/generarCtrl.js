@@ -1,5 +1,7 @@
-app.controller('generarCtrl', ['$scope', '$filter', '$http', 'DTOptionsBuilder', 'DTColumnDefBuilder', function($scope, $filter, $http, DTOptionsBuilder, DTColumnDefBuilder){
+app.controller('generarCtrl', ['$scope', '$filter', '$http', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$window', function($scope, $filter, $http, DTOptionsBuilder, DTColumnDefBuilder, $window){
   $scope.getUrl = "generarinfo";
+  $scope.solicitudd = {};
+  $scope.urlPricat = "generarpricat";
 
   $scope.progress = true;
 
@@ -26,4 +28,14 @@ app.controller('generarCtrl', ['$scope', '$filter', '$http', 'DTOptionsBuilder',
   $scope.show = function(idsolicitud){
     $scope.solicitud = angular.copy($filter('filter')($scope.solicitudes, {id : idsolicitud})[0]);
   }
+
+  $scope.solicitar = function(idsolicitud){
+    console.log($scope.solicitudd);
+    $http.post($scope.urlPricat, $scope.solicitudd).then(function(response){
+      $scope.progress = false;
+
+    });
+  }
+
+
 }]);

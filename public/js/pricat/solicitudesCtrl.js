@@ -1,6 +1,8 @@
 app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', function($scope, $http, $filter, $window){
   $scope.getUrl = "../solicitudcreateinfo";
   $scope.url = "../solicitud";
+  $scope.urlPrecio = "../solicitudprecio";
+  $scope.urlRef = "../solicitudref";
 
   $scope.getInfo = function(){
     $http.get($scope.getUrl).then(function(response){
@@ -11,7 +13,14 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
     });
   }
 
+
   $scope.getInfo();
+
+  $scope.precioBruto = function(){
+    $http.post($scope.urlPrecio, $scope.referencia.ref).then(function(response){
+      $scope.referencia.prebru = parseInt(response.data[0].precio);
+    });
+  }
 
   $scope.showRef = false;
   $scope.showPre = false;
@@ -94,7 +103,6 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
       }
       referencia['prebru'] = $scope.referencia.prebru == undefined ? '' : $scope.referencia.prebru;
       referencia['presug'] = $scope.referencia.presug == undefined ? '' : $scope.referencia.presug;
-      console.log(referencia);
 
       $scope.referencias.push(referencia);
       $scope.referencia = {};
@@ -113,4 +121,35 @@ app.controller('solicitudesCtrl', ['$scope', '$http', '$filter', '$window', func
       $window.location = response.data;
     }, function(){});
   }
+
+  $scope.read = function (workbook){
+
+    var headerNames = XLSX.utils.sheet_to_json( workbook.Sheets[workbook.SheetNames[0]], { header: 1 })[0];
+  	var data = XLSX.utils.sheet_to_json( workbook.Sheets[workbook.SheetNames[0]]);
+
+    $scope.archivo = data;
+console.log($scope.archivo);
+    $http.post($scope.urlRef, $scope.archivo).then(function(response){
+      var datos = response.data;
+
+      angular.forEach(angular.copy(datos), function(value, key){
+        $scope.datos = value;
+        angular.forEach(angular.copy($scope.datos), function(value2, key2){
+          $scope.ref = value2;
+
+        var referencia = {
+              'referencia' : $scope.ref.informacionPrecio.referencia,
+              'descripcion' : $scope.ref.informacionPrecio.descripcion,
+              'prebru' : $scope.ref.informacionPrecio.precio,
+              'presug' : $scope.ref.presug
+            }
+
+        $scope.referencias.push(referencia);
+        $scope.referencia = {};
+
+        });
+      });
+    });
+  }
+
 }]);

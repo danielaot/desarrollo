@@ -12,12 +12,13 @@ use Storage;
 use App\Models\Pricat\TItem as Item;
 use App\Models\Pricat\TSolPricat as SolPricat;
 use App\Models\Pricat\TCampSegmento as CampSegmento;
+use App\Models\Pricat\TProyecto as Proyecto;
 
 class PricatController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Pricat // Generar';
+        $ruta = 'Plataforma Integral de Creación de Items // Pricat // Generar';
         $titulo = 'Generar';
 
         // $solicitadas = SolPricat::with('clientes.terceros')
@@ -49,7 +50,7 @@ class PricatController extends Controller
                                 ->where('sop_estado', 'creada')
                                 ->get();
 
-        $items = Item::with('detalles')
+        $items = Item::with('detalles', 'proyectos')
                      ->whereHas('proyectos', function($q){
                                     $q->where('proy_estado', 'Por Certificar');
                                 })
@@ -58,6 +59,18 @@ class PricatController extends Controller
         $response = compact('solicitadas', 'generadas', 'items');
 
         return response()->json($response);
+    }
+
+    public function solicitarPricat (Request $request)
+    {
+      $item = Item::where('id', $request->pricat)->with('proyectos')->get();
+
+      $itemEst = Item::where('id', $request->pricat)
+                  ->update(['ite_est_logyca' => 'Capturado']);
+
+      $proyecto = Proyecto::where('id', $item[0]['ite_proy'])
+                          ->update(['proy_estado'=> 'Terminado']);
+
     }
 
     public function store(Request $request)
@@ -74,7 +87,7 @@ class PricatController extends Controller
 
         $solicitud = SolPricat::find($request->solicitud);
 
-        if($solicitud->sop_estado == 'creado'){
+        if($solicitud->sop_estado == 'creada'){
           $fechahora = Carbon::now();
           $solicitud->sop_fecha_inicio = $fechahora->format('Y-m-d');
           $solicitud->save();
@@ -148,7 +161,7 @@ class PricatController extends Controller
         $fileName = Uuid::uuid4().'.edi';
         Storage::put($filePath.$fileName,$txt);
 
-        $solicitud->sop_estado = 'creado';
+        $solicitud->sop_estado = 'creada';
         $solicitud->save();
 
         return response()->download(storage_path('app'.$filePath.$fileName));

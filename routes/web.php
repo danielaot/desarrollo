@@ -140,39 +140,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('solicitud', 'Pricat\SolicitudesController');
     Route::get('solicitudinfo', 'Pricat\SolicitudesController@getInfo');
     Route::get('solicitudcreateinfo', 'Pricat\SolicitudesController@getCreateInfo');
+    Route::post('solicitudprecio', 'Pricat\SolicitudesController@precioBruto');
+    Route::post('solicitudref', 'Pricat\SolicitudesController@referencia');
 
     Route::resource('generar', 'Pricat\PricatController');
     Route::get('generarinfo', 'Pricat\PricatController@getInfo');
-  });
-
-
-
-
-  // Aplicativo Control Inversion, Creado Oscar O
-  Route::group(['prefix' => 'controlinversion'], function () {
-
-    //solicitud de creacion de obsequios y muestras
-  	Route::resource('solicitud','controlinversion\solicitudController');
-  	Route::get('solicitudGetInfo','controlinversion\solicitudController@solicitudGetInfo');
-    Route::get('solicitud/{id}/correcion','controlinversion\solicitudController@correciones')->name('solicitud.correcion');
-    Route::post('consultarReferencia','controlinversion\solicitudController@consultarInformacionReferencia');
-    Route::post('consultarReferencias','controlinversion\solicitudController@consultarInformacionReferencias');
-
-    Route::get('misSolicitudes','controlinversion\solicitudController@misSolicitudes')->name('misSolicitudes');
-    Route::delete('misSolicitudes/anular/{id}','controlinversion\solicitudController@destroy');
-    Route::get('getInfoMisolicitudes','controlinversion\solicitudController@getInfoMisolicitudes');
-
-    //gestion catalogo de vendedores por zona
-    Route::resource('vendedores','controlinversion\vendedorController');
-    Route::get('vendedoresGetInfo','controlinversion\vendedorController@getInfo');
-
-    // Rutas para niveles de aprobacion
-    Route::resource('nivelesAutorizacion','controlinversion\nivelesAutorizacionController');
-    Route::get('nivelesAutorizacionGetInfo','controlinversion\nivelesAutorizacionController@nivelesAutorizacionGetInfo');
-
-    // Aprobacion de Solicitudes
-    Route::resource('aprobacion','controlinversion\autorizacionController');
-    Route::get('aprobacionGetInfo','controlinversion\autorizacionController@solicitudesAprobacionGetInfo');
+    Route::post('generarpricat', 'Pricat\PricatController@solicitarPricat');
 
 
   });

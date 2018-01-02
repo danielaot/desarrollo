@@ -43,7 +43,8 @@
                                md-items="item in itemSearchLog(itemSearchLogText)"
                                md-item-text="[item.ite_referencia,item.detalles.ide_descompleta].join(' - ')"
                                md-selected-item="referencia.ref"
-                               md-min-length="1"
+                               md-selected-item-change = "precioBruto()"
+                               md-min-length="0"
                                required
                                style="min-width: 330px;"
                                ng-if="showIteLog">
@@ -58,7 +59,8 @@
                                md-items="item in itemSearchErp(itemSearchErpText)"
                                md-item-text="[item.referenciaItem,item.descripcionItem].join(' - ')"
                                md-selected-item="referencia.ref"
-                               md-min-length="1"
+                               md-selected-item-change = "precioBruto()"
+                               md-min-length="0"
                                required
                                style="min-width: 330px;"
                                ng-if="!showIteLog">
@@ -82,6 +84,10 @@
               <br><button type="button" class="btn btn-success" ng-click="addReferencia()">
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
+            </div>
+            <div class="form-group"  ng-if="showRef">
+              <js-xls onread="read" onerror="error"></js-xls>
+              <label for="file" ng-click="addReferencia()"><i class="glyphicon glyphicon-cloud-upload"></i> Subir Archivo</label>
             </div>
           </div>
           <div class="col-sm-12" style="padding-top: 20px;" ng-if="referencias.length > 0">

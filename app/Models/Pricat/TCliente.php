@@ -19,7 +19,8 @@ class TCliente extends Model
         'cli_modificacion',
         'cli_eliminacion',
         'cli_kam',
-        'cli_gln'
+        'cli_gln',
+        'cli_listaprecio'
     ];
 
     protected $dates = ['deleted_at'];
@@ -42,5 +43,10 @@ class TCliente extends Model
     public function kam()
     {
         return $this->hasOne('App\Models\Genericas\Tercero', 'nitTercero', 'cli_kam');
+    }
+
+    public function listaprecio()
+    {
+        return $this->hasOne('App\Models\BESA\AppwebListaPrecio', 'f112_id', 'cli_listaprecio');
     }
 }

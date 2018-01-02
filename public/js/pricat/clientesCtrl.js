@@ -9,6 +9,8 @@ app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
       var info = response.data;
       $scope.terceros = angular.copy(info.terceros);
       $scope.clientes = angular.copy(info.clientes);
+      $scope.listaprecio = angular.copy(info.listaprecio);
+      console.log($scope.listaprecio);
       angular.element('.close').trigger('click');
       $scope.progress = false;
     }, function(error){
@@ -39,6 +41,16 @@ app.controller('clientesCtrl', ['$scope', '$http', '$filter', '$mdDialog', 'DTOp
     }
     else{
       return $scope.terceros;
+    }
+  }
+
+  $scope.listaSearch = function(query){
+    if(query){
+      var filtrado = $filter('filter')($scope.listaprecio, {f112_id : query});
+      return filtrado;
+    }
+    else{
+      return $scope.listaprecio;
     }
   }
 

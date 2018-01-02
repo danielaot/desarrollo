@@ -21,6 +21,7 @@ class CreateTClientesTable extends Migration
             $table->boolean('cli_eliminacion')->default(false);
             $table->string('cli_kam');
             $table->string('cli_gln');
+            $table->string('cli_listaprecio');
             $table->timestamps();
         });
     }

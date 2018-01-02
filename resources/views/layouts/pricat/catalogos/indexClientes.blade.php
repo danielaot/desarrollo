@@ -18,6 +18,7 @@
               <th>Eliminación</th>
               <th>KAM</th>
               <th>GLN</th>
+              <th>Lista Precio</th>
               <th></th>
             </tr>
           </thead>
@@ -29,6 +30,7 @@
               <td class="text-center"><span ng-if="cliente.cli_eliminacion">X</span></td>
               <td class="text-center">@{{cliente.cli_kam}}</td>
               <td class="text-center">@{{cliente.cli_gln}}</td>
+              <td>@{{cliente.listaprecio.f112_descripcion}}</td>
               <td class="text-right">
                 <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal" ng-click="editCliente(cliente)">
                   <i class="glyphicon glyphicon-edit"></i>

@@ -19,7 +19,7 @@
                              md-items="tercero in clientesSearch(terceroSearchText)"
                              md-item-text="[tercero.idTercero,tercero.razonSocialTercero].join(' - ')"
                              md-selected-item="cliente.tercero"
-                             md-min-length="1"
+                             md-min-length="0"
                              md-no-cache="true"
                              required>
               <md-item-template>
@@ -48,7 +48,7 @@
                              md-items="tercero in clientesSearch(kamSearchText)"
                              md-item-text="[tercero.idTercero,tercero.razonSocialTercero].join(' - ')"
                              md-selected-item="cliente.kam"
-                             md-min-length="1"
+                             md-min-length="0"
                              required>
               <md-item-template>
                 <span md-highlight-text="kamSearchText" md-highlight-flags="^i">@{{[tercero.idTercero,tercero.razonSocialTercero].join(' - ')}}</span>
@@ -61,6 +61,23 @@
           <div class="form-group">
             <label class="control-label">GLN<span class="required">*</span> :</label>
             <input type="number" class="form-control" ng-model="cliente.gln" required/>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Lista Precio<span class="required">*</span> :</label>
+            <md-autocomplete md-search-text="listaSearchText"
+                             md-items="lista in listaSearch(listaSearchText)"
+                             md-item-text="[lista.f112_id,lista.f112_descripcion].join(' - ')"
+                             md-selected-item="cliente.lista"
+                             md-min-length="0"
+                             md-no-cache="true"
+                             required>
+              <md-item-template>
+                <span md-highlight-text="listaSearchText" md-highlight-flags="^i">@{{[lista.f112_id,lista.f112_descripcion].join(' - ')}}</span>
+              </md-item-template>
+              <md-not-found>
+                No se encontraron resultados para "@{{listaSearchText}}".
+              </md-not-found>
+            </md-autocomplete>
           </div>
         </div>
         <div class="modal-footer">

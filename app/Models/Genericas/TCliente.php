@@ -29,8 +29,4 @@ class TCliente extends Model
         'cli_subcanal',
     ];
 
-    public function Sucursales()
-    {
-        return $this->hasOne('App\Models\Genericas\TSucursal', 'cli_id', 'cli_id')->where('suc_txt_estado', '=', 'ACTIVO')->orderBy('suc_num_codigo');
-    }    
 }
