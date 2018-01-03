@@ -53,7 +53,7 @@ class tccwsController extends Controller
         'nom_tercero', 'num_sucursal', 'desc_sucursal',
         'nit_tercero', 'date_creacion','tipoPedido')
         ->whereNull('fecha_remesa')
-        ->where('date_creacion', '=', '19-12-2017')
+        ->where('date_creacion', '>', '01-01-2018')
         ->whereNotIn('tipo_docto', ['F30', 'F28', 'F31', 'F48'])
         ->distinct()->orderBy('num_factura')->get();
 
