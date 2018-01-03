@@ -217,7 +217,7 @@ class tccwsController extends Controller
             $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
           }
 
-          $formatoDocumento = trim($factura['tipo_docto']).'-'.$factura['num_consecutivo'];
+          $formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
           //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
               'tipoPedido' => trim($factura['tipoPedido']),
