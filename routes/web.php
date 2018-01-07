@@ -30,3 +30,12 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('autocomplete', ['uses' => 'GenericasController@autocomplete', 'as' => 'autocomplete']);
 });
+
+/** Aplicativo Tiquetes y Hotel**/
+
+  Route::group(['prefix' => 'tiquetes'], function(){
+
+    Route::resource('solicitud', 'Tiquetes\SolicitudController');
+    Route::get('solicitudinfo', 'Tiquetes\SolicitudController@getInfo');
+    Route::post('ciudadesinfo', 'Tiquetes\SolicitudController@ciudades');
+  });

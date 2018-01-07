@@ -42,6 +42,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 <!-- Laravel Javascript Validation -->
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}" type="text/javascript" language="javascript"></script>
 
+<!-- DATETIMEPICKER -->
+<script src="{{url('/lib/datetimepicker/angular-material-datetimepicker.min.js')}}"></script>
+
 <!-- Dropzone -->
 <script src="{{url('/lib/dropzone.js')}}" type="text/javascript" language="javascript"></script>
 

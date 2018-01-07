@@ -26,3 +26,6 @@
 
 <!-- CSS BESA -->
 <link href="{{url('/css/besa.css')}}" type="text/css" rel="stylesheet"/>
+
+<!-- CSS DATETIMEPICKER -->
+<link href="{{url('/lib/datetimepicker/material-datetimepicker.min.css')}}" type="text/css" rel="stylesheet"/>

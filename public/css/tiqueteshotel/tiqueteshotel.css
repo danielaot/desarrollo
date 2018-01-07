@@ -1,0 +1,20 @@
+.dtp table.dtp-picker-days tr > td > a.selected,
+.dtp table.dtp-picker-days tr > td > a.selected.hilite,
+.dtp div.dtp-date, .dtp div.dtp-time, .dtp .dtp-hand.on,
+.dtp .dtp-actual-meridien a.selected,
+.dtp .dtp-picker-time > a.dtp-select-hour.selected {
+  background: #337AB7;
+}
+
+.dtp table.dtp-picker-days tr > td > a.hilite:not(.selected),
+.dtp div.dtp-actual-time.p60 span.selected {
+  color: #337AB7;
+}
+
+.dtp div.dtp-year-btn, .dtp div.dtp-actual-year, .dtp div.dtp-actual-maxtime {
+  color: #337AB7;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header {
+  background: #337AB7;
+}
