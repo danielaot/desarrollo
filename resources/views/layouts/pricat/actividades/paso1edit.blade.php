@@ -149,7 +149,7 @@
             <div class="col-sm-8 form-group">
               <div class="row">
                 <label class="col-sm-3 control-label">Categoría LOGYCA<span class="required">*</span> :</label>
-                <div class="col-sm-8">
+                <div class="col-sm-3">
                   <md-autocomplete md-search-text="categoriaSearchText"
                                    md-items="categoria in categoriaSearch(categoriaSearchText)"
                                    md-item-text="[categoria.tcl_codigo,categoria.tcl_descripcion].join(' - ')"
@@ -161,6 +161,22 @@
                     </md-item-template>
                     <md-not-found>
                       No se encontraron resultados para "@{{categoriaSearchText}}".
+                    </md-not-found>
+                  </md-autocomplete>
+                </div>
+                <label class="col-sm-3 control-label">Categoría EXITO<span class="required">*</span> :</label>
+                <div class="col-sm-3">
+                  <md-autocomplete md-search-text="categoriaExitoSearchText"
+                                   md-items="categoriaExito in categoriaExitoSearch(categoriaExitoSearchText)"
+                                   md-item-text="[categoriaExito.tce_codigo,categoriaExito.tce_descripcion].join(' - ')"
+                                   md-selected-item="producto.catexito"
+                                   md-min-length="0"
+                                   required>
+                    <md-item-template>
+                      <span md-highlight-text="categoriaExitoSearchText" md-highlight-flags="^i">@{{[categoriaExito.tce_codigo,categoriaExito.tce_descripcion].join(' - ')}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                      No se encontraron resultados para "@{{categoriaExitoSearchText}}".
                     </md-not-found>
                   </md-autocomplete>
                 </div>

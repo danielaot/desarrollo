@@ -24,7 +24,7 @@ class Paso7Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Confirmación de descripciones';
         $idproyecto = $request->proy;
         $idactividad = $request->act;
@@ -113,7 +113,7 @@ class Paso7Controller extends Controller
 
     public function edit(Request $request, $proy){
 
-      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
       $titulo = 'Confirmación de descripciones';
       $idproyecto = $proy;
       $idactividad = $request->act;

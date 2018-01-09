@@ -22,6 +22,7 @@ class TItemDetalle extends Model
         'ide_descompleta',
         'ide_desinvima',
         'ide_catlogyca',
+        'ide_catexito',
         'ide_nomfab',
         'ide_origen',
         'ide_tmarca',
@@ -89,6 +90,11 @@ class TItemDetalle extends Model
   	{
   		  return $this->hasOne('App\Models\Pricat\TCategoriasLogyca', 'id', 'ide_catlogyca');
   	}
+
+    public function exicategorias()
+    {
+        return $this->hasOne('App\Models\Pricat\TCategoriasExito', 'id', 'ide_catexito');
+    }
 
     public function origen()
   	{

@@ -24,7 +24,7 @@ class RechazoActividadesController extends Controller
 
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Rechazo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Rechazo de Actividades';
         $titulo = 'Rechazo de Actividades';
 
         $response = compact('ruta', 'titulo');

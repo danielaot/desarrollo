@@ -17,7 +17,7 @@ class NotificacionSanitariaController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Notificación Sanitaria';
+        $ruta = 'Plataforma Integral de Creación de Items // Notificación Sanitaria';
         $titulo = 'Notificación Sanitaria';
 
         return view('layouts.pricat.notificacionsanitaria.indexNotificacionesSanitarias', compact('ruta', 'titulo'));

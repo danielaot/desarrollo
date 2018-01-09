@@ -17,7 +17,7 @@ class VocabasController extends Controller
      */
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Vocabas';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Vocabas';
         $titulo = 'Administración de Vocabas';
 
         return view('layouts.pricat.catalogos.indexVocabas', compact('ruta', 'titulo'));

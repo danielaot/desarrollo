@@ -23,7 +23,7 @@ class DesarrolloActividadesController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Desarrollo de Actividades';
 
         $response = compact('ruta', 'titulo');
@@ -106,7 +106,7 @@ class DesarrolloActividadesController extends Controller
 
     public function workflow()
     {
-        $ruta = 'Calidad de Datos y Homologación // WorkFlow';
+        $ruta = 'Plataforma Integral de Creación de Items // WorkFlow';
         $titulo = 'WorkFlow';
 
         $proyectos = Proyecto::all();

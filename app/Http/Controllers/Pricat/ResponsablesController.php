@@ -19,7 +19,7 @@ class ResponsablesController extends Controller
      */
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Responsables';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Responsables';
         $titulo = 'Administración de Áreas y Responsables';
 
         return view('layouts.pricat.catalogos.indexResponsables', compact('ruta', 'titulo'));

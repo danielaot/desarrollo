@@ -23,7 +23,7 @@ class Paso3Controller extends Controller
         if(count($listamat) > 0){
           DesarrolloCtrl::update($request->proy, $request->act);
         }else {
-          $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+          $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
           $titulo = 'Desarrollo de Actividades';
           $error = 'Error en este modulo';
           return view('layouts.pricat.actividades.indexDesarrollo', compact('error', 'ruta', 'titulo'));

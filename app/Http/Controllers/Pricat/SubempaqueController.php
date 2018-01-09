@@ -20,7 +20,7 @@ class SubempaqueController extends Controller
      */
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Solicitud Creación Subempaque';
         $idproyecto = $request->proy;
         $idactividad = $request->act;

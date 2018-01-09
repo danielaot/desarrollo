@@ -16,6 +16,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
       var info = response.data;
       $scope.vocabas = angular.copy(info.vocabas);
       $scope.catlogyca = $filter('orderBy')(angular.copy(info.catlogyca), 'tcl_descripcion');
+      $scope.catexito = $filter('orderBy')(angular.copy(info.catexito), 'tce_descripcion');
       $scope.marcas = angular.copy(info.marcas);
       $scope.origen = angular.copy(info.origen);
       $scope.clase = angular.copy(info.clase);
@@ -67,6 +68,7 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
         $scope.producto.desbesa = angular.copy($scope.itemdet[0].ide_descompleta);
         $scope.producto.descorta = angular.copy($scope.itemdet[0].ide_descorta);
         $scope.producto.catlogyca = angular.copy($scope.itemdet[0].logcategorias);
+        $scope.producto.catexito = angular.copy($scope.itemdet[0].exicategorias);
         $scope.producto.embalaje = angular.copy($scope.itemdet[0].itemean.iea_cantemb);
         $scope.producto.origen = angular.copy($scope.itemdet[0].origen);
         $scope.producto.tipomarca = angular.copy($scope.itemdet[0].tipomarcas);
@@ -143,6 +145,20 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
     }
     else{
       return $scope.catlogyca;
+    }
+  }
+
+  $scope.categoriaExitoSearch = function(query){
+    if(query){
+    //  return $filter('filter')($scope.catlogyca, {tcl_descripcion : query});
+      var filtro = $filter('filter')($scope.catexito, {tce_descripcion : query});
+      if (filtro.length == 0) {
+          filtro = $filter('filter')($scope.catexito, {tce_codigo : query});
+      }
+      return filtro;
+    }
+    else{
+      return $scope.catexito;
     }
   }
 
@@ -303,11 +319,12 @@ app.controller('paso1Ctrl', ['$scope', '$window', '$http', '$filter', '$mdDialog
       );
     }
     else{
-      $scope.progress = true;
+      //$scope.progress = true;
       $scope.producto.captura = new Date($scope.captura).toDateString();
       $http.post($scope.url, $scope.producto).then(function(response){
-        $scope.progress = false;
-        $window.location = response.data;
+        console.log($scope.producto);
+      //  $scope.progress = false;
+      //  $window.location = response.data;
       }, function(){});
     }
   }

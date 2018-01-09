@@ -20,7 +20,7 @@ class Paso2Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Confirmación de Creación de Item';
         $idproyecto = $request->proy;
         $idactividad = $request->act;

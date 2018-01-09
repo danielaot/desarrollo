@@ -17,7 +17,7 @@ class Paso4Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Asignación de Posición Arancelaria';
         $idproyecto = $request->proy;
         $idactividad = $request->act;
@@ -56,7 +56,7 @@ class Paso4Controller extends Controller
     public function edit(Request $request, $proy){
 
       $act = $request->act;
-      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
 
       $titulo = 'Editar Asignación de Posición Arancelaria';
 
@@ -96,6 +96,5 @@ class Paso4Controller extends Controller
 
       return redirect('pricat/desarrolloactividades');
 
-      return ("ENTRADA EXITOSA");
     }
 }

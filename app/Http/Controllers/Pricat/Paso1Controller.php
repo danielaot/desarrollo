@@ -11,6 +11,7 @@ use Auth;
 
 use App\Models\Pricat\TVocabas as Vocabas;
 use App\Models\Pricat\TCategoriasLogyca as CatLogyca;
+use App\Models\Pricat\TCategoriasExito as CatExito;
 use App\Models\Genericas\Itemcriterioplan as Planes;
 use App\Models\Genericas\Itemcriteriomayor as Criterio;
 use App\Models\Genericas\TItemCriterio as ItemCriterio;
@@ -24,7 +25,7 @@ class Paso1Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Solicitud Creación Item';
         $idproyecto = $request->proy;
         $idactividad = $request->act;
@@ -46,6 +47,7 @@ class Paso1Controller extends Controller
     {
         $vocabas = Vocabas::all();
         $catlogyca = CatLogyca::all();
+        $catexito = CatExito::all();
         $planes = Planes::with('criterios')->get();
         $marcas = Marca::distinct()->orderBy('mar_nombre')->get(['mar_nombre']);
         $linea = Marca::with(['lineas.categorias.categorias', 'lineas' => function ($query) {
@@ -122,7 +124,7 @@ class Paso1Controller extends Controller
           }
         }
 
-        $response = compact('vocabas', 'catlogyca', 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'estadoref', 'items', 'itemdet');
+        $response = compact('vocabas', 'catlogyca', 'catexito' , 'marcas', 'origen', 'clase', 'tipomarca', 'tipooferta', 'menupromociones', 'tipopromocion', 'variedad', 'presentacion', 'categoria', 'linea', 'sublinea', 'sublinmercadeo', 'sublinmercadeo2', 'submarca', 'regalias', 'segmento' , 'clasificacion' , 'acondicionamiento', 'nomtemporada', 'estadoref', 'items', 'itemdet');
 
         return response()->json($response);
     }
@@ -142,6 +144,7 @@ class Paso1Controller extends Controller
           'deslogyca' => 'required',
           'desbesa' => 'required',
           'catlogyca' => 'required',
+          'catexito' => 'required',
           'fabricante' => 'required',
           'origen' => 'required',
           'tipomarca' => 'required',
@@ -208,6 +211,7 @@ class Paso1Controller extends Controller
         $detalle->ide_deslarga = $request->deslogyca;
         $detalle->ide_descompleta = $request->desbesa;
         $detalle->ide_catlogyca = $request->catlogyca['id'];
+        $detalle->ide_catexito = $request->catexito['id'];
         $detalle->ide_nomfab = $request->fabricante;
         $detalle->ide_origen = $request->origen['idItemCriterioMayor'];
         $detalle->ide_clase = $request->clase['idItemCriterioMayor'];
@@ -237,7 +241,6 @@ class Paso1Controller extends Controller
         $detalle->ide_acondicionamiento = $request->acondicionamiento ? $request->acondicionamiento['idItemCriterioMayor'] : 'noap';
         $detalle->ide_nomtemporada = $request->nomtemporada ? $request->nomtemporada['idItemCriterioMayor'] : 'noap';
         $detalle->ide_anotemporada = $request->anotemporada ? $request->anotemporada : 'No Catalogado';
-        //return response()->json($request->all());
         $detalle->save();
 
         $item_ean = new IEan;
@@ -250,15 +253,11 @@ class Paso1Controller extends Controller
         $url = url('pricat/desarrolloactividades');
 
         return response($url, 200);
-
-        // $response = compact('update', 'url');
-
-        return response($url, 200);
     }
 
     public function edit(Request $request, $proy){
 
-      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
       $titulo = 'Editar Item';
       $idproyecto = $proy;
       $idactividad = $request->act;
@@ -270,7 +269,7 @@ class Paso1Controller extends Controller
       $ref = $item[0]['ite_referencia'];
 
 
-      $itemdet = ItemDetalle::with('estadoref','uso', 'logcategorias', 'origen', 'tipomarcas', 'variedad', 'linea',
+      $itemdet = ItemDetalle::with('estadoref','uso', 'logcategorias', 'exicategorias' ,'origen', 'tipomarcas', 'variedad', 'linea',
                                    'submercadeo', 'sublinea', 'submarca', 'clase', 'presentacion', 'menuprom',
                                    'submercadeo2', 'regalias', 'itemean', 'items', 'tipoprom', 'tipooferta',
                                    'items.tipo', 'comp1', 'comp2', 'comp3', 'comp4', 'comp5', 'comp6', 'comp7', 'comp8',
@@ -294,6 +293,7 @@ class Paso1Controller extends Controller
          'deslogyca' => 'required',
          'desbesa' => 'required',
          'catlogyca' => 'required',
+         'catexito' => 'required',
          'fabricante' => 'required',
          'origen' => 'required',
          'tipomarca' => 'required',
@@ -358,7 +358,7 @@ class Paso1Controller extends Controller
        $detalle = ItemDetalle::where('ide_item', $idItem[0]['id'])
                              ->update(['ide_uso' => $request->uso['id'], 'ide_marca' => $request->marca['mar_nombre'], 'ide_variedad' => serialize($request->varserie),
                                       'ide_contenido' => $request->contenido,'ide_umcont' => $request->contum, 'ide_descorta' => $request->descorta, 'ide_deslarga' => $request->deslogyca,
-                                      'ide_descompleta' => $request->desbesa,'ide_catlogyca' => $request->catlogyca['id'], 'ide_nomfab' => $request->fabricante, 'ide_origen' => $request->origen['idItemCriterioMayor'],
+                                      'ide_descompleta' => $request->desbesa,'ide_catlogyca' => $request->catlogyca['id'], 'ide_catexito' => $request->catexito['id'], 'ide_nomfab' => $request->fabricante, 'ide_origen' => $request->origen['idItemCriterioMayor'],
                                       'ide_clase' => $request->clase['idItemCriterioMayor'], 'ide_tmarca' => $request->tipomarca['idItemCriterioMayor'], 'ide_presentacion' => $request->presentacion['idItemCriterioMayor'],
                                       'ide_varbesa' => $request->variedadbesa['idItemCriterioMayor'], 'ide_categoria' => $request->categoria['cat_id'], 'ide_linea' => $request->linea['lineas'][0]['idItemCriterioMayor'],
                                       'ide_sublinea' => $request->sublinea['idItemCriterioMayor'], 'ide_sublineamer' => $request->sublinmercadeo['idItemCriterioMayor'], 'ide_sublineamer2' => $request->sublinmercadeo2['idItemCriterioMayor'],

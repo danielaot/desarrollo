@@ -17,7 +17,7 @@ class Paso5Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Asignación del Grupo Impositivo';
         $idproyecto = $request->proy;
         $idactividad = $request->act;
@@ -58,7 +58,7 @@ class Paso5Controller extends Controller
 
     public function edit(Request $request, $proy){
 
-      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
       $titulo = 'Editar Asignación del Grupo Impositivo';
       $idproyecto = $proy;
       $idactividad = $request->act;

@@ -32,6 +32,10 @@ class CreateTItemDetalle extends Migration
             $table->foreign('ide_catlogyca')->references('id')
                   ->on('t_categorias_logyca')
                   ->onDelete('cascade');
+            $table->unsignedInteger('ide_catexito');
+            $table->foreign('ide_catexito')->references('id')
+                  ->on('t_categorias_exito')
+                  ->onDelete('cascade');
       			$table->string('ide_nomfab');
       			$table->string('ide_origen');
       			$table->string('ide_clase');

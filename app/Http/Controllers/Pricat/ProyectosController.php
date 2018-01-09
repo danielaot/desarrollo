@@ -16,7 +16,7 @@ class ProyectosController extends Controller
 
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Proyectos';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Proyectos';
         $titulo = 'Administración de Proyectos';
 
         return view('layouts.pricat.catalogos.indexProyectos', compact('ruta', 'titulo'));

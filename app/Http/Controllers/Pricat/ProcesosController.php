@@ -15,7 +15,7 @@ class ProcesosController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Procesos';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Procesos';
         $titulo = 'Administración de Procesos y Actividades';
 
         return view('layouts.pricat.catalogos.indexProcesos', compact('ruta', 'titulo'));

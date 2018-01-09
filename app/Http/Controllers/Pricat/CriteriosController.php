@@ -13,7 +13,7 @@ class CriteriosController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Criterios Por Item';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Criterios Por Item';
         $titulo = 'Administrar Criterios Por Item';
 
         return view('layouts.pricat.catalogos.indexCriteriosItem', compact('ruta', 'titulo'));
@@ -51,7 +51,7 @@ class CriteriosController extends Controller
           return response()->json(['errors' => $validator->errors()]);
         }
 
-        
+
         if (isset($data['id'])) {
           $criterioitem = CriteriosItem::find($data['id']);
           $criterioitem->cri_col_item = $data['cri_col_item'];
@@ -62,7 +62,7 @@ class CriteriosController extends Controller
           $criterioitem->save();
         }else{
           $criterioitem = CriteriosItem::create($data);
-        }       
+        }
 
         return response()->json($criterioitem);
     }

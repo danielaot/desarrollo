@@ -13,7 +13,7 @@ class MarcasController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Marcas';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Marcas';
         $titulo = 'Administración de Marcas';
 
         return view('layouts.pricat.catalogos.indexMarcas', compact('ruta', 'titulo'));

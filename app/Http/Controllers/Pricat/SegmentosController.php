@@ -17,7 +17,7 @@ class SegmentosController extends Controller
      */
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Segmentos Pricat';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Segmentos Pricat';
         $titulo = 'Administrar Segmentos Pricat';
 
         return view('layouts.pricat.catalogos.indexSegmentos', compact('ruta', 'titulo'));

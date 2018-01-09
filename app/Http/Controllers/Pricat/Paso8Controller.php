@@ -18,7 +18,7 @@ class Paso8Controller extends Controller
 {
     public function index(Request $request)
     {
-        $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+        $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
         $titulo = 'Confirmación de registro sanitario y su vigencia';
         $idproyecto = $request->proy;
         $idactividad = $request->act;
@@ -83,7 +83,7 @@ class Paso8Controller extends Controller
     public function edit (Request $request, $proy)
     {
 
-      $ruta = 'Calidad de Datos y Homologación // Desarrollo de Actividades';
+      $ruta = 'Plataforma Integral de Creación de Items // Desarrollo de Actividades';
       $titulo = 'Confirmación de registro sanitario y su vigencia';
       $idproyecto = $proy;
       $idactividad = $request->act;

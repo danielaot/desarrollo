@@ -20,7 +20,7 @@ class NotiActividadController extends Controller
      */
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Notificaciones';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Notificaciones';
         $titulo = 'Administración de Notificación por Actividad';
 
         return view('layouts.pricat.catalogos.indexNotiactividad', compact('ruta', 'titulo'));

@@ -21,7 +21,7 @@ class ConsultaController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Proyectos';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Proyectos';
         $titulo = 'Consulta de Referencias';
 
         return view('layouts.pricat.actividades.indexConsulta', compact('ruta', 'titulo'));
@@ -32,7 +32,7 @@ class ConsultaController extends Controller
         $proyectos = Proyecto::with('procesos')->get();
 
         $referencias = Item::with('detalles.notificacionsanitaria', 'tipo', 'detalles.uso',
-                                  'detalles.logcategorias', 'detalles.origen', 'detalles.tipomarcas',
+                                  'detalles.logcategorias','detalles.exicategorias' ,'detalles.origen', 'detalles.tipomarcas',
                                   'detalles.variedad', 'detalles.linea', 'detalles.submercadeo',
                                   'detalles.submarca', 'detalles.clase', 'detalles.presentacion',
                                   'detalles.categoria', 'detalles.sublinea', 'detalles.submercadeo2',
@@ -70,11 +70,6 @@ class ConsultaController extends Controller
           $sheet->row(2, [
             '1', '2'
           ]);
-          // foreach ($infocomp as $index => $inf) {
-          //   $sheet->row($index+2, [
-          //     '1', '2'
-          //   ]);
-          // }
         });
       })->export('xlsx');
     }

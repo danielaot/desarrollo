@@ -18,7 +18,7 @@ class FotosController extends Controller
 {
     public function index()
     {
-        $ruta = 'Calidad de Datos y Homologación // Catalogos // Administrar Proyectos';
+        $ruta = 'Plataforma Integral de Creación de Items // Catalogos // Administrar Fotos';
         $titulo = 'Fotos Producto Terminado';
 
         return view('layouts.pricat.actividades.indexFotos', compact('ruta', 'titulo'));
