@@ -37,5 +37,9 @@ class TSolicitud extends Model
 
     protected $guarded = [];
 
+    public function detalle(){
+      return $this->hasMany('App\Models\Tiquetes\TDetallesolictud', 'dtaIntSolicitud', 'solIntSolId');
+    }
+
 
 }

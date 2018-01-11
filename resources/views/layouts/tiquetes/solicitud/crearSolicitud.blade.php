@@ -10,21 +10,34 @@
       <div class="panel-heading" style="text-align:center">Información Solicitante</div>
           <div class="panel-body">
             <div class="row">
-              <div class="col-sm-6 form-group">
+              <div class="col-sm-4 form-group">
                 <div class="row">
                   <label class="col-sm-4 control-label">Fecha Creación :</label>
                   <p>{{ date('Y-m-d H:i:s') }}</p>
                 </div>
               </div>
-              <div class="col-sm-6 form-group">
+              <div class="col-sm-4 form-group">
                 <div class="row">
                   <label class="col-sm-4 control-label">Tipo Solicitud <span class="required">*</span>:</label>
                   <div class="col-sm-5">
                     <select class="form-control" ng-model="solicitud.tipo" ng-change="validateTipo()">
                       <option value="">Seleccione ...</option>
-                      <option value="nuevo">Nuevo</option>
-                      <option value="modificacion">Modificacion</option>
+                      <option value=1>Nuevo</option>
+                      <option value=2>Modificacion</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 form-group" ng-if="solicitud.tipo == 2">
+                <div class="row">
+                  <label class="col-sm-4 control-label">Solicitud Anterior <span class="required">*</span>:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" ng-model="solicitud.nombre.infopersona.perTxtCedtercero" placeholder="Solicitud Anterior" disabled>
+                  </div>
+                  <div class="col-sm-2">
+                    <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="solicitudes()">
+                          <i class="glyphicon glyphicon-search"></i>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -39,7 +52,7 @@
                                md-selected-item="solicitud.nombre"
                                md-selected-item-change="createInfo()"
                                md-min-length="0"
-                               required>
+                               >
                     <md-item-template>
                       <span md-highlight-text="nombreSearchText" md-highlight-flags="^i">@{{nombre.infopersona.perTxtNomtercero}}</span>
                     </md-item-template>
@@ -80,20 +93,20 @@
                   <label>Tipo Viajero <span class="required">*</span>:</label>
                     <select class="form-control" ng-model="solicitud.tviajero">
                       <option value="">Seleccione el tipo de viajero ..</option>
-                      <option value="interno">Interno Belleza</option>
-                      <option value="externo">Persona Externa</option>
+                      <option value="1">Interno Belleza</option>
+                      <option value="2">Persona Externa</option>
                     </select>
                 </div>
                   <div class="col-sm-6">
                     <label>Tipo de Viaje <span class="required">*</span>:</label>
-                    <select class="form-control" ng-model="solicitud.tviaje">
+                    <select class="form-control" ng-change="validarTipoViajeCargarData()" ng-model="solicitud.tviaje">
                       <option value="">Seleccione el tipo de viaje ..</option>
-                      <option value="nacional">Nacional</option>
-                      <option value="internacional">Internacional</option>
+                      <option value=1>Nacional</option>
+                      <option value=2>Internacional</option>
                     </select>
                   </div>
               </div>
-              <div class="row" ng-if = "solicitud.tviajero == 'externo'">
+              <div class="row" ng-if = "solicitud.tviajero == 2">
                 <div class="col-sm-4">
                   <label>Cedula Externo <span class="required">*</span>:</label>
                   <input type="number" class="form-control" ng-model="solicitud.ccexterno">
@@ -107,14 +120,14 @@
                     <input type="number" class="form-control" ng-model="solicitud.numcelexter">
                   </div>
               </div>
-              <div class="row" ng-if = "solicitud.tviajero == 'externo'">
+              <div class="row" ng-if = "solicitud.tviajero == 2">
                   <div class="col-sm-6">
                     <label>Nombre Completo <span class="required">*</span>:</label>
                     <input type="text" class="form-control" ng-model="solicitud.nomexterno">
                   </div>
                   <div class="col-sm-6">
                     <label>Correo Electronico <span class="required">*</span>:</label>
-                    <input type="number" class="form-control" ng-model="solicitud.corexterno">
+                    <input type="text" class="form-control" ng-model="solicitud.corexterno">
                   </div>
               </div>
               <div class="row">
@@ -129,130 +142,156 @@
         <div class="panel panel-primary" ng-if = "solicitud.tviaje != null">
           <div class="panel-heading" style="text-align:center">Detalle Solicitud de Viaje</div>
               <div class="panel-body">
-                <div class="form-group">
+                <div class="">
                   <!-- Detalle Solicitud Viaje Nacional -->
-                    <div class="row" ng-if = "solicitud.tviaje == 'nacional'">
-                      <div class="col-sm-2">
-                        <label>Origen <span class="required">*</span>:</label>
-                        <select class="form-control" ng-model="detsoli.origen" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
+                  <table class="table table-striped table-bordered" ng-if = "solicitud.tviaje == '1'">
+                    <thead>
+                      <tr>
+                        <th>Origen :</th>
+                        <th>Destino :</th>
+                        <th>Fecha :</th>
+                        <th>Hotel :</th>
+                        <th ng-if = "solicitud.detsoli.hotel == 'S'">No. Días :</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><select class="form-control" ng-model="solicitud.detsoli.origen" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Origen ..</option>
-                        </select>
-                      </div>
-                      <div class="col-sm-2">
-                        <label>Destino <span class="required">*</span>:</label>
-                        <select class="form-control" ng-model="detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
+                        </select></td>
+                        <td><select class="form-control" ng-model="solicitud.detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Destino ..</option>
-                        </select>
-                      </div>
-                      <div class="col-sm-2">
-                        <label>Fecha <span class="required">*</span>:</label>
-                        <input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
-                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="detsoli.fviaje" class=" md-input" short-time ="true"
-                          readonly="readonly">
-                      </div>
-                      <div class="col-sm-2">
-                        <label>Hotel <span class="required">*</span>:</label>
-                        <select class="form-control" ng-model="detsoli.hotel">
+                        </select></td>
+                        <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoli.fviaje" class=" md-input" short-time ="true"
+                          readonly="readonly"></td>
+                        <td><select class="form-control" ng-model="solicitud.detsoli.hotel">
                           <option value="">Seleccione ..</option>
-                          <option value="si">Si</option>
-                          <option value="no">No</option>
-                        </select>
-                      </div>
-                      <div class="col-sm-2">
-                        <label>No. Días <span class="required">*</span>:</label>
-                        <input type="number" class="form-control" ng-model="detsoli.nodias">
-                    </div>
-                  </div>
-                  <!-- fin Detalle Solicitud Viaje Nacional -->
+                          <option value="S">Si</option>
+                          <option value="N">No</option>
+                        </select></td>
+                        <td ng-if = "solicitud.detsoli.hotel == 'S'"><input type="number" class="form-control" ng-model="solicitud.detsoli.nodias"></td>
+                        <td><button class="btn btn-success btn-sm" type="button" ng-click="AgregarTramo(solicitud.detsoli)">
+                              <i class="glyphicon glyphicon-plus"></i>
+                            </button></td>
+                      </tr>
+                      <tr ng-repeat="detalle in detallesol">
+                        <td>@{{detalle.origen}}</td>
+                        <td>@{{detalle.destino}}</td>
+                        <td>@{{detalle.fviaje}}</td>
+                        <td>@{{detalle.hotel}}</td>
+                        <td >@{{detalle.hotel != 'N' ? detalle.nodias : 'N/A'}}</td>
+                        <td><button class="btn btn-danger btn-sm" type="button" ng-click="QuitarTramo(detalle)">
+                              <i class="glyphicon glyphicon-remove"></i>
+                            </button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Fin Detalle Solicitud Viaje Nacional -->
                   <!-- Detalle Solicitud Viaje Internacional -->
-                  <div class="row" ng-if = "solicitud.tviaje == 'internacional'">
-                    <div class="col-sm-2">
-                      <label>Pais Origen <span class="required">*</span>:</label>
-                      <md-autocomplete md-search-text="paisoriSearchText"
-                                   md-items="pais in paisoriSearch(paisoriSearchText)"
-                                   md-item-text="pais.Pais"
-                                   md-selected-item="detsoli.porigen"
-                                   md-min-length="0"
-                                   required>
-                        <md-item-template>
-                          <span md-highlight-text="paisSearchText" md-highlight-flags="^i">@{{pais.Pais}}</span>
-                        </md-item-template>
-                        <md-not-found>
-                          No se encontraron resultados para "@{{paisoriSearchText}}".
-                        </md-not-found>
-                      </md-autocomplete>
-                    </div>
-                    <div class="col-sm-2">
-                      <label>Ciudad Origen <span class="required">*</span>:</label>
-                      <md-autocomplete md-search-text="ciupaisoriSearchText"
-                                   md-items="ciudad in ciupaisoriSearch(ciupaisoriSearchText)"
-                                   md-item-text="ciudad.Ciudad"
-                                   md-selected-item="detsoli.ciuorigen"
-                                   md-min-length="0"
-                                   required>
-                        <md-item-template>
-                          <span md-highlight-text="ciupaisoriSearchText" md-highlight-flags="^i">@{{ciudad.Ciudad}}</span>
-                        </md-item-template>
-                        <md-not-found>
-                          No se encontraron resultados para "@{{ciupaisoriSearchText}}".
-                        </md-not-found>
-                      </md-autocomplete>
-                    </div>
-                    <div class="col-sm-2">
-                      <label>Pais Destino <span class="required">*</span>:</label>
-                      <md-autocomplete md-search-text="paisdestSearchText"
-                                   md-items="paisdest in paisdestSearch(paisdestSearchText)"
-                                   md-item-text="paisdest.Pais"
-                                   md-selected-item="detsoli.pdestino"
-                                   md-min-length="0"
-                                   required>
-                        <md-item-template>
-                          <span md-highlight-text="paisSearchText" md-highlight-flags="^i">@{{paisdest.Pais}}</span>
-                        </md-item-template>
-                        <md-not-found>
-                          No se encontraron resultados para "@{{paisdestSearchText}}".
-                        </md-not-found>
-                      </md-autocomplete>
-                    </div>
-                    <div class="col-sm-2">
-                      <label>Ciudad Destino <span class="required">*</span>:</label>
-                      <md-autocomplete md-search-text="ciupaisdestSearchText"
-                                   md-items="ciudaddest in ciupaisdestSearch(ciupaisdestSearchText)"
-                                   md-item-text="ciudaddest.Ciudad"
-                                   md-selected-item="detsoli.ciudestino"
-                                   md-min-length="0"
-                                   required>
-                        <md-item-template>
-                          <span md-highlight-text="ciupaisdestSearchText" md-highlight-flags="^i">@{{ciudaddest.Ciudad}}</span>
-                        </md-item-template>
-                        <md-not-found>
-                          No se encontraron resultados para "@{{ciupaisdestSearchText}}".
-                        </md-not-found>
-                      </md-autocomplete>
-                    </div>
-                    <div class="col-sm-2">
-                      <label>Fecha <span class="required">*</span>:</label>
-                      <input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
-                        placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="detsoli.fviaje" class=" md-input" short-time ="true"
-                        readonly="readonly">
-                    </div>
-                    <div class="col-sm-1">
-                      <label>Hotel <span class="required">*</span>:</label>
-                      <select class="form-control" ng-model="detsoli.hotel">
-                        <option value="">Seleccione ..</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-1" ng-if = "detsoli.hotel == 'si'">
-                      <label>No. Días <span class="required">*</span>:</label>
-                      <input type="number" class="form-control" ng-model="detsoli.nodias">
-                  </div>
+                  <table class="table table-striped table-bordered" ng-if = "solicitud.tviaje == '2' && paises != undefined">
+                    <thead>
+                      <tr>
+                        <th>País Origen :</th>
+                        <th>Ciudad Origen :</th>
+                        <th>País Destino :</th>
+                        <th>Ciudad Destino :</th>
+                        <th>Fecha :</th>
+                        <th>Hotel :</th>
+                        <th ng-if = "solicitud.detsoliInt.hotel == 'S'">No. Días :</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><md-autocomplete md-search-text="paisoriSearchText"
+                                     md-items="pais in paisoriSearch(paisoriSearchText)"
+                                     md-item-text="pais.Pais"
+                                     md-selected-item="solicitud.detsoliInt.porigen"
+                                     md-min-length="0"
+                                     required>
+                          <md-item-template>
+                            <span md-highlight-text="paisSearchText" md-highlight-flags="^i">@{{pais.Pais}}</span>
+                          </md-item-template>
+                          <md-not-found>
+                            No se encontraron resultados para "@{{paisoriSearchText}}".
+                          </md-not-found>
+                        </md-autocomplete></td>
+                        <td><md-autocomplete md-search-text="ciupaisoriSearchText"
+                                     md-items="ciudad in ciupaisoriSearch(ciupaisoriSearchText)"
+                                     md-item-text="ciudad.Ciudad"
+                                     md-selected-item="solicitud.detsoliInt.ciuorigen"
+                                     md-min-length="0"
+                                     required>
+                          <md-item-template>
+                            <span md-highlight-text="ciupaisoriSearchText" md-highlight-flags="^i">@{{ciudad.Ciudad}}</span>
+                          </md-item-template>
+                          <md-not-found>
+                            No se encontraron resultados para "@{{ciupaisoriSearchText}}".
+                          </md-not-found>
+                        </md-autocomplete></td>
+                        <td><md-autocomplete md-search-text="paisdestSearchText"
+                                     md-items="paisdest in paisdestSearch(paisdestSearchText)"
+                                     md-item-text="paisdest.Pais"
+                                     md-selected-item="solicitud.detsoliInt.pdestino"
+                                     md-min-length="0"
+                                     required>
+                          <md-item-template>
+                            <span md-highlight-text="paisSearchText" md-highlight-flags="^i">@{{paisdest.Pais}}</span>
+                          </md-item-template>
+                          <md-not-found>
+                            No se encontraron resultados para "@{{paisdestSearchText}}".
+                          </md-not-found>
+                        </md-autocomplete></td>
+                        <td><md-autocomplete md-search-text="ciupaisdestSearchText"
+                                     md-items="ciudaddest in ciupaisdestSearch(ciupaisdestSearchText)"
+                                     md-item-text="ciudaddest.Ciudad"
+                                     md-selected-item="solicitud.detsoliInt.ciudestino"
+                                     md-min-length="0"
+                                     required>
+                          <md-item-template>
+                            <span md-highlight-text="ciupaisdestSearchText" md-highlight-flags="^i">@{{ciudaddest.Ciudad}}</span>
+                          </md-item-template>
+                          <md-not-found>
+                            No se encontraron resultados para "@{{ciupaisdestSearchText}}".
+                          </md-not-found>
+                        </md-autocomplete></td>
+                        <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
+                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoliInt.fviaje" class=" md-input" short-time ="true"
+                          readonly="readonly"></td>
+                        <td><select class="form-control" ng-model="solicitud.detsoliInt.hotel">
+                          <option value="">Seleccione ..</option>
+                          <option value="S">Si</option>
+                          <option value="N">No</option>
+                        </select></td>
+                        <td ng-if = "solicitud.detsoliInt.hotel == 'S'"><input type="number" class="form-control" ng-model="solicitud.detsoliInt.nodias"></td>
+                        <td><button type="button" class="btn btn-success btn-sm" ng-click="AgregarTramoInternacional(solicitud.detsoliInt)">
+                              <i class="glyphicon glyphicon-plus"></i>
+                            </button></td>
+                      </tr>
+                      <tr ng-repeat="detalleInt in detallesolInt">
+                          <td>@{{detalleInt.porigen}}</td>
+                          <td>@{{detalleInt.ciuorigen}}</td>
+                          <td>@{{detalleInt.pdestino}}</td>
+                          <td>@{{detalleInt.ciudestino}}</td>
+                          <td>@{{detalleInt.fviaje}}</td>
+                          <td>@{{detalleInt.hotel}}</td>
+                          <td >@{{detalleInt.hotel != 'N' ? detalleInt.nodias : 'N/A'}}</td>
+                          <td><button class="btn btn-danger btn-sm" type="button" ng-click="QuitarTramoInt(detalleInt)">
+                                <i class="glyphicon glyphicon-remove"></i>
+                              </button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Fin Detalle Solicitud Viaje Internacional -->
                 </div>
-                <!-- fin Detalle Solicitud Viaje Internacional -->
-              </div>
             </div>
           </div>
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary pull-right">Guardar</button>
+        </div>
+        @include('layouts.tiquetes.solicitud.modifica')
     </form>
     <div ng-if="progress" class="progress">
       <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>

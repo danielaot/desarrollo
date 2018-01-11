@@ -37,5 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('solicitud', 'Tiquetes\SolicitudController');
     Route::get('solicitudinfo', 'Tiquetes\SolicitudController@getInfo');
-    Route::post('ciudadesinfo', 'Tiquetes\SolicitudController@ciudades');
+    Route::get('paisesInfo', 'Tiquetes\SolicitudController@paisesInfo');
+    Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');  
+    Route::post('solicitud', 'Tiquetes\SolicitudController@CrearSolicitud');
   });

@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TDetallesolictud extends Model
 {
+    protected $connection = 'tiqueteshotel';
+
     protected $table = 't_detallesolictud';
 
     protected $primaryKey = 'dtaIntid';
 
-	public $timestamps = false;
+	   public $timestamps = false;
 
     protected $fillable = [
         'dtaIntOCiu',
@@ -34,5 +36,8 @@ class TDetallesolictud extends Model
 
     protected $guarded = [];
 
+    public function detalle(){
+      return $this->hasMany('App\Models\Tiquetes\TSolicitud', 'dtaIntSolicitud', 'solIntSolId');
+    }
 
 }

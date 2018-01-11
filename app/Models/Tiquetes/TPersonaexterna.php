@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TPersonaexterna extends Model
 {
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_personaexterna';
 
     protected $primaryKey = 'pereIntSolId';
