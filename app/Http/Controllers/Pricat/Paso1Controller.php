@@ -32,7 +32,7 @@ class Paso1Controller extends Controller
 
         $last_ref = Item::all()->last();
 
-        if(!$last_ref){
+        if($last_ref){
           $referencia = 'AAA000';
         }
         else{
@@ -168,7 +168,7 @@ class Paso1Controller extends Controller
 
         $last_ref = Item::all()->last();
 
-        if(!$last_ref){
+        if($last_ref){
           $ref = 'AAA000';
         }
         else{
@@ -247,7 +247,6 @@ class Paso1Controller extends Controller
         $item_ean->iea_item = $item->id;
         $item_ean->iea_cantemb = $request->embalaje;
         $item_ean->save();
-
         $update = DesarrolloCtrl::update($request->proy, $request->act);
 
         $url = url('pricat/desarrolloactividades');
