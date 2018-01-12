@@ -13,6 +13,7 @@ use App\Models\Tiquetes\TSolicitud as Solicitud;
 use App\Models\Tiquetes\TPersonaexterna as PersonaExterna;
 use App\Models\Tiquetes\TDetallesolictud as DetalleSolicitud;
 
+use Auth;
 use DB;
 
 ini_set('memory_limit', '-1');
@@ -33,6 +34,7 @@ class SolicitudController extends Controller
       $persona = PersonaDepende::with('infopersona', 'aprueba')->get();
       $ciudad = Ciudad::all();
 
+
       $response =  compact('persona', 'ciudad');
 
       return response()->json($response);
@@ -48,7 +50,10 @@ class SolicitudController extends Controller
 
     public function modifica()
     {
-      $solicitudes = Solicitud::with('detalle')->get();
+      $solicitudes = Solicitud::with('detalle')
+                                ->where('solTxtCedterceroCrea', '1144094290')
+                                ->whereNotIn('solIntEstado', [1])
+                                ->get();
       return response()->json($solicitudes);
     }
 

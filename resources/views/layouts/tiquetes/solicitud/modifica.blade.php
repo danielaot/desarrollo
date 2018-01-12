@@ -21,10 +21,10 @@
             </thead>
             <tbody>
               <tr ng-repeat="soli in solicitudes">
-                <td>@{{soli}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>@{{soli.solIntSolId}}</td>
+                <td>@{{soli.solIntEstado}}</td>
+                <td>@{{soli.solTxtNomtercero}}</td>
+                <td>@{{soli.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
               </tr>
             </tbody>
           </table>
