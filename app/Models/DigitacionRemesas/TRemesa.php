@@ -50,7 +50,8 @@ class TRemesa extends Model
         'cau_id',
         'suc_num_codigoenvio',
         'rem_date_fechahora',
-        'rem_date_fechacorte'
+        'rem_date_fechacorte',
+        'rem_fuente'
     ];
 
     protected $guarded = [];

@@ -18,6 +18,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 	$scope.sumaTotalKilos = 0;
 	$scope.isError = false;
 	$scope.pesosNoValidos = false;
+	$scope.searchCliente;
+	$scope.searchSucursal;
 
 
 	$scope.getInfo = function(){
@@ -33,21 +35,43 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 		});
 	}
 
-	$scope.traerElementos = function(){
-		//aqui debo filtrar el arreglo que se pinta en la vista
+ 	$scope.clearSearchTerm = function() {
+   	 $scope.searchCliente = '';
+  	}
 
+	$element.find('.input').on('keydown', function(ev) {
+	  ev.stopPropagation();
+	});
+
+	$scope.searchClienteTxt = function(searchCliente){
+		var filter =[];
+		if(searchCliente){
+			filter = $filter('filter')($scope.terceros, {razonSocialTercero: searchCliente});
+		}
+
+		if(filter.length > 0){
+			return filter;	
+		}else{
+			return $scope.terceros;
+		}
+		
 	}
 
 	$scope.getInfo();
 
 
-	$scope.getSucursales = function(){
+	$scope.getSucursales = function(searchSucursal){
 		if ($scope.cliente == undefined) {
 			return [];
 		}else{
 			var filter = $filter('filter')($scope.sucursales, {nit_tercero : $scope.cliente.idTercero});
 			filter = $filter('orderBy')(filter,'nombre');
-			return filter;
+			var filterTerm = $filter('filter')(filter,{nombre: searchSucursal});
+			if(filterTerm.length > 0){
+				return filterTerm;
+			}else{
+				return filter;
+			}
 		}
 	}
 
@@ -215,6 +239,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$scope.progress = true;
 
 			$http.post($scope.urlUnidades, $scope.cliente).then(function(response){
+				console.log(response);
 				$scope.progress = false;
 				$scope.cliente.arregloFinal = angular.copy(response.data);
 				angular.element('#modal').css('display', 'block');
@@ -245,7 +270,7 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
 			$http.post($scope.urlPlano, $scope.cliente.arregloFinal).then(function(response){
 
 				$scope.progress = false;
-
+				console.log(response.data);
 				var encabezado = "";
 				var filterSuccessTodas = $filter('filter')(response.data.message, {respuesta : "success"});
 				var filterErrorLogin = $filter('filter')(response.data.message, {respuesta : "error_acceso"});

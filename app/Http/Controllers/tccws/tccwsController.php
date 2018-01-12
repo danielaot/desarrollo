@@ -5,6 +5,7 @@ namespace App\Http\Controllers\tccws;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\BESA\VInformacionEmpaqueFacturaDoctos as FactuClientes;
+use App\Models\BESA\wstccFacturasInfo;
 use App\Models\SCPRD\VInformacionEmpaqueFactura as InfoCargoFactura;
 use App\Models\tccws\TDoctoDespachostcc as EstructuraDocto;
 use App\Models\tccws\TClientesBoomerang as ClientesBoomerang;
@@ -213,6 +214,8 @@ class tccwsController extends Controller
         //Se hace un recorrido por cada factura de una sucursal
         foreach ($data['facturasSucursales'][$sucursal['codigo']] as $key => $factura) {
 
+          $infoFactura = wstccFacturasInfo::where(['f_tipo_docto' => $factura['tipo_docto'], 'f_consec_docto' => $factura['num_consecutivo']])->first();
+
           if(strlen($factura['tipo_docto']) < 3){
             $factura['tipo_docto'] = str_pad($factura['tipo_docto'],3," ", STR_PAD_RIGHT);
           }
@@ -220,6 +223,9 @@ class tccwsController extends Controller
           $formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
           //Guardamos los documentos de referencia que iran en el plano que se envia a tcc
             array_push($sucursal['documentosReferencia'], array(
+              'valorFactura' => $infoFactura['v470_vlr_subtotal'],
+              'unidadesFacturadas' => $infoFactura['v470_cant_1'],
+              'cantidadReferencia' => $infoFactura['v470_num_ref'],
               'tipoPedido' => trim($factura['tipoPedido']),
               'numeroOrdenCompra' => trim($factura['num_oc']),
               'tipodocumento' => trim($factura['tipo_docto']),
@@ -450,6 +456,7 @@ class tccwsController extends Controller
           if($sucursal['tieneBoomerang'] == true){
             $data['tieneBoomerang'] = true;
             $data = $this->replaceData($data,true);
+            //return response()->json($data['txt']);
             //Se envia el xml de un boomerang al servicio de tcc
             $responseBoomerang = $this->consumirServicioTcc($data['txt']);
             $xmlResponseBody['boomerangResponse'] = array("mensaje" => $responseBoomerang['mensaje'], "respuesta" => $responseBoomerang['respuesta'], "remesa" => $responseBoomerang['remesa']);
@@ -582,6 +589,7 @@ class tccwsController extends Controller
       $remesaDigi->suc_num_codigoenvio = $sucursalRemesaGenericas[0]['suc_num_codigoenvio'];
       $remesaDigi->rem_date_fechahora = strtotime($remesa['created_at']);
       $remesaDigi->rem_date_fechacorte = strtotime($remesa['created_at']);
+      $remesaDigi->rem_fuente = 'WS';
       $remesaDigi->save();
 
       foreach ($sucursal['documentosReferencia'] as $key => $documento) {
@@ -591,9 +599,9 @@ class tccwsController extends Controller
         $facturaRemesa->det_num_factura = $documento['numerodocumento'];
         $facturaRemesa->det_dat_vencimiento1 = Carbon::parse($remesa['created_at'])->format('Ymd');
         $facturaRemesa->det_dat_vencimiento2 = Carbon::parse($remesa['created_at'])->addDays(2)->format('Ymd');
-        $facturaRemesa->det_txt_valorfactura = 0;
-        $facturaRemesa->det_num_unidadesfactura = 0;
-        $facturaRemesa->det_num_itemsfactura = 0;
+        $facturaRemesa->det_txt_valorfactura = $documento['valorFactura'];
+        $facturaRemesa->det_num_unidadesfactura = $documento['unidadesFacturadas'];
+        $facturaRemesa->det_num_itemsfactura = $documento['cantidadReferencia'];
         $facturaRemesa->can_id = $sucursalRemesaGenericas[0]['codcanal'];
         $facturaRemesa->save();
       }
@@ -779,7 +787,7 @@ class tccwsController extends Controller
     public function consumirServicioTcc($xml){
 
       //Se inicializa el cliente de nusoap
-      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/servicios/wsdespachos.asmx?wsdl', true);
+      $nusoap_client = new nusoap_client('http://clientes.tcc.com.co/preservicios/wsdespachos.asmx?wsdl', true);
       $nusoap_client->soap_defencoding = 'UTF-8';
       $nusoap_client->decode_utf8 = false;
       //$nusoap_client->version = SOAP_1_1;
