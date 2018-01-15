@@ -129,7 +129,7 @@
                        class="demo-header-searchbox md-text input">
                     </md-select-header>
                     <md-optgroup label="Sucursales">
-                      <md-option ng-value="sucu" ng-repeat="sucu in  getSucursales(searchSucursal)">@{{sucu.nombre}}</md-option>
+                      <md-option ng-value="sucu" ng-repeat="sucu in  getSucursales(searchSucursal)">@{{[sucu.codigo,sucu.nombre].join(' - ')}}</md-option>
                     </md-optgroup>
                   </md-select>
 
@@ -146,7 +146,7 @@
                   <div class="panel panel-default" ng-repeat="(key, sucursal) in cliente.sucursales ">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse@{{key}}"> @{{sucursal.nombre}} </a>
+                        <a data-toggle="collapse" href="#collapse@{{key}}"> @{{[sucursal.codigo,sucursal.nombre].join(' - ')}} </a>
                         <div class="pull-right">
                           <md-checkbox ng-change="setSelectAllFacts(sucursal)" ng-model="sucursal.isSelectAll" aria-label="SelectAll"><strong>(@{{("0"+sucursal.cantSeleccionadas).slice(-2)}} / @{{sucursal.facturas.length}})</strong></md-checkbox>
                         </div>

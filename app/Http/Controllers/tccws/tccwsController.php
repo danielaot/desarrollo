@@ -55,7 +55,7 @@ class tccwsController extends Controller
         'nit_tercero', 'date_creacion','tipoPedido')
         ->whereNull('fecha_remesa')
         ->where('date_creacion', '>', '05-01-2018')
-        ->whereNotIn('tipo_docto', ['F30', 'F28', 'F31', 'F48'])
+        ->whereIn('tipo_docto', ['F', 'FI', 'F50', 'F43','F48','F51','F30', 'F47', 'F31', 'F24', 'F21'])
         ->distinct()->orderBy('num_factura')->get();
 
         $agrupoCliente = $facturas->groupBy('nit_tercero');

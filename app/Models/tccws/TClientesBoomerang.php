@@ -30,4 +30,6 @@ class TClientesBoomerang extends Model
     public function tercero(){
         return $this->hasOne('App\Models\Genericas\Tercero', 'idTercero', 'clb_idTercero');
     }
+
+    
 }

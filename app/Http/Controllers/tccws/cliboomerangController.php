@@ -37,7 +37,7 @@ class cliboomerangController extends Controller
         // 	return (is_null($cliente->boomerang) && !is_null($cliente->tclientetcc));
         // })->flatten(1);
         $clientes = collect($cli)->filter(function($cliente, $key){
-         return (is_null($cliente['clientetcc']['tercerotcc']['boomerang']) && $cliente['clientetcc']['tercerotcc']['indxClienteTercero'] == 1);
+         return ($cliente['clientetcc']['tercerotcc']['indxClienteTercero'] == 1);
         })->flatten(1);
 
 

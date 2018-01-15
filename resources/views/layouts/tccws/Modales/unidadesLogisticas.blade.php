@@ -14,7 +14,7 @@
 
           <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
-              <md-tab label="@{{sucursal.nombre}}" ng-repeat="sucursal in cliente.arregloFinal.sucursalesFiltradas">
+              <md-tab label="@{{[sucursal.codigo,sucursal.nombre].join(' - ')}}" ng-repeat="sucursal in cliente.arregloFinal.sucursalesFiltradas">
                 <md-content class="md-padding">
                   <div class="row">
                       <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
