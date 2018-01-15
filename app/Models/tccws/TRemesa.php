@@ -20,6 +20,7 @@ class TRemesa extends Model
         'rms_observacion',
         'rms_terceroid',
         'rms_sucu_cod',
+        'rms_txt_vehiculo',
         'rms_ciud_sucursal',
         'rms_nom_sucursal',
         'rms_cajas',

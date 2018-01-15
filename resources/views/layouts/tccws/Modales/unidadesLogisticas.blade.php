@@ -55,6 +55,14 @@
                             </div>
                           </div>
                         </div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
+                              <label>Placa o Número de Vehiculo (Ban):</label>
+                              <input type="text" ng-model="sucursal.numerovehiculo" class="form-control" placeholder="Placa o Numero de Vehiculo..." required>
+                            </div>                          
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -75,7 +83,7 @@
 
       </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" ng-disabled="pesosNoValidos" type="submit">Enviar Remesa</button>
+          <button class="btn btn-primary" ng-disabled="pesosNoValidos" type="submit">Enviar Remesa(s)</button>
           <button class="btn btn-secondary" data-dismiss="modal" type="button">Cerrar</button>
         </div>
       </div>

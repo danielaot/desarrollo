@@ -152,12 +152,6 @@ class tccwsController extends Controller
       $data['sucursalesFiltradas'] = [];
       $sucursales = collect($data['sucursales']);
 
-      $existeCliente = ClientesBoomerang::where('clb_idTercero', $data['idTercero'])->get();
-
-      if(count($existeCliente) > 0){
-        $data['tieneBoomerang'] = true;
-      }
-
       //Se filtran las sucursales por las que tiene una o mas facturas seleccionadas
       $data['sucursalesFiltradas'] = $sucursales->filter(function($sucuMap){
         return $sucuMap['hasOneOrMoreSelected'] == true;
@@ -199,11 +193,9 @@ class tccwsController extends Controller
         $sucursal['documentosReferencia'] = [];
         $sucursal['unidades'] = [];
         $sucursal['unidadBoomerang'] = [];
-        $sucursal['tieneBoomerang'] = false;
+        $sucursal['errorCiudad'] = false;
+        $sucursal['errorExistenciaSucursal'] = false;
 
-        if(isset($data['tieneBoomerang']) && $data['tieneBoomerang'] == true){
-          $sucursal['tieneBoomerang'] = true;
-        }
         //Se obtiene la informacion de la sucursal desde las facturas agrupadas por sucursal
         $sucursal['direcciondestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_direccion'];
         $sucursal['telefonodestinatario'] = $data['facturasSucursales'][$sucursal['codigo']][0]['txt_telefono'];
@@ -298,29 +290,24 @@ class tccwsController extends Controller
           "unidadesinternas" => ''
         ));
 
-        if($sucursal['tieneBoomerang'] == true){
+        $codigoDaneTcc = TCiudadestcc::where('ctc_ciu_erp',$sucursal['ciudaddestinatario'])->get();
 
-              $sucursal['unidadBoomerang'] = array(
-                "tipounidad" => "TIPO_UND_DOCB",
-                "claseempaque" => 'CLEM_CAJA',
-                "tipoempaque" => '',
-                "dicecontener" => '',
-                "cantidadunidades" => 1,
-                "kilosreales" => 0,
-                "kilosrealestcc" => 0,
-                "largo" => 0,
-                "alto" => 0,
-                "ancho" => 0,
-                "pesovolumen" => 0,
-                "valormercancia" => 0,
-                "codigobarras" => '',
-                "numerobolsa" => '',
-                "referencias" => '',
-                "unidadesinternas" => ''
-              );
-
+        if(count($codigoDaneTcc) == 0){
+            $sucursal['errorCiudad'] = true; 
+        }else{
+          $sucursal['codigoDaneTcc'] = $codigoDaneTcc[0];
         }
 
+        $sucursalesDestinatario = TCliente::where('ter_id',$sucursal['nit_tercero'])->with('sucursalestcc')->first();
+        $sucursalRemesaGenericas = collect($sucursalesDestinatario['sucursalestcc'])->filter(function($sucursalbd) use($sucursal){
+          return trim($sucursalbd['suc_num_codigo']) == trim($sucursal['codigo']);
+        })->values();
+
+        if(count($sucursalRemesaGenericas) == 0){
+            $sucursal['errorExistenciaSucursal'] = true;
+        }else{
+          $sucursal['sucursalRemesaGenericas'] = $sucursalRemesaGenericas[0];
+        }
 
         $documentosString = collect($sucursal['documentosReferencia'])->pluck('formatoDocumento')->all();
         $documentosString = implode(", ",$documentosString);
@@ -340,8 +327,15 @@ class tccwsController extends Controller
         return $sucursal;
       });
 
-      return response()->json($data);
+      $data['sucursalesErrorCiudad'] = $data['sucursalesFiltradas']->filter(function($sucursal){
+          return $sucursal['errorCiudad'] == true;
+      })->values();
 
+      $data['sucursalesErrorExistenciaSucursal'] = $data['sucursalesFiltradas']->filter(function($sucursal){
+        return $sucursal['errorExistenciaSucursal'] == true;
+      })->values();
+
+      return response()->json($data);
     }
 
 
@@ -357,8 +351,46 @@ class tccwsController extends Controller
 
       extract($parametrosDefault);
 
+      $request->sucursalesFiltradas = collect($request->sucursalesFiltradas)->filter(function($sucursal){
+          return ($sucursal['errorCiudad'] == false && $sucursal['errorExistenciaSucursal'] == false);
+      })->values();
+
+      //return response()->json($request->all());
+
       //Se organiza el plano por cada sucursal
       foreach ($request->sucursalesFiltradas as $key => $sucursal) {
+
+        $sucursal['tieneBoomerang'] = false;
+
+        $existeCliente = ClientesBoomerang::where(['clb_idTercero' => $sucursal['nit_tercero'], 'clb_cod_sucursal' => $sucursal['codigo']])->get();
+
+        // return response()->json($existeCliente);
+
+        if(count($existeCliente) > 0){
+          $sucursal['tieneBoomerang'] = true;
+        }
+
+        if($sucursal['tieneBoomerang'] == true){
+          $sucursal['unidadBoomerang'] = array(
+            "tipounidad" => "TIPO_UND_DOCB",
+            "claseempaque" => 'CLEM_CAJA',
+            "tipoempaque" => '',
+            "dicecontener" => '',
+            "cantidadunidades" => 1,
+            "kilosreales" => 0,
+            "kilosrealestcc" => 0,
+            "largo" => 0,
+            "alto" => 0,
+            "ancho" => 0,
+            "pesovolumen" => 0,
+            "valormercancia" => 0,
+            "codigobarras" => '',
+            "numerobolsa" => '',
+            "referencias" => '',
+            "unidadesinternas" => ''
+          );
+        }
+
         //Se obtienen solo las unidades logisticas las cuales su cantidad en unidades es mayor a '0'
         $sucursal['unidades'] = collect($sucursal['unidades'])->filter(function($unidad){
           return $unidad['cantidadunidades'] > 0;
@@ -375,13 +407,6 @@ class tccwsController extends Controller
 
           return $unidad;
         });
-
-        $codigoDaneTcc = TCiudadestcc::where('ctc_ciu_erp',$sucursal['ciudaddestinatario'])->get();
-
-        if(count($codigoDaneTcc) == 0){
-          $message = array("nombreSucursal"=> $sucursal['nombre'],"mensaje" => "Se ha presentado un error con la ciudad del destinatario, por favor comuniquese con el area de sistemas.", "respuesta" => "ciu_error", "remesa" => "0");
-          return response()->json(["message" => $message],202);
-        }
 
         $data = [
           'clave' => $clave,
@@ -415,7 +440,7 @@ class tccwsController extends Controller
           'naturalezadestinatario' => '',
           'direcciondestinatario' => $sucursal['direcciondestinatario'],
           'telefonodestinatario' =>  $sucursal['telefonodestinatario'],
-          'ciudaddestinatario' => $codigoDaneTcc[0]['ctc_cod_dane'],//$sucursal['ciudaddestinatario']
+          'ciudaddestinatario' => $sucursal['codigoDaneTcc']['ctc_cod_dane'],//$sucursal['ciudaddestinatario']
           'barriodestinatario' => '',
           'totalpeso' => '',
           'totalpesovolumen' => '',
@@ -440,23 +465,22 @@ class tccwsController extends Controller
 
         //Se organiza la informacion del plano con respecto a la estructura estipulada por tcc
         $data = $this->replaceData($data);
-        $data['tieneBoomerang'] = false;
+        // $data['tieneBoomerang'] = false;
         //Se envia el xml al servicio de tcc
         $responseRemesa = $this->consumirServicioTcc($data['txt']);
         $xmlResponseBody = array("mensaje" => $responseRemesa['mensaje'], "respuesta" => $responseRemesa['respuesta'], "remesa" => $responseRemesa['remesa']);
         $xmlResponseBody['nombreSucursal'] = $sucursal['nombre'];
+        $xmlResponseBody['sucursal'] = $sucursal;
 
 
         if($xmlResponseBody['respuesta'] == 0){
 
           $xmlResponseBody['respuesta'] = "success";
           $grabarEnTablas = $this->poblarTablasRemesas($sucursal,$xmlResponseBody,false);
-          //return response()->json($grabarEnTablas);
 
           if($sucursal['tieneBoomerang'] == true){
-            $data['tieneBoomerang'] = true;
+            // $data['tieneBoomerang'] = true;
             $data = $this->replaceData($data,true);
-            //return response()->json($data['txt']);
             //Se envia el xml de un boomerang al servicio de tcc
             $responseBoomerang = $this->consumirServicioTcc($data['txt']);
             $xmlResponseBody['boomerangResponse'] = array("mensaje" => $responseBoomerang['mensaje'], "respuesta" => $responseBoomerang['respuesta'], "remesa" => $responseBoomerang['remesa']);
@@ -468,10 +492,28 @@ class tccwsController extends Controller
             $xmlResponseBody['respuesta'] = "error_normal";
           }elseif($xmlResponseBody['respuesta'] == 1){
             $xmlResponseBody['respuesta'] = "error_acceso";
+          }elseif($xmlResponseBody['respuesta'] == 10){
+            $xmlResponseBody['respuesta'] = "error_permisos";
           }
         }
 
         array_push($message,$xmlResponseBody);
+      }
+
+      if(count($request->sucursalesErrorCiudad) > 0){
+        foreach ($request->sucursalesErrorCiudad as $key => $sucursal) {
+          $xmlResponseBody = array('mensaje' => 'La ciudad del destinatario no se encuentra registrada en el ERP, por favor comuniquese con el area de sistemas.', 'ciudaddestinatario' => $sucursal['ciudaddestinatario'] , 'respuesta' => 'ciu_error', 'remesa' => 'Sin Generar', 'nombreSucursal' => $sucursal['nombre'], 'sucursal' => $sucursal);
+
+          array_push($message,$xmlResponseBody);
+        }
+      }
+
+      if(count($request->sucursalesErrorExistenciaSucursal) > 0){
+        foreach ($request->sucursalesErrorExistenciaSucursal as $key => $sucursal) {
+          $xmlResponseBody = array('mensaje' => 'La sucursal no se encuentra registrada en la base de datos generica, por favor comuniquese con el area de sistemas.', 'ciudaddestinatario' => $sucursal['ciudaddestinatario'] , 'respuesta' => 'sucu_error', 'remesa' => 'Sin Generar', 'nombreSucursal' => $sucursal['nombre'], 'sucursal' => $sucursal);
+
+          array_push($message,$xmlResponseBody);
+        }          
       }
 
       $res = compact('message','data');
@@ -486,6 +528,7 @@ class tccwsController extends Controller
       $remesaTabla->rms_observacion = isset($sucursal['observacion']) ? $sucursal['observacion']: '';
       $remesaTabla->rms_terceroid = $sucursal['nit_tercero'];
       $remesaTabla->rms_sucu_cod = $sucursal['codigo'];
+      $remesaTabla->rms_txt_vehiculo = $sucursal['numerovehiculo'];
       $remesaTabla->rms_ciud_sucursal = $sucursal['ciudaddestinatario'];
       $remesaTabla->rms_nom_sucursal = $sucursal['nombre'];
       $remesaTabla->rms_cajas = $isBoomerang == true ? $sucursal['unidadBoomerang']['cantidadunidades'] : 0;
@@ -520,8 +563,12 @@ class tccwsController extends Controller
         foreach ($sucursal['documentosReferencia'] as $key => $documento) {
           $facturaRemesa = new TFactsxremesa;
           $facturaRemesa->fxr_remesa = $remesaTabla->id;
+          $facturaRemesa->fxr_ordencompra = $documento['numeroOrdenCompra'];
           $facturaRemesa->fxr_tipodocto = $documento['tipodocumento'];
           $facturaRemesa->fxr_numerodocto = $documento['numerodocumento'];
+          $facturaRemesa->fxr_valorfactura = $documento['valorFactura'];
+          $facturaRemesa->fxr_unidadesfactura = $documento['unidadesFacturadas'];
+          $facturaRemesa->fxr_itemsfactura = $documento['cantidadReferencia'];
           $facturaRemesa->fxr_fechadocto = Carbon::parse($documento['fechadocumento'])->toDateString();
           $facturaRemesa->save();
         }
@@ -548,11 +595,11 @@ class tccwsController extends Controller
       $userLogged = Auth::user();
       $ciudadDestinatario = RelacionCiudades::where('rel_txt_ciudad', $remesa->rms_ciud_sucursal)
       ->with('ciudadtcc')->first();
-      $sucursalesDestinatario = TCliente::where('ter_id',$remesa->rms_terceroid)->with('sucursalestcc')->first();
 
-      $sucursalRemesaGenericas = collect($sucursalesDestinatario['sucursalestcc'])->filter(function($sucursal) use($remesa){
-        return trim($sucursal['suc_num_codigo']) == trim($remesa->rms_sucu_cod);
-      })->values();
+      // $sucursalesDestinatario = TCliente::where('ter_id',$remesa->rms_terceroid)->with('sucursalestcc')->first();
+      // $sucursalRemesaGenericas = collect($sucursalesDestinatario['sucursalestcc'])->filter(function($sucursal) use($remesa){
+      //   return trim($sucursal['suc_num_codigo']) == trim($remesa->rms_sucu_cod);
+      // })->values();
 
       $remesaDigi = new DigiRemesa;
       $remesaDigi->ciu_id = $ciudadDestinatario['ciudadtcc']['ciu_id'];
@@ -563,12 +610,12 @@ class tccwsController extends Controller
       $remesaDigi->rem_num_tipodespacho = $remesa->rms_isBoomerang == false ? 1 : 2;
       $remesaDigi->rem_num_cuentaremite = $cuentaremitente;
       $remesaDigi->ter_id = $remesa->rms_terceroid;
-      $remesaDigi->suc_id = $sucursalRemesaGenericas[0]['suc_id'];
-      $remesaDigi->suc_txt_descripcion = $sucursalRemesaGenericas[0]['suc_txt_nombre'];
+      $remesaDigi->suc_id = $sucursal['sucursalRemesaGenericas']['suc_id'];
+      $remesaDigi->suc_txt_descripcion = $sucursal['sucursalRemesaGenericas']['suc_txt_nombre'];
       $remesaDigi->ter_txt_descripcion = $sucursal['facturas'][0]['nom_tercero'];
-      $remesaDigi->ter_txt_direccion = $sucursalRemesaGenericas[0]['suc_txt_direccion'];
-      $remesaDigi->ter_num_telefono = $sucursalRemesaGenericas[0]['suc_txt_telefono'];
-      $remesaDigi->ter_txt_ciudad = $sucursalRemesaGenericas[0]['suc_txt_ciudad'];
+      $remesaDigi->ter_txt_direccion = $sucursal['sucursalRemesaGenericas']['suc_txt_direccion'];
+      $remesaDigi->ter_num_telefono = $sucursal['sucursalRemesaGenericas']['suc_txt_telefono'];
+      $remesaDigi->ter_txt_ciudad = $sucursal['sucursalRemesaGenericas']['suc_txt_ciudad'];
       $remesaDigi->rem_num_tipodocumento = $tipoDocumento;
       $remesaDigi->rem_ltxt_observaciones = $remesa['rms_observacion'];
       $remesaDigi->rem_num_unidades = $remesa['rms_lios'] + $remesa['rms_palets'];
@@ -585,8 +632,8 @@ class tccwsController extends Controller
       $remesaDigi->rem_num_estadotrans = null;
       $remesaDigi->rem_txt_estadotrans = null;
       $remesaDigi->cau_id = null;
-      $remesaDigi->suc_num_codigoenvio = $sucursalRemesaGenericas[0]['suc_num_codigoenvio'];
-      $remesaDigi->suc_num_codigoenvio = $sucursalRemesaGenericas[0]['suc_num_codigoenvio'];
+      $remesaDigi->suc_num_codigoenvio = $sucursal['sucursalRemesaGenericas']['suc_num_codigoenvio'];
+      $remesaDigi->suc_num_codigoenvio = $sucursal['sucursalRemesaGenericas']['suc_num_codigoenvio'];
       $remesaDigi->rem_date_fechahora = strtotime($remesa['created_at']);
       $remesaDigi->rem_date_fechacorte = strtotime($remesa['created_at']);
       $remesaDigi->rem_fuente = 'WS';
@@ -597,12 +644,13 @@ class tccwsController extends Controller
         $facturaRemesa->rem_id = $remesaDigi->rem_id;
         $facturaRemesa->det_num_tipodocto = $documento['tipodocumento'];
         $facturaRemesa->det_num_factura = $documento['numerodocumento'];
+        $facturaRemesa->det_num_ordencompra = $documento['numeroOrdenCompra'];
         $facturaRemesa->det_dat_vencimiento1 = Carbon::parse($remesa['created_at'])->format('Ymd');
         $facturaRemesa->det_dat_vencimiento2 = Carbon::parse($remesa['created_at'])->addDays(2)->format('Ymd');
         $facturaRemesa->det_txt_valorfactura = $documento['valorFactura'];
         $facturaRemesa->det_num_unidadesfactura = $documento['unidadesFacturadas'];
         $facturaRemesa->det_num_itemsfactura = $documento['cantidadReferencia'];
-        $facturaRemesa->can_id = $sucursalRemesaGenericas[0]['codcanal'];
+        $facturaRemesa->can_id = $sucursal['sucursalRemesaGenericas']['codcanal'];
         $facturaRemesa->save();
       }
 
