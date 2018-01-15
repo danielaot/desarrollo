@@ -17,13 +17,13 @@
                 md-search-text="searchText"
                 md-items="tercero in buscarTercero(searchText) | orderBy:'razonSocialTercero'"
                 md-no-cache="true"
-                md-item-text="tercero.razonSocialTercero"
+                md-item-text="[tercero.suc_num_codigo, tercero.suc_txt_nombre].join(' - ')"
                 placeholder="Buscar clientes">
-                  <span md-highlight-text="searchText">@{{tercero.razonSocialTercero}}</span>
+                  <span md-highlight-text="searchText">@{{[tercero.suc_num_codigo, tercero.suc_txt_nombre].join(' - ')}}</span>
                 </md-autocomplete>
                 <md-chip-template>
                   <span>
-                    <strong>@{{$chip.razonSocialTercero}} (@{{$chip.idTercero}})</strong>
+                    <strong>[tercero.suc_num_codigo, tercero.suc_txt_nombre].join(' - ')</strong>
                   </span>
               </md-chips>
               </md-chip-template>

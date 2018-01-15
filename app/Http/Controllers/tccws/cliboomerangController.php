@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\tccws\TClientesBoomerang as Cliente;
 use App\Models\Genericas\Tercero;
+use App\Models\Genericas\TCliente;
+use App\Models\Genericas\TSucursal;
+ini_set('max_execution_time', 300);
 
 class cliboomerangController extends Controller
 {
@@ -25,12 +28,16 @@ class cliboomerangController extends Controller
         
     public function getInfo()
     {
-        $cli = Tercero::where('indxClienteTercero', '=', '1')->where('indxEstadoTercero', 
-        '=', '1')->with('boomerang','tclientetcc','tclientetcc.sucursalestcc')->get();
-        
+
+        $cli = TSucursal::with('clientetcc','clientetcc.tercerotcc', 'clientetcc.tercerotcc.boomerang')->get();     
+        // $cli = Tercero::where('indxClienteTercero', '=', '1')->where('indxEstadoTercero', 
+        // '=', '1')->with('boomerang','tclientetcc','tclientetcc.sucursalestcc')->get();
         $clientesAgregados = Cliente::with('tercero')->get();
+        // $clientes = collect($cli)->filter(function($cliente, $key){
+        // 	return (is_null($cliente->boomerang) && !is_null($cliente->tclientetcc));
+        // })->flatten(1);
         $clientes = collect($cli)->filter(function($cliente, $key){
-        	return (is_null($cliente->boomerang) && !is_null($cliente->tclientetcc));
+         return (is_null($cliente['clientetcc']['tercerotcc']['boomerang']) && $cliente['clientetcc']['tercerotcc']['indxClienteTercero'] == 1);
         })->flatten(1);
 
 

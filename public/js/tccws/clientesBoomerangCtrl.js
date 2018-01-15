@@ -15,10 +15,8 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
       var data = response.data;
       $scope.clientes = angular.copy(data.clientes);
       $scope.clientesAgregados = angular.copy(data.clientesAgregados);
-      $scope.noEsCliente = angular.copy(data.noEsCliente);
       console.log($scope.clientes);
       console.log($scope.clientesAgregados);
-      console.log($scope.noEsCliente);
       $scope.progress = false;
       });
   } 
@@ -33,9 +31,9 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
   }
 
   $scope.buscarTercero = function(searchText){
-    var filterClientes = $filter('filter')($scope.clientes, {idTercero: searchText});
+    var filterClientes = $filter('filter')($scope.clientes, {suc_txt_nombre: searchText});
     if (filterClientes.length == 0) {
-      filterClientes = $filter('filter')($scope.clientes, {razonSocialTercero: searchText});
+      filterClientes = $filter('filter')($scope.clientes, {suc_num_codigo: searchText});
     }
     return filterClientes;
     $scope.getInfo();

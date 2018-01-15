@@ -32,4 +32,8 @@ class TCliente extends Model
     public function sucursalestcc(){
       return $this->hasMany('App\Models\Genericas\TSucursal','cli_id','cli_id');
     }
+
+    public function tercerotcc(){
+        return $this->hasOne('App\Models\Genericas\Tercero','idTercero', 'ter_id');
+    }
 }

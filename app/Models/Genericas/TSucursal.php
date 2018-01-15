@@ -33,4 +33,8 @@ class TSucursal extends Model
         'suc_num_codigoenvio',
         'codcanal'
     ];
+
+    public function clientetcc(){
+      return $this->hasOne('App\Models\Genericas\TCliente','cli_id','cli_id');
+    }
 }
