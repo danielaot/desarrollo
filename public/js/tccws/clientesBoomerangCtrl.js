@@ -5,6 +5,7 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
   $scope.progress = true;
 
   $scope.clientesSelected = [];
+  $scope.selectedTercero = {};
   $scope.isDelete = true;
 
   $scope.getInfo = function(){
@@ -18,6 +19,8 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
       console.log($scope.clientes);
       console.log($scope.clientesAgregados);
       $scope.progress = false;
+      }, function(error){
+        $scope.getInfo();
       });
   } 
   $scope.getInfo();
@@ -29,6 +32,7 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
     }
     return { name: chip, type: 'new' }
   }
+
 
   $scope.buscarTercero = function(searchText){
     var filterClientes = $filter('filter')($scope.clientes, {suc_txt_nombre: searchText});

@@ -19,7 +19,9 @@ class TClientesBoomerang extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'clb_idTercero'
+        'clb_idTercero',
+        'clb_cod_sucursal',
+        'clb_nom_tercero'
     ];
 
     protected $dates = ['deleted_at'];

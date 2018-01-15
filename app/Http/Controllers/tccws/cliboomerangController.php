@@ -29,7 +29,7 @@ class cliboomerangController extends Controller
     public function getInfo()
     {
 
-        $cli = TSucursal::with('clientetcc','clientetcc.tercerotcc', 'clientetcc.tercerotcc.boomerang')->get();     
+        $cli = TSucursal::where('suc_txt_estado','ACTIVO')->with('clientetcc','clientetcc.tercerotcc', 'clientetcc.tercerotcc.boomerang')->get();     
         // $cli = Tercero::where('indxClienteTercero', '=', '1')->where('indxEstadoTercero', 
         // '=', '1')->with('boomerang','tclientetcc','tclientetcc.sucursalestcc')->get();
         $clientesAgregados = Cliente::with('tercero')->get();
@@ -64,10 +64,13 @@ class cliboomerangController extends Controller
     public function store(Request $request)
     {
     	$data = $request->all();
-    	$idsTerceros = collect($data)->pluck('idTercero')->all();
-    	foreach ($idsTerceros as $idTercero => $value) {
+     //    return response()->json($data);
+    	// $idsTerceros = collect($data)->pluck('idTercero')->all();
+    	foreach ($data as $key => $tercero) {
     		$creacion = new Cliente;
-    		$creacion->clb_idTercero = $value;
+    		$creacion->clb_idTercero = $tercero['clientetcc']['ter_id'];
+            $creacion->clb_cod_sucursal = $tercero['suc_num_codigo'];
+            $creacion->clb_nom_tercero = $tercero['suc_txt_nombre'];
     		$creacion->save();
     	}
 
