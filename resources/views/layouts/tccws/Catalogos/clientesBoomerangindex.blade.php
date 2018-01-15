@@ -36,15 +36,17 @@
         <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
         <thead>
         <tr>
-          <th class="text-center">Nombre del Cliente</th>
           <th class="text-center">Nit del Cliente</th>
+          <th class="text-center">Nombre del Cliente</th>
+          <th class="text-center">Sucursal (Nombre - Codigo)</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="clientea in clientesAgregados"> 
-          <td class="text-left">@{{clientea.tercero.razonSocialTercero}}</td>
           <td class="text-left">@{{clientea.clb_idTercero}}</td>
+          <td class="text-left">@{{clientea.tercero.razonSocialTercero}}</td>
+          <td class="text-left">@{{[clientea.clb_nom_tercero, clientea.clb_cod_sucursal].join(' - ')}}</td>
           <td class="text-right">
             <button type="button" class="btn btn-danger btn-sm" ng-click="eliminar(clientea)">
               <i class="glyphicon glyphicon-remove"></i>

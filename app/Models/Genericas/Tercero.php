@@ -38,4 +38,8 @@ class Tercero extends Model
     public function boomerang(){
         return $this->hasOne('App\Models\tccws\TClientesBoomerang', 'clb_idTercero', 'idTercero');
     }
+
+    public function tclientetcc(){
+        return $this->hasOne('App\Models\Genericas\TCliente', 'ter_id', 'idTercero');
+    }
 }

@@ -15,6 +15,8 @@ class CreacionTablaCientesboomerang extends Migration
     {
         Schema::connection('conectortccws')->create('t_cliboomerang', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('clb_cod_sucursal');
+            $table->string('clb_nom_tercero');
             $table->string('clb_idTercero');
             $table->timestamps();
             $table->softDeletes();

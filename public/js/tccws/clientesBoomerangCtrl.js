@@ -15,8 +15,10 @@ app.controller('clientesBoomerangCtrl', ['$scope', '$http', '$filter', '$mdDialo
       var data = response.data;
       $scope.clientes = angular.copy(data.clientes);
       $scope.clientesAgregados = angular.copy(data.clientesAgregados);
+      $scope.noEsCliente = angular.copy(data.noEsCliente);
       console.log($scope.clientes);
       console.log($scope.clientesAgregados);
+      console.log($scope.noEsCliente);
       $scope.progress = false;
       });
   } 
