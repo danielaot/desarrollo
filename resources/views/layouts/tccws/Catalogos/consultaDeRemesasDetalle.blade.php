@@ -73,7 +73,7 @@
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                     <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 col-xl-12">
                       <label>Observaciones</label>
-                      <textarea ng-disabled="true" class="form-control" value="@{{consulta.consulta.rms_observacion}}"  maxlength="150" rows="3"></textarea>
+                      <textarea ng-disabled="true" class="form-control" ng-value="consulta.consulta.rms_observacion" rows="3"></textarea>
                     </div>
                   </div>
                   </div>

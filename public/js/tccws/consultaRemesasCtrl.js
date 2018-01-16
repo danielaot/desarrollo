@@ -10,9 +10,10 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
     	var data = response.data;
      	$scope.consultas = angular.copy(data.consultafacturas);
       $scope.consultas.map(function(consulta){
+
         var fecha_ini = new Date(consulta.consulta.created_at);
-        fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
-        consulta.consulta.created_at = new Date(fecha_ini);
+        //fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
+        consulta.consulta.created_at = fecha_ini;
 
         return consulta;
       });
@@ -49,9 +50,10 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
           var data = response.data;
           $scope.consultas = angular.copy(data.consultaremesas);
           $scope.consultas.map(function(consulta){ 
+           
             var fecha_ini = new Date(consulta.consulta.created_at);
-            fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
-            consulta.consulta.created_at = new Date(fecha_ini);
+            //fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
+            consulta.consulta.created_at = fecha_ini;
 
             return consulta;
           });
@@ -97,16 +99,18 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
         $scope.progress = false;
       }else{
         $http.post($scope.getFecha, $scope.fech).then(function(response){
+
         console.log(response.data);
         var data = response.data;
         $scope.consultas = angular.copy(data.consultafechas);
-        $scope.consultas.map(function(consulta){
-          var fecha_ini = new Date(consulta.consulta.created_at);
-          fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
-          consulta.consulta.created_at = new Date(fecha_ini);
+          $scope.consultas.map(function(consulta){ 
+           
+            var fecha_ini = new Date(consulta.consulta.created_at);
+            //fecha_ini = fecha_ini.getTime() + fecha_ini.getTimezoneOffset()*60*1000;
+            consulta.consulta.created_at = fecha_ini;
 
-          return consulta;
-        });
+            return consulta;
+          });
         console.log($scope.consultas);
         $scope.progress = false;
       });
@@ -129,6 +133,12 @@ app.controller('consultaRemesasCtrl', ['$scope', '$http', '$filter', '$mdDialog'
   $scope.cambiarFecha = function(fecha){
     fecha = new Date(fecha);
     return $filter('date')(fecha, 'shortDate');
+  }
+
+  $scope.descargarInforme = function(){
+    $http.get('descargarInforme').then(function(response){
+
+    });
   }
 
   $scope.retornarCadena = function(arregloDeObjetos){

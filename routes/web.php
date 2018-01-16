@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('ciudades', 'tccws\ciudadesController', ['except' => ['create', 'show', 'edit', 'destroy']]);
     Route::get('ciudadesinfo', 'tccws\ciudadesController@getInfo');
+
+    Route::get('descargarInforme/{fechaInicial}/{fechaFinal}/{placaVehiculo}', 'tccws\tccwsController@descargarInforme')->name('descargarInforme');
   });
 
 

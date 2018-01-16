@@ -24,6 +24,9 @@ use App\Models\Genericas\Tercero;
 use DB;
 use nusoap_client;
 use Illuminate\Support\Facades\Auth;
+use Excel;
+use PHPExcel_Worksheet_HeaderFooterDrawing;
+use PHPExcel_Worksheet_HeaderFooter;
 ini_set('max_execution_time', 300);
 
 class tccwsController extends Controller
@@ -895,6 +898,14 @@ class tccwsController extends Controller
     public function consultaRemesasGetInfo()
     {
       $consultafacturas = TFactsxremesa::where('created_at', '>', Carbon::now()->subDays(3))->with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->get();
+
+      $consultafacturas = collect($consultafacturas)->map(function($consulta){
+
+          $consulta['rutaInforme'] = route('descargarInforme', ['fechaInicial' => strtotime(Carbon::parse($consulta['consulta']['created_at'])->format('Ymd')), 'fechaFinal' => strtotime(Carbon::parse($consulta['consulta']['created_at'])->addHour(24)->format('Ymd')), 'placaVehiculo' => $consulta['consulta']['rms_txt_vehiculo']]);
+
+          return $consulta;
+      });
+
       $response = compact('consultafacturas');
       return response()->json($response);
     }
@@ -910,20 +921,344 @@ class tccwsController extends Controller
             $query->where('rms_remesa', $prueba['busqueda']);
         })->get();
       }
-        $response = compact('consultaremesas', 'prueba');
-        return response()->json($response);
+
+      $consultaremesas = collect($consultaremesas)->map(function($consulta){
+        
+          $consulta['rutaInforme'] = route('descargarInforme', ['fechaInicial' => strtotime(Carbon::parse($consulta['consulta']['created_at'])->format('Ymd')), 'fechaFinal' => strtotime(Carbon::parse($consulta['consulta']['created_at'])->addHour(24)->format('Ymd')), 'placaVehiculo' => $consulta['consulta']['rms_txt_vehiculo']]);
+
+          return $consulta;
+      });      
+
+      $response = compact('consultaremesas', 'prueba');
+      return response()->json($response);
     }
 
     public function consultaFechasGetInfo(Request $request)
     {
       $fech = $request->all();
+
       $fech['inicial'] = Carbon::parse($fech['inicial'])->subHour(5);
       $fech['final'] = Carbon::parse($fech['final'])->addHour(19);
 
       $consultafechas = TFactsxremesa::with('consulta', 'consulta.facturas', 'consulta.boomerang', 'consulta.nombreCliente')->whereBetween('created_at', [$fech['inicial'], $fech['final']])->get();
+
+      $consultafechas = collect($consultafechas)->map(function($consulta) use($fech){
+        
+          $consulta['rutaInforme'] = route('descargarInforme', ['fechaInicial' => strtotime($fech['inicial']), 'fechaFinal' => strtotime($fech['final']), 'placaVehiculo' => $consulta['consulta']['rms_txt_vehiculo']]);
+
+          return $consulta;
+      });  
+
       $response = compact('consultafechas', 'fech');
       return response()->json($response);
     }
+
+    public function descargarInforme($fechaInicial,$fechaFinal,$placaVehiculo){
+
+      $fechaInicial = Carbon::createFromTimestamp($fechaInicial)->toDateTimeString();
+      $fechaFinal = Carbon::createFromTimestamp($fechaFinal)->toDateTimeString();
+      $unidadesCajas = 0;
+      $unidadesLios = 0;
+      $unidadesEstibas = 0;
+      $pesosLios = 0;
+      $pesosEstibas = 0;
+      $pesoTotal = 0;
+
+      $consultaRemesas = TRemesa::with('facturas')->where('rms_txt_vehiculo',$placaVehiculo)->where('rms_isBoomerang',0)->whereBetween('created_at', [$fechaInicial,$fechaFinal])->get();
+
+      foreach ($consultaRemesas as $key => $remesa) {
+        $unidadesCajas += $remesa['rms_cajas'];
+        $unidadesLios += $remesa['rms_lios'];
+        $unidadesEstibas += $remesa['rms_palets']; 
+        $pesosLios += $remesa['rms_pesolios'];
+        $pesosEstibas += $remesa['rms_pesopalets']; 
+      }
+
+      $pesoTotal = $pesosLios +  $pesosEstibas;
+
+      $response = compact('fechaInicial', 'fechaFinal','unidadesCajas','unidadesLios', 'unidadesEstibas','pesosLios','pesosEstibas','pesoTotal','consultaRemesas');
+      //return response()->json($response);
+  
+      $file = Excel::create('Manifesto'.$placaVehiculo.Carbon::parse($fechaInicial)->format('Ymd'), function($excel) use($placaVehiculo,$response){
+
+          $excel->sheet('ConsolidadoRemesas', function($sheet) use($placaVehiculo,$response){
+
+            //Encabezado
+            $objDrawing = new PHPExcel_Worksheet_HeaderFooterDrawing();
+            $objDrawing->setName('Image');
+            $objDrawing->setPath('images/bellezaexpress.jpg');
+            $objDrawing->setHeight(60);
+
+
+            $sheet->getHeaderFooter()->addImage($objDrawing, PHPExcel_Worksheet_HeaderFooter::IMAGE_HEADER_LEFT);
+            $sheet->getHeaderFooter()->setOddHeader('&L&G& &C&BCENTRO DE DISTRIBUCIÓN NACIONAL_x000A_MANIFIESTO DE CARGA &R&BFECHA Y HORA DE IMPRESIÓN: &D &T');
+            $sheet->getHeaderFooter()->setAlignWithMargins(false);
+            $sheet->setOrientation('landscape');
+            $sheet->setHorizontalCentered(true);
+            $sheet->setShowGridlines(false);
+            $sheet->getPageMargins()->setTop(1.4);
+            $sheet->getPageMargins()->setLeft(0.4);
+            //$sheet->getPageMargins()->setRight(0.4);
+            $sheet->getPageMargins()->setBottom(0.4);
+            $sheet->setScale(50);
+            $sheet->setPaperSize(1);          
+
+            //Diseño de informe
+
+            $sheet->setWidth(array('A' => 5.6,'B' => 23.6,'C' => 10,'D' => 50, 'E' => 23.6, 'F' => 11, 'G' => 11, 'H' => 11, 'I' => 5.6, 'J' => 6, 'K' => 11, 'L' => 40, 'M' => 11, 'N'=>5.6));            
+
+            $sheet->mergeCells('A2:N2');
+            $sheet->cell('A2', function($cell) {
+                $cell->setValue('DETALLE DE LA CARGA');
+            });
+            $sheet->mergeCells('A8:N8');
+            $sheet->cell('A8', function($cell) {
+                $cell->setValue('DETALLE DE REMESAS');
+            });
+
+            $sheet->mergeCells('B4:D4');
+            $sheet->cell('B4', function($cell) {
+                $cell->setValue('TRANSPORTADORA');
+            });
+            $sheet->cell('B5', function($cell) {
+                $cell->setValue('Compañia');
+            });
+            $sheet->cell('B6', function($cell) {
+                $cell->setValue('TCC S.A.S');
+            });            
+            $sheet->mergeCells('C5:D5');
+            $sheet->mergeCells('C6:D6');
+            $sheet->cell('C5', function($cell) {
+                $cell->setValue('Número de Vehiculo VAN');
+            });
+            $sheet->cell('C6', function($cell)use($placaVehiculo) {
+                $cell->setValue($placaVehiculo);
+            });            
+
+            $sheet->mergeCells('F4:H4');
+            $sheet->cell('F4', function($cell) {
+                $cell->setValue('INFORMACIÓN DE UNIDADES');
+            });
+            $sheet->cell('F5', function($cell) {
+                $cell->setValue('Cajas');
+            });
+            $sheet->cell('F6', function($cell)use($response) {
+                $cell->setValue($response['unidadesCajas']);
+            });            
+            $sheet->cell('G5', function($cell) {
+                $cell->setValue('Lios');
+            });
+            $sheet->cell('G6', function($cell)use($response) {
+                $cell->setValue($response['unidadesLios']);
+            });               
+            $sheet->cell('H5', function($cell) {
+                $cell->setValue('Estibas');
+            }); 
+            $sheet->cell('H6', function($cell)use($response) {
+                $cell->setValue($response['unidadesEstibas']);
+            });             
+
+
+            $sheet->mergeCells('K4:M4');
+            $sheet->cell('K4', function($cell) {
+                $cell->setValue('INFORMACIÓN DE PESOS(KG)');
+            });
+            $sheet->cell('K5', function($cell) {
+                $cell->setValue('Lios');
+            });
+            $sheet->cell('K6', function($cell)use($response) {
+                $cell->setValue($response['pesosLios']);
+            });             
+            $sheet->cell('L5', function($cell) {
+                $cell->setValue('Estibas');
+            });
+            $sheet->cell('L6', function($cell)use($response) {
+                $cell->setValue($response['pesosEstibas']);
+            });             
+            $sheet->cell('M5', function($cell) {
+                $cell->setValue('Total');
+            });
+            $sheet->cell('M6', function($cell)use($response) {
+                $cell->setValue($response['pesoTotal']);
+            });                 
+
+            //Detalle de Remesas
+            $sheet->mergeCells('B10:B11');
+            $sheet->cell('B10', function($cell) {
+                $cell->setValue('Remesa');
+            });
+            
+            $sheet->mergeCells('C10:C11');
+            $sheet->cell('C10', function($cell) {
+                $cell->setValue('No. Doctos');
+            });  
+
+            $sheet->mergeCells('D10:D11');
+            $sheet->cell('D10', function($cell) {
+                $cell->setValue('Destinatario');
+            }); 
+
+            $sheet->mergeCells('E10:E11');
+            $sheet->cell('E10', function($cell) {
+                $cell->setValue('Ciudad de Destinatario');
+            });
+
+            $sheet->mergeCells('F10:H10');
+            $sheet->cell('F10', function($cell) {
+                $cell->setValue('Información de Unidades');
+            });
+            $sheet->cell('F11', function($cell) {
+                $cell->setValue('Cajas');
+            }); 
+            $sheet->cell('G11', function($cell) {
+                $cell->setValue('Lios');
+            }); 
+            $sheet->cell('H11', function($cell) {
+                $cell->setValue('Estibas');
+            });                                      
+
+            $sheet->mergeCells('I10:K10');
+            $sheet->cell('I10', function($cell) {
+                $cell->setValue('Información de Pesos(Kg)');
+            });
+            $sheet->cell('I11', function($cell) {
+                $cell->setValue('Lios');
+            }); 
+            $sheet->cell('J11', function($cell) {
+                $cell->setValue('Estibas');
+            }); 
+            $sheet->cell('K11', function($cell) {
+                $cell->setValue('Total');
+            });              
+
+            $sheet->mergeCells('L10:M11');
+            $sheet->cell('L10', function($cell) {
+                $cell->setValue('Observaciones');
+            });                                                                                             
+
+            //Estilos de titulos
+
+            $sheet->cells('A2:N2',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            }); 
+
+            $sheet->cells('A8:N8',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            }); 
+
+            $sheet->cells('B4:D4',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            });
+
+            $sheet->cells('F4:H4',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            });
+
+            $sheet->cells('K4:M4',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            });
+            $sheet->cells('B10:M11',function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            });
+            $sheet->cells('B5:M5',function($cells){
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '9',
+                    'bold'       =>  true
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');
+            });              
+
+            $sheet->setBorder('A2:N2', 'thin');
+            $sheet->setBorder('B10:M11', 'thin');
+            $sheet->getStyle('B10:M11' . $sheet->getHighestRow())->getAlignment()->setWrapText(true);
+            $sheet->setBorder('A8:N8', 'thin');
+            $sheet->setBorder('B4:D6', 'thin'); 
+            $sheet->setBorder('F4:H6', 'thin'); 
+            $sheet->setBorder('K4:M6', 'thin');             
+
+            $filaInicial = 12;
+            //$formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
+            //
+            foreach ($response['consultaRemesas'] as $key => $remesa) {
+              # code...
+                $remesa['facturas'] = collect($remesa['facturas'])->map(function($factura){
+                  $factura['formatoDocumento'] = $factura['fxr_tipodocto'].'-'.$factura['fxr_numerodocto'];
+                  return $factura;
+                });
+
+                $documentosString = collect($remesa['facturas'])->pluck('formatoDocumento')->all();
+                $documentosString = implode(", ",$documentosString);
+
+                $sheet->row($filaInicial, array(
+                '',
+                $remesa['rms_remesa'], 
+                $documentosString, 
+                $remesa['rms_nom_sucursal'], 
+                $remesa['rms_ciud_sucursal'], 
+                $remesa['rms_cajas'], 
+                $remesa['rms_lios'], 
+                $remesa['rms_palets'],
+                $remesa['rms_pesolios'],
+                $remesa['rms_pesopalets'],
+                $remesa['rms_pesototal'], 
+                $remesa['rms_observacion'] 
+              ));
+
+              $filaInicial = 12;
+              $filaInicial = $filaInicial + ($key + 1);               
+            }            
+
+
+
+          });
+          
+      })->download('xlsx');
+
+    }    
     /**
      * Display the specified resource.
      *

@@ -9,6 +9,8 @@ use App\Models\tccws\TClientesBoomerang as Cliente;
 use App\Models\Genericas\Tercero;
 use App\Models\Genericas\TCliente;
 use App\Models\Genericas\TSucursal;
+use Excel;        
+
 ini_set('max_execution_time', 300);
 
 class cliboomerangController extends Controller
@@ -54,6 +56,7 @@ class cliboomerangController extends Controller
     {
 
     }
+
 
     /**
      * Store a newly created resource in storage.
