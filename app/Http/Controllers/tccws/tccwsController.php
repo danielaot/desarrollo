@@ -630,7 +630,7 @@ class tccwsController extends Controller
       $remesaDigi->ter_txt_descripcion = $sucursal['facturas'][0]['nom_tercero'];
       $remesaDigi->ter_txt_direccion = $sucursal['sucursalRemesaGenericas']['suc_txt_direccion'];
       $remesaDigi->ter_num_telefono = $sucursal['sucursalRemesaGenericas']['suc_txt_telefono'];
-      $remesaDigi->ter_txt_ciudad = $sucursal['sucursalRemesaGenericas']['suc_txt_ciudad'];
+      $remesaDigi->ter_txt_ciudad = $sucursal['sucursalRemesaGenericas']['suc_txt_ciudad']. ' - '.$sucursal['sucursalRemesaGenericas']['suc_txt_depto'];
       $remesaDigi->rem_num_tipodocumento = $tipoDocumento;
       $remesaDigi->rem_ltxt_observaciones = $remesa['rms_observacion'];
       $remesaDigi->rem_num_unidades = $remesa['rms_lios'] + $remesa['rms_palets'];
