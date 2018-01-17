@@ -77,6 +77,18 @@ class tccwsController extends Controller
             }
         }
 
+        $sucursales = collect($sucursales)->map(function($sucursal){
+          $sucursal['tieneBoomerang'] = false;
+
+          $sucursal['boomerang'] = ClientesBoomerang::where(['clb_idTercero'=> $sucursal['nit_tercero'], 'clb_cod_sucursal' => $sucursal['codigo']])->get();
+
+          if(count($sucursal['boomerang']) > 0){
+            $sucursal['tieneBoomerang'] = true;
+          }
+
+          return $sucursal;
+        });
+
         $response = compact('agrupoCliente', 'terceros', 'soloCliente', 'sucursales');
         return response()->json($response);
 
@@ -997,15 +1009,15 @@ class tccwsController extends Controller
             $sheet->setHorizontalCentered(true);
             $sheet->setShowGridlines(false);
             $sheet->getPageMargins()->setTop(1.4);
-            $sheet->getPageMargins()->setLeft(0.4);
-            //$sheet->getPageMargins()->setRight(0.4);
+            $sheet->getPageMargins()->setLeft(0.2);
+            $sheet->getPageMargins()->setRight(0.2);
             $sheet->getPageMargins()->setBottom(0.4);
             $sheet->setScale(50);
             $sheet->setPaperSize(1);          
 
             //Diseño de informe
 
-            $sheet->setWidth(array('A' => 5.6,'B' => 23.6,'C' => 10,'D' => 50, 'E' => 23.6, 'F' => 11, 'G' => 11, 'H' => 11, 'I' => 5.6, 'J' => 6, 'K' => 11, 'L' => 40, 'M' => 11, 'N'=>5.6));            
+            $sheet->setWidth(array('A' => 5.6,'B' => 20,'C' => 50,'D' => 50, 'E' => 23.6, 'F' => 11, 'G' => 11, 'H' => 11, 'I' => 5.6, 'J' => 6, 'K' => 11, 'L' => 40, 'M' => 11, 'N'=>5.6));            
 
             $sheet->mergeCells('A2:N2');
             $sheet->cell('A2', function($cell) {
@@ -1221,10 +1233,12 @@ class tccwsController extends Controller
             $sheet->setBorder('K4:M6', 'thin');             
 
             $filaInicial = 12;
+            $filaFinal = 0;
             //$formatoDocumento = $factura['tipo_docto'].'-'.$factura['num_consecutivo'];
             //
             foreach ($response['consultaRemesas'] as $key => $remesa) {
               # code...
+                $filaFinal = $filaInicial;
                 $remesa['facturas'] = collect($remesa['facturas'])->map(function($factura){
                   $factura['formatoDocumento'] = $factura['fxr_tipodocto'].'-'.$factura['fxr_numerodocto'];
                   return $factura;
@@ -1234,23 +1248,46 @@ class tccwsController extends Controller
                 $documentosString = implode(", ",$documentosString);
 
                 $sheet->row($filaInicial, array(
-                '',
-                $remesa['rms_remesa'], 
-                $documentosString, 
-                $remesa['rms_nom_sucursal'], 
-                $remesa['rms_ciud_sucursal'], 
-                $remesa['rms_cajas'], 
-                $remesa['rms_lios'], 
-                $remesa['rms_palets'],
-                $remesa['rms_pesolios'],
-                $remesa['rms_pesopalets'],
-                $remesa['rms_pesototal'], 
-                $remesa['rms_observacion'] 
-              ));
+                  '',
+                  $remesa['rms_remesa'], 
+                  $documentosString, 
+                  $remesa['rms_nom_sucursal'], 
+                  $remesa['rms_ciud_sucursal'], 
+                  $remesa['rms_cajas'], 
+                  $remesa['rms_lios'], 
+                  $remesa['rms_palets'],
+                  $remesa['rms_pesolios'],
+                  $remesa['rms_pesopalets'],
+                  $remesa['rms_pesototal'], 
+                  $remesa['rms_observacion'] 
+                ));
+
+                $sheet->mergeCells('L'.$filaInicial.':M'.$filaInicial);              
 
               $filaInicial = 12;
               $filaInicial = $filaInicial + ($key + 1);               
-            }            
+            }
+
+
+            $rango = 'B12:'.'M'.($filaFinal);
+            $sheet->setBorder($rango, 'thin');
+
+            $sheet->cells($rango,function($cells){
+                $cells->setBackground('#F2F2F2');
+                $cells->setFont(array(
+                    'family'     => 'Calibri',
+                    'size'       => '11',
+                    'bold'       =>  false
+                ));
+                $cells->setAlignment('center');
+                $cells->setValignment('center');                
+
+            }); 
+
+            $sheet->cells('B6:D6',function($cells){
+                $cells->setAlignment('center');
+                $cells->setValignment('center');                
+            });                                    
 
 
 

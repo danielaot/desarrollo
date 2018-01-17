@@ -65,6 +65,13 @@
     width: auto; }
   .selectdemoSelectHeader md-content._md {
     max-height: 240px; }
+
+.md-button {
+    margin: 0px 1px;  
+    border-radius: 20px;
+    padding: 0px 10px;
+    font-size: 12px;
+}    
 </style>
 <div class="container-fluid">
   <div ng-controller="pedidosAgrupaCtrl as ctrl"  layout="column" flex layout-fill ng-cloak>
@@ -146,7 +153,7 @@
                   <div class="panel panel-default" ng-repeat="(key, sucursal) in cliente.sucursales ">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a data-toggle="collapse" href="#collapse@{{key}}"> @{{[sucursal.codigo,sucursal.nombre].join(' - ')}} </a>
+                        <a data-toggle="collapse" href="#collapse@{{key}}"><md-button md-colors="{background: sucursal.tieneBoomerang == false ? 'red' : 'green' }" md-colors-watch="false">@{{sucursal.tieneBoomerang == false ? 'Sin Boomerang' : 'Con Boomerang'}}</md-button> @{{[sucursal.codigo,sucursal.nombre].join(' - ')}}</a>
                         <div class="pull-right">
                           <md-checkbox ng-change="setSelectAllFacts(sucursal)" ng-model="sucursal.isSelectAll" aria-label="SelectAll"><strong>(@{{("0"+sucursal.cantSeleccionadas).slice(-2)}} / @{{sucursal.facturas.length}})</strong></md-checkbox>
                         </div>

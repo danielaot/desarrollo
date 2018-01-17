@@ -30,6 +30,8 @@ app.controller('pedidosAgrupaCtrl', ['$scope', '$http', '$filter', '$element', '
       $scope.terceros = $filter('orderBy')($scope.terceros,'razonSocialTercero');
       $scope.sucursales = angular.copy(data.sucursales);
       $scope.progress = false;
+
+      console.log($scope.sucursales);
     }, function(errorResponse){
       $scope.getInfo();
     });
