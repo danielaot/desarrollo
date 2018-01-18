@@ -16,7 +16,8 @@
         "mpociot/laravel-apidoc-generator": "^1.0",
         "doctrine/dbal": "^2.5",
         "guzzlehttp/guzzle": "^6.2",
-        "ramsey/uuid": "^3.6"
+        "ramsey/uuid": "^3.6",
+        "ritey/nusoap": "^0.9.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -34,7 +35,10 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+          "vendor/ritey/nusoap/lib/nusoap.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [

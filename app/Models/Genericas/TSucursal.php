@@ -33,4 +33,12 @@ class TSucursal extends Model
         'suc_num_codigoenvio',
         'codcanal'
     ];
+
+    public function clientetcc(){
+      return $this->hasOne('App\Models\Genericas\TCliente','cli_id','cli_id');
+    }
+
+    public function boomerangtcc(){
+      return $this->hasOne('App\Models\tccws\TClientesBoomerang','clb_cod_sucursal','suc_num_codigo');
+    }
 }

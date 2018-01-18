@@ -131,6 +131,7 @@ return [
             'engine' => 'InnoDB',
         ],
 
+
         'tiqueteshotel' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
@@ -140,6 +141,72 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+        ],
+
+        'intsce' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_WMS_HOST', '172.100.103.70'),
+            'database' => env('DB_WMS_DATABASE', 'INTSCE'),
+            'username' => env('DB_SQL_WMS_USERNAME', 'interface'),
+            'password' => env('DB_SQL_WMS_PASSWORD', 'interface1'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+
+        'scprd' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SQL_WMS_HOST', '172.100.103.70'),
+            'database' => env('DB_SCPRD_DATABASE', 'SCPRD'),
+            'username' => env('DB_SQL_WMS_USERNAME', 'interface'),
+            'password' => env('DB_SQL_WMS_PASSWORD', 'interface1'),
+            'charset' => 'utf8',
+            'prefix' => '',
+        ],
+
+        'conectoressiesa' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'bd_conectores_siesa',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_spanish2_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+        ],
+
+
+
+        'conectortccws' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'bd_tccws',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+        ],
+
+
+        'digitacionremesas' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'bd_digitacionremesas',
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => true,
             'engine' => 'InnoDB',

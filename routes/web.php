@@ -29,6 +29,33 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::get('autocomplete', ['uses' => 'GenericasController@autocomplete', 'as' => 'autocomplete']);
+
+
+  Route::group(['prefix' => 'tcc'], function () {
+    Route::resource('tccws', 'tccws\tccwsController');
+    Route::get('agrupaPedidosGetInfo', 'tccws\tccwsController@agrupaPedidosGetInfo');
+    Route::post('obtenerPlano', 'tccws\tccwsController@getPlano');
+    Route::post('unidadesLogisticas', 'tccws\tccwsController@getUnidadesLogisticas');
+    Route::post('excluirDocumentos', 'tccws\tccwsController@excluirDocumentos');
+
+    Route::resource('parametros', 'tccws\parametrostccController');
+    Route::get('parametrosinfo', 'tccws\parametrostccController@getInfo');
+
+    Route::resource('clientes', 'tccws\cliboomerangController');
+    Route::get('clientesinfo', 'tccws\cliboomerangController@getInfo');
+
+    Route::get('consultas', 'tccws\tccwsController@getConsultaRemesas');
+    Route::get('consultasinfo', 'tccws\tccwsController@consultaRemesasGetInfo');
+    Route::post('consultasbusqueda', 'tccws\tccwsController@consultaBusquedasGetInfo');
+    Route::post('consultasfecha', 'tccws\tccwsController@consultaFechasGetInfo');
+
+    Route::resource('ciudades', 'tccws\ciudadesController', ['except' => ['create', 'show', 'edit', 'destroy']]);
+    Route::get('ciudadesinfo', 'tccws\ciudadesController@getInfo');
+
+    Route::get('descargarInforme/{fechaInicial}/{fechaFinal}/{placaVehiculo}', 'tccws\tccwsController@descargarInforme')->name('descargarInforme');
+  });
+
+
 });
 
 /** Aplicativo Tiquetes y Hotel**/

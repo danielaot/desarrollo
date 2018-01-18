@@ -28,4 +28,12 @@ class TCliente extends Model
         'cli_num_autrenta',
         'cli_subcanal',
     ];
+
+    public function sucursalestcc(){
+      return $this->hasMany('App\Models\Genericas\TSucursal','cli_id','cli_id');
+    }
+
+    public function tercerotcc(){
+        return $this->hasOne('App\Models\Genericas\Tercero','idTercero', 'ter_id');
+    }
 }
