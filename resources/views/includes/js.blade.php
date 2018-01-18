@@ -45,6 +45,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 <!-- Dropzone -->
 <script src="{{url('/lib/dropzone.js')}}" type="text/javascript" language="javascript"></script>
 
+<!-- angular-multiselect -->
+<script src="{{url('/lib/angularJs/angular-bootstrap-multiselect.min.js')}}" type="text/javascript" language="javascript"></script>
+
 <script src="{{url('/js/genericas.js')}}" type="text/javascript" language="javascript"></script>
 
 @stack('script_data_table')
