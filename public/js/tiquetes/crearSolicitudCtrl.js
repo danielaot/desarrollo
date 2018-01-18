@@ -26,7 +26,6 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     $http.get($scope.getUrlSolicitudes).then(function(response){
       var info = response.data;
       $scope.solicitudes = angular.copy(info);
-      console.log($scope.solicitudes);
     });
   }
 
@@ -92,7 +91,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
 
   $scope.AgregarTramoInternacional = function(detsoliInt){
     $scope.detsoliInt = detsoliInt;
-    console.log($scope.detsoliInt);
+
     var viaje = {
       porigen : $scope.detsoliInt.porigen.Pais,
       ciuorigen : $scope.detsoliInt.ciuorigen.Ciudad,
@@ -103,9 +102,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
       nodias : $scope.detsoliInt.nodias
     };
     $scope.detallesolInt.push(viaje);
-    console.log($scope.detallesolInt);
     $scope.solicitud.detalleInt = $scope.detallesolInt;
-    console.log($scope.solicitud.detalleInt);
   }
 
   $scope.QuitarTramo = function(detalle){
@@ -148,8 +145,51 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     });
   }
 
+  $scope.infoCompleta = function(soli){
+    $scope.infoSolicitud = soli;
+    console.log(soli);
+    $scope.solicitud.solAnterior = angular.copy($scope.infoSolicitud.solIntSolId);
+    $scope.solicitud.nombre = angular.copy($scope.infoSolicitud.solTxtNomtercero);
+    //$scope.solicitud.nombre.infopersona.perTxtCedtercero = angular.copy($scope.infoSolicitud.solTxtCedtercero);
+    // $scope.solicitud.nombre.infopersona.perTxtEmailter = angular.copy($scope.infoSolicitud.solTxtEmail);
+    // $scope.solicitud.nombre.infopersona.perTxtFechaNac = angular.copy($scope.infoSolicitud.perTxtFechaNac);
+     $scope.solicitud.numtelefono = parseInt($scope.infoSolicitud.solTxtNumTelefono);
+
+    //$scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+
+    if ($scope.infoSolicitud.solTxtPerExterna == 1) {
+      $scope.solicitud.tviajero = "1";
+    }else if ($scope.infoSolicitud.solTxtPerExterna == 2) {
+      $scope.solicitud.tviajero = "2";
+      $scope.solicitud.ccexterno = parseInt($scope.infoSolicitud.per_externa.pereTxtCedula);
+      //$scope.solicitud.fnacimientoext = angular.copy($scope.infoSolicitud.per_externa.pereTxtFNacimiento);
+      $scope.solicitud.numcelexter = parseInt($scope.infoSolicitud.per_externa.pereTxtNumCelular);
+      $scope.solicitud.nomexterno = angular.copy($scope.infoSolicitud.per_externa.pereTxtNombComple);
+      $scope.solicitud.corexterno = angular.copy($scope.infoSolicitud.per_externa.pereTxtEmail);
+    }
+
+    if ($scope.infoSolicitud.solIntTiposolicitud == 1) {
+      $scope.solicitud.tviaje = "1";
+    }else if ($scope.infoSolicitud.solIntTiposolicitud == 2) {
+      $scope.solicitud.tviaje = "2";
+    }
+
+    $scope.solicitud.motivo = angular.copy($scope.infoSolicitud.solTxtObservacion);
+
+    angular.forEach($scope.infoSolicitud.detalle, function(value, key){
+      console.log(value);
+      $scope.det = value;
+      $scope.solicitud.detsoli = angular.copy($scope.det.dtaIntOCiu);
+      console.log($scope.solicitud.detsoli);
+    });
+    // $scope.solicitud.detsoli.hotel = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+  }
+
   $scope.saveSolicitud = function(){
-    console.log($scope.solicitud);
     $http.post($scope.url, $scope.solicitud).then(function(response){
 
     });

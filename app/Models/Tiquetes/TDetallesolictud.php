@@ -40,4 +40,15 @@ class TDetallesolictud extends Model
       return $this->hasMany('App\Models\Tiquetes\TSolicitud', 'dtaIntSolicitud', 'solIntSolId');
     }
 
+    public function ciuOrigen(){
+      return $this->hasOne('App\Models\Tiquetes\TCiudad', 'ciuIntId', 'dtaIntOCiu');
+    }
+
+    public function ciuDestino(){
+      return $this->hasOne('App\Models\Tiquetes\TCiudad', 'ciuIntId', 'dtaIntDCiu');
+    }
+
+    public function aerolinea(){
+      return $this->hasOne('App\Models\Tiquetes\TAerolinea', 'aerIntId', 'dtaIntIdAerolinea');
+    }
 }

@@ -41,5 +41,20 @@ class TSolicitud extends Model
       return $this->hasMany('App\Models\Tiquetes\TDetallesolictud', 'dtaIntSolicitud', 'solIntSolId');
     }
 
+    public function estados(){
+      return $this->hasOne('App\Models\Tiquetes\TEstados', 'id', 'solIntEstado');
+    }
+
+    public function perExterna(){
+      return $this->hasOne('App\Models\Tiquetes\TPersonaexterna', 'pereIntSolId', 'solIntSolId');
+    }
+
+    public function perCrea(){
+      return $this->hasOne('App\Models\Genericas\Tercero', 'idTercero', 'solTxtCedterceroCrea');
+    }
+
+    public function pago(){
+      return $this->hasOne('App\Models\Tiquetes\TPago', 'pagIntSolicitud', 'solIntSolId');
+    }
 
 }

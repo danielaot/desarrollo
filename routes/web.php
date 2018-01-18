@@ -38,6 +38,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('solicitud', 'Tiquetes\SolicitudController');
     Route::get('solicitudinfo', 'Tiquetes\SolicitudController@getInfo');
     Route::get('paisesInfo', 'Tiquetes\SolicitudController@paisesInfo');
-    Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');  
+    Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');
     Route::post('solicitud', 'Tiquetes\SolicitudController@CrearSolicitud');
+
+    Route::resource('misSolicitudes', 'Tiquetes\MisSolicitudesController');
+    Route::get('missolicitudesinfo', 'Tiquetes\MisSolicitudesController@getInfo');
+    Route::post('enviarSol', 'Tiquetes\MisSolicitudesController@enviarSolicitud');
+    Route::post('anularSol', 'Tiquetes\MisSolicitudesController@anularSolicitud');
+    Route::post('generarPdf', 'Tiquetes\MisSolicitudesController@generarPdf')->name('generarPdf');
+
+    /*Niveles Autorizacion*/
+    Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');
+    Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
+
+
+
+
+
+
+    
   });

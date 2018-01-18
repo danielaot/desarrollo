@@ -29,5 +29,8 @@ class TPago extends Model
 
     protected $guarded = [];
 
+    public function tipoPago(){
+      return $this->hasOne('App\Models\Tiquetes\TTipoPago', 'tipTxtTipo', 'pagTxtTipo');
+    }
 
 }

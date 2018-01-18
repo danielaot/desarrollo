@@ -32,7 +32,7 @@
                 <div class="row">
                   <label class="col-sm-4 control-label">Solicitud Anterior <span class="required">*</span>:</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" ng-model="solicitud.nombre.infopersona.perTxtCedtercero" placeholder="Solicitud Anterior" disabled>
+                    <input type="text" class="form-control" ng-model="solicitud.solAnterior" placeholder="Solicitud Anterior" disabled>
                   </div>
                   <div class="col-sm-2">
                     <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="solicitudes()">

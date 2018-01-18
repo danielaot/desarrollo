@@ -5,6 +5,7 @@
       <div class="modal-content panel-primary">
         <div class="modal-header panel-heading">
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
           </button>
           <h4 class="modal-title">Solicitudes</h4>
         </div>
@@ -21,7 +22,8 @@
             </thead>
             <tbody>
               <tr ng-repeat="soli in solicitudes">
-                <td>@{{soli.solIntSolId}}</td>
+                <td ng-click="infoCompleta(soli)">@{{soli.solIntSolId}}</td>
+                <!-- <td><a href="solicitud" >@{{soli.solIntSolId}}</a></td> -->
                 <td>@{{soli.solIntEstado}}</td>
                 <td>@{{soli.solTxtNomtercero}}</td>
                 <td>@{{soli.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
