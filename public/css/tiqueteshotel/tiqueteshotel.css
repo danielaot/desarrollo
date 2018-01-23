@@ -18,3 +18,74 @@
 .dtp > .dtp-content > .dtp-date-view > header.dtp-header {
   background: #337AB7;
 }
+
+.form-control.input-60 {
+	width: 60% !important;
+    margin-left: 5%;
+}
+
+.display-cell{
+	display: inline-block;
+}
+
+.transparent{
+	color: transparent !important;
+	width: 100% !important;
+}
+
+.display-row{
+	width: 100% !important;
+	display: block !important;
+}
+
+.border-dotted {
+    border: 2px dotted #ddd !important;
+}
+
+.border-top-dotted {
+    border-top: 2px dotted #ddd !important;
+}
+
+.form-margin-top{
+	margin-top: 15px !important;
+}
+
+.md-button.md-icon-button {
+    margin: 0 0px !important;
+}
+
+.md-icon-button+.md-datepicker-input-container {
+    margin-left: 0px !important;
+}
+
+.md-datepicker-input {
+	text-align: left !important;
+}
+
+.margin-bottom-nvl{
+    margin-bottom: 15px !important;
+}
+
+body{
+    overflow: hidden !important;
+    max-width:100% !important;
+    max-height:100% !important;
+}
+
+body>div {
+    overflow: auto !important;
+    display: block !important;
+    max-height: 100% !important;
+}
+
+.span-margin>div.btn-group>button>span.caret{
+    margin-top: 1.5% !important;
+    float: right !important;
+}
+
+.span-margin>div.btn-group>button{
+    text-align: left !important;
+}
+.span-margin>div.btn-group>ul.dropdown-menu{
+    height: 40vh !important;
+}

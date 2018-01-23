@@ -18,11 +18,11 @@ class TPernivele extends Model
         'pen_nombre',
         'pen_cedula',
         'pen_idtipoper',
-        'pen_jefe',
-        'pen_nomnivel'
+        'pen_nomnivel',
+        'pen_idterritorios'
     ];
 
     protected $guarded = [];
 
-        
+
 }

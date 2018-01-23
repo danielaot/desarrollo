@@ -19,5 +19,5 @@ class TNivele extends Model
 
     protected $guarded = [];
 
-        
+
 }

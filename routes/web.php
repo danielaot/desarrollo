@@ -77,11 +77,12 @@ Route::group(['middleware' => ['auth']], function () {
     /*Niveles Autorizacion*/
     Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');
     Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
+    Route::post('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
 
 
 
 
 
 
-    
+
   });
