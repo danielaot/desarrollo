@@ -18,16 +18,16 @@
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
                 <label class="control-label">Tipo de Personas <span class="required">*</span>:</label>
-                <select class="form-control" ng-model="infoPerNivel.tpersona" ng-options="option.tpp_descripcion for option in tpersona track by option.id" required></select>
+                <select class="form-control" ng-model="infoPerNivel.tpersona" ng-change="filtrarPersonas()" ng-options="option.tpp_descripcion for option in tpersona track by option.id" required></select>
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
-                <label>Nombre <span class="required">*</span>:</label>
+                <label>Persona <span class="required">*</span>:</label>
                 <md-autocomplete md-search-text="nombreSearchText"
                              md-items="nombre in nombreSearch(nombreSearchText)"
                              md-item-text="nombre.nombreEstablecimientoTercero"
-                             md-selected-item="infoPerNivel.usuarioNivel"
+                             md-selected-item="infoPerNivel.tercero"
                              md-min-length="0"
                              >
                   <md-item-template>
@@ -54,30 +54,31 @@
             <div ng-if="infoPerNivel.tpersona.id == '3' || infoPerNivel.tpersona.id == '4' " class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
                 <label class="control-label">Grupo :</label>
-                <multiselect ng-model="infoPerNivel.grupo" options="grupo" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true"></multiselect>
+                <multiselect ng-model="infoPerNivel.grupo" ng-change="filtrarPersonas()" options="grupo" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true"></multiselect>
               </div>
             </div>
             <div ng-if="infoPerNivel.tpersona.id == '1' || infoPerNivel.tpersona.id == '2' " class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group" >
                 <label class="control-label">Canal :</label>
-                <multiselect ng-model="infoPerNivel.canal" options="canal" id-prop="can_id" display-prop="can_txt_descrip" show-select-all="true" show-unselect-all="true"></multiselect>
+                <multiselect ng-model="infoPerNivel.canales" ng-change="filtrarPersonas()" options="canales" id-prop="can_id" display-prop="can_txt_descrip" show-select-all="true" show-unselect-all="true"></multiselect>
               </div>
             </div>
             <div ng-if="infoPerNivel.tpersona.id == '2'" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
                 <label class="control-label">Territorio :</label>
                 <multiselect ng-model="infoPerNivel.territorio"
-                            options="territorios" id-prop="id"
-                            display-prop="tnw_descripcion"
-                            show-select-all="true" show-unselect-all="true"
-                            selection-limit="1">
+                             ng-change="filtrarPersonas()"
+                             options="territorios" id-prop="id"
+                             display-prop="tnw_descripcion"
+                             show-select-all="true" show-unselect-all="true"
+                             selection-limit="1">
                 </multiselect>
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
                 <label>Identificacion :</label>
-                <input type="text" class="form-control" ng-model="infoPerNivel.usuarioNivel.idTercero" placeholder="Número de Identificacion" disabled>
+                <input type="text" class="form-control" ng-model="infoPerNivel.tercero.idTercero" placeholder="Número de Identificacion" disabled>
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
@@ -89,7 +90,7 @@
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
                 <label>Correo Electrónico :</label>
-                <input type="text" class="form-control" ng-model="infoPerNivel.usuarioNivel.dirnacional.dir_txt_email" placeholder="Correo Electrónico" disabled>
+                <input type="text" class="form-control" ng-model="infoPerNivel.tercero.dirnacional.dir_txt_email" placeholder="Correo Electrónico" disabled>
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
@@ -110,19 +111,19 @@
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
-                <label>Número Pasaporte <span class="required">*</span>:</label>
+                <label>Número Pasaporte :</label>
                 <input type="text" class="form-control" ng-model="infoPerNivel.numpasaporte">
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
-                <label class="control-label">Fecha Pasaporte <span class="required">*</span>:</label>
+                <label class="control-label">Fecha Pasaporte :</label>
                 <input type="date" class="form-control" ng-model="infoPerNivel.fpasaporte">
               </div>
             </div>
             <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
               <div class="form-group">
-                <label class="control-label">Ciudad Expedición <span class="required">*</span>:</label>
+                <label class="control-label">Ciudad Expedición :</label>
                 <select class="form-control" ng-model="infoPerNivel.ciuexpedicion" ng-options='opt.ciuTxtNom for opt in ciudades track by opt.ciuIntId'>
               </div>
             </div>
@@ -151,7 +152,7 @@
               <div class="form-group">
                 <label>Autoriza a:</label>
                 <multiselect class="span-margin" ng-model="infoPerNivel.personasautoriza"
-                  options="usuariosN" id-prop="id" display-prop="cedulaNombre"
+                  options="arregloNivel" id-prop="id" display-prop="cedulaNombre"
                   placeholder="-- Seleccione Personas --" show-search="true"
                   show-select-all="true" show-unselect-all="true">
                 </multiselect>
@@ -170,9 +171,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-if="infoPerNivel.detPersona != undefined" ng-repeat="(key, detPersona) in (nivel[0].id === 1 ? infoPerNivel.detPersona : infoPerNivel.personasautoriza)">
-                      <td>@{{nivel[0].id === 1 ? detPersona.idTercero : detPersona.pen_cedula}}</td>
-                      <td>@{{nivel[0].id === 1 ? detPersona.nombreEstablecimientoTercero : detPersona.pen_nombre}}</td>
+                    <tr ng-if="infoPerNivel.tercero != undefined" ng-repeat="(key, tercero) in (nivel[0].id === 1 ? infoPerNivel.tercero : infoPerNivel.personasautoriza)">
+                      <td>@{{nivel[0].id === 1 ? detPersona.idTercero : tercero.pen_cedula}}</td>
+                      <td>@{{nivel[0].id === 1 ? detPersona.nombreEstablecimientoTercero : tercero.pen_nombre}}</td>
                       <td><button class="btn btn-danger btn-sm" type="button" ng-click="quitarPersona(per)">
                         <i class="glyphicon glyphicon-remove"></i>
                       </button></td>

@@ -62,7 +62,6 @@ class SolicitudController extends Controller
     {
 
         if ($request->tipo == 1) {
-          return response()->json($request);
           $solicitud = new Solicitud;
           $solicitud->solIntFecha = '1507738632';
           $solicitud->solTxtCedterceroCrea = '1144094290';
@@ -156,7 +155,7 @@ class SolicitudController extends Controller
           $solicitud->solTxtNumTelefono = $request->numtelefono;
           $solicitud->solIntIdCanal = 0;
           $solicitud->solIntIdZona = 0;
-        //  $solicitud->save();
+          $solicitud->save();
 
           if ($request->tviajero == 2) {
 
