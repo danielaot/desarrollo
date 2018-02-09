@@ -49,12 +49,12 @@
                     </thead>
                     <!--Ingresar informacion historica de la solicitud-->
                     <tbody>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                      <tr ng-repeat="historial in infoCompleta.evaluaciones">
+                        <td>@{{historial.evaIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
+                        <td>@{{historial.evaTxtNomterAnt}}</td>
+                        <td>@{{historial.evaIntTipoSolicitudAnt}}</td>
+                        <td>@{{historial.evaTxtnombreter}}</td>
+                        <td>@{{historial.evatxtObservacione}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -94,7 +94,7 @@
                       </div>
                     </div>
                     <!--Panel Información del Viajero Externo -->
-                    <div class="panel panel-primary">
+                    <div class="panel panel-primary" ng-if="infoCompleta.per_externa != null">
                       <div class="panel-heading" style="text-align:center">Información del Viajero Externo</div>
                         <div class="panel-body">
                           <div class="form-group">

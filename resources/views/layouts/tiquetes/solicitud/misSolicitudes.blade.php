@@ -5,6 +5,34 @@
     <div ng-controller="misSolicitudesCtrl" ng-cloak class="cold-md-12">
       <div class="container-fluid">
         <md-tabs md-dynamic-height md-border-bottom>
+          <!-- inicio Todas -->
+          <md-tab label="Todas (@{{todas.length}})">
+            <md-content class="md-padding">
+              <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Estado</th>
+                    <th>Beneficiario</th>
+                    <th>Fecha Solicitud</th>
+                    <th>Ver</th>
+                  </tr>
+                </thead>
+                <tbody ng-repeat="tod in todas">
+                  <td>@{{tod.solIntSolId}}</td>
+                  <td>@{{tod.estados.estTxtNombre}}</td>
+                  <td>@{{tod.solTxtNomtercero}}</td>
+                  <td>@{{tod.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
+                  <td>
+                    <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="solicitud(tod)">
+                      <i class="glyphicon glyphicon-eye-open"></i>
+                    </button>
+                  </td>
+                </tbody>
+              </table>
+            </md-content>
+          </md-tab>
+          <!-- fin Todas -->
           <!-- inicio En Elaboracion -->
           <md-tab label="En Elaboración (@{{elaboracion.length}})">
             <md-content class="md-padding">
@@ -162,7 +190,6 @@
           <!-- inicio Aprobadas -->
           <md-tab label="Aprobadas (@{{aprobadas.length}})">
             <md-content class="md-padding">
-
                 <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
                   <thead>
                     <tr>
@@ -198,7 +225,7 @@
           </md-tab>
           <!-- fin Aprobadas -->
           <!-- inicio Cerradas -->
-          <md-tab label="Cerradas (@{{aprobadas.length}})">
+          <md-tab label="Cerradas (@{{cerradas.length}})">
             <md-content class="md-padding">
               <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
                 <thead>
@@ -231,34 +258,10 @@
             </md-content>
           </md-tab>
           <!-- fin Cerradas -->
-          <!-- inicio Todas -->
-          <md-tab label="Todas">
-            <md-content class="md-padding">
-              <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>Estado</th>
-                    <th>Beneficiario</th>
-                    <th>Fecha Solicitud</th>
-                    <th>Ver</th>
-                  </tr>
-                </thead>
-                <tbody ng-repeat="tod in todas">
-                  <td>@{{tod.solIntSolId}}</td>
-                  <td>@{{tod.estados.estTxtNombre}}</td>
-                  <td>@{{tod.solTxtNomtercero}}</td>
-                  <td>@{{tod.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="solicitud(tod)">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                </tbody>
-              </table>
-            </md-content>
-          </md-tab>
-          <!-- fin Todas -->
+        </md-tabs>
+        <div ng-if="progress" class="progress">
+          <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+        </div>
       </div>
       @include('layouts.tiquetes.solicitud.misSolicitudesDet')
     </div>

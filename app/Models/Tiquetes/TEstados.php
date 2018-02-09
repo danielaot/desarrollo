@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TEstados extends Model
 {
+	protected $connection = 'tiqueteshotel';
+	
     protected $table = 't_estados';
 
 	public $timestamps = false;

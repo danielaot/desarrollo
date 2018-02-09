@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class TEvaluacion
  */
 class TEvaluacion extends Model
-{
+{   
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_evaluacion';
 
     protected $primaryKey = 'evaIntid';

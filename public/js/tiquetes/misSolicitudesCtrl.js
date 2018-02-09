@@ -10,7 +10,6 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$mdDialog',
      $http.get($scope.getUrl).then(function(response){
        var info = response.data;
        $scope.todas = angular.copy(info.solicitudes);
-       $scope.progress = false;
        $scope.elaboracion =  $filter('filter')($scope.todas, {solIntEstado : 1});
        $scope.correcciones = $filter('filter')($scope.todas, {solIntEstado : 2});
        $scope.anuladas = $filter('filter')($scope.todas, {solIntEstado : 3});
@@ -27,12 +26,14 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$mdDialog',
          });
        });
      });
+    $scope.progress = false;
    }
 
    $scope.getInfo();
 
    $scope.solicitud = function(toda){
      $scope.infoCompleta = toda;
+     console.log($scope.infoCompleta);
    }
 
    $scope.enviarSolicitud = function(info){

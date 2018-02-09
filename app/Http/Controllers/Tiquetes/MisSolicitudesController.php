@@ -31,11 +31,16 @@ class MisSolicitudesController extends Controller
 
     public function getInfo()
     {
-
+      
       $usuario = Auth::user();
+      // $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
+      //                                'estados', 'perExterna', 'perCrea', 'pago.tipoPago')
+      //                           ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
+      //                           ->get();
+
       $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
-                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago')
-                                ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
+                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones')
+                                ->where('solTxtCedterceroCrea', '16377055')
                                 ->get();
 
       $rutaPdf = route('generarPdf');

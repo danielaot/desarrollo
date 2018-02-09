@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class TSolicitud
  */
 class TSolicitud extends Model
-{
+{   
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_solicitud';
 
     protected $primaryKey = 'solIntSolId';
@@ -59,5 +61,9 @@ class TSolicitud extends Model
 
     public function solipernivel(){
       return $this->hasOne('App\Models\Tiquetes\TSolipernivel', 'sni_idsolicitud', 'solIntSolId');
+    }
+
+    public function evaluaciones(){
+        return $this->hasMany('App\Models\Tiquetes\TEvaluacion', 'evaIntSolicitud', 'solIntSolId');
     }
 }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TPago extends Model
 {
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_pago';
 
     protected $primaryKey = 'pagIntId';
