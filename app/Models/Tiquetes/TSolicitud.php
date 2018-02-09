@@ -57,4 +57,7 @@ class TSolicitud extends Model
       return $this->hasOne('App\Models\Tiquetes\TPago', 'pagIntSolicitud', 'solIntSolId');
     }
 
+    public function solipernivel(){
+      return $this->hasOne('App\Models\Tiquetes\TSolipernivel', 'sni_idsolicitud', 'solIntSolId');
+    }
 }

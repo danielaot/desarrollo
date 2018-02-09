@@ -4,6 +4,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   $scope.getUrlSoloPaises = 'paisesInfo';
   $scope.progress = true;
   $scope.url = 'solicitud';
+  $scope.enviaAprobarUrl = 'solicitud/enviaAprobar';
   $scope.detallesol = [];
   $scope.detallesolInt = [];
   $scope.paises = undefined;
@@ -38,15 +39,102 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
 
   $scope.nombreSearch = function(query){
     var filter = [];
-    filter = $filter('filter')($scope.persona, {infopersona:{perTxtNomtercero : query}});
+    filter = $filter('filter')($scope.persona, {pen_nombre : query});
     return filter;
   }
 
-  // $scope.aprobadorSearch = function(query){
-  //   var filter = [];
-  //   filter = $filter('filter')($scope.persona, {aprueba:{perTxtNomtercero : query}});
-  //   return filter;
-  // }
+  $scope.onChangeGrupo = function(){
+  $scope.deshabilitarSelectCanal = false;
+  if($scope.solicitud.grupoaprobacion != undefined && $scope.solicitud.grupoaprobacion.canales != undefined){
+    $scope.canalesAprobacion = $scope.solicitud.grupoaprobacion.canales;
+    if($scope.canalesAprobacion.length == 1){
+      $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
+      $scope.deshabilitarSelectCanal = true;
+    }
+  }
+}
+
+  $scope.onChangeTerritorio = function(){
+    $scope.deshabilitarSelectCanal = false;
+    if($scope.solicitud.territorioaprobacion != undefined && $scope.solicitud.territorioaprobacion.canales != undefined){
+      $scope.canalesAprobacion = $scope.solicitud.territorioaprobacion.canales;
+      if($scope.canalesAprobacion.length == 1){
+        $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
+        $scope.deshabilitarSelectCanal = true;
+      }
+    }
+  }
+
+  $scope.onBeneficiarioChange = function(){
+
+    $scope.setEmptyInfoCanales();
+
+    if($scope.solicitud.nombre != undefined){
+      $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula});
+      $scope.apro = $scope.aprobador[0].aprobador;
+
+      if($scope.solicitud.nombre.pen_idtipoper == 4 || $scope.solicitud.nombre.pen_idtipoper == 3){
+          $scope.solicitud.nombre.grupos = _.pluck($scope.solicitud.nombre.detalle,'grupo');
+          $scope.solicitud.nombre.grupos = _.uniq($scope.solicitud.nombre.grupos, 'id');
+
+          if($scope.solicitud.nombre.pen_nomnivel == 2){
+            $scope.solicitud.nombre.grupos.map(function(grupo){
+              grupo.canales = $filter('filter')($scope.solicitud.nombre.detalle,{perdepIntGrupo : grupo.id});
+                        grupo.canales = _.pluck(grupo.canales,'canal');
+                        return grupo;
+            });
+        }else{
+          $scope.canalesAprobacion = $scope.canales;
+        }
+
+        $scope.mostrarSelectGrupo = true;
+        $scope.mostrarSelectCanal = true;
+
+      }else if($scope.solicitud.nombre.pen_idtipoper == 2 || $scope.solicitud.nombre.pen_idtipoper == 1){
+
+        if($scope.solicitud.nombre.pen_idtipoper == 2){
+
+          $scope.solicitud.nombre.territorios = _.pluck($scope.solicitud.nombre.detalle, 'territorio');
+          $scope.solicitud.nombre.territorios = _.uniq($scope.solicitud.nombre.territorios, 'id');
+
+          $scope.solicitud.nombre.territorios.map(function(territorio){
+            territorio.canales = $filter('filter')($scope.solicitud.nombre.detalle,{perdepIntTerritorio : territorio.id});
+                      territorio.canales = _.pluck(territorio.canales,'canal');
+                      return territorio;
+          });
+
+          $scope.mostrarSelectTerritorio = true;
+          $scope.mostrarSelectCanal = true;
+
+        }else{
+          $scope.solicitud.nombre.canales = _.pluck($scope.solicitud.nombre.detalle, 'canal');
+          $scope.canalesAprobacion = $scope.solicitud.nombre.canales;
+          $scope.mostrarSelectCanal = true;
+          if($scope.canalesAprobacion.length == 1){
+            $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
+            $scope.deshabilitarSelectCanal = true;
+          }
+        }
+
+      }else if($scope.solicitud.nombre.pen_idtipoper == 5){
+
+        $scope.setEmptyInfoCanales();
+      }else{
+        $scope.setEmptyInfoCanales();
+      }
+    }
+  }
+
+  $scope.setEmptyInfoCanales = function(){
+		$scope.canalesAprobacion = [];
+		$scope.mostrarSelectCanal = false;
+		$scope.mostrarSelectTerritorio = false;
+		$scope.mostrarSelectGrupo = false;
+		$scope.solicitud.canalaprobacion = undefined;
+		$scope.solicitud.grupoaprobacion = undefined;
+		$scope.solicitud.territorioaprobacion = undefined;
+		$scope.deshabilitarSelectCanal = false;
+	}
 
   $scope.paisoriSearch = function(query){
     var filter = [];
@@ -86,7 +174,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     };
     $scope.detallesol.push(viaje);
     $scope.solicitud.detalleNac = $scope.detallesol;
-
+    $scope.solicitud.detsoli = {};
   }
 
   $scope.AgregarTramoInternacional = function(detsoliInt){
@@ -103,6 +191,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     };
     $scope.detallesolInt.push(viaje);
     $scope.solicitud.detalleInt = $scope.detallesolInt;
+    $scope.solicitud.detsoliInt = {};
   }
 
   $scope.QuitarTramo = function(detalle){
@@ -143,6 +232,11 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
         }
       }
     });
+  }
+
+  $scope.validarFecha = function(fecha){
+    console.log("---->");
+    console.log(fecha);
   }
 
   $scope.infoCompleta = function(soli){
@@ -189,9 +283,23 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
   }
 
-  $scope.saveSolicitud = function(){
-    $http.post($scope.url, $scope.solicitud).then(function(response){
-
-    });
+  $scope.saveSolicitud = function(isCreating){
+    $scope.progress = true;
+    if (isCreating == true) {
+      $http.post($scope.url, $scope.solicitud).then(function(response){
+        console.log("-->");
+      //  $scope.getInfo();
+        $scope.progress = false;
+      });
+    }else {
+      $http.post($scope.enviaAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
+        console.log("-->2");
+        $scope.progress = false;
+      });
+    }
   }
+
+
+
+
 }]);

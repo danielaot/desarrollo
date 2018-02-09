@@ -20,7 +20,7 @@
                 <div class="row">
                   <label class="col-sm-4 control-label">Tipo Solicitud <span class="required">*</span>:</label>
                   <div class="col-sm-5">
-                    <select class="form-control" ng-model="solicitud.tipo" ng-change="validateTipo()">
+                    <select class="form-control" ng-model="solicitud.tipo" ng-change="validateTipo()" required>
                       <option value="">Seleccione ...</option>
                       <option value=1>Nuevo</option>
                       <option value=2>Modificacion</option>
@@ -48,13 +48,12 @@
                   <label>Nombre <span class="required">*</span>:</label>
                   <md-autocomplete md-search-text="nombreSearchText"
                                md-items="nombre in nombreSearch(nombreSearchText)"
-                               md-item-text="nombre.infopersona.perTxtNomtercero"
+                               md-item-text="nombre.pen_nombre"
                                md-selected-item="solicitud.nombre"
-                               md-selected-item-change="createInfo()"
-                               md-min-length="0"
-                               >
+                               md-selected-item-change="onBeneficiarioChange(beneficiario)"
+                               md-min-length="0">
                     <md-item-template>
-                      <span md-highlight-text="nombreSearchText" md-highlight-flags="^i">@{{nombre.infopersona.perTxtNomtercero}}</span>
+                      <span md-highlight-text="nombreSearchText" md-highlight-flags="^i">@{{nombre.pen_nombre}}</span>
                     </md-item-template>
                     <md-not-found>
                       No se encontraron resultados para "@{{nombreSearchText}}".
@@ -63,17 +62,43 @@
                 </div>
                 <div class="col-sm-6">
                   <label>Identificacion :</label>
-                  <input type="text" class="form-control" ng-model="solicitud.nombre.infopersona.perTxtCedtercero" placeholder="Número de Identificacion" disabled>
+                  <input type="text" class="form-control" ng-model="solicitud.nombre.pen_cedula" placeholder="Número de Identificacion" disabled>
+                </div>
+                <div ng-if="mostrarSelectCanal || mostrarSelectGrupo || mostrarSelectTerritorio" class="form-group">
+                  <div class="row">
+
+                    <div ng-if="mostrarSelectTerritorio" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                      <label>Territorio de Aprobación:</label>
+                      <select required class="form-control" name="territorioaprobacion" id="territorioaprobacion" ng-change="onChangeTerritorio()" ng-model="solicitud.territorioaprobacion" ng-options="[territorioAprobacion.id, territorioAprobacion.tnw_descripcion].join(' - ') for territorioAprobacion in solicitud.nombre.territorios track by territorioAprobacion.id" require>
+                      <option value="">-- Seleccione el territorio de aprobación --</option>
+                      </select>
+                    </div>
+
+                    <div ng-if="mostrarSelectGrupo" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                      <label>Grupo de Aprobación:</label>
+                      <select required class="form-control" name="grupoaprobacion" id="grupoaprobacion" ng-change="onChangeGrupo()" ng-model="solicitud.grupoaprobacion" ng-options="[grupoAprobacion.gru_sigla, grupoAprobacion.gru_responsable].join(' - ') for grupoAprobacion in solicitud.nombre.grupos track by grupoAprobacion.id" require>
+                      <option value="">-- Seleccione el grupo de aprobación --</option>
+                      </select>
+                    </div>
+
+                    <div ng-if="mostrarSelectCanal" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                      <label>Canal de Aprobación:</label>
+                      <select class="form-control" name="canalaprobacion" id="canalaprobacion" ng-model="solicitud.canalaprobacion" ng-disabled="(mostrarSelectGrupo == true && solicitud.grupoaprobacion == undefined) ? true : (mostrarSelectTerritorio == true && solicitud.territorioaprobacion == undefined) ? true : deshabilitarSelectCanal == true ? true : false" ng-options="[canalAprobacion.can_id,canalAprobacion.can_txt_descrip].join(' - ') for canalAprobacion in canalesAprobacion track by canalAprobacion.can_id">
+                      <option value="">-- Seleccione el canal de aprobación --</option>
+                      </select>
+                    </div>
+
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-sm-6">
                   <label>Email :</label>
-                  <input type="text" class="form-control" ng-model="solicitud.nombre.infopersona.perTxtEmailter" placeholder="Email del Solicitante" disabled>
+                  <input type="text" class="form-control" ng-model="solicitud.nombre.detpersona.perTxtEmailter" placeholder="Email del Solicitante" disabled>
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
                   <label>Fecha Nacimiento<span class="required">*</span>:</label>
-                  <p>@{{(solicitud.nombre.infopersona.perTxtFechaNac) * (1000) | date:'dd-MM-yyyy'}}</p>
+                  <p>@{{(solicitud.nombre.detpersona.perTxtFechaNac) * (1000) | date:'dd-MM-yyyy'}}</p>
                 </div>
               </div>
               <div class="row">
@@ -83,12 +108,20 @@
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
                   <label>Aprobador <span class="required">*</span>:</label>
-                  <select class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprueba.perTxtNomtercero for opt in persona track by opt.aprueba.perTxtNomtercero'>
+                  <select class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
                     <option value="">Seleccione aprobador ..</option>
                   </select>
                 </div>
               </div>
               <div class="row">
+                <div class="col-sm-6">
+                  <label>Tipo de Viaje <span class="required">*</span>:</label>
+                    <select class="form-control" ng-change="validarTipoViajeCargarData()" ng-model="solicitud.tviaje">
+                      <option value="">Seleccione el tipo de viaje ..</option>
+                      <option value=1>Nacional</option>
+                      <option value=2>Internacional</option>
+                    </select>
+                </div>
                 <div class="col-sm-6">
                   <label>Tipo Viajero <span class="required">*</span>:</label>
                     <select class="form-control" ng-model="solicitud.tviajero">
@@ -97,14 +130,6 @@
                       <option value="2">Persona Externa</option>
                     </select>
                 </div>
-                  <div class="col-sm-6">
-                    <label>Tipo de Viaje <span class="required">*</span>:</label>
-                    <select class="form-control" ng-change="validarTipoViajeCargarData()" ng-model="solicitud.tviaje">
-                      <option value="">Seleccione el tipo de viaje ..</option>
-                      <option value=1>Nacional</option>
-                      <option value=2>Internacional</option>
-                    </select>
-                  </div>
               </div>
               <div class="row" ng-if = "solicitud.tviajero == 2">
                 <div class="col-sm-4">
@@ -165,7 +190,7 @@
                         </select></td>
                         <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
                           placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoli.fviaje" class=" md-input" short-time ="true"
-                          readonly="readonly"></td>
+                          readonly="readonly" ng-change="validarFecha(fecha)"></td>
                         <td><select class="form-control" ng-model="solicitud.detsoli.hotel">
                           <option value="">Seleccione ..</option>
                           <option value="S">Si</option>
@@ -290,6 +315,7 @@
           </div>
         <div class="col-sm-12">
           <button type="submit" class="btn btn-primary pull-right">Guardar</button>
+          <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
         </div>
         @include('layouts.tiquetes.solicitud.modifica')
     </form>

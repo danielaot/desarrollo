@@ -79,6 +79,16 @@ return [
           'prefix' => '',
         ],
 
+        'nominabesa' => [
+           'driver' => 'sqlsrv',
+           'host' => env('DB_SQL_NOMINA_HOST', 'localhost'),
+           'database' => 'NominaACCIONBESA',
+           'username' => env('DB_SQL_NOMINA_USERNAME', 'forge'),
+           'password' => env('DB_SQL_NOMINA_PASSWORD', ''),
+           'charset' => 'utf8',
+           'prefix' => '',
+        ],
+
         'qlikview' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_SQL_HOST', 'localhost'),

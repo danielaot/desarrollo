@@ -10,8 +10,14 @@ use App\Models\Tiquetes\TCiudad as Ciudad;
 use App\Models\Tiquetes\TCiudade as CiudadPais;
 use App\Models\Tiquetes\TPaises as Pais;
 use App\Models\Tiquetes\TSolicitud as Solicitud;
+use App\Models\Tiquetes\TPernivele as PerNivel;
 use App\Models\Tiquetes\TPersonaexterna as PersonaExterna;
 use App\Models\Tiquetes\TDetallesolictud as DetalleSolicitud;
+use App\Models\Tiquetes\TSolipernivel as SoliPernivel;
+use App\Models\Tiquetes\TEvaluacion as Evaluacion;
+//use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\Tiquetes\BandejaAprobacionController as AutorizacionCtrl;
 
 use Carbon\Carbon;
 use Auth;
@@ -32,11 +38,13 @@ class SolicitudController extends Controller
 
     public function getInfo()
     {
-      $persona = PersonaDepende::with('infopersona', 'aprueba')->get();
+      $usuario = Auth::user();
+      $persona = PerNivel::with('nivel','tipoPersona', 'detpersona.detallenivelpersona.aprobador',
+                                'detalle.grupo', 'detalle.canal', 'detalle.territorio', 'detalle.aprobador.nivaprobador',
+                                'detalle.ejecutivo.pernivejecutivo')->get();
       $ciudad = Ciudad::all();
 
-
-      $response =  compact('persona', 'ciudad');
+      $response =  compact('persona', 'ciudad', 'usuario');
 
       return response()->json($response);
     }
@@ -51,25 +59,30 @@ class SolicitudController extends Controller
 
     public function modifica()
     {
+      $usuario = Auth::user();
       $solicitudes = Solicitud::with('detalle', 'perExterna')
-                                ->where('solTxtCedterceroCrea', '1144094290')
+                                ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->whereNotIn('solIntEstado', [1])
                                 ->get();
       return response()->json($solicitudes);
     }
 
-    public function CrearSolicitud(Request $request)
+    public function store(Request $request, $isCreating = false)
     {
-
+        $usuario = Auth::user();
+        $usulogin = PerNivel::where('pen_cedula', $usuario['idTerceroUsuario'])->get();
+        $isCreating = $isCreating == "false" ? false: true;
+      //  return response()->json($usulogin);
         if ($request->tipo == 1) {
           $solicitud = new Solicitud;
           $solicitud->solIntFecha = '1507738632';
           $solicitud->solTxtCedterceroCrea = '1144094290';
-          $solicitud->solIntPersona = $request['nombre']['infopersona']['perIntId'];
-          $solicitud->solTxtCedtercero = $request['nombre']['infopersona']['perTxtCedtercero'];
-          $solicitud->solTxtNomtercero = $request['nombre']['infopersona']['perTxtNomtercero'];
-          $solicitud->solTxtEmail = $request['nombre']['infopersona']['perTxtEmailter'];
-          $solicitud->solIntFNacimiento = $request['nombre']['infopersona']['perTxtFechaNac'];
+          //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
+          $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
+          $solicitud->solTxtCedtercero = $request['nombre']['pen_cedula'];
+          $solicitud->solTxtNomtercero = $request['nombre']['pen_nombre'];
+          $solicitud->solTxtEmail = $request['nombre']['detpersona']['perTxtEmailter'];
+          $solicitud->solIntFNacimiento = $request['nombre']['detpersona']['perTxtFechaNac'];
           $solicitud->solTxtObservacion = $request->motivo;
           $solicitud->solIntEstado = 1;
           $solicitud->solIntTiposolicitud = $request->tviaje;
@@ -78,9 +91,33 @@ class SolicitudController extends Controller
           $solicitud->solTxtMotivotarde = "";
           $solicitud->solTxtPerExterna = $request->tviajero;
           $solicitud->solTxtNumTelefono = $request->numtelefono;
-          $solicitud->solIntIdCanal = 0;
-          $solicitud->solIntIdZona = 0;
+          $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
+          $solicitud->solIntIdZona = $request['territorioaprobacion']['id'];
+          $solicitud->solIntIdGrupo = $request['grupoaprobacion']['id'];
           $solicitud->save();
+
+          $solipernivel = new SoliPernivel;
+          $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
+          $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
+          $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
+          $solipernivel->sni_estado = 0;
+          $solipernivel->sni_orden = 1;
+          $solipernivel->save();
+
+          $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
+          $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
+
+          $evaluacion = new Evaluacion;
+          $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
+          $evaluacion->evaTxtCedtercero = $cedaprueba;
+          $evaluacion->evaTxtnombreter = $nomaprueba;
+          $evaluacion->evatxtObservacione = $request->motivo;
+          $evaluacion->evaIntFecha = '1516054234';
+          $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
+          $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
+          $evaluacion->evaIntTipoSolicitudAnt = 4;
+          $evaluacion->evaEstado = 'S';
+          $evaluacion->save();
 
           if ($request->tviajero == 2) {
 
@@ -92,6 +129,29 @@ class SolicitudController extends Controller
             $solicitudExterno->pereTxtNombComple = $request->nomexterno;
             $solicitudExterno->pereTxtEmail = $request->corexterno;
             $solicitudExterno->save();
+
+            $solipernivel = new SoliPernivel;
+            $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
+            $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
+            $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
+            $solipernivel->sni_estado = 0;
+            $solipernivel->sni_orden = 1;
+            $solipernivel->save();
+
+            $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
+            $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
+
+            $evaluacion = new Evaluacion;
+            $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
+            $evaluacion->evaTxtCedtercero = $cedaprueba;
+            $evaluacion->evaTxtnombreter = $nomaprueba;
+            $evaluacion->evatxtObservacione = $request->motivo;
+            $evaluacion->evaIntFecha = '1516054234';
+            $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
+            $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
+            $evaluacion->evaIntTipoSolicitudAnt = 4;
+            $evaluacion->evaEstado = 'S';
+            $evaluacion->save();
           }
 
           if ($request->tviaje == 1) {
@@ -140,6 +200,7 @@ class SolicitudController extends Controller
           $solicitud = new Solicitud;
           $solicitud->solIntFecha = '1507738632';
           $solicitud->solTxtCedterceroCrea = '1144094290';
+          //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
           $solicitud->solIntPersona = $request->perIntId;
           $solicitud->solTxtCedtercero = $request->perTxtCedtercero;
           $solicitud->solTxtNomtercero = $request->nombre;
@@ -153,8 +214,9 @@ class SolicitudController extends Controller
           $solicitud->solTxtMotivotarde = "";
           $solicitud->solTxtPerExterna = $request->tviajero;
           $solicitud->solTxtNumTelefono = $request->numtelefono;
-          $solicitud->solIntIdCanal = 0;
-          $solicitud->solIntIdZona = 0;
+          $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
+          $solicitud->solIntIdZona = $request['territorioaprobacion']['id'];
+          $solicitud->solIntIdGrupo = $request['grupoaprobacion']['id'];
           $solicitud->save();
 
           if ($request->tviajero == 2) {
@@ -211,6 +273,17 @@ class SolicitudController extends Controller
           }
         }
 
+        $data = $request->all();
+
+        if($isCreating == true){
+            $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,true,false,true);
+        }else{
+            $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,false,true,true);
+            //return $rutaAprobacion;
+        }
+        $response = compact('solicitud', 'detSolicitud', 'data', 'rutaAprobacion');
+
+        return response()->json($response);
     }
 
 

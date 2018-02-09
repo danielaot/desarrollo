@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('solicitudinfo', 'Tiquetes\SolicitudController@getInfo');
     Route::get('paisesInfo', 'Tiquetes\SolicitudController@paisesInfo');
     Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');
-    Route::post('solicitud', 'Tiquetes\SolicitudController@CrearSolicitud');
+    Route::post('solicitud/enviaAprobar/{isCreating}', 'Tiquetes\SolicitudController@store');
 
     Route::resource('misSolicitudes', 'Tiquetes\MisSolicitudesController');
     Route::get('missolicitudesinfo', 'Tiquetes\MisSolicitudesController@getInfo');
@@ -78,9 +78,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');
     Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
     Route::post('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
+    Route::put('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@editPerNivel');
 
-
-
+    /*Bandeja Aprobacion*/
+    Route::resource('bandejaaprobacion', 'Tiquetes\BandejaAprobacionController');
+    Route::get('bandejaaprobacioninfo', 'Tiquetes\BandejaAprobacionController@getInfo');
+    Route::get('putito', 'Tiquetes\BandejaAprobacionController@index');
 
 
 

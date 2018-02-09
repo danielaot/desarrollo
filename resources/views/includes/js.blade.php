@@ -51,6 +51,10 @@ $.extend( true, $.fn.dataTable.defaults, {
 <!-- angular-multiselect -->
 <script src="{{url('/lib/angularJs/angular-bootstrap-multiselect.min.js')}}" type="text/javascript" language="javascript"></script>
 
+<!-- underscore -->
+<script src="{{url('/lib/underscore/underscore.min.js')}}" type="text/javascript" language="javascript"></script>
+
+
 <script src="{{url('/js/genericas.js')}}" type="text/javascript" language="javascript"></script>
 
 @stack('script_data_table')

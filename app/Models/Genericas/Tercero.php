@@ -50,4 +50,9 @@ class Tercero extends Model
     public function dirnacional(){
         return $this->hasOne('App\Models\Genericas\TDirNacional', 'dir_txt_cedula', 'idTercero');
     }
+
+    public function personanivel(){
+        return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'idTercero');
+    }
+
 }

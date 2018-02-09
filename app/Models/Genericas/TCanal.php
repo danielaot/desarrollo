@@ -19,4 +19,8 @@ class TCanal extends Model
     protected $fillable = [
         'can_txt_descrip',
     ];
+
+    public function canalesperniveles(){
+        return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepIntCanal', 'can_id');
+    }
 }

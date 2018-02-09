@@ -19,4 +19,8 @@ class TTerritoriosNw extends Model
         'tnw_zonaid',
         'tnw_estado'
     ];
+
+    public function zona (){
+      return $this->hasOne('App\Models\Genericas\TZonaNw', 'id', 'tnw_zonaid');
+    }
 }

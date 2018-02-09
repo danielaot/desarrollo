@@ -33,4 +33,27 @@ class TPersonaDepende extends Model
       return $this->hasOne('App\Models\Tiquetes\TPersona', 'perIntId', 'perdepPerIntId');
     }
 
+    public function nivel(){
+      return $this->belongsTo('App\Models\Tiquetes\TNivele','perdepIntNivel','id');
+    }
+
+    public function aprobador(){
+      return $this->hasOne('App\Models\Tiquetes\TPersona', 'perIntId', 'perdepPerIntIdAprueba');
+    }
+
+    public function grupo(){
+      return $this->hasOne('App\Models\Genericas\TGrupo', 'id', 'perdepIntGrupo');
+    }
+
+    public function canal(){
+      return $this->hasOne('App\Models\Genericas\TCanal', 'can_id', 'perdepIntCanal');
+    }
+
+    public function territorio(){
+      return $this->hasOne('App\Models\Genericas\TTerritoriosNw', 'id', 'perdepIntTerritorio');
+    }
+
+    public function ejecutivo(){
+      return $this->hasOne('App\Models\Tiquetes\TPersona', 'perIntId', 'perdepPerIntId');
+    }
 }

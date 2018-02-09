@@ -43,4 +43,24 @@ class TPersona extends Model
 
       return $this->belongsTo('App\Models\Tiquetes\TPersonaDepende','perIntId','perdepPerIntIdAprueba');
     }
+
+    public function gerencia(){
+        return $this->belongsTo('App\Models\Genericas\TGerencia', 'perIntTipogerencia', 'ger_cod');
+    }
+
+    public function ciudadpasaporte(){
+        return $this->belongsTo('App\Models\Tiquetes\TCiudad', 'perIntCiudadExpPass', 'ciuIntId');
+    }
+
+    public function detallenivelpersona(){
+        return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepPerIntId', 'perIntId');
+    }
+
+    public function nivaprobador(){
+      return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'perTxtCedtercero');
+    }
+
+    public function pernivejecutivo(){
+      return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'perTxtCedtercero');
+    }
 }

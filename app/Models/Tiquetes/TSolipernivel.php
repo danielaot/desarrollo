@@ -23,5 +23,11 @@ class TSolipernivel extends Model
 
     protected $guarded = [];
 
-        
+    public function detallepernivel(){
+      return $this->hasOne('App\Models\Tiquetes\TPernivele','pen_cedula','sni_cedula');
+    }
+
+    public function detallesolicitud(){
+      return $this->hasOne('App\Models\Tiquetes\TSolicitud','solIntSolId','sni_idsolicitud');
+    }
 }

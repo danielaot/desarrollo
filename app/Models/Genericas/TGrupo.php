@@ -12,7 +12,7 @@ class TGrupo extends Model
     protected $table = 't_grupo';
 
     protected $connection = 'genericas';
-    
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -23,5 +23,7 @@ class TGrupo extends Model
 
     protected $guarded = [];
 
-
+    public function grupopernivel(){
+        return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepIntGrupo', 'id');
+    }
 }
