@@ -27,5 +27,5 @@ class TDetallehotel extends Model
 
     protected $guarded = [];
 
-
+    
 }

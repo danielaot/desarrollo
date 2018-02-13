@@ -72,7 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('missolicitudesinfo', 'Tiquetes\MisSolicitudesController@getInfo');
     Route::post('enviarSol', 'Tiquetes\MisSolicitudesController@enviarSolicitud');
     Route::post('anularSol', 'Tiquetes\MisSolicitudesController@anularSolicitud');
-    Route::post('generarPdf', 'Tiquetes\MisSolicitudesController@generarPdf')->name('generarPdf');
+    Route::get('imprimirLegalizacion', 'Tiquetes\MisSolicitudesController@imprimirLegalizacion')->name('imprimirLegalizacion');
 
     /*Niveles Autorizacion*/
     Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');

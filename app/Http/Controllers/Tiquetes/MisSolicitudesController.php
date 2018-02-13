@@ -15,6 +15,8 @@ use App\Models\Tiquetes\TDetallesolictud as DetalleSolicitud;
 
 use Auth;
 use DB;
+use Carbon\Carbon;
+use PDF;
 
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', 300);
@@ -39,20 +41,41 @@ class MisSolicitudesController extends Controller
       //                           ->get();
 
       $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
-                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones')
+                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado')
                                 ->where('solTxtCedterceroCrea', '16377055')
                                 ->get();
 
-      $rutaPdf = route('generarPdf');
+      $rutaPdf = route('imprimirLegalizacion');
 
       $response =  compact('solicitudes','usuario', 'rutaPdf');
 
       return response()->json($response);
     }
 
-    public function generarPdf(Request $request){
+    public function imprimirLegalizacion(Request $request){
       $data = $request->all();
-      dd($data);
+      $solicitudImprimir = Solicitud::where('solIntSolId', $data['objSolicitud'])->with('personaGerencia', 'personaGerencia.gerencia', 'perExterna', 'detalle', 'detalle.ciuOrigen', 'detalle.ciuOrigen.departamento', 'detalle.ciuDestino', 'detalle.ciuDestino.departamento', 'detalle.aerolinea', 'detalle.hotel')->first();
+      // dd($solicitudImprimir);
+      $fechaSolicitud = Carbon::createFromTimestamp($solicitudImprimir['solIntFecha'])->toDateString();
+      $fechaNacimiento = Carbon::createFromTimestamp($solicitudImprimir['solIntFNacimiento'])->toDateString();
+      $i = 0;
+
+      foreach ($solicitudImprimir['detalle'] as $fecha) {
+        $fecha['contador'] = $i + 1;
+        $i = $fecha['contador'];
+        $fecha['dtaIntFechaVuelo'] = Carbon::createFromTimestamp($fecha['dtaIntFechaVuelo'])->toDateString();
+        if ($fecha['dtaIntHoravuelo'] != 0) {
+          $fecha['dtaIntHoravuelo'] = Carbon::createFromTimestamp($fecha['dtaIntHoravuelo'])->toTimeString();
+        }else{
+          $fecha['dtaIntHoravuelo'] = Carbon::createFromTimestamp($fecha['dtaIntFechaVuelo'])->toTimeString();
+        }
+      }
+
+      $response = compact('solicitudImprimir', 'fechaSolicitud', 'fechaNacimiento');
+        // return view('layouts.tiquetes.solicitud.Reportes.reporteImprimir', $response);
+        $pdf = PDF::loadView('layouts.tiquetes.solicitud.Reportes.reporteImprimir', $response);
+        return $pdf->download('FormatoTiquetesHotel_GOP-FOR-004_No'. $data['objSolicitud']. '.pdf');
+      
     }
 
     public function enviarSolicitud(Request $request)

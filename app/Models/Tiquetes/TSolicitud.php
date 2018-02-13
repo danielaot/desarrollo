@@ -66,4 +66,8 @@ class TSolicitud extends Model
     public function evaluaciones(){
         return $this->hasMany('App\Models\Tiquetes\TEvaluacion', 'evaIntSolicitud', 'solIntSolId');
     }
+
+    public function personaGerencia(){
+        return $this->hasOne('App\Models\Tiquetes\TPersona', 'perTxtCedtercero', 'solTxtCedtercero');
+    }
 }

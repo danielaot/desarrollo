@@ -51,4 +51,8 @@ class TDetallesolictud extends Model
     public function aerolinea(){
       return $this->hasOne('App\Models\Tiquetes\TAerolinea', 'aerIntId', 'dtaIntIdAerolinea');
     }
+
+    public function hotel(){
+      return $this->hasOne('App\Models\Tiquetes\TDetallehotel', 'dthIntIdDetasoli', 'dtaIntid');
+    }
 }

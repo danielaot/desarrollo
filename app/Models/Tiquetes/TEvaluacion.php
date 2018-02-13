@@ -31,5 +31,7 @@ class TEvaluacion extends Model
 
     protected $guarded = [];
 
-
+    public function estado(){
+      return $this->hasOne('App\Models\Tiquetes\TEstados', 'id', 'evaIntTipoSolicitudAnt');
+    }
 }
