@@ -35,16 +35,11 @@ class MisSolicitudesController extends Controller
     {
       
       $usuario = Auth::user();
-      // $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
-      //                                'estados', 'perExterna', 'perCrea', 'pago.tipoPago')
-      //                           ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
-      //                           ->get();
-
       $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
                                      'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado')
-                                ->where('solTxtCedterceroCrea', '16377055')
+                                ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->get();
-
+                                
       $rutaPdf = route('imprimirLegalizacion');
 
       $response =  compact('solicitudes','usuario', 'rutaPdf');
