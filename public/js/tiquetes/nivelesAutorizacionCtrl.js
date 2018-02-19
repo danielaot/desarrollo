@@ -32,6 +32,9 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
       $scope.usuNivelDos = $filter('filter')($scope.usuariosN, {pen_nomnivel : 2});
       $scope.usuNivelTres = $filter('filter')($scope.usuariosN, {pen_nomnivel : 3});
       $scope.usuNivelCuatro = $filter('filter')($scope.usuariosN, {pen_nomnivel : 4});
+      $scope.usuSerAdmin = $filter('filter')($scope.usuariosN, {pen_isServiAdmon : 1});
+
+      console.log($scope.usuNivelCuatro);
       $scope.ciudades = angular.copy(info.ciudades);
       $scope.progress = false;
     }, function(error){

@@ -30,4 +30,8 @@ class TSolipernivel extends Model
     public function detallesolicitud(){
       return $this->hasOne('App\Models\Tiquetes\TSolicitud','solIntSolId','sni_idsolicitud');
     }
+
+    public function detalle(){
+      return $this->hasMany('App\Models\Tiquetes\TPersonaDepende','perdepPerIntCedPerNivel','sni_cedula');
+    }
 }

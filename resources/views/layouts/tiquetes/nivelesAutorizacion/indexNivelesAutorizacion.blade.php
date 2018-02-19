@@ -146,7 +146,7 @@
                     <th>Eliminar</th>
                   </tr>
                 </thead>
-                <tbody ng-repeat="usu in usuNivelCuatro">
+                <tbody ng-repeat="usuC in usuNivelCuatro">
                   <td>@{{usuC.tipo_persona.tpp_descripcion}}</td>
                   <td>@{{usuC.pen_cedula}}</td>
                   <td>@{{usuC.pen_nombre}}</td>
@@ -170,6 +170,47 @@
             </md-content>
           </md-tab>
           <!-- fin nivel 4 -->
+          <!-- inicio nivel Serv. Administrativos -->
+          <md-tab label="Serv. Administrativos">
+            <md-content class="md-padding">
+              <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#modal"  ng-click="cambiarNivel(5)">
+                <i class="glyphicon glyphicon-plus"></i>  Crear Aprobador Serv. Administrativos
+              </button>
+              <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
+                <thead>
+                  <tr>
+                    <th>Tipo Persona</th>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Ver</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody ng-repeat="usuSA in usuSerAdmin">
+                  <td>@{{usuSA.tipo_persona.tpp_descripcion}}</td>
+                  <td>@{{usuSA.pen_cedula}}</td>
+                  <td>@{{usuSA.pen_nombre}}</td>
+                  <td>
+                    <button class="btn btn-info btn-sm" ng-click="">
+                      <i class="glyphicon glyphicon-eye-open"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usu)">
+                      <i class="glyphicon glyphicon-edit"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usu)">
+                      <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                  </td>
+                </tbody>
+              </table>
+            </md-content>
+          </md-tab>
+          <!-- fin nivel Serv. Administrativos -->
         </md-tabs>
       </div>
       @include('layouts.tiquetes.nivelesAutorizacion.createNivelAutorizacion')

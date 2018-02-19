@@ -60,4 +60,20 @@ class TSolicitud extends Model
     public function solipernivel(){
       return $this->hasOne('App\Models\Tiquetes\TSolipernivel', 'sni_idsolicitud', 'solIntSolId');
     }
+
+    public function canal(){
+      return $this->hasOne('App\Models\Genericas\TCanal', 'can_id', 'solIntIdCanal');
+    }
+
+    public function grupoaprobacion(){
+      return $this->hasOne('App\Models\Genericas\TGrupo', 'id', 'solIntIdGrupo');
+    }
+
+    public function territorioaprobacion(){
+      return $this->hasOne('App\Models\Genericas\TTerritoriosNw', 'id', 'solIntIdZona');
+    }
+
+    public function tipoGerencia(){
+      return $this->hasOne('App\Models\Genericas\TGerencia', 'ger_cod' ,'solTxtGerencia');
+    }
 }

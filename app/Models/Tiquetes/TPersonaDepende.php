@@ -56,4 +56,8 @@ class TPersonaDepende extends Model
     public function ejecutivo(){
       return $this->hasOne('App\Models\Tiquetes\TPersona', 'perIntId', 'perdepPerIntId');
     }
+
+    public function perejecutivo(){
+      return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'perdepPerIntCedPerNivel');
+    }
 }

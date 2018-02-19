@@ -13,20 +13,32 @@
         <!--Fin Titulo del modal-->
         <div class="modal-body">
           <div class="row">
-            <p class="col-sm-4"><label>Fecha de Solicitud:</label></p>
-            <p class="col-sm-8">@{{aprobacionSolicitud.detallesolicitud.solIntFecha}}</p>
-          </div>
-          <div class="row">
-            <p class="col-sm-2"><label>Solicitante:</label></p>
-            <p class="col-sm-10">@{{aprobacionSolicitud.detallepernivel.pen_nombre}}</p>
-          </div>
-          <div class="row">
-            <p class="col-sm-2"><label>Evaluacion:</label></p>
-            <p class="col-sm-10">Evaluacion</p>
-          </div>
-          <div class="row">
-            <p class="col-sm-2"><label>Observaciones:</label></p>
-            <p class="col-sm-10">Observaciones</p>
+            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+              <div class="form-group">
+                <label>Fecha de Solicitud:</label>
+                <span>@{{(aprobacionSolicitud.detallesolicitud.solIntFecha) * (1000) | date:'dd-MM-yyyy'}}</span>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+              <div class="form-group">
+                <label>Solicitante:</label>
+                <span>@{{aprobacionSolicitud.detallesolicitud.solTxtNomtercero}}</span>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+              <div class="form-group">
+                <label>Evaluacion:</label>
+                <select class="form-control" ng-model="aprobacionSolicitud.estado" ng-options='opt.estTxtNombre for opt in estados track by opt.id'>
+                  <option value="">Seleccione ..</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+              <div class="form-group">
+                <label>Observaciones:</label>
+                <input type="text" class="form-control" ng-model="aprobacionSolicitud.motivo" placeholder="Ingrese una descripción a la solicitud">
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">

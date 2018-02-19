@@ -15,6 +15,7 @@ use App\Models\Tiquetes\TPersonaexterna as PersonaExterna;
 use App\Models\Tiquetes\TDetallesolictud as DetalleSolicitud;
 use App\Models\Tiquetes\TSolipernivel as SoliPernivel;
 use App\Models\Tiquetes\TEvaluacion as Evaluacion;
+use App\Models\Genericas\TCanal;
 //use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Tiquetes\BandejaAprobacionController as AutorizacionCtrl;
@@ -39,12 +40,15 @@ class SolicitudController extends Controller
     public function getInfo()
     {
       $usuario = Auth::user();
-      $persona = PerNivel::with('nivel','tipoPersona', 'detpersona.detallenivelpersona.aprobador',
-                                'detalle.grupo', 'detalle.canal', 'detalle.territorio', 'detalle.aprobador.nivaprobador',
-                                'detalle.ejecutivo.pernivejecutivo')->get();
+      //$persona = PerNivel::with('nivel', 'detpersona.detallenivelpersona.aprobador')->get();
+      $canales = TCanal::with('canalesperniveles')->whereIn('can_id',['20','AL','DR','SI'])->get();
+
+      $persona = PerNivel::with('nivel.nivelpadre','tipoPersona', 'detpersona.detallenivelpersona.aprobador',
+                                'detalle.grupo', 'detalle.canal', 'detalle.territorio', 'detalle.aprobador.nivaprobador.nivel',
+                                'detalle.ejecutivo.pernivejecutivo.nivel')->get();
       $ciudad = Ciudad::all();
 
-      $response =  compact('persona', 'ciudad', 'usuario');
+      $response =  compact('persona', 'ciudad', 'usuario', 'canales');
 
       return response()->json($response);
     }
@@ -96,29 +100,6 @@ class SolicitudController extends Controller
           $solicitud->solIntIdGrupo = $request['grupoaprobacion']['id'];
           $solicitud->save();
 
-          $solipernivel = new SoliPernivel;
-          $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
-          $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
-          $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
-          $solipernivel->sni_estado = 0;
-          $solipernivel->sni_orden = 1;
-          $solipernivel->save();
-
-          $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
-          $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
-
-          $evaluacion = new Evaluacion;
-          $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
-          $evaluacion->evaTxtCedtercero = $cedaprueba;
-          $evaluacion->evaTxtnombreter = $nomaprueba;
-          $evaluacion->evatxtObservacione = $request->motivo;
-          $evaluacion->evaIntFecha = '1516054234';
-          $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
-          $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
-          $evaluacion->evaIntTipoSolicitudAnt = 4;
-          $evaluacion->evaEstado = 'S';
-          $evaluacion->save();
-
           if ($request->tviajero == 2) {
 
             $solicitudExterno = new PersonaExterna;
@@ -130,28 +111,28 @@ class SolicitudController extends Controller
             $solicitudExterno->pereTxtEmail = $request->corexterno;
             $solicitudExterno->save();
 
-            $solipernivel = new SoliPernivel;
-            $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
-            $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
-            $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
-            $solipernivel->sni_estado = 0;
-            $solipernivel->sni_orden = 1;
-            $solipernivel->save();
-
-            $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
-            $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
-
-            $evaluacion = new Evaluacion;
-            $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
-            $evaluacion->evaTxtCedtercero = $cedaprueba;
-            $evaluacion->evaTxtnombreter = $nomaprueba;
-            $evaluacion->evatxtObservacione = $request->motivo;
-            $evaluacion->evaIntFecha = '1516054234';
-            $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
-            $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
-            $evaluacion->evaIntTipoSolicitudAnt = 4;
-            $evaluacion->evaEstado = 'S';
-            $evaluacion->save();
+            // $solipernivel = new SoliPernivel;
+            // $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
+            // $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
+            // $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
+            // $solipernivel->sni_estado = 0;
+            // $solipernivel->sni_orden = 1;
+            // $solipernivel->save();
+            //
+            // $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
+            // $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
+            //
+            // $evaluacion = new Evaluacion;
+            // $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
+            // $evaluacion->evaTxtCedtercero = $cedaprueba;
+            // $evaluacion->evaTxtnombreter = $nomaprueba;
+            // $evaluacion->evatxtObservacione = $request->motivo;
+            // $evaluacion->evaIntFecha = '1516054234';
+            // $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
+            // $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
+            // $evaluacion->evaIntTipoSolicitudAnt = 4;
+            // $evaluacion->evaEstado = 'S';
+            // $evaluacion->save();
           }
 
           if ($request->tviaje == 1) {

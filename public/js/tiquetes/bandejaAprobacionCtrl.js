@@ -3,14 +3,14 @@ app.controller('bandejaAprobacionCtrl', ['$scope', '$filter', '$http', '$mdDialo
   $scope.url = 'bandejaaprobacion';
   $scope.urlInfo = 'bandejaaprobacioninfo';
   $scope.progress = true;
-  console.log($scope.getInfo);
 
   $scope.getInfo = function(){
       $http.get($scope.urlInfo).then(function(response){
         var info = response.data;
         $scope.solipernivel =  angular.copy(info.solicitud);
+        $scope.estados = angular.copy(info.estadosAprobacion);
         $scope.progress = false;
-         console.log($scope.solipernivel);
+         console.log($scope.estados);
       });
   }
 
@@ -25,6 +25,14 @@ app.controller('bandejaAprobacionCtrl', ['$scope', '$filter', '$http', '$mdDialo
   $scope.aprosolicitud = function(sol){
     console.log(sol);
     $scope.aprobacionSolicitud = sol;
+  }
+
+  $scope.saveAprobSolicitud = function(){
+    $http.post($scope.url, $scope.aprobacionSolicitud).then(function(response){
+      console.log($scope.aprobacionSolicitud);
+    //  $scope.progress = false;
+    });
+
   }
 
 }]);

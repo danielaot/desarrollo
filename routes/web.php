@@ -83,7 +83,6 @@ Route::group(['middleware' => ['auth']], function () {
     /*Bandeja Aprobacion*/
     Route::resource('bandejaaprobacion', 'Tiquetes\BandejaAprobacionController');
     Route::get('bandejaaprobacioninfo', 'Tiquetes\BandejaAprobacionController@getInfo');
-    Route::get('putito', 'Tiquetes\BandejaAprobacionController@index');
 
 
 

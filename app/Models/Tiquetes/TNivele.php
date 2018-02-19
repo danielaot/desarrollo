@@ -19,5 +19,8 @@ class TNivele extends Model
 
     protected $guarded = [];
 
+    public function nivelpadre(){
+      return $this->hasOne('App\Models\Tiquetes\TNivele', 'id', 'niv_padre');
+    }
 
 }

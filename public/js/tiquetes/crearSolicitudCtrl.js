@@ -14,6 +14,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     var info = response.data;
     $scope.persona = angular.copy(info.persona);
     $scope.ciudad = angular.copy(info.ciudad);
+    $scope.canales =  angular.copy(info.canales);
     $scope.progress = false;
   });
 
