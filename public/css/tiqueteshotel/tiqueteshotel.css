@@ -74,7 +74,6 @@ body{
 
 body>div {
     overflow: auto !important;
-    display: block !important;
     max-height: 100% !important;
 }
 

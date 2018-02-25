@@ -67,18 +67,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('paisesInfo', 'Tiquetes\SolicitudController@paisesInfo');
     Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');
     Route::post('solicitud/enviaAprobar/{isCreating}', 'Tiquetes\SolicitudController@store');
+    Route::get('editarSolicitud/{idSolicitud}', 'Tiquetes\SolicitudController@edit')->name('editarSolicitud');
+    Route::post('editarSoli', 'Tiquetes\SolicitudController@editSolicitud');
+    Route::post('editarSoli/enviaEditAprobar/{isCreating}', 'Tiquetes\SolicitudController@editSolicitud');
 
     Route::resource('misSolicitudes', 'Tiquetes\MisSolicitudesController');
     Route::get('missolicitudesinfo', 'Tiquetes\MisSolicitudesController@getInfo');
     Route::post('enviarSol', 'Tiquetes\MisSolicitudesController@enviarSolicitud');
     Route::post('anularSol', 'Tiquetes\MisSolicitudesController@anularSolicitud');
-    Route::post('generarPdf', 'Tiquetes\MisSolicitudesController@generarPdf')->name('generarPdf');
+    Route::get('imprimirLegalizacion', 'Tiquetes\MisSolicitudesController@imprimirLegalizacion')->name('imprimirLegalizacion');
 
     /*Niveles Autorizacion*/
     Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');
     Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
     Route::post('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
     Route::put('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@editPerNivel');
+    Route::post('nivelesautorizaciondelete', 'Tiquetes\NivelesAutorizacionController@deletePerNivel');
 
     /*Bandeja Aprobacion*/
     Route::resource('bandejaaprobacion', 'Tiquetes\BandejaAprobacionController');

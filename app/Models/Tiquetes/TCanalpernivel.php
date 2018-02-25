@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TCanalpernivel extends Model
 {
+	protected $connection = 'tiqueteshotel';
+	
     protected $table = 't_canalpernivel';
 
     public $timestamps = true;

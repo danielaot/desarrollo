@@ -60,4 +60,5 @@ class TPersonaDepende extends Model
     public function perejecutivo(){
       return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'perdepPerIntCedPerNivel');
     }
+
 }

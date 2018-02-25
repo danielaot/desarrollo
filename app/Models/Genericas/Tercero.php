@@ -55,4 +55,8 @@ class Tercero extends Model
         return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'idTercero');
     }
 
+    public function persona(){
+        return $this->hasOne('App\Models\Tiquetes\TPersona', 'perTxtCedtercero', 'idTercero');
+    }
+
 }

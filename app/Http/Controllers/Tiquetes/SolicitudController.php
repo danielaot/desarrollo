@@ -46,6 +46,7 @@ class SolicitudController extends Controller
       $persona = PerNivel::with('nivel.nivelpadre','tipoPersona', 'detpersona.detallenivelpersona.aprobador',
                                 'detalle.grupo', 'detalle.canal', 'detalle.territorio', 'detalle.aprobador.nivaprobador.nivel',
                                 'detalle.ejecutivo.pernivejecutivo.nivel')->get();
+
       $ciudad = Ciudad::all();
 
       $response =  compact('persona', 'ciudad', 'usuario', 'canales');
@@ -64,7 +65,9 @@ class SolicitudController extends Controller
     public function modifica()
     {
       $usuario = Auth::user();
-      $solicitudes = Solicitud::with('detalle', 'perExterna')
+      $solicitudes = Solicitud::with('detalle', 'perExterna', 'perAutoriza.aprueba',
+                                     'detalle.ciuIntOrigen.porigen', 'detalle.ciuIntDestino.pdestino',
+                                     'detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.hotel')
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->whereNotIn('solIntEstado', [1])
                                 ->get();
@@ -182,11 +185,11 @@ class SolicitudController extends Controller
           $solicitud->solIntFecha = '1507738632';
           $solicitud->solTxtCedterceroCrea = '1144094290';
           //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
-          $solicitud->solIntPersona = $request->perIntId;
-          $solicitud->solTxtCedtercero = $request->perTxtCedtercero;
-          $solicitud->solTxtNomtercero = $request->nombre;
-          $solicitud->solTxtEmail = $request->perTxtEmailter;
-          $solicitud->solIntFNacimiento = $request->perTxtFechaNac;
+          $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
+          $solicitud->solTxtCedtercero = $request['nombre']['pen_cedula'];
+          $solicitud->solTxtNomtercero = $request['nombre']['pen_nombre'];
+          $solicitud->solTxtEmail = $request['nombre']['detpersona']['perTxtEmailter'];
+          $solicitud->solIntFNacimiento = $request['nombre']['detpersona']['perTxtFechaNac'];
           $solicitud->solTxtObservacion = $request->motivo;
           $solicitud->solIntEstado = 1;
           $solicitud->solIntTiposolicitud = $request->tviaje;
@@ -257,6 +260,7 @@ class SolicitudController extends Controller
         $data = $request->all();
 
         if($isCreating == true){
+
             $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,true,false,true);
         }else{
             $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,false,true,true);
@@ -276,18 +280,125 @@ class SolicitudController extends Controller
 
     public function edit($id)
     {
-        //
+      $ruta = 'Tiquetes y Hotel // Editar Solicitud';
+      $titulo = 'Editar Solicitud';
+      $usuario = Auth::user();
+
+      $solicitudes = Solicitud::with('detalle','detalle.ciuOrigen', 'detalle.ciuDestino',
+                                     'detalle.hotel','perExterna', 'perAutoriza.aprueba',
+                                     'detalle.ciuIntOrigen.porigen', 'detalle.ciuIntDestino.pdestino',
+                                     'territorioaprobacion', 'grupoaprobacion', 'canal')
+                                ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
+                                ->where('solIntSolId', $id)
+                                ->whereIn('solIntEstado', [1,2])
+                                ->get();
+      $solicitudes = collect($solicitudes)->map(function($sol){
+        $sol['pen_cedula'] = $sol['solTxtCedtercero'];
+        $sol['pen_nombre'] = $sol['solTxtNomtercero'];
+        return $sol;
+
+      });
+
+      return view('layouts.tiquetes.solicitud.crearSolicitud', compact('ruta', 'titulo', 'solicitudes'));
     }
 
-
-    public function update(Request $request, $id)
+    public function editSolicitud(Request $request, $isCreating = false)
     {
-        //
+        //return response()->json($request->all());
+        $usuario = Auth::user();
+        $fechaCreacion = '1507738632';
+        $isCreating = $isCreating == "false" ? false: true;
+
+        $updateSolicitud = Solicitud::where('solIntSolId', $request->idSolicitud)
+                                    ->update(['solIntFecha' => $fechaCreacion, 'solTxtCedterceroCrea' => $usuario->idTerceroUsuario,
+                                      'solIntPersona' => $request['nombre']['detpersona']['perIntId'],
+                                      'solTxtCedtercero' => $request['nombre']['detpersona']['perTxtCedtercero'],
+                                      'solTxtNomtercero' => $request['nombre']['detpersona']['perTxtNomtercero'],
+                                      'solTxtEmail' => $request['nombre']['detpersona']['perTxtEmailter'],
+                                      'solIntFNacimiento' => $request['nombre']['detpersona']['perTxtFechaNac'],
+                                      'solTxtObservacion' => $request->motivo, 'solIntTiposolicitud' => $request->tviaje,
+                                      'solTxtTipoNU' => $request->tipo, 'solTxtPerExterna' => $request->tviajero,
+                                      'solTxtNumTelefono' => $request->numtelefono,
+                                      'solIntIdCanal' => isset($request['canalaprobacion']['can_id'])?$request['canalaprobacion']['can_id']:null,
+                                      'solIntIdZona' => isset($request['territorioaprobacion']['id'])?$request['territorioaprobacion']['id']:null,
+                                      'solIntIdGrupo' => isset($request['grupoaprobacion']['id'])?$request['grupoaprobacion']['id']:null,
+                                      'solTxtGerencia' => $request['pen_idgerencia']]);
+
+        if ($request['tviajero'] == 2) {
+              $updateDetSolicitud = PersonaExterna::where('pereIntSolId', $request->idSolicitud)
+                                                  ->update(['pereTxtCedula' => $request['ccexterno'],
+                                                  'pereTxtFNacimiento' => Carbon::parse($request['fnacimientoext'])->format('Y-m-d'),
+                                                  'pereTxtNumCelular' => $request['numcelexter'],
+                                                  'pereTxtNombComple' => $request['nomexterno'],
+                                                  'pereTxtEmail' => $request['corexterno']]);
+        }
+
+        if ($request->tviaje == '1') {
+           foreach ($request['detalleNac'] as $key => $value) {
+
+             $buscaDet = DetalleSolicitud::where('dtaIntSolicitud', $request->idSolicitud)
+                                         ->where('dtaIntOCiu', $value['idorigen'])
+                                         ->where('dtaIntDCiu', $value['iddestino'])->get();
+              if (count($buscaDet) === 0) {
+                $updateDetSolicitud = new DetalleSolicitud;
+                $updateDetSolicitud->dtaIntOCiu = $value['idorigen'];
+                $updateDetSolicitud->dtaIntDCiu = $value['iddestino'];
+                $updateDetSolicitud->dtaIntFechaVuelo = strtotime($value['fviaje']);
+                $updateDetSolicitud->dtaIntIdAerolinea = 0;
+                $updateDetSolicitud->dtaIntHoravuelo = 0;
+                $updateDetSolicitud->dtaTxtResvuelo = "";
+                $updateDetSolicitud->dtaIntCostoVuelo = 0;
+                $updateDetSolicitud->dtaTxtFechaCompra = 0;
+                $updateDetSolicitud->dtaTxtHotel = $value['hotel'];
+                $updateDetSolicitud->dtaIntSolicitud = $request->idSolicitud;
+                $updateDetSolicitud->dtaIntCostoAdm = 0;
+                $updateDetSolicitud->dtaIntCostoIva = 0;
+                $updateDetSolicitud->save();
+              }
+
+           }
+         }elseif ($request->tviaje == 2) {
+
+           foreach ($request->detalleInt as $key => $value) {
+
+             $buscaDet = DetalleSolicitud::where('dtaIntSolicitud', $request->idSolicitud)
+                                         ->where('dtaTxtOCiu', $value['ciuorigen'])
+                                         ->where('dtaTxtDCiudad', $value['ciudestino'])->get();
+
+              if (count($buscaDet) === 0) {
+                $updateDetSolicitud = new DetalleSolicitud;
+                $updateDetSolicitud->dtaIntOCiu = 0;
+                $updateDetSolicitud->dtaTxtOCiu = $value['ciuorigen'];
+                $updateDetSolicitud->dtaIntDCiu = 0;
+                $updateDetSolicitud->dtaTxtDCiudad = $value['ciudestino'];
+                $updateDetSolicitud->dtaIntFechaVuelo = strtotime($value['fviaje']);
+                $updateDetSolicitud->dtaIntIdAerolinea = 0;
+                $updateDetSolicitud->dtaIntHoravuelo = 0;
+                $updateDetSolicitud->dtaTxtResvuelo = "";
+                $updateDetSolicitud->dtaIntCostoVuelo = 0;
+                $updateDetSolicitud->dtaTxtFechaCompra = 0;
+                $updateDetSolicitud->dtaTxtHotel = $value['hotel'];
+                $updateDetSolicitud->dtaIntSolicitud = $request->idSolicitud;
+                $updateDetSolicitud->dtaIntCostoAdm = 0;
+                $updateDetSolicitud->dtaIntCostoIva = 0;
+                $updateDetSolicitud->save();
+              }
+           }
+         }
+
+         $data = $request->all();
+
+         if($isCreating == true){
+
+             $rutaAprobacion = AutorizacionCtrl::store($request,$request->idSolicitud,true,false,true);
+         }else{
+
+             $rutaAprobacion = AutorizacionCtrl::store($request,$request->idSolicitud,false,true,true);
+         }
+
+         $response = compact('updateDetSolicitud', 'data', 'rutaAprobacion');
+
+         return response()->json($response);
     }
 
-
-    public function destroy($id)
-    {
-        //
-    }
 }

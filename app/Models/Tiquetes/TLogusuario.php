@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class TLogusuario
  */
 class TLogusuario extends Model
-{
+{   
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_logusuario';
 
     protected $primaryKey = 'log_id';

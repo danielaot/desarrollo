@@ -1,0 +1,67 @@
+.col-sm-6{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.col-sm-12{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.md-tab {
+    max-width: min-content !important;
+}
+
+hr {
+    margin-top: 16px;
+    margin-bottom: 5px;
+    }
+
+.btn{
+    margin-top: 11px;
+}
+
+.row {
+    margin-right: 2px;
+    margin-left: 1px;
+}
+
+.md-padding {
+    padding: 12px;
+}
+
+.modal-footer {
+    border-top: 0px solid #e5e5e5;
+}
+
+.list-group-item {
+    padding: 6px 15px;
+}
+
+body {
+    font-size: 13px;
+}
+
+.panel-body {
+    padding: 5px;
+    font-size: 12px;
+}
+
+.panel-footer {
+    padding: 5px;
+    font-size: 12px;
+}
+
+
+button, input, optgroup, select, textarea {
+    margin: 7px;
+}
+
+.md-dialog-container {
+    z-index: 9999;
+}
+
+ol, ul {
+      margin-top: 0;
+      margin-bottom: -55px;
+  }

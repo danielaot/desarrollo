@@ -53,7 +53,6 @@ class BandejaAprobacionController extends Controller
                                       'detallepernivel.detalle.canal',
                                       'detallepernivel.detalle.grupo')
                                       ->where(['sni_cedula' => $usuario['idTerceroUsuario'], 'sni_estado' => 0])->get();
-                                     //'detalle.aprobador.nivaprobador','detalle.ejecutivo.pernivejecutivo'
 
       $estadosAprobacion = Estados::whereIn('estIntEstado', [12,6,2])->get();
       /*$solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
@@ -87,6 +86,8 @@ class BandejaAprobacionController extends Controller
               $beneficiario['detalle'] = $dataSolicitud['nombre']['detalle'];
               $beneficiario['nivel']['niv_padre'] = $dataSolicitud['nombre']['nivel']['niv_padre'];
               $beneficiario['pen_cedula'] = $dataSolicitud['nombre']['pen_cedula'];
+              $beneficiario['pen_nombre'] = $dataSolicitud['nombre']['pen_nombre'];
+
           }elseif ($dataSolicitud['nombre']['pen_idtipoper'] == 3 || $dataSolicitud['nombre']['pen_idtipoper'] == 4) {
               $dataSolicitud['idSolicitud'] = $idSolicitud;
               $beneficiario = $dataSolicitud['nombre'];
@@ -161,34 +162,11 @@ class BandejaAprobacionController extends Controller
         }else{
             return response()->json($dataSolicitud);
         }
-      /*if($beneficiario['pen_idtipoper'] == 1 || $beneficiario['pen_idtipoper'] == 2){
-
-          if($beneficiario['pen_idtipoper'] == 1){
-
-              if($isCreating == true){
-                  self::grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
-              }else{
-                  $filtraDteAprobacion = collect($beneficiario['detalle'])
-                                        ->filter(function($dte)use($beneficiario,$dataSolicitud){
-                                            return (($dte['aprobador']['nivaprobador']['pen_nomnivel'] == $beneficiario['nivel']['niv_padre']) && ($dte['perdepIntCanal'] == $dataSolicitud['canalaprobacion']['can_id']));
-                                        })->values();
-
-                  if(count($filtraDteAprobacion) > 0){
-                      $ruta = self::grabarRutaAprobacion($filtraDteAprobacion[0],$dataSolicitud,$isCreating,$isCreatingAndSend);
-                      $dataSolicitud['primeraruta'] = $ruta;
-                  }else{
-                      $error = ["message" => "No existe ruta de aprobación para el canal ". $dataSolicitud['canalaprobacion']['can_descripcion']];
-                      return $error;
-                  }
-              }
-            }
-        }*/
     }
 
     public static function grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating = false,$isCreatingAndSend = false){
 
       $response = [];
-
       if($isCreating == true){
 
           $solicitudPerNivel = new SoliPernivel;
@@ -238,7 +216,7 @@ class BandejaAprobacionController extends Controller
 
                   $actualizaSolicitud= Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => $dataSolicitud['estadoSolicitud']]);
                }else{
-  //return ($dataSolicitud);
+
                 if($dataSolicitud['estado']['estIntEstado'] == 12){//Aprueba Solicitud
                  //if($dataSolicitud['estadoSolicitud'] == 12){//Aprueba Solicitud
 
@@ -308,13 +286,11 @@ class BandejaAprobacionController extends Controller
     }
 
     public static function grabarHistorico($usuarioEntrega,$usuarioRecibe = null,$dataSolicitud,$isCreating = false, $forceSave = false){
-
       $puedePasar = true;
 
       if($isCreating == true){
 
         $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
-
         $historico = new Evaluacion;
         $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
         $historico->evaTxtCedtercero = $usuarioEntrega['pen_cedula'];
@@ -326,8 +302,7 @@ class BandejaAprobacionController extends Controller
         $historico->evaIntTipoSolicitudAnt = 4;
         $historico->evaEstado = 'S';
         $historico->save();
-
-    }else{
+      }else{
 
         $observacion = $dataSolicitud['motivo'];
 

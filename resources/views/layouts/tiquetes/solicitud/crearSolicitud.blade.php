@@ -3,9 +3,14 @@
 @section('content')
   @include('includes.titulo')
   <link rel="stylesheet" href="{{url('/css/tiqueteshotel/tiqueteshotel.css')}}">
-  <div ng-controller="crearSolicitudCtrl" ng-cloak class="cold-md-12">
+  @if(isset($solicitudes))
+    <div ng-controller="crearSolicitudCtrl" ng-cloak ng-init="solicitudes = {{$solicitudes}};getInfo();" class="cold-md-12">
+      <form name="solicitudForm" ng-submit="solicitudForm.$valid && editarSolicitud(true)" novalidate>
+    @else
+      <div ng-controller="crearSolicitudCtrl" ng-cloak class="cold-md-12">
+    @endif
     <hr>
-    <form name="solicitudForm" ng-submit="solicitudForm.$valid && saveSolicitud()" novalidate>
+    <form name="solicitudForm" ng-submit="solicitudForm.$valid && saveSolicitud(true)" novalidate>
     <div class="panel panel-primary">
       <div class="panel-heading" style="text-align:center">Información Solicitante</div>
           <div class="panel-body">
@@ -30,12 +35,12 @@
               </div>
               <div class="col-sm-4 form-group" ng-if="solicitud.tipo == 2">
                 <div class="row">
-                  <label class="col-sm-4 control-label">Solicitud Anterior <span class="required">*</span>:</label>
+                  <label class="col-sm-4 control-label">Solicitud Ant. <span class="required">*</span>:</label>
                   <div class="col-sm-4">
                     <input type="text" class="form-control" ng-model="solicitud.solAnterior" placeholder="Solicitud Anterior" disabled>
                   </div>
                   <div class="col-sm-2">
-                    <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="solicitudes()">
+                    <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="solicitudesMod()">
                           <i class="glyphicon glyphicon-search"></i>
                     </button>
                   </div>
@@ -64,36 +69,12 @@
                   <label>Identificacion :</label>
                   <input type="text" class="form-control" ng-model="solicitud.nombre.pen_cedula" placeholder="Número de Identificacion" disabled>
                 </div>
-                <div ng-if="mostrarSelectCanal || mostrarSelectGrupo || mostrarSelectTerritorio" class="form-group">
-                  <div class="row">
 
-                    <div ng-if="mostrarSelectTerritorio" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
-                      <label>Territorio de Aprobación:</label>
-                      <select required class="form-control" name="territorioaprobacion" id="territorioaprobacion" ng-change="onChangeTerritorio()" ng-model="solicitud.territorioaprobacion" ng-options="[territorioAprobacion.id, territorioAprobacion.tnw_descripcion].join(' - ') for territorioAprobacion in solicitud.nombre.territorios track by territorioAprobacion.id" require>
-                      <option value="">-- Seleccione el territorio de aprobación --</option>
-                      </select>
-                    </div>
-
-                    <div ng-if="mostrarSelectGrupo" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
-                      <label>Grupo de Aprobación:</label>
-                      <select required class="form-control" name="grupoaprobacion" id="grupoaprobacion" ng-change="onChangeGrupo()" ng-model="solicitud.grupoaprobacion" ng-options="[grupoAprobacion.gru_sigla, grupoAprobacion.gru_responsable].join(' - ') for grupoAprobacion in solicitud.nombre.grupos track by grupoAprobacion.id" require>
-                      <option value="">-- Seleccione el grupo de aprobación --</option>
-                      </select>
-                    </div>
-
-                    <div ng-if="mostrarSelectCanal" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
-                      <label>Canal de Aprobación:</label>
-                      <select class="form-control" name="canalaprobacion" id="canalaprobacion" ng-model="solicitud.canalaprobacion" ng-disabled="(mostrarSelectGrupo == true && solicitud.grupoaprobacion == undefined) ? true : (mostrarSelectTerritorio == true && solicitud.territorioaprobacion == undefined) ? true : deshabilitarSelectCanal == true ? true : false" ng-options="[canalAprobacion.can_id,canalAprobacion.can_txt_descrip].join(' - ') for canalAprobacion in canalesAprobacion track by canalAprobacion.can_id">
-                      <option value="">-- Seleccione el canal de aprobación --</option>
-                      </select>
-                    </div>
-
-                  </div>
-                </div>
               </div>
               <div class="row">
                 <div class="col-sm-6">
                   <label>Email :</label>
+                  <input type="text" class="form-control" ng-if="solicitud.nombre.detpersona.perTxtEmailter == null " ng-model="solicitud.nombre.correo" placeholder="Email del Solicitante">
                   <input type="text" class="form-control" ng-model="solicitud.nombre.detpersona.perTxtEmailter" placeholder="Email del Solicitante" disabled>
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
@@ -107,10 +88,12 @@
                   <input type="number" class="form-control" ng-model="solicitud.numtelefono">
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
-                  <label>Aprobador <span class="required">*</span>:</label>
-                  <select class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
+                  <label ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'">Aprobador <span class="required">*</span>:</label>
+                  <select ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'" class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
                     <option value="">Seleccione aprobador ..</option>
                   </select>
+                  <label ng-if="solicitud.nombre.pen_idtipoper == 3 || solicitud.nombre.pen_idtipoper == 4">Aprobador</label>
+                  <p ng-if="solicitud.nombre.pen_idtipoper == 3 || solicitud.nombre.pen_idtipoper == 4">@{{solicitud.nombre.grupos[0].gru_responsable}}</p>
                 </div>
               </div>
               <div class="row">
@@ -155,6 +138,31 @@
                     <input type="text" class="form-control" ng-model="solicitud.corexterno">
                   </div>
               </div>
+              <div ng-if="mostrarSelectCanal || mostrarSelectGrupo || mostrarSelectTerritorio" class="form-group">
+                <div class="row">
+                  <div ng-if="mostrarSelectTerritorio" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                    <label>Territorio de Aprobación:</label>
+                    <select required class="form-control" name="territorioaprobacion" id="territorioaprobacion" ng-change="onChangeTerritorio()" ng-model="solicitud.territorioaprobacion" ng-options="[territorioAprobacion.id, territorioAprobacion.tnw_descripcion].join(' - ') for territorioAprobacion in solicitud.nombre.territorios track by territorioAprobacion.id" require>
+                    <option value="">-- Seleccione el territorio de aprobación --</option>
+                    </select>
+                  </div>
+
+                  <div ng-if="mostrarSelectGrupo" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                    <label>Grupo de Aprobación:</label>
+                    <select required class="form-control" name="grupoaprobacion" id="grupoaprobacion" ng-change="onChangeGrupo()" ng-model="solicitud.grupoaprobacion" ng-options="[grupoAprobacion.gru_sigla, grupoAprobacion.gru_responsable].join(' - ') for grupoAprobacion in solicitud.nombre.grupos track by grupoAprobacion.id" require>
+                    <option value="">-- Seleccione el grupo de aprobación --</option>
+                    </select>
+                  </div>
+
+                  <div ng-if="mostrarSelectCanal" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
+                    <label>Canal de Aprobación:</label>
+                    <select class="form-control" name="canalaprobacion" id="canalaprobacion" ng-model="solicitud.canalaprobacion" ng-disabled="(mostrarSelectGrupo == true && solicitud.grupoaprobacion == undefined) ? true : (mostrarSelectTerritorio == true && solicitud.territorioaprobacion == undefined) ? true : deshabilitarSelectCanal == true ? true : false" ng-options="[canalAprobacion.can_id,canalAprobacion.can_txt_descrip].join(' - ') for canalAprobacion in canalesAprobacion track by canalAprobacion.can_id">
+                    <option value="">-- Seleccione el canal de aprobación --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <hr>
               <div class="row">
                 <div class="col-sm-12">
                   <label>Motivo de Viaje <span class="required">*</span>:</label>
@@ -176,28 +184,28 @@
                         <th>Destino :</th>
                         <th>Fecha :</th>
                         <th>Hotel :</th>
-                        <th ng-if = "solicitud.detsoli.hotel == 'S'">No. Días :</th>
+                        <th ng-if = "detsoli.hotel == 'S'">No. Días :</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td><select class="form-control" ng-model="solicitud.detsoli.origen" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
+                        <td><select class="form-control" ng-model="detsoli.origen" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Origen ..</option>
                         </select></td>
-                        <td><select class="form-control" ng-model="solicitud.detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
+                        <td><select class="form-control" ng-model="detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Destino ..</option>
                         </select></td>
                         <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
-                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoli.fviaje" class=" md-input" short-time ="true"
+                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="detsoli.fviaje" class=" md-input" short-time ="true"
                           readonly="readonly" ng-change="validarFecha(fecha)"></td>
-                        <td><select class="form-control" ng-model="solicitud.detsoli.hotel">
+                        <td><select class="form-control" ng-model="detsoli.hotel">
                           <option value="">Seleccione ..</option>
                           <option value="S">Si</option>
                           <option value="N">No</option>
                         </select></td>
-                        <td ng-if = "solicitud.detsoli.hotel == 'S'"><input type="number" class="form-control" ng-model="solicitud.detsoli.nodias"></td>
-                        <td><button class="btn btn-success btn-sm" type="button" ng-click="AgregarTramo(solicitud.detsoli)">
+                        <td ng-if = "detsoli.hotel == 'S'"><input type="number" class="form-control" ng-model="detsoli.nodias"></td>
+                        <td><button class="btn btn-success btn-sm" type="button" ng-click="AgregarTramo(detsoli)">
                               <i class="glyphicon glyphicon-plus"></i>
                             </button></td>
                       </tr>
@@ -224,7 +232,7 @@
                         <th>Ciudad Destino :</th>
                         <th>Fecha :</th>
                         <th>Hotel :</th>
-                        <th ng-if = "solicitud.detsoliInt.hotel == 'S'">No. Días :</th>
+                        <th ng-if = "detsoliInt.hotel == 'S'">No. Días :</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -233,7 +241,7 @@
                         <td><md-autocomplete md-search-text="paisoriSearchText"
                                      md-items="pais in paisoriSearch(paisoriSearchText)"
                                      md-item-text="pais.Pais"
-                                     md-selected-item="solicitud.detsoliInt.porigen"
+                                     md-selected-item="detsoliInt.porigen"
                                      md-min-length="0"
                                      required>
                           <md-item-template>
@@ -246,7 +254,7 @@
                         <td><md-autocomplete md-search-text="ciupaisoriSearchText"
                                      md-items="ciudad in ciupaisoriSearch(ciupaisoriSearchText)"
                                      md-item-text="ciudad.Ciudad"
-                                     md-selected-item="solicitud.detsoliInt.ciuorigen"
+                                     md-selected-item="detsoliInt.ciuorigen"
                                      md-min-length="0"
                                      required>
                           <md-item-template>
@@ -259,7 +267,7 @@
                         <td><md-autocomplete md-search-text="paisdestSearchText"
                                      md-items="paisdest in paisdestSearch(paisdestSearchText)"
                                      md-item-text="paisdest.Pais"
-                                     md-selected-item="solicitud.detsoliInt.pdestino"
+                                     md-selected-item="detsoliInt.pdestino"
                                      md-min-length="0"
                                      required>
                           <md-item-template>
@@ -272,7 +280,7 @@
                         <td><md-autocomplete md-search-text="ciupaisdestSearchText"
                                      md-items="ciudaddest in ciupaisdestSearch(ciupaisdestSearchText)"
                                      md-item-text="ciudaddest.Ciudad"
-                                     md-selected-item="solicitud.detsoliInt.ciudestino"
+                                     md-selected-item="detsoliInt.ciudestino"
                                      md-min-length="0"
                                      required>
                           <md-item-template>
@@ -285,25 +293,25 @@
                         <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
                           placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoliInt.fviaje" class=" md-input" short-time ="true"
                           readonly="readonly"></td>
-                        <td><select class="form-control" ng-model="solicitud.detsoliInt.hotel">
+                        <td><select class="form-control" ng-model="detsoliInt.hotel">
                           <option value="">Seleccione ..</option>
                           <option value="S">Si</option>
                           <option value="N">No</option>
                         </select></td>
-                        <td ng-if = "solicitud.detsoliInt.hotel == 'S'"><input type="number" class="form-control" ng-model="solicitud.detsoliInt.nodias"></td>
-                        <td><button type="button" class="btn btn-success btn-sm" ng-click="AgregarTramoInternacional(solicitud.detsoliInt)">
+                        <td ng-if = "solicitud.detsoliInt.hotel == 'S'"><input type="number" class="form-control" ng-model="detsoliInt.nodias"></td>
+                        <td><button type="button" class="btn btn-success btn-sm" ng-click="AgregarTramoInternacional(detsoliInt)">
                               <i class="glyphicon glyphicon-plus"></i>
                             </button></td>
                       </tr>
-                      <tr ng-repeat="detalleInt in detallesolInt">
-                          <td>@{{detalleInt.porigen}}</td>
-                          <td>@{{detalleInt.ciuorigen}}</td>
-                          <td>@{{detalleInt.pdestino}}</td>
-                          <td>@{{detalleInt.ciudestino}}</td>
-                          <td>@{{detalleInt.fviaje}}</td>
-                          <td>@{{detalleInt.hotel}}</td>
-                          <td >@{{detalleInt.hotel != 'N' ? detalleInt.nodias : 'N/A'}}</td>
-                          <td><button class="btn btn-danger btn-sm" type="button" ng-click="QuitarTramoInt(detalleInt)">
+                      <tr ng-repeat="detInt in detallesolInt">
+                          <td>@{{detInt.porigen}}</td>
+                          <td>@{{detInt.ciuorigen}}</td>
+                          <td>@{{detInt.pdestino}}</td>
+                          <td>@{{detInt.ciudestino}}</td>
+                          <td>@{{detInt.fviaje}}</td>
+                          <td>@{{detInt.hotel}}</td>
+                          <td >@{{detInt.hotel != 'N' ? detInt.nodias : 'N/A'}}</td>
+                          <td><button class="btn btn-danger btn-sm" type="button" ng-click="QuitarTramoInt(detInt)">
                                 <i class="glyphicon glyphicon-remove"></i>
                               </button></td>
                       </tr>
@@ -313,10 +321,17 @@
                 </div>
             </div>
           </div>
-        <div class="col-sm-12">
-          <button type="submit" class="btn btn-primary pull-right">Guardar</button>
-          <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
-        </div>
+        @if(isset($solicitudes))
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary pull-right">Guardar</button>
+            <button type="button" ng-click="editarSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
+          </div>
+          @else
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary pull-right">Guardar</button>
+            <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
+          </div>
+        @endif
         @include('layouts.tiquetes.solicitud.modifica')
     </form>
     <div ng-if="progress" class="progress">

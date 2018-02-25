@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class THotel extends Model
 {
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_hotel';
 
     protected $primaryKey = 'hotIntId';

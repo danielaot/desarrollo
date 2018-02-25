@@ -27,5 +27,12 @@ class TCiudade extends Model
       return $this->belongsTo('App\Models\Tiquetes\TPaises','Paises_Codigo','Codigo');
     }
 
+    public function porigen(){
+      return $this->hasOne('App\Models\Tiquetes\TPaises','Codigo','Paises_Codigo');
+    }
+
+    public function pdestino(){
+      return $this->hasOne('App\Models\Tiquetes\TPaises','Codigo','Paises_Codigo');
+    }
 
 }

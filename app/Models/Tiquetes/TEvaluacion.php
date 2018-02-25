@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class TEvaluacion
  */
 class TEvaluacion extends Model
-{
+{   
+    protected $connection = 'tiqueteshotel';
+    
     protected $table = 't_evaluacion';
 
     protected $primaryKey = 'evaIntid';
@@ -29,5 +31,7 @@ class TEvaluacion extends Model
 
     protected $guarded = [];
 
-
+    public function estado(){
+      return $this->hasOne('App\Models\Tiquetes\TEstados', 'id', 'evaIntTipoSolicitudAnt');
+    }
 }

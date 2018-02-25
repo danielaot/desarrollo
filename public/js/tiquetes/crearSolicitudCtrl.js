@@ -1,33 +1,143 @@
-app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog', function( $scope, $filter, $http, $mdDialog){
+app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '$mdDialog', function( $scope, $filter, $http, $mdDialog, $window){
 
   $scope.getUrl = 'solicitudinfo';
   $scope.getUrlSoloPaises = 'paisesInfo';
   $scope.progress = true;
   $scope.url = 'solicitud';
   $scope.enviaAprobarUrl = 'solicitud/enviaAprobar';
+  $scope.urlEditar = '../editarSoli';
+  $scope.enviaEditAprobarUrl = '../editarSoli/enviaEditAprobar';
   $scope.detallesol = [];
   $scope.detallesolInt = [];
   $scope.paises = undefined;
   $scope.getUrlSolicitudes = 'solicitudes';
+  $scope.solicitudes;
 
-  $http.get($scope.getUrl).then(function(response){
-    var info = response.data;
-    $scope.persona = angular.copy(info.persona);
-    $scope.ciudad = angular.copy(info.ciudad);
-    $scope.canales =  angular.copy(info.canales);
-    $scope.progress = false;
-  });
+  $scope.getInfo = function(){
 
-  $http.get($scope.getUrlSoloPaises).then(function(response){
-    var info = response.data;
-    $scope.paises = angular.copy(info.paises);
-    $scope.progress = false;
-  });
+    if ($scope.solicitudes !== undefined ) {
+      $scope.getUrl = '../solicitudinfo';
+      $scope.getUrlSoloPaises = '../paisesInfo';
+      $scope.urlEditar = '../editarSoli';
+      $scope.enviaEditAprobarUrl = '../editarSoli/enviaEditAprobar';
+    }
 
-  $scope.solicitudes =  function(){
+    $http.get($scope.getUrl).then(function(response){
+      var info = response.data;
+      $scope.persona = angular.copy(info.persona);
+      $scope.ciudad = angular.copy(info.ciudad);
+      $scope.canales =  angular.copy(info.canales);
+      $scope.progress = false;
+
+      if ($scope.solicitudes !== undefined) {
+          $scope.solicitud = {};
+          $scope.detsoli = {};
+          $scope.detsoliInt = {};
+
+          $scope.solicitud.nombre = $filter('filter')($scope.persona, {pen_cedula : $scope.solicitudes[0].pen_cedula})[0];
+
+          $scope.solicitud.solAnterior = angular.copy($scope.solicitudes[0].solTxtSolAnterior);
+
+          if ($scope.solicitudes[0].solIntTiposolicitud == 1) {
+            $scope.solicitud.tipo = "1";
+          }else if ($scope.solicitudes[0].solIntTiposolicitud == 2) {
+            $scope.solicitud.tipo = "2";
+          }
+
+          $scope.solicitud.numtelefono = parseInt($scope.solicitudes[0].solTxtNumTelefono);
+
+          if ($scope.solicitudes[0].solTxtPerExterna == 1) {
+            $scope.solicitud.tviajero = "1";
+          }else if ($scope.solicitudes[0].solTxtPerExterna == 2) {
+            $scope.solicitud.tviajero = "2";
+            $scope.solicitud.ccexterno = parseInt($scope.solicitudes[0].per_externa.pereTxtCedula);
+            //$scope.solicitud.fnacimientoext = angular.copy($scope.solicitudes[0].per_externa.pereTxtFNacimiento);
+            $scope.solicitud.numcelexter = parseInt($scope.solicitudes[0].per_externa.pereTxtNumCelular);
+            $scope.solicitud.nomexterno = angular.copy($scope.solicitudes[0].per_externa.pereTxtNombComple);
+            $scope.solicitud.corexterno = angular.copy($scope.solicitudes[0].per_externa.pereTxtEmail);
+          }
+
+          if ($scope.solicitudes[0].solIntTiposolicitud == 1) {
+            $scope.solicitud.tviaje = "1";
+          }else if ($scope.solicitudes[0].solIntTiposolicitud == 2) {
+            $scope.solicitud.tviaje = "2";
+          }
+          $scope.solicitud.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula})[0];
+
+          $scope.solicitud.motivo = angular.copy($scope.solicitudes[0].solTxtObservacion);
+
+          $scope.solicitud.idSolicitud = $scope.solicitudes[0].solIntSolId;
+
+          if ($scope.solicitudes[0].solIntTiposolicitud == 1) {
+            angular.forEach($scope.solicitudes[0].detalle, function(value, key){
+
+              $scope.value = value;
+              var viaje = {
+                idorigen : $scope.value.dtaIntOCiu,
+                origen : $scope.value.ciu_origen.ciuTxtNom,
+                destino : $scope.value.ciu_destino.ciuTxtNom,
+                iddestino : $scope.value.dtaIntDCiu,
+                fviaje : $scope.value.dtaIntFechaVuelo,
+                hotel : $scope.value.dtaTxtHotel,
+                dtaIntid : $scope.value.dtaIntid
+              };
+
+              if ($scope.detsoli != undefined) {
+                $scope.detallesol.push(viaje);
+                $scope.solicitud.detalleNac = $scope.detallesol;
+              }
+            });
+          }
+
+//        $scope.solicitud.territorioaprobacion = angular.copy($scope.solicitudes[0].solIntIdZona);
+
+        }
+    });
+  }
+
+  $scope.getInfo();
+
+  $scope.getInfoPaises = function(){
+
+    if ($scope.solicitudes !== undefined ) {
+      $scope.getUrl = '../solicitudinfo';
+      $scope.getUrlSoloPaises = '../paisesInfo';
+      $scope.urlEditar = '../editarSoli';
+    }
+
+    $http.get($scope.getUrlSoloPaises).then(function(response){
+      var info = response.data;
+      $scope.paises = angular.copy(info.paises);
+      $scope.progress = false;
+
+    });
+    //if ($scope.solicitudes.solIntTiposolicitud == 2) {
+      /*angular.forEach($scope.solicitudes.detalle, function(value, key){
+          $scope.value = value;
+console.log($scope.value);
+          var viaje = {
+            porigen : $scope.value.ciu_int_origen.porigen.Pais,
+            ciuorigen : $scope.value.dtaTxtOCiu,
+            pdestino : $scope.value.ciu_int_destino.pdestino.Pais,
+            ciudestino : $scope.value.dtaTxtDCiudad,
+            fviaje : $scope.value.dtaIntFechaVuelo,
+            hotel : $scope.value.dtaTxtHotel,
+          };
+
+          if ($scope.detsoliInt != undefined) {
+              $scope.detallesolInt.push(viaje);
+              $scope.solicitud.detalleInt = $scope.detallesolInt;
+          }
+        });*/
+    //}
+  }
+
+  $scope.getInfoPaises();
+
+  $scope.solicitudesMod =  function(){
     $http.get($scope.getUrlSolicitudes).then(function(response){
       var info = response.data;
-      $scope.solicitudes = angular.copy(info);
+      $scope.solicitudesAnt = angular.copy(info);
     });
   }
 
@@ -37,7 +147,6 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     }
   }
 
-
   $scope.nombreSearch = function(query){
     var filter = [];
     filter = $filter('filter')($scope.persona, {pen_nombre : query});
@@ -45,15 +154,15 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   }
 
   $scope.onChangeGrupo = function(){
-  $scope.deshabilitarSelectCanal = false;
-  if($scope.solicitud.grupoaprobacion != undefined && $scope.solicitud.grupoaprobacion.canales != undefined){
-    $scope.canalesAprobacion = $scope.solicitud.grupoaprobacion.canales;
-    if($scope.canalesAprobacion.length == 1){
-      $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
-      $scope.deshabilitarSelectCanal = true;
+    $scope.deshabilitarSelectCanal = false;
+      if($scope.solicitud.grupoaprobacion != undefined && $scope.solicitud.grupoaprobacion.canales != undefined){
+        $scope.canalesAprobacion = $scope.solicitud.grupoaprobacion.canales;
+        if($scope.canalesAprobacion.length == 1){
+          $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
+          $scope.deshabilitarSelectCanal = true;
+        }
+      }
     }
-  }
-}
 
   $scope.onChangeTerritorio = function(){
     $scope.deshabilitarSelectCanal = false;
@@ -71,8 +180,13 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     $scope.setEmptyInfoCanales();
 
     if($scope.solicitud.nombre != undefined){
-      $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula});
-      $scope.apro = $scope.aprobador[0].aprobador;
+
+      if ($scope.solicitud.nombre.pen_idtipoper !== 3 || $scope.solicitud.nombre.pen_idtipoper !== 4) {
+        $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula});
+        $scope.apro = $scope.aprobador[0].aprobador;
+      }else {
+        $scope.apro = "";
+      }
 
       if($scope.solicitud.nombre.pen_idtipoper == 4 || $scope.solicitud.nombre.pen_idtipoper == 3){
           $scope.solicitud.nombre.grupos = _.pluck($scope.solicitud.nombre.detalle,'grupo');
@@ -127,15 +241,15 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   }
 
   $scope.setEmptyInfoCanales = function(){
-		$scope.canalesAprobacion = [];
-		$scope.mostrarSelectCanal = false;
-		$scope.mostrarSelectTerritorio = false;
-		$scope.mostrarSelectGrupo = false;
-		$scope.solicitud.canalaprobacion = undefined;
-		$scope.solicitud.grupoaprobacion = undefined;
-		$scope.solicitud.territorioaprobacion = undefined;
-		$scope.deshabilitarSelectCanal = false;
-	}
+  		$scope.canalesAprobacion = [];
+  		$scope.mostrarSelectCanal = false;
+  		$scope.mostrarSelectTerritorio = false;
+  		$scope.mostrarSelectGrupo = false;
+  		$scope.solicitud.canalaprobacion = undefined;
+  		$scope.solicitud.grupoaprobacion = undefined;
+  		$scope.solicitud.territorioaprobacion = undefined;
+  		$scope.deshabilitarSelectCanal = false;
+	   }
 
   $scope.paisoriSearch = function(query){
     var filter = [];
@@ -196,6 +310,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   }
 
   $scope.QuitarTramo = function(detalle){
+    console.log(detalle);
     var confirm = $mdDialog.confirm()
       .title('')
       .textContent('Desea eliminar este tramo?')
@@ -236,21 +351,16 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   }
 
   $scope.validarFecha = function(fecha){
-    console.log("---->");
-    console.log(fecha);
+
   }
 
   $scope.infoCompleta = function(soli){
     $scope.infoSolicitud = soli;
-    console.log(soli);
     $scope.solicitud.solAnterior = angular.copy($scope.infoSolicitud.solIntSolId);
-    $scope.solicitud.nombre = angular.copy($scope.infoSolicitud.solTxtNomtercero);
-    //$scope.solicitud.nombre.infopersona.perTxtCedtercero = angular.copy($scope.infoSolicitud.solTxtCedtercero);
-    // $scope.solicitud.nombre.infopersona.perTxtEmailter = angular.copy($scope.infoSolicitud.solTxtEmail);
-    // $scope.solicitud.nombre.infopersona.perTxtFechaNac = angular.copy($scope.infoSolicitud.perTxtFechaNac);
-     $scope.solicitud.numtelefono = parseInt($scope.infoSolicitud.solTxtNumTelefono);
+    $scope.solicitud.nombre = $filter('filter')($scope.persona, {pen_cedula : $scope.infoSolicitud.solTxtCedtercero})[0];
+    $scope.solicitud.numtelefono = parseInt($scope.infoSolicitud.solTxtNumTelefono);
+    //$scope.solicitud.aprobador = $filter('filter')($scope.aprobador, {nivaprobador : {pen_cedula : $scope.infoSolicitud.per_autoriza.aprueba.perTxtCedtercero}});
 
-    //$scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
 
     if ($scope.infoSolicitud.solTxtPerExterna == 1) {
       $scope.solicitud.tviajero = "1";
@@ -264,6 +374,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     }
 
     if ($scope.infoSolicitud.solIntTiposolicitud == 1) {
+
       $scope.solicitud.tviaje = "1";
     }else if ($scope.infoSolicitud.solIntTiposolicitud == 2) {
       $scope.solicitud.tviaje = "2";
@@ -271,21 +382,46 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
 
     $scope.solicitud.motivo = angular.copy($scope.infoSolicitud.solTxtObservacion);
 
-    angular.forEach($scope.infoSolicitud.detalle, function(value, key){
-      console.log(value);
-      $scope.det = value;
-      $scope.solicitud.detsoli = angular.copy($scope.det.dtaIntOCiu);
-      console.log($scope.solicitud.detsoli);
-    });
-    // $scope.solicitud.detsoli.hotel = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
-    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
-    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
-    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
-    // $scope.solicitud.aprobador = angular.copy($scope.infoSolicitud.solTxtNumTelefono);
+    if ($scope.infoSolicitud.solIntTiposolicitud == 1) {
+      angular.forEach($scope.infoSolicitud.detalle, function(value, key){
+
+        $scope.value = value;
+        var viaje = {
+          idorigen : $scope.value.dtaIntOCiu,
+          origen : $scope.value.ciu_origen.ciuTxtNom,
+          destino : $scope.value.ciu_destino.ciuTxtNom,
+          iddestino : $scope.value.dtaIntDCiu,
+          fviaje : $scope.value.dtaIntFechaVuelo,
+          hotel : $scope.value.dtaTxtHotel
+        };
+
+        if ($scope.detsoli != undefined) {
+          $scope.detallesol.push(viaje);
+          $scope.solicitud.detalleNac = $scope.detallesol;
+        }
+      });
+    }else {
+      angular.forEach($scope.infoSolicitud.detalle, function(value, key){
+
+        $scope.value = value;
+        var viaje = {
+          porigen : $scope.value.ciu_int_origen.porigen.Pais,
+          ciuorigen : $scope.value.dtaTxtOCiu,
+          pdestino : $scope.value.ciu_int_destino.pdestino.Pais,
+          ciudestino : $scope.value.dtaTxtDCiudad,
+          fviaje : $scope.value.dtaIntFechaVuelo,
+          hotel : $scope.value.dtaTxtHotel,
+        };
+        $scope.detallesolInt.push(viaje);
+        $scope.solicitud.detalleInt = $scope.detallesolInt;
+      });
+    }
+
   }
 
   $scope.saveSolicitud = function(isCreating){
     $scope.progress = true;
+
     if (isCreating == true) {
       $http.post($scope.url, $scope.solicitud).then(function(response){
         console.log("-->");
@@ -300,6 +436,31 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     }
   }
 
+  $scope.editarSolicitud = function(isCreating){
+
+    if (isCreating == true) {
+      $http.post($scope.urlEditar, $scope.solicitud).then(function(response){
+        var data = response.data;
+      });
+    }else {
+console.log("---->1");
+      $http.post($scope.enviaEditAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
+           console.log("-->2");
+      });
+    }
+
+  /*  console.log(isCreating);
+    console.log($scope.solicitud);
+
+      $http.post($scope.urlEditar, $scope.solicitud).then(function(response){
+        var data = response.data;
+      });
+    // }else {
+    //   $http.post($scope.enviaEditAprobar+"/"+isCreating, $scope.solicitud).then(function(response){
+    //     console.log("-->2");
+    //   });
+    // }*/
+  }
 
 
 

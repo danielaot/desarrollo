@@ -63,4 +63,8 @@ class TPersona extends Model
     public function pernivejecutivo(){
       return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'perTxtCedtercero');
     }
+
+    public function personasdepende(){
+      return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepPerIntIdAprueba', 'perIntId');
+    }
 }

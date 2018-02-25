@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TSolicitud extends Model
 {
+    protected $connection = 'tiqueteshotel';
+
     protected $table = 't_solicitud';
 
     protected $primaryKey = 'solIntSolId';
@@ -53,6 +55,10 @@ class TSolicitud extends Model
       return $this->hasOne('App\Models\Genericas\Tercero', 'idTercero', 'solTxtCedterceroCrea');
     }
 
+    public function perAutoriza(){
+      return $this->hasOne('App\Models\Tiquetes\TPersonaDepende', 'perdepPerIntCedPerNivel', 'solTxtCedtercero');
+    }
+
     public function pago(){
       return $this->hasOne('App\Models\Tiquetes\TPago', 'pagIntSolicitud', 'solIntSolId');
     }
@@ -60,6 +66,7 @@ class TSolicitud extends Model
     public function solipernivel(){
       return $this->hasOne('App\Models\Tiquetes\TSolipernivel', 'sni_idsolicitud', 'solIntSolId');
     }
+
 
     public function canal(){
       return $this->hasOne('App\Models\Genericas\TCanal', 'can_id', 'solIntIdCanal');
@@ -75,5 +82,13 @@ class TSolicitud extends Model
 
     public function tipoGerencia(){
       return $this->hasOne('App\Models\Genericas\TGerencia', 'ger_cod' ,'solTxtGerencia');
+    }
+    public function evaluaciones(){
+        return $this->hasMany('App\Models\Tiquetes\TEvaluacion', 'evaIntSolicitud', 'solIntSolId');
+    }
+
+    public function personaGerencia(){
+        return $this->hasOne('App\Models\Tiquetes\TPersona', 'perTxtCedtercero', 'solTxtCedtercero');
+
     }
 }

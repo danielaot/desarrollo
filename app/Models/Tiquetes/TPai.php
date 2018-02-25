@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TPai extends Model
 {
+	protected $connection = 'tiqueteshotel';
+	
     protected $table = 't_pais';
 
     protected $primaryKey = 'paiIntId';

@@ -13,36 +13,32 @@
                 <i class="glyphicon glyphicon-plus"></i>  Agregar Nivel
               </button>
               <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
-                <thead>
-                  <tr>
-                    <th>Tipo Persona</th>
-                    <th>Cedula</th>
-                    <th>Nombre</th>
-                    <th>Ver</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody ng-repeat="usu in usuNivelUno">
-                  <td>@{{usu.tipo_persona.tpp_descripcion}}</td>
-                  <td>@{{usu.pen_cedula}}</td>
-                  <td>@{{usu.pen_nombre}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" ng-click="">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usu)">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usu)">
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                  </td>
-                </tbody>
+                 <thead>
+                   <tr>
+                      <th>Tipo Persona</th>
+                      <th>Cedula</th>
+                      <th>Nombre</th>
+                      <th>Editar</th>
+                      <th>Eliminar</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr ng-repeat="usu in usuNivelUno">
+                     <td>@{{usu.tipo_persona.tpp_descripcion}}</td>
+                     <td>@{{usu.pen_cedula}}</td>
+                     <td>@{{usu.pen_nombre}}</td>
+                     <td>
+                       <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usu)">
+                         <i class="glyphicon glyphicon-edit"></i>
+                       </button>
+                     </td>
+                     <td>
+                       <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usu)">
+                         <i class="glyphicon glyphicon-remove"></i>
+                       </button>
+                     </td>
+                   </tr>
+                 </tbody>
               </table>
             </md-content>
           </md-tab>
@@ -59,30 +55,26 @@
                     <th>Tipo Persona</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
-                    <th>Ver</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                   </tr>
                 </thead>
-                <tbody ng-repeat="usuD in usuNivelDos">
-                  <td>@{{usuD.tipo_persona.tpp_descripcion}}</td>
-                  <td>@{{usuD.pen_cedula}}</td>
-                  <td>@{{usuD.pen_nombre}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" ng-click="">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usuD)">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usuD)">
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                  </td>
+                <tbody>
+                  <tr ng-repeat="usuD in usuNivelDos">
+                    <td>@{{usuD.tipo_persona.tpp_descripcion}}</td>
+                    <td>@{{usuD.pen_cedula}}</td>
+                    <td>@{{usuD.pen_nombre}}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usuD)">
+                        <i class="glyphicon glyphicon-edit"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usuD)">
+                        <i class="glyphicon glyphicon-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </md-content>
@@ -100,30 +92,26 @@
                     <th>Tipo Persona</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
-                    <th>Ver</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                   </tr>
                 </thead>
-                <tbody ng-repeat="usuT in usuNivelTres">
-                  <td>@{{usuT.tipo_persona.tpp_descripcion}}</td>
-                  <td>@{{usuT.pen_cedula}}</td>
-                  <td>@{{usuT.pen_nombre}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" ng-click="">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usuT)">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usuT)">
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                  </td>
+                <tbody>
+                  <tr ng-repeat="usuT in usuNivelTres">
+                    <td>@{{usuT.tipo_persona.tpp_descripcion}}</td>
+                    <td>@{{usuT.pen_cedula}}</td>
+                    <td>@{{usuT.pen_nombre}}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usuT)">
+                        <i class="glyphicon glyphicon-edit"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usuT)">
+                        <i class="glyphicon glyphicon-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </md-content>
@@ -141,30 +129,26 @@
                     <th>Tipo Persona</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
-                    <th>Ver</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                   </tr>
                 </thead>
-                <tbody ng-repeat="usuC in usuNivelCuatro">
-                  <td>@{{usuC.tipo_persona.tpp_descripcion}}</td>
-                  <td>@{{usuC.pen_cedula}}</td>
-                  <td>@{{usuC.pen_nombre}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" ng-click="">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usu)">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usu)">
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                  </td>
+                <tbody>
+                  <tr  ng-repeat="usuC in usuNivelCuatro">
+                    <td>@{{usuC.tipo_persona.tpp_descripcion}}</td>
+                    <td>@{{usuC.pen_cedula}}</td>
+                    <td>@{{usuC.pen_nombre}}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usuC)">
+                        <i class="glyphicon glyphicon-edit"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usuC)">
+                        <i class="glyphicon glyphicon-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </md-content>
@@ -182,30 +166,26 @@
                     <th>Tipo Persona</th>
                     <th>Cedula</th>
                     <th>Nombre</th>
-                    <th>Ver</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
                   </tr>
                 </thead>
-                <tbody ng-repeat="usuSA in usuSerAdmin">
-                  <td>@{{usuSA.tipo_persona.tpp_descripcion}}</td>
-                  <td>@{{usuSA.pen_cedula}}</td>
-                  <td>@{{usuSA.pen_nombre}}</td>
-                  <td>
-                    <button class="btn btn-info btn-sm" ng-click="">
-                      <i class="glyphicon glyphicon-eye-open"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="editNivelUno(usu)">
-                      <i class="glyphicon glyphicon-edit"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivelUno(usu)">
-                      <i class="glyphicon glyphicon-remove"></i>
-                    </button>
-                  </td>
+                <tbody>
+                  <tr ng-repeat="usuSA in usuSerAdmin">
+                    <td>@{{usuSA.tipo_persona.tpp_descripcion}}</td>
+                    <td>@{{usuSA.pen_cedula}}</td>
+                    <td>@{{usuSA.pen_nombre}}</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usuSA)">
+                        <i class="glyphicon glyphicon-edit"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usuSA)">
+                        <i class="glyphicon glyphicon-remove"></i>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </md-content>
@@ -214,6 +194,7 @@
         </md-tabs>
       </div>
       @include('layouts.tiquetes.nivelesAutorizacion.createNivelAutorizacion')
+      @include('layouts.tiquetes.nivelesAutorizacion.editNivelAutorizacion')
       <div ng-if="progress" class="progress">
         <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
       </div>

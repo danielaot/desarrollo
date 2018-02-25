@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
  * Class TAerolinea
  */
 class TAerolinea extends Model
-{
+{	
+	protected $connection = 'tiqueteshotel';
+
     protected $table = 't_aerolinea';
 
     protected $primaryKey = 'aerIntId';

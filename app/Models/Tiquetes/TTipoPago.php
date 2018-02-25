@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TTipoPago extends Model
 {
+	protected $connection = 'tiqueteshotel';
+	
     protected $table = 't_tip_pago';
 
     protected $primaryKey = 'id';

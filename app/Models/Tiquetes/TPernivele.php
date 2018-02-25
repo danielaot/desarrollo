@@ -41,4 +41,5 @@ class TPernivele extends Model
     public function detalle(){
       return $this->hasMany('App\Models\Tiquetes\TPersonaDepende','perdepPerIntCedPerNivel','pen_cedula');
     }
+
 }

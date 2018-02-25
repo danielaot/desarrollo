@@ -21,7 +21,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="soli in solicitudes">
+              <tr ng-repeat="soli in solicitudesAnt">
                 <td ng-click="infoCompleta(soli)">@{{soli.solIntSolId}}</td>
                 <!-- <td><a href="solicitud" >@{{soli.solIntSolId}}</a></td> -->
                 <td>@{{soli.solIntEstado}}</td>

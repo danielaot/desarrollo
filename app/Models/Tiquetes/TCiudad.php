@@ -26,5 +26,7 @@ class TCiudad extends Model
 
     protected $guarded = [];
 
-
+    public function departamento(){
+      return $this->hasOne('App\Models\Tiquetes\TDepartamento', 'depIntId', 'ciuIntDep');
+    }
 }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TNivele extends Model
 {
+	protected $connection = 'tiqueteshotel';
+	
     protected $table = 't_niveles';
 
     public $timestamps = true;
