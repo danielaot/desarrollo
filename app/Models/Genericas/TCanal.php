@@ -20,7 +20,7 @@ class TCanal extends Model
         'can_txt_descrip',
     ];
 
-    public function canalesperniveles(){
+    public function canalperniveles(){
         return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepIntCanal', 'can_id');
     }
 }

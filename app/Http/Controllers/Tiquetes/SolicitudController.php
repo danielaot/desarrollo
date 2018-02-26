@@ -41,7 +41,7 @@ class SolicitudController extends Controller
     {
       $usuario = Auth::user();
       //$persona = PerNivel::with('nivel', 'detpersona.detallenivelpersona.aprobador')->get();
-      $canales = TCanal::with('canalesperniveles')->whereIn('can_id',['20','AL','DR','SI'])->get();
+      $canales = TCanal::with('canalperniveles')->whereIn('can_id',['20','AL','DR','SI'])->get();
 
       $persona = PerNivel::with('nivel.nivelpadre','tipoPersona', 'detpersona.detallenivelpersona.aprobador',
                                 'detalle.grupo', 'detalle.canal', 'detalle.territorio', 'detalle.aprobador.nivaprobador.nivel',

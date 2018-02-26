@@ -35,9 +35,9 @@ class NivelesAutorizacionController extends Controller
     public function getInfo()
     {
       $tpersona = TipoPersona::all();
-      $canal = Canal::with('canalesperniveles')->whereIn('can_id',['20','AL','DR','SI'])->get();
+      $canal = Canal::with('canalperniveles')->whereIn('can_id',['20','AL','DR','SI'])->get();
       $territorios = Territorios::with('zona')->get();
-      $grupos =  Grupo::with('grupopernivel', 'grupopernivel.nivel')->where('gru_estado',1)->get();
+      $grupos =  Grupo::with('gruppernivel', 'gruppernivel.nivel')->where('gru_estado',1)->get();
       $usuarios = Tercero::with('usuario', 'dirnacional', 'personanivel', 'persona')
                         ->where('indxEstadoTercero', 1)
                         ->where('indxEmpleadoTercero', 1)
@@ -59,7 +59,7 @@ class NivelesAutorizacionController extends Controller
        return ($usuario->usuario != null && $usuario->personanivel == null);
       })->values();
 
-      $gerencias = Gerencia::with('gerenciapernivel')->get();
+      $gerencias = Gerencia::with('gerepernivel')->get();
       $gerencias = collect($gerencias)->map(function($gerencia){
         $gerencia['codigoGerencia'] = $gerencia['ger_cod'].' - '.$gerencia['ger_nom'];
         return $gerencia;
@@ -622,7 +622,7 @@ class NivelesAutorizacionController extends Controller
 
           }
         }elseif ($request['tipo_persona']['id'] == '2') {
-          
+
             foreach ($request['territorios'] as $key => $value) {
               if ($value['isNew']  == true){
                 foreach ($value['canales'] as $key2 => $value2) {

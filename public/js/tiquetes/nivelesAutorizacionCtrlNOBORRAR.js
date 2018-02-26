@@ -195,7 +195,7 @@ console.log("------>2");
           //
           //     if($scope.nivel[0].id == 2){
           //
-          //       $scope.canalesFiltrados = $filter('filter')($scope.canales, {canalesperniveles:{perdepIntGrupo: objeto.id, perdepIntNivel: $scope.nivel[0].id, perdepPerIntIdtipoper: $scope.infoPerNivel.tpersona.id}});
+          //       $scope.canalesFiltrados = $filter('filter')($scope.canales, {canalperniveles:{perdepIntGrupo: objeto.id, perdepIntNivel: $scope.nivel[0].id, perdepPerIntIdtipoper: $scope.infoPerNivel.tpersona.id}});
           //
           //       var canales = angular.copy($scope.canales);
           //
@@ -215,7 +215,7 @@ console.log("------>2");
           //
           //     }else if($scope.nivel[0].id == 3){
           //
-          //       var gruposFiltrados = $filter('filter')($scope.grupos,{grupopernivel:{pnd_nivel: $scope.nivel[0].id, pnd_tipopersona: $scope.infoPerNivel.tipopersona.id}});
+          //       var gruposFiltrados = $filter('filter')($scope.grupos,{gruppernivel:{pnd_nivel: $scope.nivel[0].id, pnd_tipopersona: $scope.infoPerNivel.tipopersona.id}});
           //       var grupos = angular.copy($scope.grupos);
           //
           //       if(gruposFiltrados.length > 0){
@@ -240,7 +240,7 @@ console.log("------>2");
         }
         else if($scope.nivel[0].id == 4){
 
-          var gerenciasFiltradas = $filter('filter')($scope.gerencias,{gerenciapernivel:{perdepIntNivel: $scope.nivel[0].id, perdepPerIntIdtipoper: $scope.infoPerNivel.tpersona.id}});
+          var gerenciasFiltradas = $filter('filter')($scope.gerencias,{gerepernivel:{perdepIntNivel: $scope.nivel[0].id, perdepPerIntIdtipoper: $scope.infoPerNivel.tpersona.id}});
           var gerencias = angular.copy($scope.gerencias);
 
           if(gerenciasFiltradas.length > 0){

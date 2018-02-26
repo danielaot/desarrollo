@@ -15,7 +15,7 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$window', '
       $scope.anuladas = $filter('filter')($scope.todas, {solIntEstado : 3}, true);
       $scope.paprobacion = $filter('filter')($scope.todas, {solIntEstado : 4}, true);
       $scope.cerradas = $filter('filter')($scope.todas, {solIntEstado : 9}, true);
-
+      
       $scope.filtrosAprobacion = [7, 12, 14];
       $scope.aprobadas = [];
       $scope.filtrosAprobacion.forEach(function(element){

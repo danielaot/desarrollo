@@ -24,7 +24,7 @@ class TGerencia extends Model
 
     protected $guarded = [];
 
-    public function gerenciapernivel(){
+    public function gerepernivel(){
 
       return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepPerIntGerencia', 'ger_cod');
     }

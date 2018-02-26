@@ -23,7 +23,7 @@ class TGrupo extends Model
 
     protected $guarded = [];
 
-    public function grupopernivel(){
+    public function gruppernivel(){
         return $this->hasMany('App\Models\Tiquetes\TPersonaDepende', 'perdepIntGrupo', 'id');
     }
 }

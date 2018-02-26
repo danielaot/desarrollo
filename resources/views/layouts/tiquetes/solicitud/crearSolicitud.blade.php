@@ -74,7 +74,6 @@
               <div class="row">
                 <div class="col-sm-6">
                   <label>Email :</label>
-                  <input type="text" class="form-control" ng-if="solicitud.nombre.detpersona.perTxtEmailter == null " ng-model="solicitud.nombre.correo" placeholder="Email del Solicitante">
                   <input type="text" class="form-control" ng-model="solicitud.nombre.detpersona.perTxtEmailter" placeholder="Email del Solicitante" disabled>
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
@@ -88,7 +87,7 @@
                   <input type="number" class="form-control" ng-model="solicitud.numtelefono">
                 </div>
                 <div class="col-sm-6" ng-if = "solicitud.nombre != null">
-                  <label ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'">Aprobador <span class="required">*</span>:</label>
+                  <!-- <label ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'">Aprobador <span class="required">*</span>:</label> -->
                   <select ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'" class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
                     <option value="">Seleccione aprobador ..</option>
                   </select>
