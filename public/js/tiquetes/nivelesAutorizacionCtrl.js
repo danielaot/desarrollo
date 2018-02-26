@@ -1,6 +1,6 @@
 app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function( $scope, $filter, $http, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
 
-  $scope.url = 'nivelesautorizacion';
+  $scope.url = 'nivelesautorizacionTiquetes';
   $scope.getUrl = 'nivelesautorizacioninfo';
   $scope.urlEdit = 'nivelesautorizacionedit';
   $scope.urlDelete = 'nivelesautorizaciondelete';
@@ -450,7 +450,6 @@ console.log(filterPersonaExist);
               }else{
 
                 canalTemporal.usuarios.forEach(function(tercero,key){
-                  console.log(tercero);
                   var filterExistTercero = $filter('filter')(objeto.usuarios, {id: tercero.id},true);
                   if(filterExistTercero.length == 0){
                     canalTemporal.usuarios.splice(key,1);
@@ -509,12 +508,11 @@ console.log($scope.tercerosFiltrados);
 console.log($scope.usuarios);
            }else if($scope.pernivelEdit.tipo_persona.id == 2){
 console.log("entrada4");
-
              if(objeto.canales != undefined){
                    objeto.canales.map(function(canal){
                      $scope.tercerosFiltrados = $filter('filter')
-                     ($scope.usuarios,{
-                       nivel: {niv_padre: $scope.nivel.id},
+                     ($scope.usuariosN,{
+                       nivel: {niv_padre: $scope.niveles.id},
                        pen_idtipoper: $scope.pernivelEdit.tipo_persona.id,
                        detpersona: {detallenivelpersona : {perdepIntCanal: objeto.can_id,perdepPerIntIdAprueba: 0}}
                        //detpersona: {detallenivelpersona : {perdepIntCanal: canal.can_id,perdepIntTerritorio: objeto.id,perdepPerIntIdAprueba: 0}}
@@ -523,6 +521,8 @@ console.log("entrada4");
                      return canal;
                    });
                }
+  console.log(objeto.canales);
+
            }
          }
 

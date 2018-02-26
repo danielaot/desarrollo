@@ -3,8 +3,8 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
   $scope.getUrl = 'solicitudinfo';
   $scope.getUrlSoloPaises = 'paisesInfo';
   $scope.progress = true;
-  $scope.url = 'solicitud';
-  $scope.enviaAprobarUrl = 'solicitud/enviaAprobar';
+  $scope.url = 'solicitudTiquetes';
+  $scope.enviaAprobarUrl = 'solicitudTiquetes/enviaAprobar';
   $scope.urlEditar = '../editarSoli';
   $scope.enviaEditAprobarUrl = '../editarSoli/enviaEditAprobar';
   $scope.detallesol = [];
@@ -17,7 +17,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
 
     if ($scope.solicitudes !== undefined ) {
       $scope.getUrl = '../solicitudinfo';
-      $scope.getUrlSoloPaises = '../paisesInfo';
+      //$scope.getUrlSoloPaises = '../paisesInfo';
       $scope.urlEditar = '../editarSoli';
       $scope.enviaEditAprobarUrl = '../editarSoli/enviaEditAprobar';
     }
@@ -27,6 +27,8 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
       $scope.persona = angular.copy(info.persona);
       $scope.ciudad = angular.copy(info.ciudad);
       $scope.canales =  angular.copy(info.canales);
+      $scope.fechahoy = angular.copy(info.fechahoy.date);
+      $scope.fechavalidacion = angular.copy(info.fechavalidacion.date)
       $scope.progress = false;
 
       if ($scope.solicitudes !== undefined) {
@@ -62,6 +64,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
           }else if ($scope.solicitudes[0].solIntTiposolicitud == 2) {
             $scope.solicitud.tviaje = "2";
           }
+
           $scope.solicitud.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula})[0];
 
           $scope.solicitud.motivo = angular.copy($scope.solicitudes[0].solTxtObservacion);
@@ -95,44 +98,46 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
     });
   }
 
-  $scope.getInfo();
-
   $scope.getInfoPaises = function(){
 
-    if ($scope.solicitudes !== undefined ) {
-      $scope.getUrl = '../solicitudinfo';
-      $scope.getUrlSoloPaises = '../paisesInfo';
-      $scope.urlEditar = '../editarSoli';
-    }
+     if ($scope.solicitudes !== undefined ) {
+          $scope.getUrl = '../solicitudinfo';
+          $scope.getUrlSoloPaises = '../paisesInfo';
+          $scope.urlEditar = '../editarSoli';
+     }
 
     $http.get($scope.getUrlSoloPaises).then(function(response){
       var info = response.data;
       $scope.paises = angular.copy(info.paises);
       $scope.progress = false;
-
     });
-    //if ($scope.solicitudes.solIntTiposolicitud == 2) {
-      /*angular.forEach($scope.solicitudes.detalle, function(value, key){
-          $scope.value = value;
-console.log($scope.value);
-          var viaje = {
-            porigen : $scope.value.ciu_int_origen.porigen.Pais,
-            ciuorigen : $scope.value.dtaTxtOCiu,
-            pdestino : $scope.value.ciu_int_destino.pdestino.Pais,
-            ciudestino : $scope.value.dtaTxtDCiudad,
-            fviaje : $scope.value.dtaIntFechaVuelo,
-            hotel : $scope.value.dtaTxtHotel,
-          };
 
-          if ($scope.detsoliInt != undefined) {
+    if ($scope.solicitudes !== undefined) {
+        $scope.detsoliInt = {};
+
+      if ($scope.solicitudes[0].solIntTiposolicitud == 2) {
+
+          angular.forEach($scope.solicitudes[0].detalle, function(value, key){
+            $scope.value = value;
+            console.log($scope.value);
+            var viaje = {
+              porigen : $scope.value.ciu_int_origen.porigen.Pais,
+              ciuorigen : $scope.value.dtaTxtOCiu,
+              pdestino : $scope.value.ciu_int_destino.pdestino.Pais,
+              ciudestino : $scope.value.dtaTxtDCiudad,
+              fviaje : $scope.value.dtaIntFechaVuelo,
+              hotel : $scope.value.dtaTxtHotel,
+            };
+
+            if ($scope.detsoliInt != undefined) {
               $scope.detallesolInt.push(viaje);
-              $scope.solicitud.detalleInt = $scope.detallesolInt;
-          }
-        });*/
-    //}
-  }
+            //  $scope.solicitud.detalleInt = $scope.detallesolInt;
+            }
+          });
+      }
 
-  $scope.getInfoPaises();
+    }
+  }
 
   $scope.solicitudesMod =  function(){
     $http.get($scope.getUrlSolicitudes).then(function(response){
@@ -271,6 +276,7 @@ console.log($scope.value);
 
   $scope.ciupaisdestSearch = function(query){
       var filter = [];
+
       filter = $filter('filter')($scope.solicitud.detsoliInt.pdestino.ciudades, {Ciudad : query});
       return filter;
   }
@@ -290,6 +296,7 @@ console.log($scope.value);
     $scope.detallesol.push(viaje);
     $scope.solicitud.detalleNac = $scope.detallesol;
     $scope.solicitud.detsoli = {};
+    $scope.detsoli = {};
   }
 
   $scope.AgregarTramoInternacional = function(detsoliInt){
@@ -307,12 +314,13 @@ console.log($scope.value);
     $scope.detallesolInt.push(viaje);
     $scope.solicitud.detalleInt = $scope.detallesolInt;
     $scope.solicitud.detsoliInt = {};
+    $scope.detalleInt = {};
   }
 
   $scope.QuitarTramo = function(detalle){
     console.log(detalle);
     var confirm = $mdDialog.confirm()
-      .title('')
+      .title('Alerta')
       .textContent('Desea eliminar este tramo?')
       .ariaLabel('detalle')
       .ok('Eliminar')
@@ -332,7 +340,7 @@ console.log($scope.value);
 
   $scope.QuitarTramoInt = function(detalleInt){
     var confirm = $mdDialog.confirm()
-      .title('')
+      .title('Alerta')
       .textContent('Desea eliminar este tramo?')
       .ariaLabel('detalleInt')
       .ok('Eliminar')
@@ -350,9 +358,18 @@ console.log($scope.value);
     });
   }
 
-  $scope.validarFecha = function(fecha){
+  /*$scope.validarFecha = function(){
+    console.log($scope.solicitud.detsoli);
+    $scope.fechaSolicitud = $filter('date')(new Date($scope.solicitud.detsoli.fviaje), 'yyyy-MM-dd');
+    $scope.fechahoyVal = $filter('date')(new Date($scope.fechahoy), 'yyyy-MM-dd');
+    $scope.fechaminVal = $filter('date')(new Date($scope.fechavalidacion), 'yyyy-MM-dd');
 
-  }
+    if ($scope.fechaSolicitud == $scope.fechahoyVal || $scope.fechaSolicitud > $scope.fechahoyVal && $scope.fechaSolicitud < $scope.fechaminVal) {
+        console.log("mostrar mensaje");
+        // motivo viaje
+
+      }
+  }*/
 
   $scope.infoCompleta = function(soli){
     $scope.infoSolicitud = soli;
@@ -443,7 +460,7 @@ console.log($scope.value);
         var data = response.data;
       });
     }else {
-console.log("---->1");
+      console.log("---->1");
       $http.post($scope.enviaEditAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
            console.log("-->2");
       });

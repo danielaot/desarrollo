@@ -48,8 +48,10 @@ class SolicitudController extends Controller
                                 'detalle.ejecutivo.pernivejecutivo.nivel')->get();
 
       $ciudad = Ciudad::all();
+      $fechavalidacion = Carbon::now()->addDays(12);
+      $fechahoy = Carbon::now();
 
-      $response =  compact('persona', 'ciudad', 'usuario', 'canales');
+      $response =  compact('persona', 'ciudad', 'usuario', 'canales', 'fechahoy', 'fechavalidacion');
 
       return response()->json($response);
     }
@@ -77,12 +79,13 @@ class SolicitudController extends Controller
     public function store(Request $request, $isCreating = false)
     {
         $usuario = Auth::user();
+        $fecha = Carbon::now();
         $usulogin = PerNivel::where('pen_cedula', $usuario['idTerceroUsuario'])->get();
         $isCreating = $isCreating == "false" ? false: true;
       //  return response()->json($usulogin);
         if ($request->tipo == 1) {
           $solicitud = new Solicitud;
-          $solicitud->solIntFecha = '1507738632';
+          $solicitud->solIntFecha = strtotime($fecha);
           $solicitud->solTxtCedterceroCrea = '1144094290';
           //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
           $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
@@ -272,12 +275,6 @@ class SolicitudController extends Controller
     }
 
 
-    public function show($id)
-    {
-        //
-    }
-
-
     public function edit($id)
     {
       $ruta = 'Tiquetes y Hotel // Editar Solicitud';
@@ -306,11 +303,11 @@ class SolicitudController extends Controller
     {
         //return response()->json($request->all());
         $usuario = Auth::user();
-        $fechaCreacion = '1507738632';
+        $fechaEdicion = Carbon::now();
         $isCreating = $isCreating == "false" ? false: true;
 
         $updateSolicitud = Solicitud::where('solIntSolId', $request->idSolicitud)
-                                    ->update(['solIntFecha' => $fechaCreacion, 'solTxtCedterceroCrea' => $usuario->idTerceroUsuario,
+                                    ->update(['solIntFecha' => strtotime($fechaEdicion), 'solTxtCedterceroCrea' => $usuario->idTerceroUsuario,
                                       'solIntPersona' => $request['nombre']['detpersona']['perIntId'],
                                       'solTxtCedtercero' => $request['nombre']['detpersona']['perTxtCedtercero'],
                                       'solTxtNomtercero' => $request['nombre']['detpersona']['perTxtNomtercero'],

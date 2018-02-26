@@ -62,23 +62,26 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::group(['prefix' => 'tiquetes'], function(){
 
-    Route::resource('solicitud', 'Tiquetes\SolicitudController');
+    /*Solicitud*/
+    Route::resource('solicitudTiquetes', 'Tiquetes\SolicitudController');
     Route::get('solicitudinfo', 'Tiquetes\SolicitudController@getInfo');
     Route::get('paisesInfo', 'Tiquetes\SolicitudController@paisesInfo');
     Route::get('solicitudes', 'Tiquetes\SolicitudController@modifica');
-    Route::post('solicitud/enviaAprobar/{isCreating}', 'Tiquetes\SolicitudController@store');
+    Route::post('solicitudTiquetes/enviaAprobar/{isCreating}', 'Tiquetes\SolicitudController@store');
     Route::get('editarSolicitud/{idSolicitud}', 'Tiquetes\SolicitudController@edit')->name('editarSolicitud');
     Route::post('editarSoli', 'Tiquetes\SolicitudController@editSolicitud');
     Route::post('editarSoli/enviaEditAprobar/{isCreating}', 'Tiquetes\SolicitudController@editSolicitud');
 
-    Route::resource('misSolicitudes', 'Tiquetes\MisSolicitudesController');
+    /*Mis Solicitudes*/
+
+    Route::resource('misSolicitudesTiquetes', 'Tiquetes\MisSolicitudesController');
     Route::get('missolicitudesinfo', 'Tiquetes\MisSolicitudesController@getInfo');
     Route::post('enviarSol', 'Tiquetes\MisSolicitudesController@enviarSolicitud');
     Route::post('anularSol', 'Tiquetes\MisSolicitudesController@anularSolicitud');
     Route::get('imprimirLegalizacion', 'Tiquetes\MisSolicitudesController@imprimirLegalizacion')->name('imprimirLegalizacion');
 
     /*Niveles Autorizacion*/
-    Route::resource('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController');
+    Route::resource('nivelesautorizacionTiquetes', 'Tiquetes\NivelesAutorizacionController');
     Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
     Route::post('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
     Route::put('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@editPerNivel');
