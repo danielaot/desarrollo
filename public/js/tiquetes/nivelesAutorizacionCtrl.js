@@ -608,9 +608,9 @@ console.log("entrada4");
     $scope.progress = true;
     $scope.infoPerNivel.nivel = $scope.nivel[0];
     $http.post($scope.url, $scope.infoPerNivel).then(function(response){
-      //$scope.getInfo();
-      //$scope.progress = false;
-      //angular.element('.close').trigger('click');
+      $scope.getInfo();
+      $scope.progress = false;
+      angular.element('.close').trigger('click');
       });
     }
 
