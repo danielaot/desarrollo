@@ -60,12 +60,11 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
 
     $scope.pernivelEdit.estado = $filter('filter')($scope.estados, {value : $scope.pernivelEdit.detpersona.perTxtEstado})[0];
 
-    //$scope.pernivelEdit.numpasaporte = $scope.pernivelEdit.detpersona.perTxtNoPasaporte;
-    //console.log($scope.pernivelEdit.numpasaporte);
+    $scope.pernivelEdit.numpasaporte = $scope.pernivelEdit.detpersona.perTxtNoPasaporte;
 
-    //$scope.infoPerNivel.fpasaporte = $scope.usuarioUno.detpersona.perTxtFechaNac; //nO SE MUESTRA
-    //$scope.pernivelEdit.ciuexpedicion = $filter('filter')($scope.ciudades, {ciuIntId : $scope.pernivelEdit.detpersona.perIntCiudadExpPass})[0];
-    //$scope.pernivelEdit.lifemiles = $scope.infoPerNivel.detpersona.perIntLifeMiles;
+    //$scope.pernivelEdit.fpasaporte = $scope.pernivelEdit.detpersona.perTxtFechaNac; //nO SE MUESTRA
+    $scope.pernivelEdit.ciuexpedicion = $filter('filter')($scope.ciudades, {ciuIntId : $scope.pernivelEdit.detpersona.perIntCiudadExpPass})[0];
+    $scope.pernivelEdit.lifemiles = $scope.pernivelEdit.detpersona.perIntLifeMiles;
 
     var persona = $filter('filter')($scope.usuariosSinFiltro,{dirnacional : {dir_txt_cedula : $scope.pernivelEdit.pen_cedula}});
 
@@ -92,7 +91,7 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
             canal.tercerosFiltrados = $scope.filtrarPersonasArregloEditar(canal);
 
             var filterCanalDepende = $filter('filter')($scope.pernivelEdit.detpersona.personasdepende, {perdepIntCanal: canal.can_id},true);
-            console.log(filterCanalDepende);
+
             if(filterCanalDepende.length > 0){
               filterCanalDepende = _.pluck(filterCanalDepende, 'perejecutivo');
               filterCanalDepende.forEach(function(perDepende){
@@ -609,9 +608,9 @@ console.log("entrada4");
     $scope.progress = true;
     $scope.infoPerNivel.nivel = $scope.nivel[0];
     $http.post($scope.url, $scope.infoPerNivel).then(function(response){
-      $scope.getInfo();
+      //$scope.getInfo();
+      //$scope.progress = false;
       //angular.element('.close').trigger('click');
-      $scope.progress = false;
       });
     }
 

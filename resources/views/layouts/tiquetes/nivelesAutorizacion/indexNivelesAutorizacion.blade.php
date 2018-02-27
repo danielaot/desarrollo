@@ -192,12 +192,12 @@
           </md-tab>
           <!-- fin nivel Serv. Administrativos -->
         </md-tabs>
+        <div ng-if="progress" class="progress">
+          <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
+        </div>
       </div>
       @include('layouts.tiquetes.nivelesAutorizacion.createNivelAutorizacion')
       @include('layouts.tiquetes.nivelesAutorizacion.editNivelAutorizacion')
-      <div ng-if="progress" class="progress">
-        <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>
-      </div>
     </div>
 @endsection
 

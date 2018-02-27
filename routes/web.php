@@ -83,8 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
     /*Niveles Autorizacion*/
     Route::resource('nivelesautorizacionTiquetes', 'Tiquetes\NivelesAutorizacionController');
     Route::get('nivelesautorizacioninfo', 'Tiquetes\NivelesAutorizacionController@getInfo');
-    Route::post('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
-    Route::put('nivelesautorizacion', 'Tiquetes\NivelesAutorizacionController@editPerNivel');
+    Route::post('nivelesautorizacionTiquetes', 'Tiquetes\NivelesAutorizacionController@savePerNivel');
+    Route::put('nivelesautorizacionTiquetes', 'Tiquetes\NivelesAutorizacionController@editPerNivel');
     Route::post('nivelesautorizaciondelete', 'Tiquetes\NivelesAutorizacionController@deletePerNivel');
 
     /*Bandeja Aprobacion*/

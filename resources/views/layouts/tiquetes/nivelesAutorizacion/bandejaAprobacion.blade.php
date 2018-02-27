@@ -19,12 +19,12 @@
           <tbody>
             <tr ng-repeat="sol in solipernivel">
               <td class="text-center">@{{sol.sni_idsolicitud}}</td>
-              <td class="text-center">@{{sol.detallepernivel.pen_cedula}}</td>
-              <td class="text-center">@{{sol.detallepernivel.pen_nombre}}</td>
+              <td class="text-center">@{{sol.detallesolicitud.solTxtCedtercero}}</td>
+              <td class="text-center">@{{sol.detallesolicitud.solTxtNomtercero}}</td>
               <td class="text-center">@{{(sol.detallesolicitud.solIntFecha) * (1000) | date:'dd-MM-yyyy'}}</td>
               <td class="text-center">@{{sol.detallesolicitud.solIntEstado}}</td>
               <td class="text-right">
-                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#modal" ng-click="infosolicitud(sol)">
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#modalinfo" ng-click="infosolicitud(sol)">
                   <i class="glyphicon glyphicon-eye-open"></i>
                   <md-tooltip>Ver
                   </button>
@@ -40,7 +40,7 @@
         </table>
         @include('layouts.tiquetes.nivelesAutorizacion.aprobSolicitud')
       </div>
-      @include('layouts.tiquetes.solicitud.misSolicitudesDet')
+      @include('layouts.tiquetes.solicitud.infoSolicitudesDet')
     </div>
 @endsection
 

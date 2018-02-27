@@ -1,5 +1,5 @@
 <!--Modal-->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalinfo" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog"  style="width: 70% !important;" role="document">
     <div class="modal-content panel-primary">
       <!--Titulo del modal-->
@@ -12,19 +12,19 @@
       <!--Fin Titulo del modal-->
       <div class="modal-body">
         <!--Encabezado del modal-->
-        <h3>Solicitud No. @{{infoCompleta.solIntSolId}}</h3>
+        <h3>Solicitud No. @{{infoCompleta.sni_idsolicitud}}</h3>
         <div class="row">
           <div class="col-sm-6">
             <ul class="list-group">
               <li class="list-group-item">
-                <label>Fecha de solicitud: </label>  @{{(infoCompleta.solIntFecha) * (1000) | date:'dd-MM-yyyy'}}
+                <label>Fecha de solicitud: </label>  @{{(infoCompleta.detallesolicitud.solIntFecha) * (1000) | date:'dd-MM-yyyy'}}
               </li>
             </ul>
           </div>
           <div class="col-sm-6">
             <ul class="list-group">
               <li class="list-group-item">
-                <label>Estado: </label>  @{{infoCompleta.estados.estTxtNombre}}
+                <label>Estado: </label>  @{{infoCompleta.detallesolicitud.estados.estTxtNombre}}
               </li>
             </ul>
           </div>
@@ -71,23 +71,23 @@
                     <div class="form-group">
                       <div class="row">
                         <p class="col-sm-2"><label>Viajero :</label></p>
-                        <p class="col-sm-4">@{{infoCompleta.solTxtNomtercero}}</p>
+                        <p class="col-sm-4">@{{infoCompleta.detallesolicitud.solTxtNomtercero}}</p>
                         <p class="col-sm-3"><label>Nit o Cédula :</label></p>
-                        <p class="col-sm-3">@{{infoCompleta.solTxtCedtercero}}</p>
+                        <p class="col-sm-3">@{{infoCompleta.detallesolicitud.solTxtCedtercero}}</p>
                       </div>
                       <div class="row">
                         <p class="col-sm-2"><label>Email :</label></p>
-                        <p class="col-sm-4">@{{infoCompleta.solTxtEmail}}</p>
+                        <p class="col-sm-4">@{{infoCompleta.detallesolicitud.solTxtEmail}}</p>
                         <p class="col-sm-3"><label>Fecha de Nacimiento:</label></p>
-                        <p class="col-sm-3">@{{(infoCompleta.solIntFNacimiento) * (1000) | date:'dd-MM-yyyy'}}</p>
+                        <p class="col-sm-3">@{{(infoCompleta.detallesolicitud.solIntFNacimiento) * (1000) | date:'dd-MM-yyyy'}}</p>
                       </div>
                       <div class="row">
                         <p class="col-sm-2"><label>Teléfono :</label></p>
-                        <p class="col-sm-4">@{{infoCompleta.solTxtNumTelefono}}</p>
+                        <p class="col-sm-4">@{{infoCompleta.detallesolicitud.solTxtNumTelefono}}</p>
                       </div>
                       <div class="row">
                         <p class="col-sm-2"><label>Motivo del Viaje:</label></p>
-                        <p class="col-sm-10">@{{infoCompleta.solTxtObservacion}}</p>
+                        <p class="col-sm-10">@{{infoCompleta.detallesolicitud.solTxtObservacion}}</p>
                       </div>
                     </div>
                   </div>
@@ -125,7 +125,7 @@
                           <th>Hotel</th>
                         </tr>
                       </thead>
-                      <tbody ng-repeat = "det in infoCompleta.detalle">
+                      <tbody ng-repeat = "det in infoCompleta.detallesolicitud.detalle">
                         <td>@{{det.ciu_origen.ciuTxtNom}}</td>
                         <td>@{{det.ciu_destino.ciuTxtNom}}</td>
                         <td>@{{(det.dtaIntFechaVuelo) * (1000) | date:'dd-MM-yyyy'}}</td>
@@ -141,9 +141,9 @@
                     <div class="form-group">
                       <div class="row">
                         <p class="col-sm-2"><label>Nombre :</label></p>
-                        <p class="col-sm-4">@{{infoCompleta.per_crea.razonSocialTercero}}</p>
+                        <p class="col-sm-4">@{{infoCompleta.detallesolicitud.per_crea.razonSocialTercero}}</p>
                         <p class="col-sm-3"><label>Nit o Cédula :</label></p>
-                        <p class="col-sm-3">@{{infoCompleta.solTxtCedterceroCrea}}</p>
+                        <p class="col-sm-3">@{{infoCompleta.detallesolicitud.solTxtCedterceroCrea}}</p>
                       </div>
                     </div>
                   </div>
@@ -191,7 +191,7 @@
                         <th># Reserva / # Tiquete</th>
                       </tr>
                     </thead>
-                    <tbody ng-repeat = "det in infoCompleta.detalle">
+                    <tbody ng-repeat = "det in infoCompleta.detallesolicitud.detalle">
                       <td>@{{det.ciu_origen.ciuTxtNom}}</td>
                       <td>@{{det.ciu_destino.ciuTxtNom}}</td>
                       <td>@{{(det.dtaIntFechaVuelo) * (1000) | date:'dd-MM-yyyy'}} - @{{(det.dtaIntHoravuelo) * (1000) | date:'HH:mm:ss'}}</td>

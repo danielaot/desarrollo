@@ -39,12 +39,16 @@ class MisSolicitudesController extends Controller
                                      'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado')
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->get();
+      /*$solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
+                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado')
+                                ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
+                                ->get();*/
 
+return $usuario['idTerceroUsuario'];
       $solicitudes = collect($solicitudes)->map(function($solicitud){
         $solicitud['urlEdit'] = route('editarSolicitud',['idSolicitud' => $solicitud['solIntSolId']]);
         return $solicitud;
       });
-      
       $rutaPdf = route('imprimirLegalizacion');
 
       $response =  compact('solicitudes','usuario', 'rutaPdf');

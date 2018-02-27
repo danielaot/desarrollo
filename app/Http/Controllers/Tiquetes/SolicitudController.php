@@ -86,7 +86,7 @@ class SolicitudController extends Controller
         if ($request->tipo == 1) {
           $solicitud = new Solicitud;
           $solicitud->solIntFecha = strtotime($fecha);
-          $solicitud->solTxtCedterceroCrea = '1144094290';
+          $solicitud->solTxtCedterceroCrea = $usuario['idTerceroUsuario'];
           //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
           $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
           $solicitud->solTxtCedtercero = $request['nombre']['pen_cedula'];

@@ -51,7 +51,15 @@ class BandejaAprobacionController extends Controller
                                       'detallepernivel.detalle.ejecutivo.pernivejecutivo.nivel',
                                       'detallepernivel.detalle.territorio',
                                       'detallepernivel.detalle.canal',
-                                      'detallepernivel.detalle.grupo')
+                                      'detallepernivel.detalle.grupo',
+                                      'detallesolicitud.estados',
+                                      'detallesolicitud.detalle.ciuOrigen',
+                                      'detallesolicitud.detalle.ciuDestino',
+                                      'detallesolicitud.detalle.aerolinea',
+                                      'detallesolicitud.detalle.hotel',
+                                      'detallesolicitud.detalle.ciuIntOrigen',
+                                      'detallesolicitud.detalle.ciuIntDestino',
+                                      'detallesolicitud.perCrea')
                                       ->where(['sni_cedula' => $usuario['idTerceroUsuario'], 'sni_estado' => 0])->get();
 
       $estadosAprobacion = Estados::whereIn('estIntEstado', [12,6,2])->get();
@@ -77,6 +85,7 @@ class BandejaAprobacionController extends Controller
           if ($dataSolicitud['nombre']['pen_idtipoper'] == 1) {
               $dataSolicitud['idSolicitud'] = $idSolicitud;
               $beneficiario = $dataSolicitud['nombre'];
+
           }elseif ($dataSolicitud['nombre']['pen_idtipoper'] == 2) {
               $dataSolicitud['idSolicitud'] = $idSolicitud;
               $beneficiario = $dataSolicitud['nombre']['detalle'][0];

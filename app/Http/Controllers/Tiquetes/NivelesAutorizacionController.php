@@ -146,6 +146,7 @@ class NivelesAutorizacionController extends Controller
                $perdepende->save();
              }
             }elseif ($request['tpersona']['id'] == '2') {
+
               foreach ($request['territorio'] as $key => $value) {
                 foreach ($value['canales'] as $key2 => $value2) {
                   $perdepende = new PerDepende;
@@ -380,14 +381,23 @@ class NivelesAutorizacionController extends Controller
 
                foreach ($request['canales'] as $key2 => $value2) {
                  foreach ($value2['terceros'] as $key3 => $value3) {
-                   $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['pen_cedula'])
+                   $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['pen_cedula'])->where('perdepIntCanal', $value2['can_id'])
                                              ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
 
+                   $aprueba = PerDepende::where('perdepPerIntGerencia', $persona->perIntTipogerencia)
+                                         ->where('perdepIntNivel', 4)->get();
+
+                   $meaprueba = PerDepende::where('perdepPerIntCedPerNivel', $request['tercero']['idTercero'])->where('perdepIntCanal', $value2['can_id'])
+                                          ->update(['perdepPerIntIdAprueba' => $aprueba[0]['perdepPerIntId']]);
                  }
                }
+
            }elseif ($request['tpersona']['id'] == '2') {
+
               foreach ($request['territorio'] as $key => $value) {
+
                 foreach ($value['canales'] as $key2 => $value2) {
+
                   $perdepende = new PerDepende;
                   $perdepende->perdepPerIntId = $persona->perIntId;
                   $perdepende->perdepPerIntIdAprueba = 0;
@@ -401,17 +411,26 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepIntGrupo = 0;
                   $perdepende->perdepIntPorcentaje = 0;
                   $perdepende->save();
+
+                  $aprueba = PerDepende::where('perdepIntCanal', $value2['can_id'])->where('perdepIntNivel', 2)->get();
+
+                  foreach ($aprueba as $key => $value3) {
+
+                    $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['perdepPerIntCedPerNivel'])->where('perdepIntCanal', $value2['can_id'])
+                                              ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
+
+                  }
                 }
               }
 
-              foreach ($request['territorio'] as $key => $value) {
+              /*foreach ($request['territorio'] as $key => $value) {
                 foreach ($value['canales'] as $key2 => $value2) {
                   foreach ($value2['terceros'] as $key3 => $value3) {
                     $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['pen_cedula'])
                                              ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
                   }
                 }
-              }
+              }*/
             }elseif ($request['tpersona']['id'] == '3' || $request['tpersona']['id'] == '4') {
               foreach ($request['grupos'] as $key => $value) {
                 foreach ($value['canales'] as $key2 => $value2) {
@@ -428,6 +447,12 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepIntGrupo = $value['id'];
                   $perdepende->perdepIntPorcentaje = 0;
                   $perdepende->save();
+
+                  $aprueba = PerDepende::where('perdepPerIntGerencia', $persona->perIntTipogerencia)
+                                        ->where('perdepIntNivel', 4)->get();
+
+                  $meaprueba = PerDepende::where('perdepPerIntCedPerNivel', $request['tercero']['idTercero'])
+                                         ->update(['perdepPerIntIdAprueba' => $aprueba[0]['perdepPerIntId']]);
                 }
               }
            }elseif ($request['tpersona']['id'] == '5') {
@@ -452,6 +477,7 @@ class NivelesAutorizacionController extends Controller
            }
            /*Fin Persona Depende*/
       }elseif ($request['nivel']['id'] == 4) {
+
           /*Tabla Perniveles*/
           $perNivel = new PerNivel;
           $perNivel->pen_usuario = $request['tercero']['usuario']['login'];
@@ -490,19 +516,22 @@ class NivelesAutorizacionController extends Controller
           /*Fin tabla persona*/
 
           /*Inicio Persona Depende*/
-          $perdepende = new PerDepende;
-          $perdepende->perdepPerIntId = $persona->perIntId;
-          $perdepende->perdepPerIntIdAprueba = 0;
-          $perdepende->perdepPerIntCedPerNivel = $perNivel->pen_cedula;
-          $perdepende->perdepPerIntGerencia = 0;
-          $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
-          $perdepende->perdepIntNivel = $request['nivel']['id'];
-          $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
-          $perdepende->perdepIntCanal = 0;
-          $perdepende->perdepIntTerritorio = 0;
-          $perdepende->perdepIntGrupo = 0;
-          $perdepende->perdepIntPorcentaje = 0;
-          $perdepende->save();
+          foreach ($request['gerencias'] as $key => $value) {
+
+              $perdepende = new PerDepende;
+              $perdepende->perdepPerIntId = $persona->perIntId;
+              $perdepende->perdepPerIntIdAprueba = 0;
+              $perdepende->perdepPerIntCedPerNivel = $perNivel->pen_cedula;
+              $perdepende->perdepPerIntGerencia = 0;
+              $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
+              $perdepende->perdepIntNivel = $request['nivel']['id'];
+              $perdepende->perdepPerIntGerencia = $value['ger_cod'];
+              $perdepende->perdepIntCanal = 0;
+              $perdepende->perdepIntTerritorio = 0;
+              $perdepende->perdepIntGrupo = 0;
+              $perdepende->perdepIntPorcentaje = 0;
+              $perdepende->save();
+          }
           /*Fin persona depende*/
         }elseif ($request['nivel']['id'] == 5) {
             /*Tabla Perniveles*/
@@ -564,7 +593,7 @@ class NivelesAutorizacionController extends Controller
   }
 
     public function update(Request $request){
-      //return response()->json($request);
+
       if ($request['nivel']['id'] == 1) {
         /*Tabla Perniveles*/
         $pernivel = PerNivel::where('id', $request['idpernivel'])
@@ -599,26 +628,29 @@ class NivelesAutorizacionController extends Controller
         /*Inicio Persona Depende*/
         if ($request['tipo_persona']['id'] == '1') {
 
-          $canales = $request['canales'];
+          /*$canales = $request['canales'];
           $buscaCanal = collect($canales)->filter(function ($canal, $key){
             return (!isset($canal['isNew']));
-          });
+          });*/
 
-//return response()->json($request);
-          foreach ($buscaCanal as $key => $value) {
+          foreach ($request['canales'] as $key => $value) {
 
-              $perdepende = new PerDepende;
-              $perdepende->perdepPerIntId = $request['nuevoBeneficiario']['persona']['perIntId'];
-              $perdepende->perdepPerIntIdAprueba = 0;
-              $perdepende->perdepPerIntCedPerNivel = $request['nuevoBeneficiario']['personanivel']['pen_cedula'];
-              $perdepende->perdepPerIntGerencia = trim($request['nuevoBeneficiario']['datosGerencia']['cod_gerencia']);
-              $perdepende->perdepPerIntIdtipoper = $request['nuevoBeneficiario']['personanivel']['pen_idtipoper'];
-              $perdepende->perdepIntNivel = $request['nivel']['id'];
-              $perdepende->perdepIntCanal = $value['can_id'];
-              $perdepende->perdepIntTerritorio = 0;
-              $perdepende->perdepIntGrupo = 0;
-              $perdepende->perdepIntPorcentaje = 0;
-              $perdepende->save();
+            $existeCanal = PerDepende::where('perdepPerIntCedPerNivel', $request['nuevoBeneficiario']['idTercero'])->where('perdepIntCanal', $value['can_id'])->get();
+
+            if (count($existeCanal) == 0) {
+                $perdepende = new PerDepende;
+                $perdepende->perdepPerIntId = $request['nuevoBeneficiario']['persona']['perIntId'];
+                $perdepende->perdepPerIntIdAprueba = 0;
+                $perdepende->perdepPerIntCedPerNivel = $request['nuevoBeneficiario']['personanivel']['pen_cedula'];
+                $perdepende->perdepPerIntGerencia = trim($request['nuevoBeneficiario']['datosGerencia']['cod_gerencia']);
+                $perdepende->perdepPerIntIdtipoper = $request['nuevoBeneficiario']['personanivel']['pen_idtipoper'];
+                $perdepende->perdepIntNivel = $request['nivel']['id'];
+                $perdepende->perdepIntCanal = $value['can_id'];
+                $perdepende->perdepIntTerritorio = 0;
+                $perdepende->perdepIntGrupo = 0;
+                $perdepende->perdepIntPorcentaje = 0;
+                $perdepende->save();
+            }
 
           }
         }elseif ($request['tipo_persona']['id'] == '2') {
@@ -665,9 +697,10 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->save();
               }
           }
+        }elseif ($request['tipo_persona']['id'] == '5') {
+          return response()->json($request);
         }
         /*Fin Persona Depende*/
-
 
       }elseif ($request['nivel']['id'] == 2) {
 
@@ -701,7 +734,40 @@ class NivelesAutorizacionController extends Controller
                                     'perIntLifeMiles' => $request['lifemiles']]);
         /*Fin tabla persona*/
         /*Inicio tabla Persona Depende*/
+        if ($request['tipo_persona']['id'] == '1') {
 
+          $canales = $request['canales'];
+          /*$buscaCanal = collect($canales)->filter(function ($canal, $key){
+            return (isset($canal['isNew']));
+          });*/
+
+          //return response()->json($request);
+          foreach ($request['canales'] as $key => $value) {
+
+              if ($value['isNew'] == false) {
+
+                foreach ($value['terceros'] as $key => $info) {
+
+                  if ($info['isNew'] == true) {
+                      $perdepende = new PerDepende;
+                      $perdepende->perdepPerIntId = $request['terceros']['persona']['perIntId'];
+                      $perdepende->perdepPerIntIdAprueba = 0;
+                      $perdepende->perdepPerIntCedPerNivel = $request['nuevoBeneficiario']['personanivel']['pen_cedula'];
+                      $perdepende->perdepPerIntGerencia = trim($request['nuevoBeneficiario']['datosGerencia']['cod_gerencia']);
+                      $perdepende->perdepPerIntIdtipoper = $request['nuevoBeneficiario']['personanivel']['pen_idtipoper'];
+                      $perdepende->perdepIntNivel = $request['nivel']['id'];
+                      $perdepende->perdepIntCanal = $value['can_id'];
+                      $perdepende->perdepIntTerritorio = 0;
+                      $perdepende->perdepIntGrupo = 0;
+                      $perdepende->perdepIntPorcentaje = 0;
+                      $perdepende->save();
+                  }
+                }
+              }
+          }
+        }elseif ($request['tipo_persona']['id'] == '2') {
+          return response()->json($request);
+        }
         /*fin tabla Persona Depende*/
       }elseif ($request['nivel']['id'] == 3) {
         # code...
