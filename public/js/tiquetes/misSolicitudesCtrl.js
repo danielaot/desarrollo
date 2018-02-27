@@ -17,15 +17,15 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$window', '
       $scope.paprobacion = $filter('filter')($scope.todas, {solIntEstado : 4}, true);
       $scope.cerradas = $filter('filter')($scope.todas, {solIntEstado : 9}, true);
 
-      /*$scope.filtrosAprobacion = [7, 12];
-console.log($scope.filtrosAprobacion);
+      $scope.filtrosAprobacion = [7, 12];
       $scope.aprobadas = [];
       $scope.filtrosAprobacion.forEach(function(element){
         var arregloAprobacion = $filter('filter')($scope.todas, {solIntEstado : element}, true);
         arregloAprobacion.forEach(function(obj){
           $scope.aprobadas.push(obj);
         });
-      });*/
+      });
+      
       $scope.rutaPdf = angular.copy(info.rutaPdf);
       $scope.progress = false;
     });
