@@ -8,6 +8,7 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$window', '
   $scope.getInfo = function(){
     $scope.todas = [];
     $http.get($scope.getUrl).then(function(response){
+      console.log(response);
       var info = response.data;
       $scope.todas = angular.copy(info.solicitudes);
       $scope.elaboracion =  $filter('filter')($scope.todas, {solIntEstado : 1}, true);
