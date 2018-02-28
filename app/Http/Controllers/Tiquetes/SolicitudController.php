@@ -82,12 +82,11 @@ class SolicitudController extends Controller
         $fecha = Carbon::now();
         $usulogin = PerNivel::where('pen_cedula', $usuario['idTerceroUsuario'])->get();
         $isCreating = $isCreating == "false" ? false: true;
-      //  return response()->json($usulogin);
+
         if ($request->tipo == 1) {
           $solicitud = new Solicitud;
           $solicitud->solIntFecha = strtotime($fecha);
           $solicitud->solTxtCedterceroCrea = $usuario['idTerceroUsuario'];
-          //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
           $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
           $solicitud->solTxtCedtercero = $request['nombre']['pen_cedula'];
           $solicitud->solTxtNomtercero = $request['nombre']['pen_nombre'];
@@ -185,9 +184,8 @@ class SolicitudController extends Controller
 
         if ($request->tipo == 2) {
           $solicitud = new Solicitud;
-          $solicitud->solIntFecha = '1507738632';
-          $solicitud->solTxtCedterceroCrea = '1144094290';
-          //$solicitud->solTxtCedterceroCrea = $usulogin[0]['pen_cedula'];
+          $solicitud->solIntFecha = strtotime($fecha);
+          $solicitud->solTxtCedterceroCrea = $usuario['idTerceroUsuario'];
           $solicitud->solIntPersona = $request['nombre']['detpersona']['perIntId'];
           $solicitud->solTxtCedtercero = $request['nombre']['pen_cedula'];
           $solicitud->solTxtNomtercero = $request['nombre']['pen_nombre'];

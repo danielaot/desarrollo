@@ -44,7 +44,7 @@ class MisSolicitudesController extends Controller
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->get();*/
 
-return $usuario['idTerceroUsuario'];
+
       $solicitudes = collect($solicitudes)->map(function($solicitud){
         $solicitud['urlEdit'] = route('editarSolicitud',['idSolicitud' => $solicitud['solIntSolId']]);
         return $solicitud;

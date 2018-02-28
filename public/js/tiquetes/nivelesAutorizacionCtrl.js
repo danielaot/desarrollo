@@ -50,44 +50,39 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
     $scope.pernivelEdit = {};
     $scope.pernivelEditTemporal = {};
     $scope.pernivelEdit = angular.copy(infoPerNivel);
-  //  $scope.infoPerNivel = angular.copy(infoPerNivel);
     $scope.nivel = angular.copy($scope.pernivelEdit.nivel);
-
-    $scope.pernivelEdit.idpernivel = $scope.pernivelEdit.id;
-    $scope.pernivelEdit.tpersona = $scope.pernivelEdit.tipo_persona.tpp_descripcion;
 
     console.log($scope.pernivelEdit);
 
+    $scope.pernivelEdit.idpernivel = $scope.pernivelEdit.id;
+    $scope.pernivelEdit.tpersona = $scope.pernivelEdit.tipo_persona.tpp_descripcion;
     $scope.pernivelEdit.estado = $filter('filter')($scope.estados, {value : $scope.pernivelEdit.detpersona.perTxtEstado})[0];
-
     $scope.pernivelEdit.numpasaporte = $scope.pernivelEdit.detpersona.perTxtNoPasaporte;
-
     //$scope.pernivelEdit.fpasaporte = $scope.pernivelEdit.detpersona.perTxtFechaNac; //nO SE MUESTRA
     $scope.pernivelEdit.ciuexpedicion = $filter('filter')($scope.ciudades, {ciuIntId : $scope.pernivelEdit.detpersona.perIntCiudadExpPass})[0];
     $scope.pernivelEdit.lifemiles = $scope.pernivelEdit.detpersona.perIntLifeMiles;
 
     var persona = $filter('filter')($scope.usuariosSinFiltro,{dirnacional : {dir_txt_cedula : $scope.pernivelEdit.pen_cedula}});
-
-    if(persona.length > 0){
-      $scope.tercerosTemp = angular.copy($scope.usuariosSinFiltro);
-      $scope.tercerosTemp.push(persona[0]);
-      $scope.pernivelEdit.nuevoBeneficiario = angular.copy(persona[0]);
-    }
+      if(persona.length > 0){
+        $scope.tercerosTemp = angular.copy($scope.usuariosSinFiltro);
+        $scope.tercerosTemp.push(persona[0]);
+        $scope.pernivelEdit.nuevoBeneficiario = angular.copy(persona[0]);
+      }
 
     if($scope.pernivelEdit.tipo_persona.id == 1 || $scope.pernivelEdit.tipo_persona.id == 2){
 
       if($scope.pernivelEdit.tipo_persona.id == 1){
-        var canalesPluckeados = _.pluck($scope.pernivelEdit.detpersona.detallenivelpersona, 'canal');
-        canalesPluckeados = _.uniq(canalesPluckeados, 'can_id');
-        canalesPluckeados.map(function(canal){
-          canal.isNew = false;
-          return canal;
+          var canalesPluckeados = _.pluck($scope.pernivelEdit.detpersona.detallenivelpersona, 'canal');
+          canalesPluckeados = _.uniq(canalesPluckeados, 'can_id');
+          canalesPluckeados.map(function(canal){
+            canal.isNew = false;
+            return canal;
         })
 
         if($scope.pernivelEdit.nivel.id == 2 || $scope.pernivelEdit.nivel.id == 3){
 
           canalesPluckeados.map(function(canal){
-            canal.usuarios = [];
+            canal.terceros = [];
             canal.tercerosFiltrados = $scope.filtrarPersonasArregloEditar(canal);
 
             var filterCanalDepende = $filter('filter')($scope.pernivelEdit.detpersona.personasdepende, {perdepIntCanal: canal.can_id},true);
@@ -352,14 +347,14 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
       if($scope.pernivelEdit.tipo_persona.id == 1){
 
         if($scope.pernivelEdit.nivel.id == 2 || $scope.pernivelEdit.nivel.id == 3){
-console.log("entreeeeeeeeeeeeeeeeeeeeee");
+
           var canalTemporal = $filter('filter')($scope.pernivelEditTemporal.canales,{can_id: objeto.can_id},true)[0];
           var ultimaPersona = {};
 
           if(objeto.terceros != undefined){
             ultimaPersona = angular.copy(objeto.terceros[objeto.terceros.length - 1]);
             var filterPersonaExist = $filter('filter')(canalTemporal.terceros, {id : ultimaPersona.id},true);
-console.log(filterPersonaExist);
+
             if(filterPersonaExist.length == 0){
               canalTemporal.terceros.push(ultimaPersona);
             }
@@ -488,11 +483,11 @@ console.log(filterPersonaExist);
        //if($scope.nivel[0].id > 1 && $scope.nivel[0].id < 4){
 
        if($scope.nivel.id > 1 && $scope.nivel.id < 4){
-console.log("entrada1");
+
          if($scope.pernivelEdit.tipo_persona.id == 1 || $scope.pernivelEdit.tipo_persona.id == 2){
-console.log("entrada2");
+
            if($scope.pernivelEdit.tipo_persona.id == 1){
-console.log("entrada3");
+
 
                $scope.tercerosFiltrados = $filter('filter')
                ($scope.usuarios,
@@ -503,10 +498,9 @@ console.log("entrada3");
                  }
                );
                return $scope.tercerosFiltrados;
-console.log($scope.tercerosFiltrados);
-console.log($scope.usuarios);
+
            }else if($scope.pernivelEdit.tipo_persona.id == 2){
-console.log("entrada4");
+
              if(objeto.canales != undefined){
                    objeto.canales.map(function(canal){
                      $scope.tercerosFiltrados = $filter('filter')
@@ -520,7 +514,6 @@ console.log("entrada4");
                      return canal;
                    });
                }
-  console.log(objeto.canales);
 
            }
          }
@@ -608,9 +601,9 @@ console.log("entrada4");
     $scope.progress = true;
     $scope.infoPerNivel.nivel = $scope.nivel[0];
     $http.post($scope.url, $scope.infoPerNivel).then(function(response){
-      $scope.getInfo();
-      $scope.progress = false;
-      angular.element('.close').trigger('click');
+      //$scope.getInfo();
+    //  $scope.progress = false;
+    //  angular.element('.close').trigger('click');
       });
     }
 
@@ -807,8 +800,7 @@ console.log($scope.infoPerNivel.objeto);
 }*/
 
   $scope.editarNivel = function(){
-console.log("entreeeeeee");
-console.log($scope.pernivelEdit);
+
       if ($scope.pernivelEdit.idpernivel != undefined) {
         console.log($scope.pernivelEdit);
         $http.put($scope.url+'/'+$scope.pernivelEdit.idpernivel, $scope.pernivelEdit).then(function(response){
