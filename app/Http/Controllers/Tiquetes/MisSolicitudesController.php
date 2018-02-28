@@ -44,7 +44,6 @@ class MisSolicitudesController extends Controller
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->get();*/
 
-
       $solicitudes = collect($solicitudes)->map(function($solicitud){
         $solicitud['urlEdit'] = route('editarSolicitud',['idSolicitud' => $solicitud['solIntSolId']]);
         return $solicitud;
@@ -76,7 +75,7 @@ class MisSolicitudesController extends Controller
       }
 
       $response = compact('solicitudImprimir', 'fechaSolicitud', 'fechaNacimiento');
-      return view('layouts.tiquetes.solicitud.Reportes.reporteImprimir', $response);
+      // return view('layouts.tiquetes.solicitud.Reportes.reporteImprimir', $response);
         $pdf = PDF::loadView('layouts.tiquetes.solicitud.Reportes.reporteImprimir', $response);
         return $pdf->download('FormatoTiquetesHotel_GOP-FOR-004_No'. $data['objSolicitud']. '.pdf');
 

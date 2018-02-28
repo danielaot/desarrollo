@@ -2,6 +2,8 @@
 
 @section('content')
   @include('includes.titulo')
+  <link rel="stylesheet" type="text/css" href="{{url('/css/tiqueteshotel/misSolicitudes.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url('/css/timeline.css')}}">
   <div ng-controller="misSolicitudesCtrl" ng-cloak class="cold-md-12">
      <div class="container-fluid">
        <md-tabs md-dynamic-height md-border-bottom>
@@ -25,7 +27,7 @@
                        <td>@{{tod.solTxtNomtercero}}</td>
                        <td>@{{tod.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
                        <td>
-                         <button class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#modal" ng-click="solicitud(tod)">
+                         <button class="btn btn-info" type="button" data-toggle="modal" data-target="#modal" ng-click="solicitud(tod)">
                            <i class="glyphicon glyphicon-eye-open"></i>
                          </button>
                        </td>
@@ -58,7 +60,7 @@
                           <td>@{{elab.solTxtNomtercero}}</td>
                           <td>@{{elab.solIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
                           <td>
-                            <button class="btn btn-warning btn-sm" ng-click="editSolicitud(elab)">
+                            <button class="btn btn-warning" ng-click="editSolicitud(elab)">
                               <i class="glyphicon glyphicon-edit"></i>
                             </button>
                           </td>
@@ -68,12 +70,12 @@
                             </button>
                           </td>
                           <td>
-                            <button class="btn btn-primary btn-sm" type="button" ng-click="enviarSolicitud(elab)">
+                            <button class="btn btn-primary" type="button" ng-click="enviarSolicitud(elab)">
                               <i class="glyphicon glyphicon-send"></i>
                             </button>
                           </td>
                           <td>
-                            <button class="btn btn-danger btn-sm" type="button" ng-click="anularSolicitud(elab)">
+                            <button class="btn btn-danger" type="button" ng-click="anularSolicitud(elab)">
                               <i class="glyphicon glyphicon-remove"></i>
                             </button>
                           </td>
@@ -111,17 +113,17 @@
                         </button>
                       </td>
                       <td>
-                        <button class="btn btn-warning btn-sm" ng-click="">
+                        <button class="btn btn-warning" ng-click="">
                           <i class="glyphicon glyphicon-edit"></i>
                         </button>
                       </td>
                       <td>
-                        <button class="btn btn-primary btn-sm" type="button" ng-click="enviarSolicitud(corr)">
+                        <button class="btn btn-primary" type="button" ng-click="enviarSolicitud(corr)">
                           <i class="glyphicon glyphicon-send"></i>
                         </button>
                       </td>
                       <td>
-                        <button class="btn btn-danger btn-sm" type="button" ng-click="anularSolicitud(corr)">
+                        <button class="btn btn-danger" type="button" ng-click="anularSolicitud(corr)">
                           <i class="glyphicon glyphicon-remove"></i>
                         </button>
                       </td>
@@ -187,7 +189,7 @@
                        </button>
                      </td>
                      <td>
-                       <button class="btn btn-danger btn-sm" type="button" ng-click="anularSolicitud(papro)">
+                       <button class="btn btn-danger" type="button" ng-click="anularSolicitud(papro)">
                          <i class="glyphicon glyphicon-remove"></i>
                        </button>
                      </td>
@@ -223,7 +225,9 @@
                         </button>
                       </td>
                       <td>
-
+                        <button class="btn btn-primary" ng-click="generarPdf(apro.solIntSolId)">
+                         <i class="glyphicon glyphicon-download-alt"></i>
+                       </button>
                       </td>
                    </tr>
                  </tbody>
@@ -257,7 +261,7 @@
                        </button>
                      </td>
                      <td>
-                       <button class="btn btn-primary btn-sm" ng-click="">
+                       <button class="btn btn-primary" ng-click="generarPdf(cerr.solIntSolId)">
                          <i class="glyphicon glyphicon-download-alt"></i>
                        </button>
                      </td>

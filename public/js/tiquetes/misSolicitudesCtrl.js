@@ -8,6 +8,7 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$window', '
   $scope.getInfo = function(){
     $scope.todas = [];
     $http.get($scope.getUrl).then(function(response){
+      console.log(response);
       var info = response.data;
       $scope.todas = angular.copy(info.solicitudes);
       $scope.elaboracion =  $filter('filter')($scope.todas, {solIntEstado : 1}, true);
@@ -16,15 +17,15 @@ app.controller('misSolicitudesCtrl', ['$scope', '$filter', '$http', '$window', '
       $scope.paprobacion = $filter('filter')($scope.todas, {solIntEstado : 4}, true);
       $scope.cerradas = $filter('filter')($scope.todas, {solIntEstado : 9}, true);
 
-      /*$scope.filtrosAprobacion = [7, 12];
-console.log($scope.filtrosAprobacion);
+      $scope.filtrosAprobacion = [7, 12];
       $scope.aprobadas = [];
       $scope.filtrosAprobacion.forEach(function(element){
         var arregloAprobacion = $filter('filter')($scope.todas, {solIntEstado : element}, true);
         arregloAprobacion.forEach(function(obj){
           $scope.aprobadas.push(obj);
         });
-      });*/
+      });
+      
       $scope.rutaPdf = angular.copy(info.rutaPdf);
       $scope.progress = false;
     });
