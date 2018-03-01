@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TCompradoresgerencium extends Model
 {
+    protected $connection = 'tiqueteshotel';
+
     protected $table = 't_compradoresgerencia';
 
     public $timestamps = false;
@@ -20,5 +22,8 @@ class TCompradoresgerencium extends Model
 
     protected $guarded = [];
 
+    public function datocomprador(){
+      return $this->hasOne('App\Models\Genericas\Tercero', 'idTercero', 'comgerTxtIdTercero');
+    }
 
 }

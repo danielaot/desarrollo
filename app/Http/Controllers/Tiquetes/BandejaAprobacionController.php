@@ -16,6 +16,7 @@ use App\Models\Tiquetes\TSolipernivel as SoliPernivel;
 use App\Models\Tiquetes\TEvaluacion as Evaluacion;
 use App\Models\Tiquetes\TPernivele as PerNivel;
 use App\Models\Tiquetes\TEstados as Estados;
+use App\Models\Tiquetes\TCompradoresgerencium as CompradoresGerencia;
 
 use Auth;
 use DB;
@@ -110,7 +111,8 @@ class BandejaAprobacionController extends Controller
           //$dataSolicitud['idSolicitud'] = $idSolicitud;
           //  $beneficiario = $dataSolicitud['nombre'];
 
-      }else{
+      }
+      else{
           $dataSolicitud = $request->all();
           $dataSolicitud['idSolicitud'] = $request['sni_idsolicitud'];
           $dataSolicitud['solTxtGerencia'] = $request['detallesolicitud']['solTxtGerencia'];
@@ -127,6 +129,7 @@ class BandejaAprobacionController extends Controller
       if($isCreating == true){
            self::grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
        }else{
+
         $validarRutaAprobacion = self::validarRutaAprobacion($beneficiario,$dataSolicitud);
          if($validarRutaAprobacion['hasRoute'] == true){
             $filtraDteAprobacion = $validarRutaAprobacion['response'];
@@ -145,7 +148,6 @@ class BandejaAprobacionController extends Controller
                       $dataSolicitud['respuestaAutorizacion'] = $error;
                   }*/
               }else{
-
                 $response = self::grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
                 $dataSolicitud['respuestaAutorizacion'] = $response;
                 /*if(count($filtraDteAprobacion) > 0){
@@ -156,14 +158,25 @@ class BandejaAprobacionController extends Controller
                   }*/
               }
           }else{
-              if(count($filtraDteAprobacion) > 0){
-                  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
-                  $dataSolicitud['respuestaAutorizacion'] = $response;
-                  //  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$dataSolicitud,$isCreating,$isCreatingAndSend);
-                }else{
-                    $error['message'] = "No existe una ruta de aprobación en servicios Administrativos para poder enviar a aprobar la solicitud.";
-                    $dataSolicitud['respuestaAutorizacion'] = $error;
-                }
+              
+              $compradorGerencia = CompradoresGerencia::with('datocomprador')->where('comgerIntIdGerencia', $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perIntTipogerencia'])->get();
+
+              $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
+              $historico = new Evaluacion;
+              $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+              $historico->evaTxtCedtercero = $compradorGerencia[0]['comgerTxtIdTercero'];
+              $historico->evaTxtnombreter = $compradorGerencia[0]['datocomprador']['nombreEstablecimientoTercero'];
+              $historico->evatxtObservacione = $observacion;
+              $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+              $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+              $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+              $historico->evaIntTipoSolicitudAnt = 12;
+              $historico->evaEstado = 'S';
+              $historico->save();
+
+              $response = ['isSuccess' => true, 'message' => 'Se ha creado la ruta correctamente.'];
+              $dataSolicitud['respuestaAutorizacion'] = $response;
+
             }
         }
         if($isExt){
@@ -393,12 +406,11 @@ class BandejaAprobacionController extends Controller
     }
   }else{
 
-      $aprobadorTesoreria = PerNivel::with('nivel')->where('pen_isServiAdmon',1)->first();
-
-      if(count($aprobadorTesoreria) > 0){
-          $filtraDllAprobacion['tpernivelejecutivo'] = $beneficiario;
-          $filtraDllAprobacion['tpernivelaprobador'] = $aprobadorTesoreria;
-      }
+      $cambiarEstadoSoli = Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => 12]);
+      // if(count($aprobadorTesoreria) > 0){
+      //     $filtraDllAprobacion['tpernivelejecutivo'] = $beneficiario;
+      //     $filtraDllAprobacion['tpernivelaprobador'] = $aprobadorTesoreria;
+      // }
     }
 
     if(count($filtraDteAprobacion) > 0){

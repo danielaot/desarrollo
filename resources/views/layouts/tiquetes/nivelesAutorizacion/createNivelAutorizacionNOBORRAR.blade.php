@@ -78,6 +78,12 @@
                       <multiselect ng-model="infoPerNivel.grupos" options="grupos" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true" required></multiselect>
                     </div>
                   </div>
+                  <div ng-if="nivel[0].id == 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+                    <div class="form-group">
+                      <label>Gerencias:</label>
+                      <multiselect class="span-margin" ng-model="infoPerNivel.gerencias" options="gerenciasFiltradas" id-prop="ger_id" display-prop="codigoGerencia" placeholder="-- Seleccione Gerencias --" show-select-all="true" show-unselect-all="true" required></multiselect>
+                    </div>
+                  </div>
                   <div ng-if="infoPerNivel.tpersona.id == '2'" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                       <label class="control-label">Territorio :</label>

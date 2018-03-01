@@ -59,11 +59,11 @@ class NivelesAutorizacionController extends Controller
        return ($usuario->usuario != null && $usuario->personanivel == null);
       })->values();
 
-      $gerencias = Gerencia::with('gerepernivel')->get();
+      /*$gerencias = Gerencia::with('gerepernivel')->get();
       $gerencias = collect($gerencias)->map(function($gerencia){
         $gerencia['codigoGerencia'] = $gerencia['ger_cod'].' - '.$gerencia['ger_nom'];
         return $gerencia;
-      });
+      });*/
       //$usuarios = NominaGerenciasAppWebAnticipos2::obtenerDatosGerenciales($usuarios, true);
 
       $niveles = Niveles::all();
@@ -78,7 +78,7 @@ class NivelesAutorizacionController extends Controller
       $ciudades = Ciudades::all();
 
 
-      $response = compact('tpersona', 'canal', 'territorios', 'usuarios', 'grupos', 'gerencias' ,'niveles', 'usuariosN', 'ciudades', 'usuariosSinFiltro');
+      $response = compact('tpersona', 'canal', 'territorios', 'usuarios', 'grupos' ,'niveles', 'usuariosN', 'ciudades', 'usuariosSinFiltro');
 
       return response()->json($response);
     }
@@ -89,6 +89,9 @@ class NivelesAutorizacionController extends Controller
 
        if (count($existePersona) === 0) {
 
+         $buscagerencia = Gerencia::where('ger_cod' , $request['tercero']['datosGerencia']['cod_gerencia'])->get();
+//return $buscagerencia;
+
          if ($request['nivel']['id'] == 1) {
            /*Tabla Perniveles*/
            $perNivel = new PerNivel;
@@ -98,7 +101,7 @@ class NivelesAutorizacionController extends Controller
            $perNivel->pen_idtipoper = $request['tpersona']['id'];
            $perNivel->pen_nomnivel = $request['nivel']['id'];
            $perNivel->pen_nivelpadre = 2;
-           $perNivel->pen_idgerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+           $perNivel->pen_idgerencia = $buscagerencia[0]['ger_id'];
            $perNivel->pen_isServiAdmon = false;
            $perNivel->pen_isCreador = true;
            $perNivel->save();
@@ -120,7 +123,7 @@ class NivelesAutorizacionController extends Controller
            $persona->perIntPorcmix = 0;
            $persona->perIntDepencia = 0;
            $persona->perTxtEstado = $request['estado']['value'];
-           $persona->perIntTipogerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+           $persona->perIntTipogerencia = $buscagerencia[0]['ger_id'];
            $persona->perTxtNoPasaporte = $request['numpasaporte'];
            $persona->perTxtFechaCadPass = Carbon::parse($request['fpasaporte'])->format('Y-m-d');
            $persona->perIntCiudadExpPass = $request['ciuexpedicion']['ciuIntId'];
@@ -138,7 +141,7 @@ class NivelesAutorizacionController extends Controller
                $perdepende->perdepPerIntGerencia = 0;
                $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                $perdepende->perdepIntNivel = $request['nivel']['id'];
-               $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+               $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                $perdepende->perdepIntCanal = $value['can_id'];
                $perdepende->perdepIntTerritorio = 0;
                $perdepende->perdepIntGrupo = 0;
@@ -156,7 +159,7 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepPerIntGerencia = 0;
                   $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                   $perdepende->perdepIntNivel = $request['nivel']['id'];
-                  $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                  $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                   $perdepende->perdepIntCanal = trim($value2['can_id']);
                   $perdepende->perdepIntTerritorio = $value['id'];
                   $perdepende->perdepIntGrupo = 0;
@@ -173,7 +176,7 @@ class NivelesAutorizacionController extends Controller
                $perdepende->perdepPerIntGerencia = 0;
                $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                $perdepende->perdepIntNivel = $request['nivel']['id'];
-               $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+               $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                $perdepende->perdepIntCanal = 0;
                $perdepende->perdepIntTerritorio = 0;
                $perdepende->perdepIntGrupo = $value['id'];
@@ -187,7 +190,7 @@ class NivelesAutorizacionController extends Controller
                $perdepende->perdepPerIntCedPerNivel = $perNivel->pen_cedula;
                $perdepende->perdepPerIntGerencia = 0;
                $perdepende->perdepIntNivel = $request['nivel']['id'];
-               $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+               $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                $perdepende->perdepIntCanal = 0;
                $perdepende->perdepIntTerritorio = 0;
                $perdepende->perdepIntGrupo = 0;
@@ -204,7 +207,7 @@ class NivelesAutorizacionController extends Controller
             $perNivel->pen_idtipoper = $request['tpersona']['id'];
             $perNivel->pen_nomnivel = $request['nivel']['id'];
             $perNivel->pen_nivelpadre = 3;
-            $perNivel->pen_idgerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+            $perNivel->pen_idgerencia = $buscagerencia[0]['ger_id'];
             $perNivel->pen_isServiAdmon = false;
             $perNivel->pen_isCreador = true;
             $perNivel->save();
@@ -225,7 +228,7 @@ class NivelesAutorizacionController extends Controller
             $persona->perIntPorcmix = 0;
             $persona->perIntDepencia = 0;
             $persona->perTxtEstado = $request['estado']['value'];
-            $persona->perIntTipogerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+            $persona->perIntTipogerencia = $buscagerencia[0]['ger_id'];
             $persona->perTxtNoPasaporte = $request['numpasaporte'];
             $persona->perTxtFechaCadPass = Carbon::parse($request['fpasaporte'])->format('Y-m-d');
             $persona->perIntCiudadExpPass = $request['ciuexpedicion']['ciuIntId'];
@@ -242,7 +245,7 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepPerIntGerencia = 0;
                   $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                   $perdepende->perdepIntNivel = $request['nivel']['id'];
-                  $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                  $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                   $perdepende->perdepIntCanal = $value['can_id'];
                   $perdepende->perdepIntTerritorio = 0;
                   $perdepende->perdepIntGrupo = 0;
@@ -267,7 +270,7 @@ class NivelesAutorizacionController extends Controller
                    $perdepende->perdepPerIntGerencia = 0;
                    $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                    $perdepende->perdepIntNivel = $request['nivel']['id'];
-                   $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                   $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                    $perdepende->perdepIntCanal = $value2['can_id'];
                    $perdepende->perdepIntTerritorio = $value['id'];
                    $perdepende->perdepIntGrupo = 0;
@@ -294,7 +297,7 @@ class NivelesAutorizacionController extends Controller
                     $perdepende->perdepPerIntGerencia = 0;
                     $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                     $perdepende->perdepIntNivel = $request['nivel']['id'];
-                    $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                    $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                     $perdepende->perdepIntCanal = $value2['can_id'];
                     $perdepende->perdepIntTerritorio = 0;
                     $perdepende->perdepIntGrupo = $value['id'];
@@ -310,7 +313,7 @@ class NivelesAutorizacionController extends Controller
                 $perdepende->perdepPerIntGerencia = 0;
                 $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                 $perdepende->perdepIntNivel = $request['nivel']['id'];
-                $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                 $perdepende->perdepIntCanal = 0;
                 $perdepende->perdepIntTerritorio = 0;
                 $perdepende->perdepIntGrupo = 0;
@@ -324,7 +327,7 @@ class NivelesAutorizacionController extends Controller
             }
             /*Fin Persona Depende*/
       }elseif ($request['nivel']['id'] == 3) {
-     //return response()->json($request);
+
            /*Tabla Perniveles*/
            $perNivel = new PerNivel;
            $perNivel->pen_usuario = $request['tercero']['usuario']['login'];
@@ -333,7 +336,7 @@ class NivelesAutorizacionController extends Controller
            $perNivel->pen_idtipoper = $request['tpersona']['id'];
            $perNivel->pen_nomnivel = $request['nivel']['id'];
            $perNivel->pen_nivelpadre = 4;
-           $perNivel->pen_idgerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+           $perNivel->pen_idgerencia = $buscagerencia[0]['ger_id'];
            $perNivel->pen_isServiAdmon = false;
            $perNivel->pen_isCreador = true;
            $perNivel->save();
@@ -354,7 +357,7 @@ class NivelesAutorizacionController extends Controller
            $persona->perIntPorcmix = 0;
            $persona->perIntDepencia = 0;
            $persona->perTxtEstado = $request['estado']['value'];
-           $persona->perIntTipogerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+           $persona->perIntTipogerencia = $buscagerencia[0]['ger_id'];
            $persona->perTxtNoPasaporte = $request['numpasaporte'];
            $persona->perTxtFechaCadPass = Carbon::parse($request['fpasaporte'])->format('Y-m-d');
            $persona->perIntCiudadExpPass = $request['ciuexpedicion']['ciuIntId'];
@@ -371,7 +374,7 @@ class NivelesAutorizacionController extends Controller
                  $perdepende->perdepPerIntGerencia = 0;
                  $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                  $perdepende->perdepIntNivel = $request['nivel']['id'];
-                 $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                 $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                  $perdepende->perdepIntCanal = $value['can_id'];
                  $perdepende->perdepIntTerritorio = 0;
                  $perdepende->perdepIntGrupo = 0;
@@ -405,7 +408,7 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepPerIntGerencia = 0;
                   $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                   $perdepende->perdepIntNivel = $request['nivel']['id'];
-                  $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                  $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                   $perdepende->perdepIntCanal = $value2['can_id'];
                   $perdepende->perdepIntTerritorio = $value['id'];
                   $perdepende->perdepIntGrupo = 0;
@@ -441,18 +444,13 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepPerIntGerencia = 0;
                   $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                   $perdepende->perdepIntNivel = $request['nivel']['id'];
-                  $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+                  $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                   $perdepende->perdepIntCanal = $value2['can_id'];
                   $perdepende->perdepIntTerritorio = 0;
                   $perdepende->perdepIntGrupo = $value['id'];
                   $perdepende->perdepIntPorcentaje = 0;
                   $perdepende->save();
 
-                  $aprueba = PerDepende::where('perdepPerIntGerencia', $persona->perIntTipogerencia)
-                                        ->where('perdepIntNivel', 4)->get();
-
-                  $meaprueba = PerDepende::where('perdepPerIntCedPerNivel', $request['tercero']['idTercero'])
-                                         ->update(['perdepPerIntIdAprueba' => $aprueba[0]['perdepPerIntId']]);
                 }
               }
            }elseif ($request['tpersona']['id'] == '5') {
@@ -463,7 +461,7 @@ class NivelesAutorizacionController extends Controller
                $perdepende->perdepPerIntGerencia = 0;
                $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                $perdepende->perdepIntNivel = $request['nivel']['id'];
-               $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+               $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
                $perdepende->perdepIntCanal = 0;
                $perdepende->perdepIntTerritorio = 0;
                $perdepende->perdepIntGrupo = 0;
@@ -486,7 +484,7 @@ class NivelesAutorizacionController extends Controller
           $perNivel->pen_idtipoper = $request['tpersona']['id'];
           $perNivel->pen_nomnivel = $request['nivel']['id'];
           $perNivel->pen_nivelpadre = 0;
-          $perNivel->pen_idgerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+          $perNivel->pen_idgerencia = $buscagerencia[0]['ger_id'];
           $perNivel->pen_isServiAdmon = false;
           $perNivel->pen_isCreador = true;
           $perNivel->save();
@@ -507,7 +505,7 @@ class NivelesAutorizacionController extends Controller
           $persona->perIntPorcmix = 0;
           $persona->perIntDepencia = 0;
           $persona->perTxtEstado = $request['estado']['value'];
-          $persona->perIntTipogerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+          $persona->perIntTipogerencia = $buscagerencia[0]['ger_id'];
           $persona->perTxtNoPasaporte = $request['numpasaporte'];
           $persona->perTxtFechaCadPass = Carbon::parse($request['fpasaporte'])->format('Y-m-d');
           $persona->perIntCiudadExpPass = $request['ciuexpedicion']['ciuIntId'];
@@ -516,7 +514,6 @@ class NivelesAutorizacionController extends Controller
           /*Fin tabla persona*/
 
           /*Inicio Persona Depende*/
-          foreach ($request['gerencias'] as $key => $value) {
 
               $perdepende = new PerDepende;
               $perdepende->perdepPerIntId = $persona->perIntId;
@@ -525,31 +522,39 @@ class NivelesAutorizacionController extends Controller
               $perdepende->perdepPerIntGerencia = 0;
               $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
               $perdepende->perdepIntNivel = $request['nivel']['id'];
-              $perdepende->perdepPerIntGerencia = $value['ger_cod'];
+              $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
               $perdepende->perdepIntCanal = 0;
               $perdepende->perdepIntTerritorio = 0;
               $perdepende->perdepIntGrupo = 0;
               $perdepende->perdepIntPorcentaje = 0;
               $perdepende->save();
-          }
+
+              $aprueba = PerDepende::where('perdepPerIntGerencia', $persona->perIntTipogerencia)
+                                      ->where('perdepIntNivel', 3)->get();
+
+              $meaprueba = PerDepende::where('perdepPerIntCedPerNivel', $aprueba[0]['perdepPerIntCedPerNivel'])
+                                      ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
+
           /*Fin persona depende*/
-        }elseif ($request['nivel']['id'] == 5) {
+        }
+
+        //elseif ($request['nivel']['id'] == 5) {
             /*Tabla Perniveles*/
-            $perNivel = new PerNivel;
+            /*$perNivel = new PerNivel;
             $perNivel->pen_usuario = $request['tercero']['usuario']['login'];
             $perNivel->pen_nombre = $request['tercero']['nombreEstablecimientoTercero'];
             $perNivel->pen_cedula = $request['tercero']['idTercero'];
             $perNivel->pen_idtipoper = $request['tpersona']['id'];
             $perNivel->pen_nomnivel = $request['nivel']['id'];
             $perNivel->pen_nivelpadre = 0;
-            $perNivel->pen_idgerencia = $request['tercero']['datosGerencia']['cod_gerencia'];
+            $perNivel->pen_idgerencia = $buscagerencia[0]['ger_id'];
             $perNivel->pen_isServiAdmon = true;
             $perNivel->pen_isCreador = false;
             $perNivel->save();
 
             /*Fin tabla perniveles*/
             /*Tabla persona*/
-            $persona = new Persona;
+            /*$persona = new Persona;
             $persona->perTxtNivel = 1;
             $persona->perTxtCedtercero = $request['tercero']['idTercero'];
             $persona->perTxtNomtercero = $request['tercero']['nombreEstablecimientoTercero'];
@@ -564,7 +569,7 @@ class NivelesAutorizacionController extends Controller
             $persona->perIntPorcmix = 0;
             $persona->perIntDepencia = 0;
             $persona->perTxtEstado = $request['estado']['value'];
-            $persona->perIntTipogerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+            $persona->perIntTipogerencia = $buscagerencia[0]['ger_id'];
             $persona->perTxtNoPasaporte = $request['numpasaporte'];
             $persona->perTxtFechaCadPass = Carbon::parse($request['fpasaporte'])->format('Y-m-d');
             $persona->perIntCiudadExpPass = $request['ciuexpedicion']['ciuIntId'];
@@ -573,22 +578,21 @@ class NivelesAutorizacionController extends Controller
             /*Fin tabla persona*/
 
             /*Inicio Persona Depende*/
-            $perdepende = new PerDepende;
+            /*$perdepende = new PerDepende;
             $perdepende->perdepPerIntId = $persona->perIntId;
             $perdepende->perdepPerIntIdAprueba = 0;
             $perdepende->perdepPerIntCedPerNivel = $perNivel->pen_cedula;
             $perdepende->perdepPerIntGerencia = 0;
             $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
             $perdepende->perdepIntNivel = $request['nivel']['id'];
-            $perdepende->perdepPerIntGerencia = trim($request['tercero']['datosGerencia']['cod_gerencia']);
+            $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
             $perdepende->perdepIntCanal = 0;
             $perdepende->perdepIntTerritorio = 0;
             $perdepende->perdepIntGrupo = 0;
             $perdepende->perdepIntPorcentaje = 0;
             $perdepende->save();
             /*Fin persona depende*/
-          }
-        return response()->json($request);
+          //}
     }
   }
 
