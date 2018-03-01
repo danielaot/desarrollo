@@ -67,12 +67,12 @@ class MisSolicitudesController extends Controller
       foreach ($solicitudImprimir['detalle'] as $fecha) {
         $fecha['contador'] = $i + 1;
         $i = $fecha['contador'];
-        $fecha['dtaIntFechaVuelo'] = Carbon::createFromTimestamp($fecha['dtaIntFechaVuelo'])->toDateString();
         if ($fecha['dtaIntHoravuelo'] != 0) {
           $fecha['dtaIntHoravuelo'] = Carbon::createFromTimestamp($fecha['dtaIntHoravuelo'])->toTimeString();
         }else{
           $fecha['dtaIntHoravuelo'] = Carbon::createFromTimestamp($fecha['dtaIntFechaVuelo'])->toTimeString();
         }
+        $fecha['dtaIntFechaVuelo'] = Carbon::createFromTimestamp($fecha['dtaIntFechaVuelo'])->toDateString();
       }
 
       $response = compact('solicitudImprimir', 'fechaSolicitud', 'fechaNacimiento');
