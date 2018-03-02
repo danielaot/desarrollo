@@ -78,12 +78,6 @@
                       <multiselect ng-model="infoPerNivel.grupos" options="grupos" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true" required></multiselect>
                     </div>
                   </div>
-                  <div ng-if="nivel[0].id == 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
-                    <div class="form-group">
-                      <label>Gerencias:</label>
-                      <multiselect class="span-margin" ng-model="infoPerNivel.gerencias" options="gerenciasFiltradas" id-prop="ger_id" display-prop="codigoGerencia" placeholder="-- Seleccione Gerencias --" show-select-all="true" show-unselect-all="true" required></multiselect>
-                    </div>
-                  </div>
                   <div ng-if="infoPerNivel.tpersona.id == '2'" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                       <label class="control-label">Territorio :</label>
@@ -110,7 +104,7 @@
                 </div>
 
 
-                <div class="panel panel-primary" ng-if="infoPerNivel.territorio != undefined || infoPerNivel.canales != undefined || infoPerNivel.grupos != undefined"><!--|| infoPerNivel.tpersona.id == '5' && nivel[0].id !== 1-->
+                <div class="panel panel-primary" ng-if="infoPerNivel.territorio != undefined || infoPerNivel.tpersona.id == '1' && infoPerNivel.canales != undefined || infoPerNivel.grupos != undefined"><!--|| infoPerNivel.tpersona.id == '5' && nivel[0].id !== 1-->
                   <div class="panel-heading">Información</div>
                     <div class="panel-body">
                       <md-tabs ng-if="nivel[0].id !== 1 && infoPerNivel.canales.length > 0 || infoPerNivel.territorio.length > 0 || infoPerNivel.grupos.length > 0 || infoPerNivel.tpersona.id === '5'" md-dynamic-height md-border-bottom>

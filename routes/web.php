@@ -55,10 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('descargarInforme/{fechaInicial}/{fechaFinal}/{placaVehiculo}', 'tccws\tccwsController@descargarInforme')->name('descargarInforme');
   });
 
-
-});
-
-/** Aplicativo Tiquetes y Hotel**/
+  /** Aplicativo Tiquetes y Hotel**/
 
   Route::group(['prefix' => 'tiquetes'], function(){
 
@@ -90,8 +87,6 @@ Route::group(['middleware' => ['auth']], function () {
     /*Bandeja Aprobacion*/
     Route::resource('bandejaaprobacion', 'Tiquetes\BandejaAprobacionController');
     Route::get('bandejaaprobacioninfo', 'Tiquetes\BandejaAprobacionController@getInfo');
-
-
-
-
   });
+  
+});

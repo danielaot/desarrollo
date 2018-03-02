@@ -49,7 +49,7 @@
                   <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                       <label class="control-label">Fecha Nacimiento <span class="required">*</span></label>
-                      <input type="date" class="form-control" ng-model="infoPerNivel.fnacimiento">
+                      <input type="date" class="form-control" ng-model="infoPerNivel.fnacimiento" required>
                     </div>
                   </div>
                   <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
@@ -98,15 +98,29 @@
                   <div ng-if="(infoPerNivel.tpersona.id === 5 && nivel[0].id > 1 && nivel[0].id < 4)" class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                     <div class="form-group">
                       <label>Personas Autoriza:</label>
-                      <multiselect class="span-margin" ng-model="infoPerNivel.personasautoriza" options="tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
+                      <multiselect class="span-margin" ng-model="infoPerNivel.personasautoriza" options="tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true"></multiselect>
                     </div>
                   </div>
                 </div>
 
 
-                <div class="panel panel-primary" ng-if="infoPerNivel.territorio != undefined || infoPerNivel.canales != undefined || infoPerNivel.grupos != undefined"><!--|| infoPerNivel.tpersona.id == '5' && nivel[0].id !== 1-->
+                <div class="panel panel-primary" ng-if="infoPerNivel.canales != undefined || infoPerNivel.territorio != undefined || infoPerNivel.grupos != undefined"><!--|| infoPerNivel.tpersona.id == '5' && nivel[0].id !== 1-->
                   <div class="panel-heading">Información</div>
                     <div class="panel-body">
+                      <table ng-if = "infoPerNivel.canales != undefined && infoPerNivel.tpersona.id == '1' && nivel[0].id == 1" class="table table-responsive table-striped table-bordered">
+                        <thead>
+                          <tr>
+                            <th class="text-center">Código</th>
+                            <th class="text-center">Canal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="canales in infoPerNivel.canales">
+                            <td class="text-center">@{{canales.can_id}}</td>
+                            <td class="text-center">@{{canales.can_txt_descrip}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                       <md-tabs ng-if="nivel[0].id !== 1 && infoPerNivel.canales.length > 0 || infoPerNivel.territorio.length > 0 || infoPerNivel.grupos.length > 0 || infoPerNivel.tpersona.id === '5'" md-dynamic-height md-border-bottom>
                         <md-tab label="@{{infoPerNivel.canales.length > 0 ? [objeto.can_id,objeto.can_txt_descrip].join(' - ') : infoPerNivel.territorio.length > 0 ? [objeto.zonanw.znw_descripcion,objeto.tnw_descripcion].join(' - ') : [objeto.gru_sigla,objeto.gru_responsable].join(' - ')}}"
                                 ng-repeat="(key, objeto) in infoPerNivel.canales.length > 0 ? infoPerNivel.canales : infoPerNivel.territorio.length > 0 ? infoPerNivel.territorio : infoPerNivel.grupos">
@@ -126,9 +140,9 @@
                                   <multiselect class="span-margin" ng-model="objeto.terceros"
                                                options="objeto.tercerosFiltrados" id-prop="pen_cedula" display-prop="cedulaNombre"
                                                placeholder="-- Seleccione Personas --" show-search="true"
-                                               show-select-all="true" show-unselect-all="true" required></multiselect>
+                                               show-select-all="true" show-unselect-all="true"></multiselect>
                                 </div>
-                                <table ng-if = "canal.terceros.length > 0" class="table table-responsive table-striped table-bordered">
+                                <!-- <table ng-if = "canal.terceros.length > 0" class="table table-responsive table-striped table-bordered">
                                   <thead>
                                     <tr>
                                       <th class="text-center">Cédula</th>
@@ -145,7 +159,7 @@
                                       </td>
                                     </tr>
                                   </tbody>
-                                </table>
+                                </table> -->
                               </div>
                             </div>
                             <md-tabs md-dynamic-height md-border-bottom>
@@ -155,11 +169,11 @@
                                     <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                                       <div class="form-group" >
                                         <label>Persona(s):</label>
-							                          <multiselect class="span-margin" ng-model="canal.terceros" options="canal.tercerosFiltrados" id-prop="pen_cedula" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
+							                          <multiselect class="span-margin" ng-model="canal.terceros" options="canal.tercerosFiltrados" id-prop="pen_cedula" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true"></multiselect>
                                       </div>
                                     </div>
                                   </div>
-                                  <table ng-if = "canal.terceros.length > 0" class="table table-responsive table-striped table-bordered">
+                                  <!-- <table ng-if = "canal.terceros.length > 0" class="table table-responsive table-striped table-bordered">
         				                    <thead>
         				                      <tr>
         				                        <th class="text-center">Cédula</th>
@@ -176,7 +190,7 @@
         				                        </td>
         				                      </tr>
         				                    </tbody>
-        				                  </table>
+        				                  </table> -->
                                 </md-content>
                               </md-tab>
                             </md-tabs>
@@ -218,7 +232,7 @@
                   <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                     <label class="control-label">Estado <span class="required">*</span>:</label>
-                    <select class="form-control" ng-model="infoPerNivel.estado" ng-options="opt.key for opt in estados track by opt.value">
+                    <select class="form-control" ng-model="infoPerNivel.estado" ng-options="opt.key for opt in estados track by opt.value" required>
                     </select>
                     </div>
                   </div>
