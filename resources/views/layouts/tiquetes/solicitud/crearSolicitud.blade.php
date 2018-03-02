@@ -86,17 +86,17 @@
 
                 <div ng-if="mostrarSelectCanal" class="col-lg-6 col-sm-6 col-xs-6 col-md-6">
                   <label>Canal de Aprobación:</label>
-                  <select class="form-control" name="canalaprobacion" id="canalaprobacion" ng-model="solicitud.canalaprobacion" ng-disabled="(mostrarSelectGrupo == true && solicitud.grupoaprobacion == undefined) ? true : (mostrarSelectTerritorio == true && solicitud.territorioaprobacion == undefined) ? true : deshabilitarSelectCanal == true ? true : false" ng-options="[canalAprobacion.can_id,canalAprobacion.can_txt_descrip].join(' - ') for canalAprobacion in canalesAprobacion track by canalAprobacion.can_id">
+                  <select class="form-control" name="canalaprobacion" id="canalaprobacion" ng-change="seleccionaAprobador()" ng-model="solicitud.canalaprobacion" ng-disabled="(mostrarSelectGrupo == true && solicitud.grupoaprobacion == undefined) ? true : (mostrarSelectTerritorio == true && solicitud.territorioaprobacion == undefined) ? true : deshabilitarSelectCanal == true ? true : false" ng-options="[canalAprobacion.can_id,canalAprobacion.can_txt_descrip].join(' - ') for canalAprobacion in canalesAprobacion track by canalAprobacion.can_id">
                     <option value="">-- Seleccione el canal de aprobación --</option>
                   </select>
                 </div>
-                <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6" ng-if = "solicitud.nombre != null">
-                  <label ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'">Aprobador <span class="required">*</span>:</label>
-                  <select ng-if="solicitud.nombre.pen_idtipoper != '3' || solicitud.nombre.pen_idtipoper != '4'" class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
+                <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6" ng-if = "solicitud.nombre !== null">
+                  <label ng-if="solicitud.nombre.pen_idtipoper !== '3' && solicitud.nombre.pen_idtipoper !== '4'">Aprobador <span class="required">*</span>:</label>
+                  <select ng-if="solicitud.nombre.pen_idtipoper !== '3' && solicitud.nombre.pen_idtipoper !== '4'" class="form-control" ng-model="solicitud.aprobador" ng-options='opt.aprobador.perTxtNomtercero for opt in aprobador track by opt.aprobador.perTxtNomtercero'>
                     <option value="">Seleccione aprobador ..</option>
                   </select>
                   <label ng-if="solicitud.nombre.pen_idtipoper == 3 || solicitud.nombre.pen_idtipoper == 4">Aprobador</label>
-                  <p ng-if="solicitud.nombre.pen_idtipoper == 3 || solicitud.nombre.pen_idtipoper == 4">@{{solicitud.nombre.grupos[0].gru_responsable}}</p>
+                  <p ng-if="solicitud.nombre.pen_idtipoper == 3 || solicitud.nombre.pen_idtipoper == 4">@{{solicitud.grupoaprobacion.gru_responsable}}</p>
                 </div>
 
                 <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
@@ -211,14 +211,10 @@
                         <td><select class="form-control" ng-model="solicitud.detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Destino ..</option>
                         </select></td>
-                        <td><input class="form-control" mdc-datetime-picker="" date="true" time="true" type="text" id="datetime"
-                          placeholder="Fecha y Hora de Viaje" show-todays-date="" min-date="date" ng-model="solicitud.detsoli.fviaje" class=" md-input" short-time ="true"
-                          readonly="readonly" ng-change="validarFecha(fecha)"></td>
-                        <td><select class="form-control" ng-model="solicitud.detsoli.hotel">
-                          <option value="">Seleccione ..</option>
-                          <option value="S">Si</option>
-                          <option value="N">No</option>
-                        </select></td>
+                        <td><input class="form-control" type="datetime-local" ng-model="solicitud.detsoli.fviaje" ng-change="validarFecha(fecha)"></td>
+                        <td><select class="form-control" ng-model="solicitud.detsoli.hotel" ng-options="opt.key for opt in hotel track by opt.value">
+                            </select>
+                        </td>
                         <td ng-if = "detsoli.hotel == 'S'"><input type="number" class="form-control" ng-model="solicitud.detsoli.nodias"></td>
                         <td><button class="btn btn-success btn-sm" type="button" ng-click="AgregarTramo(solicitud.detsoli)">
                               <i class="glyphicon glyphicon-plus"></i>
@@ -337,14 +333,14 @@
             </div>
           </div>
         @if(isset($solicitudes))
-          <div class="col-sm-12">
+          <div class="modal-footer">
             <button type="submit" class="btn btn-primary pull-right">Guardar</button>
             <button type="button" ng-click="editarSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
           </div>
           @else
-          <div class="col-sm-12">
-            <button type="submit" class="btn btn-primary pull-right">Guardar</button>
-            <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success pull-right">Guardar y Enviar</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success">Guardar y Enviar</button>
           </div>
         @endif
         @include('layouts.tiquetes.solicitud.modifica')
