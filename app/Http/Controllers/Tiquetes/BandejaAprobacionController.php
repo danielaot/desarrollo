@@ -327,6 +327,8 @@ class BandejaAprobacionController extends Controller
         $historico->evaIntTipoSolicitudAnt = 4;
         $historico->evaEstado = 'S';
         $historico->save();
+
+        $objSolTiquete = Evaluacion::with()->where()->first();
       }else{
 
         $observacion = $dataSolicitud['motivo'];
