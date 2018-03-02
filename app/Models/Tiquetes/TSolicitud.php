@@ -83,6 +83,7 @@ class TSolicitud extends Model
     public function tipoGerencia(){
       return $this->hasOne('App\Models\Genericas\TGerencia', 'ger_cod' ,'solTxtGerencia');
     }
+    
     public function evaluaciones(){
         return $this->hasMany('App\Models\Tiquetes\TEvaluacion', 'evaIntSolicitud', 'solIntSolId');
     }

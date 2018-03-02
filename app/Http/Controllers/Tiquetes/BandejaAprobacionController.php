@@ -328,7 +328,6 @@ class BandejaAprobacionController extends Controller
         $historico->evaEstado = 'S';
         $historico->save();
 
-        $objSolTiquete = Evaluacion::with()->where()->first();
       }else{
 
         $observacion = $dataSolicitud['motivo'];
@@ -344,9 +343,18 @@ class BandejaAprobacionController extends Controller
         $historico->evaIntTipoSolicitudAnt = 4;
         $historico->evaEstado = 'S';
         $historico->save();
+      }
 
+      $objSolTiquete = Evaluacion::with('estado', 'solicitud', 'solicitud.detalle', 'solicitud.detalle.ciuOrigen', 'solicitud.detalle.ciuDestino', 'solicitud.perCrea')->where('evaIntid', $historico['evaIntid'])->first();
+
+      if ($objSolTiquete['evaTxtCedtercero'] != $objSolTiquete['evaTxtCedterAnt']) {
+        $correo = TDirNacional::where('dir_txt_cedula', $historico['evaTxtCedtercero'])->pluck('dir_txt_email')->first();
+        Mail::to($correo)->send(new notificacionEstadoSolicitudNego($objSolTiquete));
+        if(Mail::failures()){
+          return response()->json(Mail::failures());
+        }
+      }   
     }
-  }
 
   public static function validarRutaAprobacion($beneficiario,$dataSolicitud){
     $filtraDteAprobacion = [];
