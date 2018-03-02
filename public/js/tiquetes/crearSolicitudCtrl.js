@@ -11,6 +11,10 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
   $scope.detallesolInt = [];
   $scope.paises = undefined;
   $scope.getUrlSolicitudes = 'solicitudes';
+  $scope.solicitud = {'detsoli' : {}};
+  $scope.hotel = [{value: 'S' , key : 'Si'},{value: 'N', key: 'No'}];
+  $scope.solicitud.detsoli.hotel = $scope.hotel[1];
+  console.log();
   $scope.solicitudes;
 
   $scope.getInfo = function(){
@@ -178,6 +182,9 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
         $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
         $scope.deshabilitarSelectCanal = true;
       }
+
+      $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, {perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
+      console.log($scope.aprobador);
     }
   }
 
@@ -187,17 +194,16 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
 
     if($scope.solicitud.nombre != undefined){
 
-      if ($scope.solicitud.nombre.pen_idtipoper !== 3 || $scope.solicitud.nombre.pen_idtipoper !== 4) {
+    /*  if ($scope.solicitud.nombre.pen_idtipoper !== 3 || $scope.solicitud.nombre.pen_idtipoper !== 4) {
         console.log($scope.solicitud.nombre.detalle);
         console.log($scope.solicitud);
 
-        $scope.aprobador = $filter('filter')($scope.solicitud.canalaprobacion, {can_id :  $scope.solicitud.nombre.detpersona.detallenivelpersona.perdepIntCanal});
-console.log($scope.aprobador);
+        $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, { perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
 console.log($scope.solicitud.nombre.detpersona);
-      //  $scope.apro = $scope.aprobador[0].aprobador;
+
       }else {
         $scope.apro = "";
-      }
+      }*/
 
       if($scope.solicitud.nombre.pen_idtipoper == 4 || $scope.solicitud.nombre.pen_idtipoper == 3){
           $scope.solicitud.nombre.grupos = _.pluck($scope.solicitud.nombre.detalle,'grupo');
@@ -249,6 +255,22 @@ console.log($scope.solicitud.nombre.detpersona);
         $scope.setEmptyInfoCanales();
       }
     }
+
+  }
+
+
+  $scope.seleccionaAprobador = function(){
+console.log("---->");
+console.log($scope.solicitud);
+    if ($scope.solicitud.nombre.pen_idtipoper == '1') {
+      $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, {perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
+
+    }else if ($scope.solicitud.nombre.pen_idtipoper == '3' || $scope.solicitud.pen_idtipoper == '4') {
+      console.log($scope.solicitud);
+        $scope.aprobador = $scope.solicitud.grupoaprobacion.gru_responsable;
+              console.log($scope.aprobador);
+    }
+
   }
 
   $scope.setEmptyInfoCanales = function(){
