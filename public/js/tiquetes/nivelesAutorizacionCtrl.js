@@ -601,9 +601,9 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
     $scope.progress = true;
     $scope.infoPerNivel.nivel = $scope.nivel[0];
     $http.post($scope.url, $scope.infoPerNivel).then(function(response){
-      //$scope.getInfo();
-    //  $scope.progress = false;
-    //  angular.element('.close').trigger('click');
+      $scope.progress = true;
+      $scope.getInfo();
+      angular.element('.close').trigger('click');
       });
     }
 
@@ -817,11 +817,14 @@ console.log($scope.infoPerNivel.objeto);
        .title('')
        .textContent('Desea eliminar la persona?')
        .ariaLabel('usuario')
-       .ok('Enviar')
+       .ok('Eliminar')
        .cancel('Cancelar');
 
       $mdDialog.show(confirm).then(function(){
         $http.post($scope.urlDelete, $scope.infoEnviar).then(function(response){
+          $scope.progress = true;
+          $scope.getInfo();
+          angular.element('.close').trigger('click');
         });
       });
     }

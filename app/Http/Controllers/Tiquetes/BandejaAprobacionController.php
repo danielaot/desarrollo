@@ -158,14 +158,14 @@ class BandejaAprobacionController extends Controller
                   }*/
               }
           }else{
-              
+
               $compradorGerencia = CompradoresGerencia::with('datocomprador')->where('comgerIntIdGerencia', $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perIntTipogerencia'])->get();
 
               $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
               $historico = new Evaluacion;
               $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
-              $historico->evaTxtCedtercero = $compradorGerencia[0]['comgerTxtIdTercero'];
-              $historico->evaTxtnombreter = $compradorGerencia[0]['datocomprador']['nombreEstablecimientoTercero'];
+              $historico->evaTxtCedtercero = $compradorGerencia['comgerTxtIdTercero'];
+              $historico->evaTxtnombreter = $compradorGerencia['datocomprador']['nombreEstablecimientoTercero'];
               $historico->evatxtObservacione = $observacion;
               $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
               $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];

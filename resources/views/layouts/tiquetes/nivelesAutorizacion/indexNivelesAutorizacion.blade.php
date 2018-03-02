@@ -154,43 +154,6 @@
             </md-content>
           </md-tab>
           <!-- fin nivel 4 -->
-          <!-- inicio nivel Serv. Administrativos -->
-          <md-tab label="Serv. Administrativos">
-            <md-content class="md-padding">
-              <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#modal"  ng-click="cambiarNivel(5)">
-                <i class="glyphicon glyphicon-plus"></i>  Crear Aprobador Serv. Administrativos
-              </button>
-              <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
-                <thead>
-                  <tr>
-                    <th>Tipo Persona</th>
-                    <th>Cedula</th>
-                    <th>Nombre</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="usuSA in usuSerAdmin">
-                    <td>@{{usuSA.tipo_persona.tpp_descripcion}}</td>
-                    <td>@{{usuSA.pen_cedula}}</td>
-                    <td>@{{usuSA.pen_nombre}}</td>
-                    <td>
-                      <button class="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modal1" ng-click="setEditPernivel(usuSA)">
-                        <i class="glyphicon glyphicon-edit"></i>
-                      </button>
-                    </td>
-                    <td>
-                      <button class="btn btn-danger btn-sm" type="button" ng-click="eliminarNivel(usuSA)">
-                        <i class="glyphicon glyphicon-remove"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </md-content>
-          </md-tab>
-          <!-- fin nivel Serv. Administrativos -->
         </md-tabs>
         <div ng-if="progress" class="progress">
           <md-progress-circular md-mode="indeterminate" md-diameter="96"></md-progress-circular>

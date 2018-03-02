@@ -153,6 +153,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
   }
 
   $scope.nombreSearch = function(query){
+    console.log($scope.persona);
     var filter = [];
     filter = $filter('filter')($scope.persona, {pen_nombre : query});
     return filter;
@@ -187,8 +188,13 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
     if($scope.solicitud.nombre != undefined){
 
       if ($scope.solicitud.nombre.pen_idtipoper !== 3 || $scope.solicitud.nombre.pen_idtipoper !== 4) {
-        $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detalle, {perdepPerIntCedPerNivel :  $scope.solicitud.nombre.pen_cedula});
-        $scope.apro = $scope.aprobador[0].aprobador;
+        console.log($scope.solicitud.nombre.detalle);
+        console.log($scope.solicitud);
+
+        $scope.aprobador = $filter('filter')($scope.solicitud.canalaprobacion, {can_id :  $scope.solicitud.nombre.detpersona.detallenivelpersona.perdepIntCanal});
+console.log($scope.aprobador);
+console.log($scope.solicitud.nombre.detpersona);
+      //  $scope.apro = $scope.aprobador[0].aprobador;
       }else {
         $scope.apro = "";
       }
