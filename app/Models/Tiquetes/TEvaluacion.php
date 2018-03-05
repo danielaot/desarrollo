@@ -34,4 +34,8 @@ class TEvaluacion extends Model
     public function estado(){
       return $this->hasOne('App\Models\Tiquetes\TEstados', 'id', 'evaIntTipoSolicitudAnt');
     }
+
+    public function solicitud(){
+      return $this->belongsTo('App\Models\Tiquetes\TSolicitud', 'evaIntSolicitud', 'solIntSolId');
+    }
 }
