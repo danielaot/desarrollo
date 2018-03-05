@@ -17,6 +17,7 @@ use App\Models\Tiquetes\TEvaluacion as Evaluacion;
 use App\Models\Tiquetes\TPernivele as PerNivel;
 use App\Models\Tiquetes\TEstados as Estados;
 use App\Models\Tiquetes\TCompradoresgerencium as CompradoresGerencia;
+use App\Models\Genericas\TDirNacional;
 
 use Auth;
 use DB;
@@ -379,7 +380,7 @@ class BandejaAprobacionController extends Controller
                     $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
                     $historico = new Evaluacion;
                     $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
-                    $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedtercero'];
+                    $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedterceroCrea'];
                     $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['solTxtNomtercero'];
                     $historico->evatxtObservacione = $observacion;
                     $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
@@ -447,11 +448,11 @@ class BandejaAprobacionController extends Controller
 
       if ($objSolTiquete['evaTxtCedtercero'] != $objSolTiquete['evaTxtCedterAnt']) {
         $correo = TDirNacional::where('dir_txt_cedula', $historico['evaTxtCedtercero'])->pluck('dir_txt_email')->first();
-        Mail::to($correo)->send(new notificacionEstadoSolicitudNego($objSolTiquete));
+        Mail::to($correo)->send(new notificacionEstadoSolicitudTiquetes($objSolTiquete));
         if(Mail::failures()){
           return response()->json(Mail::failures());
         }
-      }   
+      }
     }
 
   public static function validarRutaAprobacion($beneficiario,$dataSolicitud){

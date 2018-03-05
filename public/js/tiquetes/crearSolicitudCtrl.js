@@ -489,8 +489,6 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
         $scope.progress = false;
 
         var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
-        console.log(response.data);
-
         var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
         var mensaje = respuesta.message;
         var alerta = $mdDialog.alert()
