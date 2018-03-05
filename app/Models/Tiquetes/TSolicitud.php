@@ -91,4 +91,9 @@ class TSolicitud extends Model
         return $this->hasOne('App\Models\Tiquetes\TPersona', 'perTxtCedtercero', 'solTxtCedtercero');
 
     }
+
+    public function personaPernivel(){
+        return $this->hasOne('App\Models\Tiquetes\TPernivele', 'pen_cedula', 'solTxtCedtercero');
+
+    }
 }

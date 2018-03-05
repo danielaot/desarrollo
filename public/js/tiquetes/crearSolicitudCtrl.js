@@ -1,4 +1,4 @@
-app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '$mdDialog', function( $scope, $filter, $http, $mdDialog, $window){
+app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog', '$window', function( $scope, $filter, $http, $mdDialog, $window){
 
   $scope.getUrl = 'solicitudinfo';
   $scope.getUrlSoloPaises = 'paisesInfo';
@@ -11,10 +11,10 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
   $scope.detallesolInt = [];
   $scope.paises = undefined;
   $scope.getUrlSolicitudes = 'solicitudes';
-  $scope.solicitud = {'detsoli' : {}};
+  $scope.solicitud = {'detsoli' : {}, 'detsoliInt' : {}};
   $scope.hotel = [{value: 'S' , key : 'Si'},{value: 'N', key: 'No'}];
   $scope.solicitud.detsoli.hotel = $scope.hotel[1];
-  console.log();
+  $scope.solicitud.detsoliInt.hotel = $scope.hotel[1];
   $scope.solicitudes;
 
   $scope.getInfo = function(){
@@ -76,6 +76,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
           $scope.solicitud.idSolicitud = $scope.solicitudes[0].solIntSolId;
 
           if ($scope.solicitudes[0].solIntTiposolicitud == 1) {
+
             angular.forEach($scope.solicitudes[0].detalle, function(value, key){
 
               $scope.value = value;
@@ -96,7 +97,7 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
             });
           }
 
-//        $scope.solicitud.territorioaprobacion = angular.copy($scope.solicitudes[0].solIntIdZona);
+        $scope.solicitud.canalaprobacion = angular.copy($scope.solicitudes[0].canal);
 
         }
     });
@@ -157,7 +158,6 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
   }
 
   $scope.nombreSearch = function(query){
-    console.log($scope.persona);
     var filter = [];
     filter = $filter('filter')($scope.persona, {pen_nombre : query});
     return filter;
@@ -193,17 +193,6 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$window', '
     $scope.setEmptyInfoCanales();
 
     if($scope.solicitud.nombre != undefined){
-
-    /*  if ($scope.solicitud.nombre.pen_idtipoper !== 3 || $scope.solicitud.nombre.pen_idtipoper !== 4) {
-        console.log($scope.solicitud.nombre.detalle);
-        console.log($scope.solicitud);
-
-        $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, { perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
-console.log($scope.solicitud.nombre.detpersona);
-
-      }else {
-        $scope.apro = "";
-      }*/
 
       if($scope.solicitud.nombre.pen_idtipoper == 4 || $scope.solicitud.nombre.pen_idtipoper == 3){
           $scope.solicitud.nombre.grupos = _.pluck($scope.solicitud.nombre.detalle,'grupo');
@@ -246,6 +235,8 @@ console.log($scope.solicitud.nombre.detpersona);
             $scope.solicitud.canalaprobacion = $scope.canalesAprobacion[0];
             $scope.deshabilitarSelectCanal = true;
           }
+
+          $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, {perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
         }
 
       }else if($scope.solicitud.nombre.pen_idtipoper == 5){
@@ -258,17 +249,14 @@ console.log($scope.solicitud.nombre.detpersona);
 
   }
 
-
   $scope.seleccionaAprobador = function(){
-console.log("---->");
-console.log($scope.solicitud);
+
     if ($scope.solicitud.nombre.pen_idtipoper == '1') {
       $scope.aprobador = $filter('filter')($scope.solicitud.nombre.detpersona.detallenivelpersona, {perdepIntCanal : $scope.solicitud.canalaprobacion.can_id});
-
     }else if ($scope.solicitud.nombre.pen_idtipoper == '3' || $scope.solicitud.pen_idtipoper == '4') {
-      console.log($scope.solicitud);
+
         $scope.aprobador = $scope.solicitud.grupoaprobacion.gru_responsable;
-              console.log($scope.aprobador);
+
     }
 
   }
@@ -312,13 +300,15 @@ console.log($scope.solicitud);
   $scope.AgregarTramo = function(detsoli){
     $scope.detsoli = detsoli;
 
+    $scope.fechaNormal = $filter('date')(new Date($scope.solicitud.detsoli.fviaje), 'yyyy-MM-dd HH:mm:ss');
+
     var viaje = {
       idorigen : $scope.detsoli.origen.ciuIntId,
       origen : $scope.detsoli.origen.ciuTxtNom,
       destino : $scope.detsoli.destino.ciuTxtNom,
       iddestino : $scope.detsoli.destino.ciuIntId,
-      fviaje : $scope.detsoli.fviaje,
-      hotel : $scope.detsoli.hotel,
+      fviaje : $scope.fechaNormal,
+      hotel : $scope.detsoli.hotel.value,
       nodias : $scope.detsoli.nodias
     };
     $scope.detallesol.push(viaje);
@@ -330,13 +320,15 @@ console.log($scope.solicitud);
   $scope.AgregarTramoInternacional = function(detsoliInt){
     $scope.detsoliInt = detsoliInt;
 
+    $scope.fechaNormal = $filter('date')(new Date($scope.solicitud.detsoliInt.fviaje), 'yyyy-MM-dd HH:mm:ss');
+
     var viaje = {
       porigen : $scope.detsoliInt.porigen.Pais,
       ciuorigen : $scope.detsoliInt.ciuorigen.Ciudad,
       pdestino : $scope.detsoliInt.pdestino.Pais,
       ciudestino : $scope.detsoliInt.ciudestino.Ciudad,
-      fviaje : $scope.detsoliInt.fviaje,
-      hotel : $scope.detsoliInt.hotel,
+      fviaje : $scope.fechaNormal,
+      hotel : $scope.detsoliInt.hotel.value,
       nodias : $scope.detsoliInt.nodias
     };
     $scope.detallesolInt.push(viaje);
@@ -468,15 +460,51 @@ console.log($scope.solicitud);
     $scope.progress = true;
 
     if (isCreating == true) {
+      console.log($scope.solicitud);
       $http.post($scope.url, $scope.solicitud).then(function(response){
         console.log("-->");
-      //  $scope.getInfo();
+        $scope.getInfo();
         $scope.progress = false;
+
+        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
+        console.log(respuesta.rutaMisSolicitudes);
+        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
+        var mensaje = respuesta.message;
+        var alerta = $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(false)
+          .title(titulo)
+          .textContent(mensaje)
+          .ariaLabel('Alert Dialog Demo')
+          .ok('Ok')
+
+          $mdDialog.show(alerta).then(function(){
+              $scope.progress = true;
+              $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
+          });
       });
     }else {
       $http.post($scope.enviaAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
         console.log("-->2");
         $scope.progress = false;
+
+        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
+        console.log(response.data);
+
+        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
+        var mensaje = respuesta.message;
+        var alerta = $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(false)
+          .title(titulo)
+          .textContent(mensaje)
+          .ariaLabel('Alert Dialog Demo')
+          .ok('Ok')
+
+          $mdDialog.show(alerta).then(function(){
+              $scope.progress = true;
+              $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
+          });
       });
     }
   }
@@ -485,12 +513,47 @@ console.log($scope.solicitud);
 
     if (isCreating == true) {
       $http.post($scope.urlEditar, $scope.solicitud).then(function(response){
-        var data = response.data;
+        //var data = response.data;
+        $scope.getInfo();
+        $scope.progress = false;
+
+        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
+        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
+        var mensaje = respuesta.message;
+        var alerta = $mdDialog.alert()
+          .parent(angular.element(document.querySelector('#popupContainer')))
+          .clickOutsideToClose(false)
+          .title(titulo)
+          .textContent(mensaje)
+          .ariaLabel('Alert Dialog Demo')
+          .ok('Ok')
+
+          $mdDialog.show(alerta).then(function(){
+              $scope.progress = true;
+              $window.location = respuesta.rutaMisSolicitudes;
+          });
       });
     }else {
-      console.log("---->1");
+
       $http.post($scope.enviaEditAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
-           console.log("-->2");
+          $scope.getInfo();
+          $scope.progress = false;
+
+          var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
+          var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
+          var mensaje = respuesta.message;
+          var alerta = $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .title(titulo)
+            .textContent(mensaje)
+            .ariaLabel('Alert Dialog Demo')
+            .ok('Ok')
+
+            $mdDialog.show(alerta).then(function(){
+                $scope.progress = true;
+                $window.location = respuesta.rutaMisSolicitudes;
+          });
       });
     }
 

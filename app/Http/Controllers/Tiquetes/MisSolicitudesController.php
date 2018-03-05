@@ -13,6 +13,8 @@ use App\Models\Tiquetes\TSolicitud as Solicitud;
 use App\Models\Tiquetes\TPersonaexterna as PersonaExterna;
 use App\Models\Tiquetes\TDetallesolictud as DetalleSolicitud;
 
+use App\Http\Controllers\Tiquetes\BandejaAprobacionController as AutorizacionCtrl;
+
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -36,7 +38,11 @@ class MisSolicitudesController extends Controller
 
       $usuario = Auth::user();
       $solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
-                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado')
+                                     'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'evaluaciones', 'evaluaciones.estado',
+                                     'personaPernivel', 'personaPernivel.nivel.nivelpadre', 'personaPernivel.detalle.grupo', 'personaPernivel.detalle.canal',
+                                     'personaPernivel.detalle.aprobador.nivaprobador.nivel', 'personaPernivel.detalle.ejecutivo.pernivejecutivo.nivel',
+                                     'personaPernivel.detalle.territorio', 'personaPernivel.detpersona.detallenivelpersona.aprobador', 'personaPernivel.detalle',
+                                     'personaPernivel.tipoPersona')
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
                                 ->get();
       /*$solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
@@ -48,7 +54,7 @@ class MisSolicitudesController extends Controller
         $solicitud['urlEdit'] = route('editarSolicitud',['idSolicitud' => $solicitud['solIntSolId']]);
         return $solicitud;
       });
-      $rutaPdf = route('imprimirLegalizacionTiquetes');
+      //$rutaPdf = route('imprimirLegalizacion');
 
       $response =  compact('solicitudes','usuario', 'rutaPdf');
 
@@ -83,10 +89,14 @@ class MisSolicitudesController extends Controller
 
     public function enviarSolicitud(Request $request)
     {
-        $updateEstado = Solicitud::where('solIntSolId', $request->solIntSolId)
-                                  ->update(['solIntEstado' => 4]);
+      //return response()->json($request);
 
-        return response()->json($updateEstado);
+        $data = $request->all();
+        $rutaAprobacion = AutorizacionCtrl::store($request,false,false,true);
+
+        $response = compact('data', 'rutaAprobacion');
+
+        return response()->json($response);
     }
 
     public function anularSolicitud(Request $request)

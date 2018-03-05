@@ -1,4 +1,4 @@
-app.controller('bandejaAprobacionCtrl', ['$scope', '$filter', '$http', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', function( $scope, $filter, $http, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder){
+app.controller('bandejaAprobacionCtrl', ['$scope', '$filter', '$http', '$mdDialog', 'DTOptionsBuilder', 'DTColumnDefBuilder', '$window', function( $scope, $filter, $http, $mdDialog, DTOptionsBuilder, DTColumnDefBuilder, $window){
 
   $scope.url = 'bandejaaprobacion';
   $scope.urlInfo = 'bandejaaprobacioninfo';
@@ -29,8 +29,10 @@ app.controller('bandejaAprobacionCtrl', ['$scope', '$filter', '$http', '$mdDialo
 
   $scope.saveAprobSolicitud = function(){
     $http.post($scope.url, $scope.aprobacionSolicitud).then(function(response){
-      console.log($scope.aprobacionSolicitud);
-    //  $scope.progress = false;
+
+      $scope.progress = true;
+      $scope.getInfo();
+      angular.element('.close').trigger('click');
     });
 
   }

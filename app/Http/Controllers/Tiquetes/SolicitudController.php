@@ -78,6 +78,9 @@ class SolicitudController extends Controller
 
     public function store(Request $request, $isCreating = false)
     {
+        $rutaMisSolicitudes = route('misSolicitudesTiquetes');
+        $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
+
         $usuario = Auth::user();
         $fecha = Carbon::now();
         $usulogin = PerNivel::where('pen_cedula', $usuario['idTerceroUsuario'])->get();
@@ -103,6 +106,7 @@ class SolicitudController extends Controller
           $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
           $solicitud->solIntIdZona = $request['territorioaprobacion']['id'];
           $solicitud->solIntIdGrupo = $request['grupoaprobacion']['id'];
+          $solicitud->solTxtGerencia = $request['nombre']['detpersona']['perIntTipogerencia'];
           $solicitud->save();
 
           if ($request->tviajero == 2) {
@@ -116,28 +120,6 @@ class SolicitudController extends Controller
             $solicitudExterno->pereTxtEmail = $request->corexterno;
             $solicitudExterno->save();
 
-            // $solipernivel = new SoliPernivel;
-            // $solipernivel->sni_idpernivel = $request['nombre']['pen_nomnivel'];
-            // $solipernivel->sni_cedula = $request['nombre']['pen_cedula'];
-            // $solipernivel->sni_idsolicitud = $solicitud->solIntSolId;
-            // $solipernivel->sni_estado = 0;
-            // $solipernivel->sni_orden = 1;
-            // $solipernivel->save();
-            //
-            // $cedaprueba = $request['aprobador']['aprobador']['perTxtCedtercero'];
-            // $nomaprueba = $request['aprobador']['aprobador']['perTxtNomtercero'];
-            //
-            // $evaluacion = new Evaluacion;
-            // $evaluacion->evaIntSolicitud = $solicitud->solIntSolId;
-            // $evaluacion->evaTxtCedtercero = $cedaprueba;
-            // $evaluacion->evaTxtnombreter = $nomaprueba;
-            // $evaluacion->evatxtObservacione = $request->motivo;
-            // $evaluacion->evaIntFecha = '1516054234';
-            // $evaluacion->evaTxtCedterAnt = $request['nombre']['pen_cedula'];
-            // $evaluacion->evaTxtNomterAnt = $request['nombre']['pen_nombre'];
-            // $evaluacion->evaIntTipoSolicitudAnt = 4;
-            // $evaluacion->evaEstado = 'S';
-            // $evaluacion->save();
           }
 
           if ($request->tviaje == 1) {
@@ -202,6 +184,7 @@ class SolicitudController extends Controller
           $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
           $solicitud->solIntIdZona = $request['territorioaprobacion']['id'];
           $solicitud->solIntIdGrupo = $request['grupoaprobacion']['id'];
+          $solicitud->solTxtGerencia = $request['nombre']['detpersona']['perIntTipogerencia'];
           $solicitud->save();
 
           if ($request->tviajero == 2) {
@@ -261,13 +244,11 @@ class SolicitudController extends Controller
         $data = $request->all();
 
         if($isCreating == true){
-
             $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,true,false,true);
         }else{
             $rutaAprobacion = AutorizacionCtrl::store($request,$solicitud->solIntSolId,false,true,true);
-            //return $rutaAprobacion;
         }
-        $response = compact('solicitud', 'detSolicitud', 'data', 'rutaAprobacion');
+        $response = compact('solicitud', 'detSolicitud', 'data', 'rutaAprobacion', 'respuestaCreacion');
 
         return response()->json($response);
     }
@@ -300,6 +281,9 @@ class SolicitudController extends Controller
     public function editSolicitud(Request $request, $isCreating = false)
     {
         //return response()->json($request->all());
+        $rutaMisSolicitudes = route('misSolicitudesTiquetes');
+        $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
+        
         $usuario = Auth::user();
         $fechaEdicion = Carbon::now();
         $isCreating = $isCreating == "false" ? false: true;
@@ -391,7 +375,7 @@ class SolicitudController extends Controller
              $rutaAprobacion = AutorizacionCtrl::store($request,$request->idSolicitud,false,true,true);
          }
 
-         $response = compact('updateDetSolicitud', 'data', 'rutaAprobacion');
+         $response = compact('updateDetSolicitud', 'data', 'rutaAprobacion', 'respuestaCreacion');
 
          return response()->json($response);
     }

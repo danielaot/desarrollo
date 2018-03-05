@@ -408,7 +408,6 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepPerIntId = $persona->perIntId;
                   $perdepende->perdepPerIntIdAprueba = 0;
                   $perdepende->perdepPerIntCedPerNivel = $perNivel->pen_cedula;
-                  $perdepende->perdepPerIntGerencia = 0;
                   $perdepende->perdepPerIntIdtipoper = $request['tpersona']['id'];
                   $perdepende->perdepIntNivel = $request['nivel']['id'];
                   $perdepende->perdepPerIntGerencia = $buscagerencia[0]['ger_id'];
@@ -426,6 +425,11 @@ class NivelesAutorizacionController extends Controller
                                               ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
 
                   }
+
+                  $actPersonaDep = PerDepende::where('perdepIntNivel', 4)->where('perdepPerIntGerencia', $buscagerencia[0]['ger_id'])->get();
+                  $aprobador = PerDepende::where('perdepIntNivel', 3)->where('perdepPerIntGerencia', $buscagerencia[0]['ger_id'])->where('perdepPerIntId', $persona->perIntId)
+                                         ->update(['perdepPerIntIdAprueba' => $actPersonaDep[0]['perdepPerIntId']]);
+
                 }
               }
 
@@ -454,6 +458,9 @@ class NivelesAutorizacionController extends Controller
                   $perdepende->perdepIntPorcentaje = 0;
                   $perdepende->save();
 
+                  $actPersonaDep = PerDepende::where('perdepIntNivel', 4)->where('perdepPerIntGerencia', $buscagerencia[0]['ger_id'])->get();
+                  $aprobador = PerDepende::where('perdepIntNivel', 3)->where('perdepPerIntGerencia', $buscagerencia[0]['ger_id'])->where('perdepPerIntId', $persona->perIntId)
+                                         ->update(['perdepPerIntIdAprueba' => $actPersonaDep[0]['perdepPerIntId']]);
                 }
               }
            }elseif ($request['tpersona']['id'] == '5') {

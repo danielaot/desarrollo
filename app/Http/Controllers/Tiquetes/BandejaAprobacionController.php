@@ -41,7 +41,8 @@ class BandejaAprobacionController extends Controller
       $usuario = Auth::user();
       $usulogin = PerNivel::where('pen_cedula', $usuario['idTerceroUsuario'])->get();
 
-      $solicitud = SoliPernivel::with('detallesolicitud',
+      $solicitud = SoliPernivel::with('detallesolicitud.evaluaciones',
+                                      'detallesolicitud.evaluaciones.estado',
                                       'detallesolicitud.canal',
                                       'detallesolicitud.grupoaprobacion',
                                       'detallesolicitud.territorioaprobacion',
@@ -63,7 +64,7 @@ class BandejaAprobacionController extends Controller
                                       'detallesolicitud.perCrea')
                                       ->where(['sni_cedula' => $usuario['idTerceroUsuario'], 'sni_estado' => 0])->get();
 
-      $estadosAprobacion = Estados::whereIn('estIntEstado', [12,6,2])->get();
+      $estadosAprobacion = Estados::whereIn('estIntEstado', [12,3,2])->get();
       /*$solicitudes = Solicitud::with('detalle.ciuOrigen', 'detalle.ciuDestino', 'detalle.aerolinea',
                                      'estados', 'perExterna', 'perCrea', 'pago.tipoPago', 'solipernivel')
                                 ->where('solTxtCedterceroCrea', $usuario['idTerceroUsuario'])
@@ -75,8 +76,9 @@ class BandejaAprobacionController extends Controller
     }
 
     static function store(Request $request,$idSolicitud = null,$isCreating = false,$isCreatingAndSend = false,$isExt = false){
-
       $dataSolicitud = $request->all();
+      $rutaMisSolicitudes = route('misSolicitudesTiquetes');
+      $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
       $error = ["isSuccess" => false, "message" => ""];
       $filtraDteAprobacion = [];
       $dataToApprobation = [];
@@ -106,24 +108,50 @@ class BandejaAprobacionController extends Controller
               $beneficiario = $dataSolicitud['nombre'];
               $dataSolicitud['tipoPersona'] = $dataSolicitud['nombre']['pen_idtipoper'];
               $beneficiario['pen_idtipoper'] = $dataSolicitud['nombre']['pen_idtipoper'];
-//return $beneficiario['pen_idtipoper'];
           }
           //$dataSolicitud['idSolicitud'] = $idSolicitud;
           //  $beneficiario = $dataSolicitud['nombre'];
 
       }
       else{
-          $dataSolicitud = $request->all();
-          $dataSolicitud['idSolicitud'] = $request['sni_idsolicitud'];
-          $dataSolicitud['solTxtGerencia'] = $request['detallesolicitud']['solTxtGerencia'];
-          $dataSolicitud['canalaprobacion'] = $request['detallesolicitud']['canal'];
-          $dataSolicitud['grupoaprobacion'] = $request['detallesolicitud']['grupoaprobacion'];
-          $beneficiario = $dataSolicitud['detallepernivel'];
-          $beneficiario['ejecutivo']['tipo_persona']['id'] = $dataSolicitud['detallepernivel']['pen_idtipoper'];
-          $beneficiario['ejecutivo'] = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo'];
-          $beneficiario['datosGerencia']['cod_gerencia'] = $dataSolicitud['detallepernivel']['pen_idgerencia'];
-          $beneficiario['aprobador']['nivaprobador'] = $dataSolicitud['detallepernivel']['detalle'][0]['aprobador']['nivaprobador'];
-          $dataSolicitud['territorioaprobacion'] = $request['detallesolicitud']['territorioaprobacion'];
+
+        $dataSolicitud = $request->all();
+
+          if (isset($dataSolicitud['persona_nivel'])) {
+            //return $dataSolicitud;
+            $dataSolicitud['idSolicitud'] = $request['solIntSolId'];
+            $dataSolicitud['solTxtGerencia'] = $request['solTxtGerencia'];
+            $dataSolicitud['canalaprobacion'] = $dataSolicitud['persona_pernivel']['detalle'][0]['canal'];
+            $dataSolicitud['grupoaprobacion'] = $dataSolicitud['persona_pernivel']['detalle'][0]['grupo'];
+            $dataSolicitud['territorioaprobacion'] = $dataSolicitud['persona_pernivel']['detalle'][0]['territorio'];
+            // foreach ($dataSolicitud['persona_pernivel']['detalle'] as $key => $value) {
+            //   $dataSolicitud['canalaprobacion'] = $value['canal'];
+            //   $dataSolicitud['grupoaprobacion'] = $value['grupo'];
+            //   $dataSolicitud['territorioaprobacion'] = $value['territorio'];
+            // }
+            $beneficiario = $dataSolicitud['persona_pernivel'];
+            // foreach ($dataSolicitud['persona_pernivel']['detalle'] as $key => $value2) {
+            //   $beneficiario['ejecutivo'] = $value2['ejecutivo'];
+            //   $beneficiario['aprobador']['nivaprobador'] = $value2['aprobador']['nivaprobador'];
+            // }
+            $beneficiario['ejecutivo'] = $dataSolicitud['persona_pernivel']['detalle'][0]['ejecutivo'];
+            $beneficiario['aprobador']['nivaprobador'] = $dataSolicitud['persona_pernivel']['detalle'][0]['aprobador']['nivaprobador'];
+            $beneficiario['ejecutivo']['tipo_persona']['id'] = $dataSolicitud['persona_pernivel']['pen_idtipoper'];
+            $beneficiario['datosGerencia']['cod_gerencia'] = $dataSolicitud['persona_pernivel']['pen_idgerencia'];
+            $dataSolicitud['motivo'] = "Enviado aprobación";
+          }else {
+
+            $dataSolicitud['idSolicitud'] = $request['sni_idsolicitud'];
+            $dataSolicitud['solTxtGerencia'] = $request['detallesolicitud']['solTxtGerencia'];
+            $dataSolicitud['canalaprobacion'] = $request['detallesolicitud']['canal'];
+            $dataSolicitud['grupoaprobacion'] = $request['detallesolicitud']['grupoaprobacion'];
+            $beneficiario = $dataSolicitud['detallepernivel'];
+            $beneficiario['ejecutivo']['tipo_persona']['id'] = $dataSolicitud['detallepernivel']['pen_idtipoper'];
+            $beneficiario['ejecutivo'] = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo'];
+            $beneficiario['datosGerencia']['cod_gerencia'] = $dataSolicitud['detallepernivel']['pen_idgerencia'];
+            $beneficiario['aprobador']['nivaprobador'] = $dataSolicitud['detallepernivel']['detalle'][0]['aprobador']['nivaprobador'];
+            $dataSolicitud['territorioaprobacion'] = $request['detallesolicitud']['territorioaprobacion'];
+          }
       }
 
       if($isCreating == true){
@@ -139,43 +167,82 @@ class BandejaAprobacionController extends Controller
 
               if($beneficiario['nivel']['nivelpadre']['niv_gerencial'] != 1){
 
-                $response = self::grabarRutaAprobacion($filtraDteAprobacion,$dataSolicitud,$isCreating,$isCreatingAndSend);
-                //  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
-                $dataSolicitud['respuestaAutorizacion'] = $response;
-                  /*if(count($filtraDteAprobacion) > 0){
-                  }else{
-                      $error['message'] = "No existe una ruta de aprobación para el canal de la solicitud";
-                      $dataSolicitud['respuestaAutorizacion'] = $error;
-                  }*/
-              }else{
-                $response = self::grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
-                $dataSolicitud['respuestaAutorizacion'] = $response;
-                /*if(count($filtraDteAprobacion) > 0){
-                  //  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
+                    if(count($filtraDteAprobacion) > 0){
+                      $response = self::grabarRutaAprobacion($filtraDteAprobacion,$dataSolicitud,$isCreating,$isCreatingAndSend);
+                      //  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
+                      $dataSolicitud['respuestaAutorizacion'] = $response;
+                    }else{
+                          $error['message'] = "No existe una ruta de aprobación para la solicitud";
+                          $dataSolicitud['respuestaAutorizacion'] = $error;
+                        }
                 }else{
-                      $error['message'] = "No existe una ruta de aprobación que coincida con la gerencia de la solicitud";
-                      $dataSolicitud['respuestaAutorizacion'] = $error;
-                  }*/
+
+                    if(count($filtraDteAprobacion) > 0){
+                      $response = self::grabarRutaAprobacion($beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
+                      $dataSolicitud['respuestaAutorizacion'] = $response;
+                  //  $response = self::grabarRutaAprobacion($filtraDteAprobacion,$beneficiario,$dataSolicitud,$isCreating,$isCreatingAndSend);
+                    }else{
+                          $error['message'] = "No existe una ruta de aprobación que coincida con la gerencia de la solicitud";
+                          $dataSolicitud['respuestaAutorizacion'] = $error;
+                      }
+                  }
+           }else{
+
+              if ($dataSolicitud['estado']['estIntEstado'] == 4) {
+                  $compradorGerencia = CompradoresGerencia::with('datocomprador')->where('comgerIntIdGerencia', $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perIntTipogerencia'])->get();
+
+                  $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
+                  $historico = new Evaluacion;
+                  $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+                  $historico->evaTxtCedtercero = $compradorGerencia[0]['comgerTxtIdTercero'];
+                  $historico->evaTxtnombreter = $compradorGerencia[0]['datocomprador']['nombreEstablecimientoTercero'];
+                  $historico->evatxtObservacione = $observacion;
+                  $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+                  $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+                  $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+                  $historico->evaIntTipoSolicitudAnt = 12;
+                  $historico->evaEstado = 'S';
+                  $historico->save();
+
+                  $response = ['isSuccess' => true, 'message' => 'Se ha creado la ruta correctamente.'];
+                  $dataSolicitud['respuestaAutorizacion'] = $response;
+
+              }elseif ($dataSolicitud['estado']['estIntEstado'] == 3) {
+
+                $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
+                $historico = new Evaluacion;
+                $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+                $historico->evaTxtCedtercero = "";
+                $historico->evaTxtnombreter = "";
+                $historico->evatxtObservacione = $observacion;
+                $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+                $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+                $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+                $historico->evaIntTipoSolicitudAnt = 2;
+                $historico->evaEstado = 'S';
+                $historico->save();
+
+                $response = ['isSuccess' => true, 'message' => 'Se ha anulado la ruta correctamente.'];
+                $dataSolicitud['respuestaAutorizacion'] = $response;
+
+              }elseif ($dataSolicitud['estado']['estIntEstado'] == 2) {
+
+                  /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
+                  $historico = new Evaluacion;
+                  $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+                  $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedtercero'];
+                  $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['solTxtNomtercero'];
+                  $historico->evatxtObservacione = $observacion;
+                  $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+                  $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+                  $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+                  $historico->evaIntTipoSolicitudAnt = 2;
+                  $historico->evaEstado = 'S';
+                  $historico->save();
+
+                  $response = ['isSuccess' => true, 'message' => 'Se ha enviado a correcciones la ruta correctamente.'];
+                  $dataSolicitud['respuestaAutorizacion'] = $response;*/
               }
-          }else{
-
-              $compradorGerencia = CompradoresGerencia::with('datocomprador')->where('comgerIntIdGerencia', $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perIntTipogerencia'])->get();
-
-              $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
-              $historico = new Evaluacion;
-              $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
-              $historico->evaTxtCedtercero = $compradorGerencia['comgerTxtIdTercero'];
-              $historico->evaTxtnombreter = $compradorGerencia['datocomprador']['nombreEstablecimientoTercero'];
-              $historico->evatxtObservacione = $observacion;
-              $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
-              $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
-              $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
-              $historico->evaIntTipoSolicitudAnt = 12;
-              $historico->evaEstado = 'S';
-              $historico->save();
-
-              $response = ['isSuccess' => true, 'message' => 'Se ha creado la ruta correctamente.'];
-              $dataSolicitud['respuestaAutorizacion'] = $response;
 
             }
         }
@@ -241,7 +308,6 @@ class BandejaAprobacionController extends Controller
 
                 if($dataSolicitud['estado']['estIntEstado'] == 12){//Aprueba Solicitud
                  //if($dataSolicitud['estadoSolicitud'] == 12){//Aprueba Solicitud
-
                     $estadoSolicitud = 4;
                     if($usuarioEntrega['nivel']['niv_gerencial'] == 1){
                         $obs = isset($dataSolicitud['motivo'])? $dataSolicitud['motivo'] : 'Aprueba Servicios Administrativos';
@@ -267,34 +333,66 @@ class BandejaAprobacionController extends Controller
 
                     $actualizaSolicitud= Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => $estadoSolicitud]);
 
-               }elseif($dataSolicitud['estadoSolicitud'] == 6){//Rechaza Solicitud
-                 return ("--->");
-                  /*  $usuarioCreador = $dataSolicitud['pernivelbeneficiario'];
-                    $dataSolicitud['observacion'] = isset($dataSolicitud['observacion'])?$dataSolicitud['observacion']:'Solicitud Rechazada';
-                    $estadoSolicitud = $dataSolicitud['estadoSolicitud'];
+               }elseif($dataSolicitud['estado']['estIntEstado'] == 3){//Rechaza Solicitud
+                 //return ("--->");
+                    $usuarioCreador = $dataSolicitud['detallepernivel'];
+                    $dataSolicitud['motivo'] = isset($dataSolicitud['motivo'])?$dataSolicitud['motivo']:'Solicitud Rechazada';
+                    $estadoSolicitud = $dataSolicitud['estado']['estIntEstado'];
 
-                    self::grabarHistorico($usuarioEntrega,$usuarioCreador,$dataSolicitud,$isCreating);
+                    //self::grabarHistorico($usuarioEntrega,$usuarioCreador,$dataSolicitud,$isCreating);
 
-                    $actualizaEstadoRuta = TSolipernivel::where(['sni_idpernivel' => $usuarioEntrega['id'], 'sni_idsolicitud' => $dataSolicitud['sol_int_id']])->update(['sni_estado' => 1]);
+                    $actualizaEstadoRuta = SoliPernivel::where(['sni_idpernivel' => $usuarioEntrega['id'], 'sni_idsolicitud' => $dataSolicitud['detallesolicitud']['solIntSolId']])->update(['sni_estado' => 1]);
 
-                    $actualizaSolicitud= TSolicitud::where('sol_int_id', $dataSolicitud['sol_int_id'])->update(['sol_int_idestado' => $estadoSolicitud]);
+                    $actualizaSolicitud= Solicitud::where('solIntSolId', $dataSolicitud['detallesolicitud']['solIntSolId'])->update(['solIntEstado' => $estadoSolicitud]);
+
+                    $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
+                    $historico = new Evaluacion;
+                    $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+                    $historico->evaTxtCedtercero = "";
+                    $historico->evaTxtnombreter = "";
+                    $historico->evatxtObservacione = $observacion;
+                    $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+                    $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+                    $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+                    $historico->evaIntTipoSolicitudAnt = 3;
+                    $historico->evaEstado = 'S';
+                    $historico->save();
+
+                    //$actualizaEvaluacion = Evaluacion::where('evaIntSolicitud', $dataSolicitud['detallesolicitud']['solIntSolId'])->where('evaTxtCedtercero', $dataSolicitud['detallepernivel']['pen_cedula'])->update(['evaIntTipoSolicitudAnt' => $estadoSolicitud]);
 
                     $response = ['isSuccess' => true, 'message' => 'Se ha rechazado la solicitud correctamente.'];
-                    return $response;*/
+                    return $response;
 
-                }elseif($dataSolicitud['estadoSolicitud'] == 2){//Envia a Correciones la Solicitud
-                  return ("----->");
-                  /*  $usuarioCreador = $dataSolicitud['tpernivelbeneficiario'];
-                    $eliminarRutaActual = TSolipernivel::where('sni_idsolicitud', $dataSolicitud['sol_int_id'])->delete();
-                    $estadoSolicitud = $dataSolicitud['estadoSolicitud'];
+                }elseif($dataSolicitud['estado']['estIntEstado'] == 2){//Envia a Correciones la Solicitud
 
-                    self::grabarRutaAprobacion($usuarioCreador,$dataSolicitud,true,false);
+                    $usuarioCreador = $dataSolicitud['detallepernivel'];
+                    $eliminarRutaActual = SoliPernivel::where('sni_idsolicitud', $dataSolicitud['detallesolicitud']['solIntSolId'])->delete();
+                    $estadoSolicitud = $dataSolicitud['estado']['estIntEstado'];
 
-                    $actualizaSolicitud= TSolicitud::where('sol_int_id', $dataSolicitud['sol_int_id'])->update(['sol_int_idestado' => $estadoSolicitud]);
+                    //self::grabarRutaAprobacion($usuarioCreador,$dataSolicitud,true,false);
 
-                    self::grabarHistorico($usuarioEntrega,$usuarioCreador,$dataSolicitud,$isCreating,true);
-                    $response = ['isSuccess' => true, 'message' => 'Se ha enviado a correciones correctamente la solicitud.'];
-                    return $response;*/
+                    $actualizaSolicitud= Solicitud::where('solIntSolId', $dataSolicitud['detallesolicitud']['solIntSolId'])->update(['solIntEstado' => $estadoSolicitud]);
+
+                    $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
+                    $historico = new Evaluacion;
+                    $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
+                    $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedtercero'];
+                    $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['solTxtNomtercero'];
+                    $historico->evatxtObservacione = $observacion;
+                    $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
+                    $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
+                    $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
+                    $historico->evaIntTipoSolicitudAnt = 2;
+                    $historico->evaEstado = 'S';
+                    $historico->save();
+
+                    //self::grabarHistorico($usuarioEntrega,$usuarioCreador,$dataSolicitud,$isCreating,true);
+
+                    /*$actualizaEvaluacion = Evaluacion::where('evaIntSolicitud', $dataSolicitud['detallesolicitud']['solIntSolId'])->where('evaTxtCedtercero', $dataSolicitud['detallepernivel']['pen_cedula'])
+                                                      ->update(['evaIntTipoSolicitudAnt' => $estadoSolicitud, 'evaTxtCedtercero' => $dataSolicitud['detallesolicitud']['solTxtCedtercero'], 'evaTxtnombreter' => $dataSolicitud['detallesolicitud']['solTxtNomtercero']]);*/
+
+                    $response = ['isSuccess' => true, 'message' => 'Se ha enviado a correcciones correctamente la solicitud.'];
+                    return $response;
                 }
             }
 
@@ -344,6 +442,7 @@ class BandejaAprobacionController extends Controller
   }
 
   public static function validarRutaAprobacion($beneficiario,$dataSolicitud){
+
     $filtraDteAprobacion = [];
     $response = ['hasRoute' => false, 'response' => []];
 
@@ -352,11 +451,13 @@ class BandejaAprobacionController extends Controller
         if($beneficiario['pen_idtipoper'] == 1 || $beneficiario['pen_idtipoper'] == 2){
 
              if($beneficiario['pen_idtipoper'] == 1){
+
                   $filtraDteAprobacion = collect($beneficiario['detalle'])
                   ->filter(function($dte)use($beneficiario,$dataSolicitud){
                   return (($dte['aprobador']['nivaprobador']['pen_nomnivel'] == $beneficiario['nivel']['niv_padre']) && ($dte['perdepIntCanal'] == $dataSolicitud['canalaprobacion']['can_id']));
                   //return (($dte['tpernivelaprobador']['pen_nomnivel'] == $beneficiario['nivel']['niv_padre']) && ($dte['pnd_canal'] == $dataSolicitud['canalaprobacion']['can_id']));
                   })->values();
+
               }else{
                   $filtraDteAprobacion = collect($beneficiario['detalle'])
                   ->filter(function($dte)use($beneficiario,$dataSolicitud){
@@ -381,20 +482,25 @@ class BandejaAprobacionController extends Controller
                 $filtraDteAprobacion['aprobador']['nivaprobador'] = $consultaMercadeo['perejecutivo'];
              }
       }elseif($beneficiario['pen_idtipoper'] == 5){
+
             $filtraDteAprobacion = collect($beneficiario['detalle'])
             ->filter(function($dte)use($beneficiario,$dataSolicitud){
                 return (($dte['aprobador']['nivaprobador']['pen_nomnivel'] == $beneficiario['nivel']['niv_padre']) && ($dte['perdepPerIntIdtipoper'] == $beneficiario['pen_idtipoper']));
              })->values();
-
              if(count($filtraDteAprobacion) > 0){
                  $filtraDteAprobacion = $filtraDteAprobacion[0];
              }
       }
     }else{
+
         if(isset($dataSolicitud['detallesolicitud']['solTxtGerencia'])){
+
             $gerencia = $dataSolicitud['detallesolicitud']['solTxtGerencia'];
+
         }else{
-            $gerencia = trim($beneficiario['datosGerencia']['cod_gerencia']);
+
+            // $gerencia = trim($beneficiario['datosGerencia']['cod_gerencia']);
+            $gerencia = trim($beneficiario['pen_idgerencia']);
         }
 
           $nivelGerencial = PersonaDepende::with('perejecutivo')->where(['perdepIntNivel' => $beneficiario['nivel']['nivelpadre']['id'], 'perdepPerIntGerencia' => $gerencia])->first();
@@ -407,10 +513,10 @@ class BandejaAprobacionController extends Controller
   }else{
 
       $cambiarEstadoSoli = Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => 12]);
-      // if(count($aprobadorTesoreria) > 0){
-      //     $filtraDllAprobacion['tpernivelejecutivo'] = $beneficiario;
-      //     $filtraDllAprobacion['tpernivelaprobador'] = $aprobadorTesoreria;
-      // }
+        // if(count($aprobadorTesoreria) > 0){
+        //     $filtraDllAprobacion['tpernivelejecutivo'] = $beneficiario;
+        //     $filtraDllAprobacion['tpernivelaprobador'] = $aprobadorTesoreria;
+        // }
     }
 
     if(count($filtraDteAprobacion) > 0){

@@ -48,7 +48,7 @@
                   </thead>
                     <!--Ingresar informacion historica de la solicitud-->
                   <tbody>
-                    <tr ng-repeat="historial in infoCompleta.evaluaciones | orderBy : '-evaIntFecha'">
+                    <tr ng-repeat="historial in infoCompleta.detallesolicitud.evaluaciones | orderBy : '-evaIntFecha'">
                       <td>@{{historial.evaIntFecha * (1000) | date:'dd-MM-yyyy'}}</td>
                       <td>@{{historial.evaTxtNomterAnt}}</td>
                       <td>@{{historial.estado.estTxtNombre}}</td>
@@ -155,7 +155,7 @@
           <md-tab label="Ruta Aprobación">
             <md-content class="md-padding">
               <div class="container-fluid">
-                <ul class="timeline" ng-repeat="(key, rutaAprobacion) in infoCompleta.evaluaciones">
+                <ul class="timeline" ng-repeat="(key, rutaAprobacion) in infoCompleta.detallesolicitud.evaluaciones">
                   <li class="@{{saberSiEsParClass(key)}}">
                     <div class="timeline-badge success">
                       <i class="glyphicon glyphicon-thumbs-up"></i>

@@ -2,6 +2,8 @@
 
 @section('content')
   @include('includes.titulo')
+  <link rel="stylesheet" type="text/css" href="{{url('/css/tiqueteshotel/misSolicitudes.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url('/css/timeline.css')}}">
    <div ng-controller="bandejaAprobacionCtrl" ng-cloak class="cold-md-12">
       <div class="container-fluid">
         <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="row-border hover">
@@ -22,7 +24,7 @@
               <td class="text-center">@{{sol.detallesolicitud.solTxtCedtercero}}</td>
               <td class="text-center">@{{sol.detallesolicitud.solTxtNomtercero}}</td>
               <td class="text-center">@{{(sol.detallesolicitud.solIntFecha) * (1000) | date:'dd-MM-yyyy'}}</td>
-              <td class="text-center">@{{sol.detallesolicitud.solIntEstado}}</td>
+              <td class="text-center">@{{sol.detallesolicitud.estados.estTxtNombre}}</td>
               <td class="text-right">
                 <button class="btn btn-info" type="button" data-toggle="modal" data-target="#modalinfo" ng-click="infosolicitud(sol)">
                   <i class="glyphicon glyphicon-eye-open"></i>
