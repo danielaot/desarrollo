@@ -94,12 +94,19 @@
   		              </div>
 		              </div>
 
-                <div ng-if="pernivelEdit.nivel.id == 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
+                  <div ng-if="((pernivelEdit.nivel.id === 2 || pernivelEdit.nivel.id === 3) && pernivelEdit.tipo_persona.id === 5)" class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <div class="form-group">
+                      <label>Persona(s):</label>
+                      <multiselect class="span-margin" ng-change="agregandoObjetoEditar(objeto)" ng-model="objeto.terceros" options="objeto.tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
+                    </div>
+                  </div>
+
+                <!-- <div ng-if="pernivelEdit.nivel.id == 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
 		              <div class="form-group">
 		                <label>Gerencias:</label>
 		                <multiselect class="span-margin" ng-model="pernivelEdit.gerencias" options="gerenciasFiltradas" id-prop="ger_id" display-prop="codigoGerencia" placeholder="-- Seleccione Gerencias --" show-select-all="true" show-unselect-all="true" required></multiselect>
 		              </div>
-		            </div>
+		            </div> -->
 
               </div>
 
@@ -111,6 +118,7 @@
 		                <tr>
 		                  <th class="text-center">@{{(pernivelEdit.canales != undefined || pernivelEdit.gerencias != undefined) ? 'Código' : pernivelEdit.grupos != undefined ? 'Sigla' : 'Cédula'}}</th>
 		                  <th class="text-center">@{{pernivelEdit.canales != undefined ? 'Canal' : pernivelEdit.grupos != undefined ? 'Responsable' : pernivelEdit.terceros ? 'Nombre' : 'Gerencia'}}</th>
+                      <th>@{{pernivelEdit.terceros}}</th>
 		                </tr>
                     <tr ng-if="(pernivelEdit.canales.length == 0 && pernivelEdit.grupos.length == 0 && pernivelEdit.terceros.length == 0 && pernivelEdit.gerencias.length == 0) || (pernivelEdit.canales == undefined && pernivelEdit.grupos == undefined && pernivelEdit.terceros == undefined && pernivelEdit.gerencias == undefined)">
                       <td class="text-center" colspan="3">No se han encontrado registros</td>

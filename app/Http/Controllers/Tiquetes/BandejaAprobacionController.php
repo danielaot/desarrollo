@@ -113,15 +113,13 @@ class BandejaAprobacionController extends Controller
               $dataSolicitud['tipoPersona'] = $dataSolicitud['nombre']['pen_idtipoper'];
               $beneficiario['pen_idtipoper'] = $dataSolicitud['nombre']['pen_idtipoper'];
           }
-          //$dataSolicitud['idSolicitud'] = $idSolicitud;
-          //  $beneficiario = $dataSolicitud['nombre'];
 
       }
       else{
 
         $dataSolicitud = $request->all();
-
-          if (isset($dataSolicitud['persona_nivel'])) {
+//return $dataSolicitud;
+          if (isset($dataSolicitud['persona_pernivel'])) {
             //return $dataSolicitud;
             $dataSolicitud['idSolicitud'] = $request['solIntSolId'];
             $dataSolicitud['solTxtGerencia'] = $request['solTxtGerencia'];
@@ -212,7 +210,7 @@ class BandejaAprobacionController extends Controller
                   $dataSolicitud['respuestaAutorizacion'] = $response;
 
               }elseif ($dataSolicitud['estado']['estIntEstado'] == 3) {
-
+                return ("-->");
                 $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
                 $historico = new Evaluacion;
                 $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
@@ -230,7 +228,7 @@ class BandejaAprobacionController extends Controller
                 $dataSolicitud['respuestaAutorizacion'] = $response;
 
               }elseif ($dataSolicitud['estado']['estIntEstado'] == 2) {
-
+                return ("--->2");
                   /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
                   $historico = new Evaluacion;
                   $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];

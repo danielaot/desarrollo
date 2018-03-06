@@ -175,7 +175,7 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
           terceros = angular.copy($scope.pernivelEdit.perniveldepende);
           tercerosPluckeados = _.pluck(terceros,'tpernivelejecutivo');
           tercerosFiltrados = angular.copy($scope.tercerosFiltrados);
-
+console.log(tercerosFiltrados);
           tercerosPluckeados.forEach(function(tercero){
             tercero.cedulaNombre = [tercero.pen_cedula, tercero.pen_nombre].join(' - ');
             tercerosFiltrados.push(tercero);
@@ -519,7 +519,12 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
          }
 
          else if($scope.pernivelEdit.tipo_persona.id == 5){
-           $scope.tercerosFiltrados = $filter('filter')($scope.usuarios,{nivel: {niv_padre: $scope.nivel.id},pen_idtipoper: $scope.pernivelEdit.tipo_persona.id, detpersona : {detallenivelpersona : {perdepPerIntIdAprueba: 0}}});
+           console.log("--->entre tipo persona 5");
+           console.log($scope.usuariosN);
+           console.log("-----");
+           console.log($scope.pernivelEdit);
+           $scope.tercerosFiltrados = $filter('filter')($scope.usuariosN,{nivel: {niv_padre: $scope.niveles.id},pen_idtipoper: $scope.pernivelEdit.tipo_persona.id, detpersona : {detallenivelpersona : {perdepPerIntIdAprueba: 0}}});
+           console.log($scope.tercerosFiltrados);
          }
 
        }
