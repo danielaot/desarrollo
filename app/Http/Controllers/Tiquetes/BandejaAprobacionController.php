@@ -227,6 +227,14 @@ class BandejaAprobacionController extends Controller
                 $response = ['isSuccess' => true, 'message' => 'Se ha anulado la ruta correctamente.'];
                 $dataSolicitud['respuestaAutorizacion'] = $response;
 
+                $objSolTiquete = Evaluacion::with('estado', 'solicitud', 'solicitud.detalle', 'solicitud.detalle.ciuOrigen', 'solicitud.detalle.ciuDestino', 'solicitud.perCrea')->where('evaIntid', $historico['evaIntid'])->first();
+
+                $correo = TDirNacional::where('dir_txt_cedula', $objSolTiquete['solicitud']['solTxtCedterceroCrea'])->pluck('dir_txt_email')->first();
+                Mail::to($correo)->send(new notificacionEstadoSolicitudTiquetes($objSolTiquete));
+                if(Mail::failures()){
+                  return response()->json(Mail::failures());
+                }
+
               }elseif ($dataSolicitud['estado']['estIntEstado'] == 2) {
                 return ("--->2");
                   /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
@@ -379,7 +387,7 @@ class BandejaAprobacionController extends Controller
                     $historico = new Evaluacion;
                     $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
                     $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedterceroCrea'];
-                    $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['solTxtNomtercero'];
+                    $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['perCrea']['razonSocialTercero'];
                     $historico->evatxtObservacione = $observacion;
                     $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
                     $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
@@ -387,6 +395,14 @@ class BandejaAprobacionController extends Controller
                     $historico->evaIntTipoSolicitudAnt = 2;
                     $historico->evaEstado = 'S';
                     $historico->save();
+
+                    $objSolTiquete = Evaluacion::with('estado', 'solicitud', 'solicitud.detalle', 'solicitud.detalle.ciuOrigen', 'solicitud.detalle.ciuDestino', 'solicitud.perCrea')->where('evaIntid', $historico['evaIntid'])->first();
+
+                    $correo = TDirNacional::where('dir_txt_cedula', $objSolTiquete['solicitud']['solTxtCedterceroCrea'])->pluck('dir_txt_email')->first();
+                    Mail::to($correo)->send(new notificacionEstadoSolicitudTiquetes($objSolTiquete));
+                    if(Mail::failures()){
+                      return response()->json(Mail::failures());
+                    }
 
                     //self::grabarHistorico($usuarioEntrega,$usuarioCreador,$dataSolicitud,$isCreating,true);
 
