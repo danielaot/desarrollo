@@ -40,6 +40,8 @@
                       </md-autocomplete>
                     </div>
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                       <label>Identificacion :</label>
@@ -94,31 +96,29 @@
   		              </div>
 		              </div>
 
-                  <div ng-if="((pernivelEdit.nivel.id === 2 || pernivelEdit.nivel.id === 3) && pernivelEdit.tipo_persona.id === 5)" class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                  <div ng-if="(pernivelEdit.tipo_persona.id === 5 && (pernivelEdit.nivel.id === 2 || pernivelEdit.nivel.id === 3))" class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <div class="form-group">
+                      <label>Personas Autoriza:</label>
+                      <multiselect class="span-margin" ng-model="pernivelEdit.terceros" options="pernivelEdit.tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true"></multiselect>
+                    </div>
+                  </div>
+
+                  <!-- <div ng-if="((pernivelEdit.nivel.id === 2 || pernivelEdit.nivel.id === 3) && pernivelEdit.tipo_persona.id === 5)" class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                     <div class="form-group">
                       <label>Persona(s):</label>
                       <multiselect class="span-margin" ng-change="agregandoObjetoEditar(objeto)" ng-model="objeto.terceros" options="objeto.tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
                     </div>
-                  </div>
-
-                <!-- <div ng-if="pernivelEdit.nivel.id == 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
-		              <div class="form-group">
-		                <label>Gerencias:</label>
-		                <multiselect class="span-margin" ng-model="pernivelEdit.gerencias" options="gerenciasFiltradas" id-prop="ger_id" display-prop="codigoGerencia" placeholder="-- Seleccione Gerencias --" show-select-all="true" show-unselect-all="true" required></multiselect>
-		              </div>
-		            </div> -->
-
+                  </div> -->
               </div>
 
                 <hr ng-if="!(pernivelEdit.tipo_persona.id == 5 && pernivelEdit.nivel.id == 1)" class="border-top-dotted">
 
                 <div class="row">
                   <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-		              <table ng-if="(pernivelEdit.tipo_persona.id == 1 && pernivelEdit.nivel.id == 1) || ((pernivelEdit.tipo_persona.id == 3 || pernivelEdit.tipo_persona.id == 4) && (pernivelEdit.nivel.id == 1 || pernivelEdit.nivel.id == 3)) || (pernivelEdit.tipo_persona.id == 5 && (pernivelEdit.nivel.id > 1 && pernivelEdit.nivel.id < 4)) || (pernivelEdit.tipo_persona.id == 5 && pernivelEdit.nivel.id == 4)" class="table table-responsive table-striped table-bordered">
+		              <table ng-if="(pernivelEdit.tipo_persona.id == 1 && pernivelEdit.nivel.id == 1) || ((pernivelEdit.tipo_persona.id == 3 || pernivelEdit.tipo_persona.id == 4) && (pernivelEdit.nivel.id == 1 || pernivelEdit.nivel.id == 3)) || (pernivelEdit.tipo_persona.id == 5 && (pernivelEdit.nivel.id > 1 && pernivelEdit.nivel.id < 4))" class="table table-responsive table-striped table-bordered">
 		                <tr>
 		                  <th class="text-center">@{{(pernivelEdit.canales != undefined || pernivelEdit.gerencias != undefined) ? 'Código' : pernivelEdit.grupos != undefined ? 'Sigla' : 'Cédula'}}</th>
 		                  <th class="text-center">@{{pernivelEdit.canales != undefined ? 'Canal' : pernivelEdit.grupos != undefined ? 'Responsable' : pernivelEdit.terceros ? 'Nombre' : 'Gerencia'}}</th>
-                      <th>@{{pernivelEdit.terceros}}</th>
 		                </tr>
                     <tr ng-if="(pernivelEdit.canales.length == 0 && pernivelEdit.grupos.length == 0 && pernivelEdit.terceros.length == 0 && pernivelEdit.gerencias.length == 0) || (pernivelEdit.canales == undefined && pernivelEdit.grupos == undefined && pernivelEdit.terceros == undefined && pernivelEdit.gerencias == undefined)">
                       <td class="text-center" colspan="3">No se han encontrado registros</td>
@@ -126,7 +126,7 @@
 
                     <tr ng-if="pernivelEdit.canales.length > 0 || pernivelEdit.grupos.length > 0 || pernivelEdit.terceros.length > 0 || pernivelEdit.gerencias.length > 0" ng-repeat="objeto in pernivelEdit.canales.length > 0 ? pernivelEdit.canales: pernivelEdit.grupos.length > 0 ? pernivelEdit.grupos : pernivelEdit.terceros.length > 0 ? pernivelEdit.terceros : pernivelEdit.gerencias">
 		                  <td class="text-center">@{{pernivelEdit.canales.length > 0 ? objeto.can_id : pernivelEdit.grupos.length > 0 ? objeto.gru_sigla : pernivelEdit.terceros.length > 0 ? objeto.pen_cedula : objeto.ger_cod}}</td>
-		                  <td class="text-center">@{{pernivelEdit.canales.length > 0 ? objeto.can_txt_descrip : pernivelEdit.grupos.length > 0 ? objeto.gru_responsable : objeto.terceros.length > 0 ? objeto.pen_nombre : objeto.ger_nom}}</td>
+		                  <td class="text-center">@{{pernivelEdit.canales.length > 0 ? objeto.can_txt_descrip : pernivelEdit.grupos.length > 0 ? objeto.gru_responsable : pernivelEdit.terceros.length > 0 ? objeto.pen_nombre : objeto.ger_nom}}</td>
 		                </tr>
                   </table>
                     <md-tabs ng-if="(pernivelEdit.tipo_persona.id == 2 && (pernivelEdit.nivel.id == 1 || pernivelEdit.nivel.id == 2 || pernivelEdit.nivel.id == 3)) || ((pernivelEdit.tipo_persona.id == 1) && (pernivelEdit.nivel.id == 2 || pernivelEdit.nivel.id == 3)) || ((pernivelEdit.tipo_persona.id == 3 || pernivelEdit.tipo_persona.id == 4) && pernivelEdit.nivel.id == 2)" md-dynamic-height md-border-bottom>
@@ -170,8 +170,8 @@
 										                        <div class="row">
                 						                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
                     								              <div class="form-group">
-                    								                <label>Persona(s):</label>
-                    								                <multiselect class="span-margin" ng-change="agregandoObjetoEditar(obj,true,objeto)" ng-model="obj.terceros" options="obj.tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
+                                                    <label>Persona(s):</label>
+                          					                <multiselect class="span-margin" ng-change="agregandoObjetoEditar(obj,true,objeto)" ng-model="obj.terceros" options="obj.tercerosFiltrados" id-prop="id" display-prop="cedulaNombre" placeholder="-- Seleccione Personas --" show-search="true" show-select-all="true" show-unselect-all="true" required></multiselect>
                     								              </div>
                 						                    </div>
 										                        </div>
@@ -196,9 +196,8 @@
 		                  </md-content>
 		                </md-tab>
 		              </md-tabs>
-
+                  </div>
                 </div>
-
               </md-content>
             </md-tab>
             <!--Fin Formulario Creacion -->

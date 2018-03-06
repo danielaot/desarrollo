@@ -84,7 +84,6 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
           canalesPluckeados.map(function(canal){
             canal.terceros = [];
             canal.tercerosFiltrados = $scope.filtrarPersonasArregloEditar(canal);
-
             var filterCanalDepende = $filter('filter')($scope.pernivelEdit.detpersona.personasdepende, {perdepIntCanal: canal.can_id},true);
 
             if(filterCanalDepende.length > 0){
@@ -93,7 +92,8 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
                 perDepende.isNew = false;
                 perDepende.cedulaNombre = [perDepende.pen_cedula, perDepende.pen_nombre].join(' - ');
                 canal.tercerosFiltrados.push(perDepende);
-                canal.usuarios.push(perDepende);
+                canal.terceros.push(perDepende);
+
               })
             }
             return canal;
@@ -118,9 +118,9 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
               }
               return ter;
             });
-
+console.log("entre funcion territorios");
             if($scope.pernivelEdit.nivel.id == 2 || $scope.pernivelEdit.nivel.id == 3){
-
+console.log(territoriosPluckeados);
               territoriosPluckeados.forEach(function(terr,key){
 
                 $scope.filtrarPersonasArregloEditar(terr);
@@ -138,9 +138,10 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
 
             }
             $scope.pernivelEdit.territorios = angular.copy(territoriosPluckeados);
+            console.log($scope.pernivelEdit.territorios);
           }
       }else if($scope.pernivelEdit.tipo_persona.id == 3 || $scope.pernivelEdit.tipo_persona.id == 4){
-
+console.log("grupos");
         var gruposPluckeados = _.pluck($scope.pernivelEdit.detpersona.detallenivelpersona, 'grupo');
         gruposPluckeados = _.uniq(gruposPluckeados, 'id');
 
@@ -150,14 +151,16 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
         })
 
         if($scope.pernivelEdit.nivel.id == 2){
+          console.log(gruposPluckeados);
           gruposPluckeados.forEach(function(grupo){
-            var canalesGrupo = $filter('filter')($scope.pernivelEdit.detalle, {perdepIntGrupo : grupo.id.toString()},true);
+            var canalesGrupo = $filter('filter')($scope.pernivelEdit.detpersona.detallenivelpersona, {perdepIntGrupo : grupo.id.toString()},true);
+            console.log(canalesGrupo);
             var canalesPluckeados = _.pluck(canalesGrupo,'canal');
             grupo.canales = angular.copy(canalesPluckeados);
-            grupo.canalesFiltrados = $scope.filtrarPersonasArregloEditar(grupo);
+            /*grupo.canalesFiltrados = $scope.filtrarPersonasArregloEditar(grupo);
             grupo.canales.forEach(function(canal){
               grupo.canalesFiltrados.push(canal);
-            })
+            })*/
           })
         }
 
@@ -170,24 +173,26 @@ app.controller('nivelesAutorizacionCtrl', ['$scope', '$filter', '$http', '$mdDia
           var terceros = [];
           var tercerosPluckeados = [];
           var tercerosFiltrados = [];
+          var agregarTercero = [];
+          var tercerosnuevos = [];
           $scope.filtrarPersonasArregloEditar();
 
-          terceros = angular.copy($scope.pernivelEdit.perniveldepende);
-          tercerosPluckeados = _.pluck(terceros,'tpernivelejecutivo');
+          terceros = angular.copy($scope.pernivelEdit.detpersona.personasdepende);
+          tercerosPluckeados = _.pluck(terceros,'perejecutivo');
           tercerosFiltrados = angular.copy($scope.tercerosFiltrados);
-console.log(tercerosFiltrados);
-          tercerosPluckeados.forEach(function(tercero){
+
+          agregarTercero = $filter('filter')($scope.usuariosN, {pen_idtipoper : $scope.pernivelEdit.pen_idtipoper, nivel : {niv_padre:  $scope.pernivelEdit.nivel.id}});
+
+          /*todosterceros = angular.copy($scope.pernivelEdit.detpersona.personasdepende);
+          tercerosPluckeados = _.pluck(todosterceros,'perejecutivo');
+          tercerosFiltrados = angular.copy($scope.tercerosFiltrados);*/
+          agregarTercero.forEach(function(tercero){
             tercero.cedulaNombre = [tercero.pen_cedula, tercero.pen_nombre].join(' - ');
             tercerosFiltrados.push(tercero);
           });
 
           $scope.pernivelEdit.tercerosFiltrados = angular.copy(tercerosFiltrados);
           $scope.pernivelEdit.terceros = angular.copy(tercerosPluckeados);
-
-
-          $scope.pernivelEdit.tercerosFiltrados = angular.copy(tercerosFiltrados);
-          $scope.pernivelEdit.terceros = angular.copy(tercerosPluckeados);
-
 
         }else if($scope.pernivelEdit.nivel.id == 4){
 
@@ -399,6 +404,7 @@ console.log(tercerosFiltrados);
 
                 territorioTemporal.canales.map(function(canal,key){
                   if(canal.isNew == true && canal.terceros.length == 0){
+
                     canal.terceros = $filter('filter')($scope.pernivelEdit.perniveldepende,{pnd_canal: canal.can_id, pnd_territorio: territorioTemporal.id.toString()},true);
                     if(canal.terceros.length > 0){
                       canal.terceros = _.pluck(canal.terceros,'tpernivelejecutivo');
@@ -419,12 +425,14 @@ console.log(tercerosFiltrados);
 
                 territorioTemporal.canales.forEach(function(canal,key){
                   var filterExistTemp = $filter('filter')(objeto.canales, {can_id : canal.can_id},true);
+
                   if(filterExistTemp.length == 0){
                     territorioTemporal.canales.splice(key,1);
                   }
                 });
 
                 objeto.canales = angular.copy(territorioTemporal.canales);
+
               }
             }
           }else{
@@ -475,7 +483,7 @@ console.log(tercerosFiltrados);
   }
 
   $scope.filtrarPersonasArregloEditar = function(objeto = null){
-    console.log("--->entre funcion nueva");
+console.log("entre funcion personas editar");
        $scope.tercerosFiltrados = [];
        $scope.canalesFiltrados = [];
        $scope.gerenciasFiltradas = [];
@@ -488,17 +496,16 @@ console.log(tercerosFiltrados);
 
            if($scope.pernivelEdit.tipo_persona.id == 1){
 
-
                $scope.tercerosFiltrados = $filter('filter')
-               ($scope.usuarios,
+               ($scope.usuariosN,
                  {
                    nivel: {niv_padre: $scope.nivel.id},
                    pen_idtipoper: $scope.pernivelEdit.tipo_persona.id,
                    detpersona: {detallenivelpersona : {perdepIntCanal: objeto.can_id,perdepPerIntIdAprueba: 0}}
                  }
                );
+               console.log($scope.tercerosFiltrados);
                return $scope.tercerosFiltrados;
-
            }else if($scope.pernivelEdit.tipo_persona.id == 2){
 
              if(objeto.canales != undefined){
@@ -519,31 +526,12 @@ console.log(tercerosFiltrados);
          }
 
          else if($scope.pernivelEdit.tipo_persona.id == 5){
-           console.log("--->entre tipo persona 5");
-           console.log($scope.usuariosN);
-           console.log("-----");
-           console.log($scope.pernivelEdit);
-           $scope.tercerosFiltrados = $filter('filter')($scope.usuariosN,{nivel: {niv_padre: $scope.niveles.id},pen_idtipoper: $scope.pernivelEdit.tipo_persona.id, detpersona : {detallenivelpersona : {perdepPerIntIdAprueba: 0}}});
-           console.log($scope.tercerosFiltrados);
+          // $scope.tercerosFiltrados = $scope.pernivelEdit.detpersona.personasdepende;
+          // console.log($scope.tercerosFiltrados);
          }
 
        }
-       else if($scope.nivel.id == 4){
 
-         var gerenciasFiltradas = $filter('filter')($scope.gerencias,{gerepernivel:{perdepIntNivel: $scope.nivel.id, perdepPerIntIdtipoper: $scope.pernivelEdit.tipo_persona.id}});
-         var gerencias = angular.copy($scope.gerencias);
-
-         if(gerenciasFiltradas.length > 0){
-           gerenciasFiltradas.forEach(function(gerencia){
-               gerencias.forEach(function(gn,k2){
-                   if(gerencia.ger_cod == gn.ger_cod){
-                     gerencias.splice(k2,1);
-                   }
-               })
-           });
-         }
-         $scope.gerenciasFiltradas = gerencias;
-       }
   }
 
 

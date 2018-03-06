@@ -211,7 +211,7 @@ class BandejaAprobacionController extends Controller
 
               }elseif ($dataSolicitud['estado']['estIntEstado'] == 3) {
                 return ("-->");
-                $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
+                /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
                 $historico = new Evaluacion;
                 $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
                 $historico->evaTxtCedtercero = "";
@@ -225,15 +225,7 @@ class BandejaAprobacionController extends Controller
                 $historico->save();
 
                 $response = ['isSuccess' => true, 'message' => 'Se ha anulado la ruta correctamente.'];
-                $dataSolicitud['respuestaAutorizacion'] = $response;
-
-                $objSolTiquete = Evaluacion::with('estado', 'solicitud', 'solicitud.detalle', 'solicitud.detalle.ciuOrigen', 'solicitud.detalle.ciuDestino', 'solicitud.perCrea')->where('evaIntid', $historico['evaIntid'])->first();
-
-                $correo = TDirNacional::where('dir_txt_cedula', $objSolTiquete['solicitud']['solTxtCedterceroCrea'])->pluck('dir_txt_email')->first();
-                Mail::to($correo)->send(new notificacionEstadoSolicitudTiquetes($objSolTiquete));
-                if(Mail::failures()){
-                  return response()->json(Mail::failures());
-                }
+                $dataSolicitud['respuestaAutorizacion'] = $response;*/
 
               }elseif ($dataSolicitud['estado']['estIntEstado'] == 2) {
                 return ("--->2");
@@ -368,6 +360,13 @@ class BandejaAprobacionController extends Controller
                     $historico->evaEstado = 'S';
                     $historico->save();
 
+                    $objSolTiquete = Evaluacion::with('estado', 'solicitud', 'solicitud.detalle', 'solicitud.detalle.ciuOrigen', 'solicitud.detalle.ciuDestino', 'solicitud.perCrea')->where('evaIntid', $historico['evaIntid'])->first();
+
+                    $correo = TDirNacional::where('dir_txt_cedula', $objSolTiquete['solicitud']['solTxtCedterceroCrea'])->pluck('dir_txt_email')->first();
+                    Mail::to($correo)->send(new notificacionEstadoSolicitudTiquetes($objSolTiquete));
+                    if(Mail::failures()){
+                      return response()->json(Mail::failures());
+                    }
                     //$actualizaEvaluacion = Evaluacion::where('evaIntSolicitud', $dataSolicitud['detallesolicitud']['solIntSolId'])->where('evaTxtCedtercero', $dataSolicitud['detallepernivel']['pen_cedula'])->update(['evaIntTipoSolicitudAnt' => $estadoSolicitud]);
 
                     $response = ['isSuccess' => true, 'message' => 'Se ha rechazado la solicitud correctamente.'];
@@ -387,7 +386,7 @@ class BandejaAprobacionController extends Controller
                     $historico = new Evaluacion;
                     $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
                     $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedterceroCrea'];
-                    $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['perCrea']['razonSocialTercero'];
+                    $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['per_crea']['razonSocialTercero'];
                     $historico->evatxtObservacione = $observacion;
                     $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
                     $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
