@@ -14,11 +14,11 @@
   @if($objSolTiquete['evaIntTipoSolicitudAnt'] == 4 || $objSolTiquete['evaIntTipoSolicitudAnt'] == 12)
     <!-- Creacion -->
     @if($objSolTiquete['evaIntTipoSolicitudAnt'] == 4)
-      <p>La solicitud de <strong>Tiquetes Aereos y Hotel Nro. {{$objSolTiquete['solicitud']['solIntSolId']}}</strong> para <strong>{{$objSolTiquete['solicitud']['solTxtCedterceroCrea']}}</strong> se encuentra en estado: <strong>Solicitud</strong>, para su revisión y aprobación, por favor ingrese al aplicativo y aplique las acciones necesarias y/o comentarios.</p>
+      <p>La solicitud de <strong>Tiquetes Aereos y Hotel Nro. {{$objSolTiquete['solicitud']['solIntSolId']}}</strong> para <strong>{{$objSolTiquete['solicitud']['perCrea']['razonSocialTercero']}}</strong> se encuentra en estado: <strong>Solicitud</strong>, para su revisión y aprobación, por favor ingrese al aplicativo y aplique las acciones necesarias y/o comentarios.</p>
       <p>Gracias</p>
     <!-- Aprobacion -->
     @else
-      <p>La solicitud de <strong>Tiquetes Aereos y Hotel Nro. {{$objSolTiquete['solicitud']['solIntSolId']}}</strong> para <strong>{{$objSolTiquete['solicitud']['solTxtCedterceroCrea']}}</strong> se encuentra en estado: <strong>Aprobado</strong>, para su revisión y aprobación, por favor ingrese al aplicativo y aplique las acciones necesarias y/o comentarios.</p>
+      <p>La solicitud de <strong>Tiquetes Aereos y Hotel Nro. {{$objSolTiquete['solicitud']['solIntSolId']}}</strong> para <strong>{{$objSolTiquete['solicitud']['perCrea']['razonSocialTercero']}}</strong> se encuentra en estado: <strong>Aprobado</strong>, para su revisión y aprobación, por favor ingrese al aplicativo y aplique las acciones necesarias y/o comentarios.</p>
       <p>Gracias</p>
 
     @endif
