@@ -20,7 +20,8 @@ class TPaises extends Model
 	  public $timestamps = false;
 
     protected $fillable = [
-        'Pais'
+        'Pais',
+        'Estado'
     ];
 
     protected $guarded = [];

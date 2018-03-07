@@ -213,7 +213,7 @@
                         <td><select class="form-control" ng-model="solicitud.detsoli.destino" ng-options='opt.ciuTxtNom for opt in ciudad track by opt.ciuIntId'>
                           <option value="">Seleccione Ciudad Destino ..</option>
                         </select></td>
-                        <td><input class="form-control" type="datetime-local" ng-model="solicitud.detsoli.fviaje" ng-change="validarFecha(fecha)"></td>
+                        <td><input class="form-control" type="datetime-local" ng-model="solicitud.detsoli.fviaje" ng-change="validarFecha(fecha)"   min="@{{today}}" max="2025-12-31"></td>
                         <td><select class="form-control" ng-model="solicitud.detsoli.hotel" ng-options="opt.key for opt in hotel track by opt.value">
                             </select>
                         </td>
@@ -303,7 +303,7 @@
                             No se encontraron resultados para "@{{ciupaisdestSearchText}}".
                           </md-not-found>
                         </md-autocomplete></td>
-                        <td><input class="form-control" type="datetime-local" ng-model="solicitud.detsoliInt.fviaje" ng-change="validarFecha(fecha)">
+                        <td><input class="form-control" type="datetime-local" ng-model="solicitud.detsoliInt.fviaje" ng-change="validarFecha(fecha)"   min="@{{today}}" max="2025-12-31">
                         </td>
                         <td><select class="form-control" ng-model="solicitud.detsoliInt.hotel" ng-options="opt.key for opt in hotel track by opt.value">
                             </select>
@@ -339,8 +339,8 @@
           </div>
           @else
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success">Guardar y Enviar</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="!solicitudForm.$valid">Guardar</button>
+            <button type="button" ng-click="saveSolicitud(false)" class="btn btn-success" ng-disabled="!solicitudForm.$valid">Guardar y Enviar</button>
             <button class="btn btn-secondary" onclick="window.location='{{route("misSolicitudesTiquetes")}}'" type="button">Cerrar</button>
           </div>
         @endif

@@ -58,7 +58,7 @@ class SolicitudController extends Controller
 
     public function paisesInfo()
     {
-      $paises = Pais::with('ciudades')->get();
+      $paises = Pais::with('ciudades')->where('Estado', 1)->get();
       $response =  compact('paises');
 
       return response()->json($response);
@@ -78,6 +78,7 @@ class SolicitudController extends Controller
 
     public function store(Request $request, $isCreating = false)
     {
+
         $rutaMisSolicitudes = route('misSolicitudesTiquetes');
         $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
 
@@ -100,7 +101,7 @@ class SolicitudController extends Controller
           $solicitud->solIntTiposolicitud = $request->tviaje;
           $solicitud->solTxtTipoNU = $request->tipo;
           $solicitud->solTxtSolAnterior = "0";
-          $solicitud->solTxtMotivotarde = "";
+          $solicitud->solTxtMotivotarde = $request['motivoViaje'];
           $solicitud->solTxtPerExterna = $request->tviajero;
           $solicitud->solTxtNumTelefono = $request->numtelefono;
           $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
@@ -178,7 +179,7 @@ class SolicitudController extends Controller
           $solicitud->solIntTiposolicitud = $request->tviaje;
           $solicitud->solTxtTipoNU = $request->tipo;
           $solicitud->solTxtSolAnterior = $request->solAnterior;
-          $solicitud->solTxtMotivotarde = "";
+          $solicitud->solTxtMotivotarde = $request['motivoViaje'];
           $solicitud->solTxtPerExterna = $request->tviajero;
           $solicitud->solTxtNumTelefono = $request->numtelefono;
           $solicitud->solIntIdCanal = $request['canalaprobacion']['can_id'];
@@ -283,7 +284,7 @@ class SolicitudController extends Controller
         //return response()->json($request->all());
         $rutaMisSolicitudes = route('misSolicitudesTiquetes');
         $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
-        
+
         $usuario = Auth::user();
         $fechaEdicion = Carbon::now();
         $isCreating = $isCreating == "false" ? false: true;

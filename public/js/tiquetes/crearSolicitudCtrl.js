@@ -32,6 +32,9 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
       $scope.ciudad = angular.copy(info.ciudad);
       $scope.canales =  angular.copy(info.canales);
       $scope.fechahoy = angular.copy(info.fechahoy.date);
+      var today = new Date();
+      $scope.today = today.toISOString();
+
       $scope.fechavalidacion = angular.copy(info.fechavalidacion.date)
       $scope.progress = false;
 
@@ -378,18 +381,28 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
     });
   }
 
-  /*$scope.validarFecha = function(){
+  $scope.validarFecha = function(fecha){
     console.log($scope.solicitud.detsoli);
     $scope.fechaSolicitud = $filter('date')(new Date($scope.solicitud.detsoli.fviaje), 'yyyy-MM-dd');
     $scope.fechahoyVal = $filter('date')(new Date($scope.fechahoy), 'yyyy-MM-dd');
     $scope.fechaminVal = $filter('date')(new Date($scope.fechavalidacion), 'yyyy-MM-dd');
 
     if ($scope.fechaSolicitud == $scope.fechahoyVal || $scope.fechaSolicitud > $scope.fechahoyVal && $scope.fechaSolicitud < $scope.fechaminVal) {
-        console.log("mostrar mensaje");
-        // motivo viaje
+
+          var confirm = $mdDialog.prompt()
+            .title('Motivo Viaje')
+            .textContent('Por favor indique el motivo por el cual la solicitud del viaje es menor de 12 días')
+            .placeholder('')
+            .ariaLabel('fecha')
+            .ok('Aceptar')
+            .cancel('Cancelar');
+
+          $mdDialog.show(confirm).then(function(result) {
+            $scope.solicitud.motivoViaje = result;
+          });
 
       }
-  }*/
+  }
 
   $scope.infoCompleta = function(soli){
     $scope.infoSolicitud = soli;
@@ -457,79 +470,65 @@ app.controller('crearSolicitudCtrl', ['$scope', '$filter', '$http', '$mdDialog',
   }
 
   $scope.saveSolicitud = function(isCreating){
-    $scope.progress = true;
 
-    if (isCreating == true) {
-      console.log($scope.solicitud);
-      $http.post($scope.url, $scope.solicitud).then(function(response){
-        console.log("-->");
-        $scope.getInfo();
-        $scope.progress = false;
+    console.log($scope.solicitud);
 
-        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
-        console.log(respuesta.rutaMisSolicitudes);
-        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
-        var mensaje = respuesta.message;
-        var alerta = $mdDialog.alert()
-          .parent(angular.element(document.querySelector('#popupContainer')))
-          .clickOutsideToClose(false)
-          .title(titulo)
-          .textContent(mensaje)
-          .ariaLabel('Alert Dialog Demo')
-          .ok('Ok')
+    if ($scope.solicitud.detalleNac === undefined && $scope.solicitud.detalleInt === undefined) {
 
-          $mdDialog.show(alerta).then(function(){
-              $scope.progress = true;
-              $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
-          });
-      });
+      var confirm = $mdDialog.confirm()
+        .title('Alerta')
+        .textContent('Debe ingresar la ruta de viaje')
+        .ariaLabel('detalle')
+        .ok('Ok')
+        .cancel('Cancelar');
+
+        $mdDialog.show(confirm).then(function(){
+
+        });
     }else {
-      $http.post($scope.enviaAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
-        console.log("-->2");
-        $scope.progress = false;
 
-        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
-        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
-        var mensaje = respuesta.message;
-        var alerta = $mdDialog.alert()
-          .parent(angular.element(document.querySelector('#popupContainer')))
-          .clickOutsideToClose(false)
-          .title(titulo)
-          .textContent(mensaje)
-          .ariaLabel('Alert Dialog Demo')
-          .ok('Ok')
+        $scope.progress = true;
 
-          $mdDialog.show(alerta).then(function(){
+        if (isCreating == true) {
+
+          $http.post($scope.url, $scope.solicitud).then(function(response){
+             $scope.progress = true;
+             $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
+          });
+        }else {
+          $http.post($scope.enviaAprobarUrl+"/"+isCreating, $scope.solicitud).then(function(response){
+            console.log("-->2");
+            $scope.progress = false;
+
+            var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
+            var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
+            var mensaje = respuesta.message;
+            var alerta = $mdDialog.alert()
+            .parent(angular.element(document.querySelector('#popupContainer')))
+            .clickOutsideToClose(false)
+            .title(titulo)
+            .textContent(mensaje)
+            .ariaLabel('Alert Dialog Demo')
+            .ok('Ok')
+
+            $mdDialog.show(alerta).then(function(){
               $scope.progress = true;
               $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
+            });
           });
-      });
+        }
     }
+
   }
 
   $scope.editarSolicitud = function(isCreating){
 
     if (isCreating == true) {
       $http.post($scope.urlEditar, $scope.solicitud).then(function(response){
-        //var data = response.data;
-        $scope.getInfo();
-        $scope.progress = false;
 
-        var respuesta = response.data.rutaAprobacion.respuestaAutorizacion;
-        var titulo = respuesta.isSuccess == true ? 'Exito!' : 'Error!';
-        var mensaje = respuesta.message;
-        var alerta = $mdDialog.alert()
-          .parent(angular.element(document.querySelector('#popupContainer')))
-          .clickOutsideToClose(false)
-          .title(titulo)
-          .textContent(mensaje)
-          .ariaLabel('Alert Dialog Demo')
-          .ok('Ok')
-
-          $mdDialog.show(alerta).then(function(){
-              $scope.progress = true;
-              $window.location = respuesta.rutaMisSolicitudes;
-          });
+        $scope.progress = true;
+        $window.location = response.data.respuestaCreacion.rutaMisSolicitudes;
+        
       });
     }else {
 
