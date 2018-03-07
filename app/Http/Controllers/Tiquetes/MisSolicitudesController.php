@@ -54,7 +54,7 @@ class MisSolicitudesController extends Controller
         $solicitud['urlEdit'] = route('editarSolicitud',['idSolicitud' => $solicitud['solIntSolId']]);
         return $solicitud;
       });
-      //$rutaPdf = route('imprimirLegalizacion');
+      $rutaPdf = route('imprimirLegalizacionTiquetes');
 
       $response =  compact('solicitudes','usuario', 'rutaPdf');
 

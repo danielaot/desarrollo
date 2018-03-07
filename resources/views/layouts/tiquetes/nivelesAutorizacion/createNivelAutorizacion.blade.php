@@ -75,7 +75,7 @@
                   <div ng-if="infoPerNivel.tpersona.id == '3' || infoPerNivel.tpersona.id == '4' " class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
                     <div class="form-group">
                       <label class="control-label">Grupo :</label>
-                      <multiselect ng-model="infoPerNivel.grupos" options="grupos" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true" required></multiselect>
+                      <multiselect ng-model="infoPerNivel.grupos" options="grupos" id-prop="gru_sigla" display-prop="gru_responsable" show-select-all="true" show-unselect-all="true" selection-limit="1">  required></multiselect>
                     </div>
                   </div>
                   <div ng-if="infoPerNivel.tpersona.id == '2'" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
@@ -84,7 +84,7 @@
                       <multiselect ng-model="infoPerNivel.territorio"
                                    options="territorios" id-prop="id"
                                    display-prop="tnw_descripcion"
-                                   show-select-all="true" show-unselect-all="true" ng-change="filtrarPersonas()">
+                                   show-select-all="true" show-unselect-all="true" ng-change="filtrarPersonas()" selection-limit="1">
                       </multiselect>
                     </div>
                   </div>

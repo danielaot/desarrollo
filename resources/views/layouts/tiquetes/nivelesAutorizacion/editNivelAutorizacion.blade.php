@@ -85,14 +85,14 @@
                   <div ng-if="pernivelEdit.tipo_persona.id === 2" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
   		              <div class="form-group">
     		              <label>Territorio:</label>
-    		              <multiselect class="span-margin" ng-change="onEditBeneficiario()" ng-model="pernivelEdit.territorios" options="territorios" id-prop="id" display-prop="tnw_descripcion" placeholder="-- Seleccione un Territorio --" show-select-all="true" show-unselect-all="true" required></multiselect>
+    		              <multiselect class="span-margin" ng-change="onEditBeneficiario()" ng-model="pernivelEdit.territorios" options="territorios" id-prop="id" display-prop="tnw_descripcion" placeholder="-- Seleccione un Territorio --" show-select-all="true" show-unselect-all="true" selection-limit="1" required></multiselect>
   		              </div>
 		              </div>
 
                   <div ng-if="pernivelEdit.tipo_persona.id === 3 || pernivelEdit.tipo_persona.id === 4" class="col-md-6 col-lg-6 col-xs-6 col-sm-6">
   		              <div class="form-group">
   		                <label>Grupo:</label>
-  		                <multiselect class="span-margin" ng-change="onEditBeneficiario()" ng-model="pernivelEdit.grupos" options="grupos" id-prop="gru_sigla" display-prop="grupoPersona" placeholder="-- Seleccione Grupos --" show-select-all="true" show-unselect-all="true" required></multiselect>
+  		                <multiselect class="span-margin" ng-change="onEditBeneficiario()" ng-model="pernivelEdit.grupos" options="grupos" id-prop="gru_sigla" display-prop="grupoPersona" placeholder="-- Seleccione Grupos --" show-select-all="true" show-unselect-all="true" selection-limit="1" required></multiselect>
   		              </div>
 		              </div>
 
