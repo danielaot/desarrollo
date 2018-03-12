@@ -190,7 +190,6 @@ class BandejaAprobacionController extends Controller
                   }
            }else{
 
-              if ($dataSolicitud['estado']['estIntEstado'] == 4) {
                   $compradorGerencia = CompradoresGerencia::with('datocomprador')->where('comgerIntIdGerencia', $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perIntTipogerencia'])->get();
 
                   $observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en elaboración" : $dataSolicitud['motivo'];
@@ -208,44 +207,7 @@ class BandejaAprobacionController extends Controller
 
                   $response = ['isSuccess' => true, 'message' => 'Se ha creado la ruta correctamente.'];
                   $dataSolicitud['respuestaAutorizacion'] = $response;
-
-              }elseif ($dataSolicitud['estado']['estIntEstado'] == 3) {
-                return ("-->");
-                /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud anulada" : $dataSolicitud['motivo'];
-                $historico = new Evaluacion;
-                $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
-                $historico->evaTxtCedtercero = "";
-                $historico->evaTxtnombreter = "";
-                $historico->evatxtObservacione = $observacion;
-                $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
-                $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
-                $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
-                $historico->evaIntTipoSolicitudAnt = 2;
-                $historico->evaEstado = 'S';
-                $historico->save();
-
-                $response = ['isSuccess' => true, 'message' => 'Se ha anulado la ruta correctamente.'];
-                $dataSolicitud['respuestaAutorizacion'] = $response;*/
-
-              }elseif ($dataSolicitud['estado']['estIntEstado'] == 2) {
-                return ("--->2");
-                  /*$observacion = trim($dataSolicitud['motivo']) == "" ? "Solicitud en correcciones" : $dataSolicitud['motivo'];
-                  $historico = new Evaluacion;
-                  $historico->evaIntSolicitud = $dataSolicitud['idSolicitud'];
-                  $historico->evaTxtCedtercero = $dataSolicitud['detallesolicitud']['solTxtCedtercero'];
-                  $historico->evaTxtnombreter = $dataSolicitud['detallesolicitud']['solTxtNomtercero'];
-                  $historico->evatxtObservacione = $observacion;
-                  $historico->evaIntFecha = strtotime(Carbon::now()->addMinute(1)->toDateTimeString());;
-                  $historico->evaTxtCedterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtCedtercero'];
-                  $historico->evaTxtNomterAnt = $dataSolicitud['detallepernivel']['detalle'][0]['ejecutivo']['perTxtNomtercero'];
-                  $historico->evaIntTipoSolicitudAnt = 2;
-                  $historico->evaEstado = 'S';
-                  $historico->save();
-
-                  $response = ['isSuccess' => true, 'message' => 'Se ha enviado a correcciones la ruta correctamente.'];
-                  $dataSolicitud['respuestaAutorizacion'] = $response;*/
-              }
-
+                  return response()->json($response);
             }
         }
         if($isExt){
@@ -336,7 +298,7 @@ class BandejaAprobacionController extends Controller
                     $actualizaSolicitud= Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => $estadoSolicitud]);
 
                }elseif($dataSolicitud['estado']['estIntEstado'] == 3){//Rechaza Solicitud
-                 //return ("--->");
+
                     $usuarioCreador = $dataSolicitud['detallepernivel'];
                     $dataSolicitud['motivo'] = isset($dataSolicitud['motivo'])?$dataSolicitud['motivo']:'Solicitud Rechazada';
                     $estadoSolicitud = $dataSolicitud['estado']['estIntEstado'];
@@ -540,10 +502,7 @@ class BandejaAprobacionController extends Controller
   }else{
 
       $cambiarEstadoSoli = Solicitud::where('solIntSolId', $dataSolicitud['idSolicitud'])->update(['solIntEstado' => 12]);
-        // if(count($aprobadorTesoreria) > 0){
-        //     $filtraDllAprobacion['tpernivelejecutivo'] = $beneficiario;
-        //     $filtraDllAprobacion['tpernivelaprobador'] = $aprobadorTesoreria;
-        // }
+
     }
 
     if(count($filtraDteAprobacion) > 0){
