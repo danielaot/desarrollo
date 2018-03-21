@@ -252,7 +252,7 @@ class NivelesAutorizacionController extends Controller
                 }
 
                 foreach ($request['canales'] as $key2 => $value2) {
-                  if (!isset($value2['terceros'])) {
+                  if (isset($value2['terceros'])) {
                     foreach ($value2['terceros'] as $key3 => $value3) {
 
                       $actPersona = PerDepende::where('perdepIntCanal', $value2['can_id'])->where('perdepIntNivel', 1)->where('perdepPerIntCedPerNivel', $value3['pen_cedula'])
@@ -281,7 +281,7 @@ class NivelesAutorizacionController extends Controller
 
                foreach ($request['territorio'] as $key => $value) {
                  foreach ($value['canales'] as $key2 => $value2) {
-                   if (!isset($value2['terceros'])) {
+                   if (isset($value2['terceros'])) {
                      foreach ($value2['terceros'] as $key3 => $value3) {
                        $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['pen_cedula'])
                        ->update(['perdepPerIntIdAprueba' => $persona->perIntId]);
@@ -384,7 +384,7 @@ class NivelesAutorizacionController extends Controller
 
                foreach ($request['canales'] as $key2 => $value2) {
 
-                 if (!isset($value2['terceros'])) {
+                 if (isset($value2['terceros'])) {
 
                    foreach ($value2['terceros'] as $key3 => $value3) {
                      $actPersona = PerDepende::where('perdepPerIntCedPerNivel', $value3['pen_cedula'])->where('perdepIntCanal', $value2['can_id'])

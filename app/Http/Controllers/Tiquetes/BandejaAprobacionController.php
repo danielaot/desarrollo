@@ -79,7 +79,7 @@ class BandejaAprobacionController extends Controller
       return response()->json($response);
     }
 
-    static function store(Request $request,$idSolicitud = null,$isCreating = false,$isCreatingAndSend = false,$isExt = false){
+     public static function store(Request $request,$idSolicitud = null,$isCreating = false,$isCreatingAndSend = false,$isExt = false){
       $dataSolicitud = $request->all();
       $rutaMisSolicitudes = route('misSolicitudesTiquetes');
       $respuestaCreacion = array('isSuccess' => true, 'message' => '', 'rutaMisSolicitudes' => $rutaMisSolicitudes);
@@ -118,7 +118,7 @@ class BandejaAprobacionController extends Controller
       else{
 
         $dataSolicitud = $request->all();
-//return $dataSolicitud;
+          //return $dataSolicitud;
           if (isset($dataSolicitud['persona_pernivel'])) {
             //return $dataSolicitud;
             $dataSolicitud['idSolicitud'] = $request['solIntSolId'];
