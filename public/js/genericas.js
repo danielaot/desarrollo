@@ -1,14 +1,25 @@
 /*
  * Funciones generales
  */
+//Dropzone.autoDiscover = false;
 // Declaración de Modulo AngularJs
-var app = angular.module('aplicativos', ['angular.filter','ngMaterial','ngSanitize','datatables','ui.calendar', 'btorfs.multiselect']);
+var app = angular.module('aplicativos', ['angular.filter','ngMaterial','ngSanitize','datatables','ui.calendar', 'btorfs.multiselect', 'angular-js-xlsx']);
+
 
 //Declaracion de la paleta de colores para Angular Material
 app.config(function($mdThemingProvider){
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
     .accentPalette('light-green');
+
+  /*dropzoneOpsProvider.setOptions({
+    url : '/',
+    acceptedFiles : 'image/jpeg, images/jpg, image/png',
+    addRemoveLinks : false,
+    dictDefaultMessage : 'Click para agregar o arrastrar imágenes',
+    dictRemoveFile : 'Quitar imágen',
+    dictResponseError : 'No se pudo cargar la imágen'
+  });*/
 });
 
 // Declaracion de directiva para restringir caracteres en los campos de texto o textareas
@@ -38,6 +49,23 @@ app.directive('chars', function() {
     }
   };
 });
+
+// Declaracion de directiva para ser capaz de capturar archivos en el controlador
+app.directive('fileModel', ['$parse', function ($parse) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.fileModel);
+      var modelSetter = model.assign;
+
+      element.bind('change', function(){
+        scope.$apply(function(){
+            modelSetter(scope, element[0].files[0]);
+        });
+      });
+    }
+  };
+}]);
 
 //Funciones para realizar autocomplete
 $(function(){

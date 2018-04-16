@@ -1,21 +1,97 @@
 html {
-    background-color: #fff;
+  background-color: #fff;
+}
+
+.selectdemoSelectHeader .demo-header-searchbox {
+  border: none;
+  outline: none;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+}
+
+.selectdemoSelectHeader .demo-select-header {
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12);
+  padding-left: 10.667px;
+  height: 48px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.selectdemoSelectHeader md-content._md {
+  max-height: 240px;
 }
 
 header, footer {
-    width: 100%;
+  width: 100%;
 }
 
 footer {
-    font-size: 12px;
-    font-family: Arial;
-    color: #000;
+  font-size: 12px;
+  font-family: Arial;
+  color: #000;
 }
 
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px;
+  width: 140px !important;
+  height: 32px;
+  text-align: center;
+  border-radius: 82px;
+  color: white;
+  background-color: #5cb85c;
+  display: inline-block;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: #5cb85c;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.inputCantMinimized{
+  height: auto !important;
+  padding: 0px 5px !important;
+  text-align: right !important;
+}
+
+.inputCantMinimized-bad{
+  border-color: rgb(221, 0, 0);
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.inputCantMinimized-bad:focus{
+  border-color: rgb(221, 0, 0) !important;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s !important;
+}
+
+.inputCantMinimized-success{
+  border-color: rgb(2, 142, 0);
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+
 .wrap {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px 0 0;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0 0;
 }
 
 .txt-center {
@@ -37,6 +113,10 @@ input::-webkit-inner-spin-button {
 
 .required {
   font-size: 16px;
+  color: rgb(221, 44, 40);
+}
+
+.has-error {
   color: rgba(221, 44, 40, 1);
 }
 
@@ -74,6 +154,10 @@ input::-webkit-inner-spin-button {
 table.dataTable thead{
   background-color: #366092;
   color: #fff;
+}
+
+table.dataTable thead th {
+  text-align: center;
 }
 
 /* Estilos del autocompletar */

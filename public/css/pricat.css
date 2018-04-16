@@ -1,0 +1,82 @@
+button.work-box {
+  width: 100px;
+  height: 100px;
+  font-size: 50px;
+  line-height: 86px;
+  color: #fff;
+}
+
+.btn:focus, .btn:active {
+  outline-color: #fff;
+}
+
+div.proyecto{
+  padding: 20px 0px 0px;
+}
+
+.estado {
+  position: absolute;
+  bottom: 0px;
+  left: 140px;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: bold;
+}
+
+.info-proy{
+  display: inline-block;
+  padding: 0 10px;
+  vertical-align: top;
+}
+
+.header-wf{
+  width: 100%;
+  table-layout: fixed;
+}
+
+.header-wf th{
+  text-align: center;
+}
+
+th.act-title{
+  padding-right: 10px;
+  font-size: 12px;
+  color: #fff;
+}
+
+th.act-title div{
+  padding: 5px;
+  background: #1EA1B9;
+}
+
+th.act{
+  height: 58px;
+  border-right: 1px solid;
+}
+
+th.act>div{
+  background-color: #E6E6FA;
+  padding: 12px 0;
+}
+
+th.act>div.complete, th.act>div.inprogress{
+  background: #1EA1B9;
+}
+
+div.complete>div{
+  background-color: #266773;
+  background: -webkit-linear-gradient(right bottom,#308797 0,#308797 25%,#266773 25%,#266773 50%,#308797 50%,#308797 75%,#266773 75%);
+  background-size: 6px 6px;
+}
+
+.well .detail{
+  padding-bottom: 15px;
+}
+
+.well em{
+  padding: 0;
+  border-bottom: 2px dashed #808080;
+  font-size: 13px;
+}

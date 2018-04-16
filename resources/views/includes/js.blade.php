@@ -29,6 +29,9 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script src="{{url('/lib/angularJs/angular-datatables.min.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/lib/angularJs/calendar.js')}}" type="text/javascript" language="javascript"></script>
 <script src="{{url('/lib/angularJs/angular-locale_es-co.js')}}"></script>
+<script src="{{url('/lib/angularJs/xlsxfull.min.js')}}"></script>
+<script src="{{url('/lib/angularJs/angular-js-xlsx.js')}}"></script>
+
 
 <!-- FullCalendarJs -->
 <script src="{{url('/lib/fullcalendarjs/fullcalendar.min.js')}}" type="text/javascript" language="javascript"></script>
@@ -42,8 +45,10 @@ $.extend( true, $.fn.dataTable.defaults, {
 <!-- Laravel Javascript Validation -->
 <script src="{{asset('vendor/jsvalidation/js/jsvalidation.js')}}" type="text/javascript" language="javascript"></script>
 
-<!-- Dropzone -->
-<script src="{{url('/lib/dropzone.js')}}" type="text/javascript" language="javascript"></script>
+<!-- FileInput (https://github.com/kartik-v/bootstrap-fileinput) -->
+<script src="{{url('/js/fileinput/fileinput.min.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/fileinput/locales/es.js')}}" type="text/javascript" language="javascript"></script>
+<script src="{{url('/js/fileinput/themes/explorer/theme.js')}}" type="text/javascript" language="javascript"></script>
 
 <!-- angular-multiselect -->
 <script src="{{url('/lib/angularJs/angular-bootstrap-multiselect.min.js')}}" type="text/javascript" language="javascript"></script>
